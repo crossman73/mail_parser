@@ -1,0 +1,13 @@
+import os
+import sys
+import platform
+
+def print_env_info():
+    print("Python 버전:", sys.version)
+    print("실행 경로:", sys.executable)
+    print("OS 정보:", platform.platform())
+    print("PATH 환경 변수:", os.environ.get("PATH"))
+    print("현재 작업 디렉토리:", os.getcwd())
+
+if __name__ == "__main__":
+    print_env_info()

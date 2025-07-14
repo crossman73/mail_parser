@@ -1,0 +1,17 @@
+# Virtual Environment
+.venv/
+venv/
+
+# User data and results
+email_files/
+processed_emails/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE / Editor specific
+.vscode/
+.idea/
