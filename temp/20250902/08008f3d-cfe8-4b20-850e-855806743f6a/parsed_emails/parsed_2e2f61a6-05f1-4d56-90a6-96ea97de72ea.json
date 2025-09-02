@@ -1,0 +1,4622 @@
+{
+  "emails": [
+    {
+      "id": "<CAOCD9wT+wCHJXCFSpm+6fYsZZKgW0GDF4ozvLtfGarAzo3hf0w@mail.gmail.com>",
+      "key": 79,
+      "subject": "[현원소프트] 안녕하세요.",
+      "date": "2022-12-01 14:27:31+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "곽지훈 <jkwak@aination.kr>"
+      ],
+      "attachments": [
+        {
+          "filename": "IMG_0024.jpeg",
+          "size": 428777,
+          "content_type": "image/jpeg"
+        }
+      ],
+      "size": 428777
+    },
+    {
+      "id": "<CAOCD9wQ4fvx5sr92wCmQ4KTJ5NgWowezLAR6SOVO=zrPe9anNA@mail.gmail.com>",
+      "key": 59,
+      "subject": "Fwd: [RE]안녕하세요. 대표님",
+      "date": "2022-08-25 09:00:46+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220824220200.18046.30613@me233.mailplug.com>",
+      "key": 60,
+      "subject": "[RE]안녕하세요. 대표님",
+      "date": "2022-08-25 07:01:57+09:00",
+      "sender": "최수용 <sychoi@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "곽지훈 대표님 <jkwak@aination.kr>",
+        "김영삼 부사장님 <skyrunners@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220824220023.18050.50889@me233.mailplug.com>",
+      "key": 61,
+      "subject": "[RE]안녕하세요. 대표님",
+      "date": "2022-08-25 07:00:21+09:00",
+      "sender": "최수용 <sychoi@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202208191553283503_Ems@116.67.103.111>",
+      "key": 164,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-08-19 15:53:28+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<CAOCD9wS3XpvL0QaDbtqdUqLm20Roxcaz90YqMK_LrQhyHPYmwg@mail.gmail.com>",
+      "key": 154,
+      "subject": "안녕하세요. 대표님",
+      "date": "2022-08-19 14:10:34+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "곽지훈 <jkwak@aination.kr>",
+        "최수용 <sychoi@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220512042735.18050.22464@me233.mailplug.com>",
+      "key": 25,
+      "subject": "메일 발송 관련",
+      "date": "2022-05-12 13:27:33+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220512041345.18050.2765@me233.mailplug.com>",
+      "key": 230,
+      "subject": "[RE]네임서버 이전 관련",
+      "date": "2022-05-12 13:13:44+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최수용 <sychoi@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSqhT4zbK+BiQFEZfYgToLegK5QD6-wWunNGrN+gYCqMg@mail.gmail.com>",
+      "key": 200,
+      "subject": "Re: [RE]네임서버 이전 관련",
+      "date": "2022-05-12 12:35:04+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최수용 <sychoi@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220512030801.18046.21128@me233.mailplug.com>",
+      "key": 201,
+      "subject": "[RE]네임서버 이전 관련",
+      "date": "2022-05-12 12:08:00+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최수용 <sychoi@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220512010107.18050.21447@me233.mailplug.com>",
+      "key": 71,
+      "subject": "[RE]Re: (주)에이아이네이션 KT목동IDC 센터 IP 현황.xlsx",
+      "date": "2022-05-12 10:01:05+09:00",
+      "sender": "김영삼 <skyrunners@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "황인석 <insuk1004@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "Jihoon Kwak <jkwak314@snu.ac.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wR4PKS34BWNCg6nG5H4saz8YUaA-1OD4mudaqZNAEjObQ@mail.gmail.com>",
+      "key": 72,
+      "subject": "Re: (주)에이아이네이션 KT목동IDC 센터 IP 현황.xlsx",
+      "date": "2022-05-11 17:18:58+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "김영삼 <skyrunners@aination.kr>"
+      ],
+      "attachments": [
+        {
+          "filename": "image.png",
+          "size": 430397,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 430397
+    },
+    {
+      "id": "<CAG-8DHDD5GYdFvvmr8GRsnz3iAO-3SDdgTSZxMWe3uNRm1XQYw@mail.gmail.com>",
+      "key": 73,
+      "subject": "Re: (주)에이아이네이션 KT목동IDC 센터 IP 현황.xlsx",
+      "date": "2022-05-11 17:07:24+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "서울대 서버 NAS 연동 관련 문의.eml",
+          "size": 0,
+          "content_type": "message/rfc822"
+        },
+        {
+          "filename": "[상황공유] 추가 공유.eml",
+          "size": 0,
+          "content_type": "message/rfc822"
+        },
+        {
+          "filename": "image.png",
+          "size": 31420,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image.png",
+          "size": 12660,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image.png",
+          "size": 34077,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image.png",
+          "size": 19634,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "테스트 요청.eml",
+          "size": 0,
+          "content_type": "message/rfc822"
+        },
+        {
+          "filename": "정상 동작합니다..eml",
+          "size": 0,
+          "content_type": "message/rfc822"
+        }
+      ],
+      "size": 97791
+    },
+    {
+      "id": "<CAOCD9wQGOQZ6zY3MbxZcmgcrzhUVqLv-bk71g2eXyPXMjxBnkw@mail.gmail.com>",
+      "key": 34,
+      "subject": "Re: DB.zip",
+      "date": "2022-05-11 16:38:39+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이재형 <ljh0519@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wS74MQ4T7s_Z89vFoEu1E5J-G9Kaa67i+VAamGDP7+T8g@mail.gmail.com>",
+      "key": 74,
+      "subject": "Fwd: (주)에이아이네이션 KT목동IDC 센터 IP 현황.xlsx",
+      "date": "2022-05-11 16:01:14+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 KT목동IDC 센터 IP 현황.xlsx",
+          "size": 50435,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 50435
+    },
+    {
+      "id": "<20220511063815.18046.45620@me233.mailplug.com>",
+      "key": 75,
+      "subject": "(주)에이아이네이션 KT목동IDC 센터 IP 현황.xlsx",
+      "date": "2022-05-11 15:38:13+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 KT목동IDC 센터 IP 현황.xlsx",
+          "size": 50435,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 50435
+    },
+    {
+      "id": "<4b545cc53ab46317f944eeb8f2846369@cvweb008.wmail.nhnsystem.com>",
+      "key": 35,
+      "subject": "DB.zip",
+      "date": "2022-05-03 18:06:35+09:00",
+      "sender": "이재형 <ljh0519@3rdeyesys.com>",
+      "recipients": [
+        "<hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wT0JJgzhwS4TsKs-=SuT=5tQs85Af9y5sdMf3J59tj6aw@mail.gmail.com>",
+      "key": 8,
+      "subject": "Fwd: (주)에이아이네이션 서버장비 변경된 IP 관련",
+      "date": "2022-05-02 08:55:30+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 서버 구성도(변경).xlsx",
+          "size": 43545,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 43545
+    },
+    {
+      "id": "<CAOCD9wSJqfdfV1LfH9hSoHnK+P9yf-B=tECcEaH-i4peGvNavQ@mail.gmail.com>",
+      "key": 189,
+      "subject": "네임서버 이전 관련",
+      "date": "2022-05-02 08:54:49+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQzzv8Z7HvWcgDCA7ppCUtTL5hyJYGZYHszJ30QA+rA0w@mail.gmail.com>",
+      "key": 9,
+      "subject": "Re: (주)에이아이네이션 서버장비 변경된 IP 관련",
+      "date": "2022-04-29 20:30:40+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220429110838.18050.17222@me233.mailplug.com>",
+      "key": 10,
+      "subject": "(주)에이아이네이션 서버장비 변경된 IP 관련",
+      "date": "2022-04-29 20:08:36+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 서버 구성도(변경).xlsx",
+          "size": 43545,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 43545
+    },
+    {
+      "id": "<CAOCD9wSmKApydys4yuLO0OH4BBH-4ieXvFZ_+LgXYikG95Fr7g@mail.gmail.com>",
+      "key": 167,
+      "subject": "Fwd: (주)에이아이네이션 서초 idc 센터 서버장비 목록 및 IP .xlsx",
+      "date": "2022-04-28 18:15:20+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jhshim@3rdeyesys.com"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 서초 idc 센터 서버장비 목록 및 IP .xlsx",
+          "size": 50262,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 50262
+    },
+    {
+      "id": "<20220428083254.18046.38327@me233.mailplug.com>",
+      "key": 168,
+      "subject": "(주)에이아이네이션 서초 idc 센터 서버장비 목록 및 IP .xlsx",
+      "date": "2022-04-28 17:32:52+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 서초 idc 센터 서버장비 목록 및 IP .xlsx",
+          "size": 50262,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 50262
+    },
+    {
+      "id": "<20220428062045.18050.59717@me233.mailplug.com>",
+      "key": 249,
+      "subject": "[RE]Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-28 15:20:43+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "윤주환 <jhyhana@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최호진 <hjchoi@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "이상덕 <lsd@aination.kr>"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 서초 idc 센터 서버장비 목록 및 IP .xlsx",
+          "size": 49942,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 49942
+    },
+    {
+      "id": "<20220425054313.18046.5413@me233.mailplug.com>",
+      "key": 250,
+      "subject": "[RE]Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-25 14:43:10+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202204251329075944_Ems@116.67.103.54>",
+      "key": 87,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-04-25 13:29:07+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202204251328238658_Ems@116.67.103.104>",
+      "key": 88,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-04-25 13:28:23+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CAOCD9wT6d7T9=96u36FXYr61o=SFTFqJQp0HRYyMb341kvPvig@mail.gmail.com>",
+      "key": 251,
+      "subject": "Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-25 10:41:28+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "윤주환 <jhyhana@aination.kr>",
+        "최호진 <hjchoi@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "이상덕 <lsd@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wT54cp-mhc1g+qNM0mzsxfXmFFZqn4B9HbowKqM0GAydQ@mail.gmail.com>",
+      "key": 147,
+      "subject": "Re: [RE]Re: IDC 철수 건",
+      "date": "2022-04-21 16:51:07+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "황인석 <insuk1004@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220421074919.18044.60073@me233.mailplug.com>",
+      "key": 148,
+      "subject": "[RE]Re: IDC 철수 건",
+      "date": "2022-04-21 16:49:16+09:00",
+      "sender": "곽지훈 <jkwak@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "황인석 <insuk1004@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTF1UaECjg2s0=nAFrHCG2r7B6d8u+zf0ny8P7OuEL8tQ@mail.gmail.com>",
+      "key": 149,
+      "subject": "Re: IDC 철수 건",
+      "date": "2022-04-21 16:42:00+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "황인석 <insuk1004@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220421073135.18046.98535@me233.mailplug.com>",
+      "key": 150,
+      "subject": "IDC 철수 건",
+      "date": "2022-04-21 16:31:33+09:00",
+      "sender": "곽지훈 <jkwak@aination.kr>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "황인석 <insuk1004@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220419061542.18050.36817@me233.mailplug.com>",
+      "key": 252,
+      "subject": "[RE]Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-19 15:15:42+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSHw588OzWC=ZbpEn13HMJm2+4Ko1d+B-t4O=C527Xqmw@mail.gmail.com>",
+      "key": 253,
+      "subject": "Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-19 10:23:00+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "윤주환 <jhyhana@aination.kr>",
+        "최호진 <hjchoi@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "이상덕 <lsd@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220412050347.2959.1795@me233.mailplug.com>",
+      "key": 254,
+      "subject": "[RE]Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-12 14:03:46+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRpBPnJ5aLLfcMHU0CGWGuU66jkE5XzWN=n19N0L5U_zA@mail.gmail.com>",
+      "key": 255,
+      "subject": "Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-12 11:02:29+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "윤주환 <jhyhana@aination.kr>",
+        "최호진 <hjchoi@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "이상덕 <lsd@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<004601d84e0d$1f913120$5eb39360$@3rdeyesys.com>",
+      "key": 256,
+      "subject": "RE: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-12 10:32:07+09:00",
+      "sender": "장원진 <qxsilver@3rdeyesys.com>",
+      "recipients": [
+        "'현원소프트' <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQPFt16oDiPr339+ESh-28Q26buaB=-iZXUjZxOcAC9UQ@mail.gmail.com>",
+      "key": 257,
+      "subject": "Fwd: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-12 10:09:02+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSFLouXpzP_rNz2psUNV5=89rtP4r858Z7k62yGYOL4nw@mail.gmail.com>",
+      "key": 258,
+      "subject": "Re: [RE][현원소프트] 계약 관련",
+      "date": "2022-04-12 10:05:49+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "황인석 <insuk1004@aination.kr>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "윤주환 <jhyhana@aination.kr>",
+        "최호진 <hjchoi@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "이상덕 <lsd@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20220412004254.3016.1742@me233.mailplug.com>",
+      "key": 259,
+      "subject": "[RE][현원소프트] 계약 관련",
+      "date": "2022-04-12 09:42:51+09:00",
+      "sender": "황인석 <insuk1004@aination.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "곽지훈 <jkwak@aination.kr>",
+        "김영삼 <skyrunners@aination.kr>",
+        "이상은 <dreamtrue@aination.kr>",
+        "윤주환 <jhyhana@aination.kr>",
+        "최호진 <hjchoi@aination.kr>",
+        "최수용 <sychoi@aination.kr>",
+        "이상덕 <lsd@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRkCJ2SrBoagN=kLNqNq+zGbg2FVCpUEQn0Bmpnu0JVHQ@mail.gmail.com>",
+      "key": 176,
+      "subject": "Re: FW: 에이아이네이션 서버 위탁운영 사용 현황파악 요청",
+      "date": "2022-04-07 16:29:02+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jhshim@3rdeyesys.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<!&!AAAAAAAAAAAYAAAAAAAAAHzpJngIUwNAutF4eqwuLm/CgAAAEAAAAJE2yJt9VTRBpAri41AlQfUBAAAAAA==@ipartners.co.kr>",
+      "key": 177,
+      "subject": "FW: 에이아이네이션 서버 위탁운영 사용 현황파악 요청",
+      "date": "2022-04-07 16:25:42+09:00",
+      "sender": "<crossman@ipartners.co.kr>",
+      "recipients": [
+        "<hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "(주)에이아이네이션 서초 idc 센터 서버장비 목록 v2 용도 기재.xlsx",
+          "size": 42312,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 42312
+    },
+    {
+      "id": "<202203312128137639_Ems@116.67.103.105>",
+      "key": 113,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-03-31 21:28:13+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202203312126535813_Ems@116.67.103.52>",
+      "key": 114,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-03-31 21:26:53+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CAOCD9wSgWsSjvV5xQBXTgYkXjKmSxBtxDLeSwS4C1dVmBNP1mg@mail.gmail.com>",
+      "key": 119,
+      "subject": "[문의] 인프라 비용 관련",
+      "date": "2022-03-11 17:02:55+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerrygs@naver.com",
+        "이상은 <kboom8002@gmail.com>",
+        "insuk1004@aination.kr",
+        "sychoi@aination.kr"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202202281039313394_Ems@116.67.103.53>",
+      "key": 218,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-02-28 10:39:31+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202202281036423596_Ems@116.67.103.111>",
+      "key": 219,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-02-28 10:36:42+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<b399d4aed96c35d9fa7bd75decf2b84@cvweb019.wmail.nhnsystem.com>",
+      "key": 163,
+      "subject": "[써드아이시스템] IDC 제공 서비스 및 부가서비스 안내",
+      "date": "2022-02-23 15:16:48+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "써드아이_사업 <biz@3rdeyesys.com>",
+        "이재형 <ljh0519@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<706ef7b080808e27e3ccddaa6eea664d@cvweb014.wmail.nhnsystem.com>",
+      "key": 64,
+      "subject": "[써드아이시스템] 에이아이네이션 IDC 방문 일정 ",
+      "date": "2022-02-16 17:01:14+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "써드아이_기술 <tech@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQVM469cvGi2WWe63td6-9tEh65J3w_qyMiodW6H5wopQ@mail.gmail.com>",
+      "key": 178,
+      "subject": "[현원소프트] 앱 관련",
+      "date": "2022-02-14 10:30:44+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "insuk1004@aination.kr",
+        "이상은 <kboom8002@gmail.com>",
+        "jerrygs@naver.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202201281420587402_Ems@116.67.103.56>",
+      "key": 42,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-01-28 14:20:58+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202201281418429336_Ems@116.67.103.111>",
+      "key": 43,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2022-01-28 14:18:42+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CAG-8DHD5_y49LVywtr2VR4b0xBHXzD0bjaX8amU4P=RfH_qc_w@mail.gmail.com>",
+      "key": 170,
+      "subject": "KPOP source db dump 파일 전달 드립니다.",
+      "date": "2022-01-20 14:44:51+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQmYwzRz6RqmUHAjpsAq+SODsj7a=hNavDEDqw4Df7JdA@mail.gmail.com>",
+      "key": 125,
+      "subject": "[현원소프트] 서버 자산 관련 리스트",
+      "date": "2022-01-19 18:28:56+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "insuk1004@aination.kr",
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "20220118_현원소프트_서버관리목록.xlsx",
+          "size": 48031,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 48031
+    },
+    {
+      "id": "<CAOCD9wTX8QqvROcZUqQTjPq4bs9a5D22T6Sxy+wEuonJUkUfPw@mail.gmail.com>",
+      "key": 155,
+      "subject": "Re: [현원소프트] 자산 파악 요청",
+      "date": "2022-01-18 17:08:13+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이재형 <ljh0519@3rdeyesys.com>",
+        "강석주 <sjkang@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<ed881eb0809a41291dd95f1d4fd571@cvweb019.wmail.nhnsystem.com>",
+      "key": 156,
+      "subject": "RE: [현원소프트] 자산 파악 요청",
+      "date": "2022-01-18 16:41:15+09:00",
+      "sender": "이재형 <ljh0519@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "강석주 <sjkang@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "현원소프트.xlsx",
+          "size": 44487,
+          "content_type": "application/haansoftxlsx"
+        }
+      ],
+      "size": 44487
+    },
+    {
+      "id": "<CAOCD9wTqEOYCCu1Q-JRvKJwjyj+EVtGfchRoZLmY7n-dETY_2g@mail.gmail.com>",
+      "key": 157,
+      "subject": "[현원소프트] 자산 파악 요청",
+      "date": "2022-01-18 16:27:36+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이재형 <ljh0519@3rdeyesys.com>",
+        "강석주 <sjkang@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQz2XJAzpTzXPXmpcHmFiudNZuBE=C-CNRcfb1NBuvNfA@mail.gmail.com>",
+      "key": 191,
+      "subject": "이사님 aOS 최종 버젼 다시 전달 해 드립니다.",
+      "date": "2021-12-22 14:07:52+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerrygs@naver.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<9f3c78d3cbfc19ee5d3d9bb8e5d5a8@cweb001.nm.nfra.io>",
+      "key": 3,
+      "subject": "대표님 ~",
+      "date": "2021-12-15 11:03:22+09:00",
+      "sender": "조길수 jerry <jerrygs@naver.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "KAIBY_수행계획서.DOC",
+          "size": 218112,
+          "content_type": "application/msword"
+        }
+      ],
+      "size": 218112
+    },
+    {
+      "id": "<61b5b7df.1c69fb81.12790.6de6.GMR@mx.google.com>",
+      "key": 17,
+      "subject": "Delivery Status Notification (Failure)",
+      "date": "2021-12-12 00:50:39-08:00",
+      "sender": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "icon.png",
+          "size": 5747,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 5747
+    },
+    {
+      "id": "<61b48b71.1c69fb81.1cf6b.62cb.GMR@mx.google.com>",
+      "key": 18,
+      "subject": "Delivery Status Notification (Delay)",
+      "date": "2021-12-11 03:28:49-08:00",
+      "sender": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "icon.png",
+          "size": 3910,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 3910
+    },
+    {
+      "id": "<61b3283c.1c69fb81.9cd0a.4d1d.GMR@mx.google.com>",
+      "key": 19,
+      "subject": "Delivery Status Notification (Delay)",
+      "date": "2021-12-10 02:13:16-08:00",
+      "sender": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "icon.png",
+          "size": 3910,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 3910
+    },
+    {
+      "id": "<37702f711a52159aa14eda2a495ff@cweb010.nm.nfra.io>",
+      "key": 215,
+      "subject": "KAIBY APP 회원탈퇴",
+      "date": "2021-12-10 11:31:34+09:00",
+      "sender": "조길수 jerry <jerrygs@naver.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "KAIBY 개인정보 취급방침1.docx",
+          "size": 17183,
+          "content_type": "application/haansoftdocx"
+        }
+      ],
+      "size": 17183
+    },
+    {
+      "id": "<CAOCD9wRCR6cvtub2WpWuOcUG4LEwD5P0CSauUpGeirt=+Aq+Qw@mail.gmail.com>",
+      "key": 20,
+      "subject": "Re: 검수관한사항.docx",
+      "date": "2021-12-09 17:06:40+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerrygs@naver.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQOZGTn_hTTSW3dMJPg3pwx0YaTdpK6bdScEtzWRVPEnQ@mail.gmail.com>",
+      "key": 21,
+      "subject": "Re: 검수관한사항.docx",
+      "date": "2021-12-09 16:29:41+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerry@lbstory.com"
+      ],
+      "attachments": [
+        {
+          "filename": "KAIBY_정보구조(IA)_re.xlsx",
+          "size": 48676,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 48676
+    },
+    {
+      "id": "<212373d2b1d154d4268c4e81ba72d1@cweb003.nm.nfra.io>",
+      "key": 22,
+      "subject": "검수관한사항.docx",
+      "date": "2021-12-09 14:45:33+09:00",
+      "sender": "조길수 jerry <jerrygs@naver.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "검수관한사항.docx",
+          "size": 17394,
+          "content_type": "application/haansoftdocx"
+        },
+        {
+          "filename": "KAIBY_정보구조(IA).xlsx",
+          "size": 51113,
+          "content_type": "application/haansoftxlsx"
+        }
+      ],
+      "size": 68507
+    },
+    {
+      "id": "<CAOCD9wQetJCOy8on-C-Fs2T_KgR7jRxYACEO7HUDFA3MjX7JVw@mail.gmail.com>",
+      "key": 151,
+      "subject": "[현원소프트] 프로젝트 산출물 전달",
+      "date": "2021-11-30 16:37:25+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerrygs@naver.com",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "sychoi@aination.kr",
+        "skyrunners@aination.kr",
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202111301540508786_Ems@116.67.103.55>",
+      "key": 216,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-11-30 15:40:50+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202111301530224451_Ems@116.67.103.112>",
+      "key": 217,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-11-30 15:30:22+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CAOCD9wQ7WdoCmSoc8ryVgPWxsSVXZTbJoy=xqM=8SesQjoifgQ@mail.gmail.com>",
+      "key": 199,
+      "subject": "[현원소프트] 프로젝트 산출물 전달을 위한 일정 안내",
+      "date": "2021-11-25 16:23:31+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerrygs@naver.com",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "sychoi@aination.kr",
+        "skyrunners@aination.kr"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<fd2a2fce44cee10ba01385e53b407c92$2c2458f2@mail3.nate.com>",
+      "key": 4,
+      "subject": "Fw:[가비아] SSL 보안서버인증서 파일을 다운로드해 주세요.",
+      "date": "2021-11-25 14:11:57+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>",
+        "\"Jaewon Taiji\" <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<aa3838478d98b082dfbffcec1ee1de8@cweb012.nm.nfra.io>",
+      "key": 14,
+      "subject": "에이아이네이션 -메일 보내실 때 참조 하실 분들입니다.",
+      "date": "2021-11-25 14:09:27+09:00",
+      "sender": "조길수 jerry <jerrygs@naver.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<1ff45ca956e1d5cb4849802b8401e17c$2c2458f2@mail3.nate.com>",
+      "key": 5,
+      "subject": "Fw:[가비아] SSL 보안서버인증서 파일을 다운로드해 주세요.",
+      "date": "2021-11-25 14:08:47+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>",
+        "\"Jaewon Taiji\" <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTnwquGs3afDZfRu0eQv3RO-Fc86ohdtOtqjTuZy2mWBA@mail.gmail.com>",
+      "key": 6,
+      "subject": "Fwd: Fw:[가비아] SSL 보안서버인증서 파일을 다운로드해 주세요.",
+      "date": "2021-11-25 14:07:55+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<514722a834b3d86de0ddad4694fb74ee$2c2458f2@mail3.nate.com>",
+      "key": 7,
+      "subject": "Fw:[가비아] SSL 보안서버인증서 파일을 다운로드해 주세요.",
+      "date": "2021-11-25 14:07:30+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>",
+        "\"Jaewon Taiji\" <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTkfp0SYq-kjPzeejWbBhvtX98=njxiyzhf=R=yMZsPXg@mail.gmail.com>",
+      "key": 85,
+      "subject": "Fwd: Fw:Order ID CEDX211125262137 AlphaSSL - Approve SSL Application",
+      "date": "2021-11-25 14:00:04+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<c48d20f9d1afc1ab9f95f45641536dd2$2c2458f2@mail3.nate.com>",
+      "key": 86,
+      "subject": "Fw:Order ID CEDX211125262137 AlphaSSL - Approve SSL Application",
+      "date": "2021-11-25 13:52:24+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>",
+        "\"Jaewon Taiji\" <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wT7eO-m4mX-aTwL-HcoR47ha=J89fDkXp87uQHOJ3Adcg@mail.gmail.com>",
+      "key": 129,
+      "subject": "Fwd: Fw:Order ID CEDX211125262059 AlphaSSL - Approve SSL Application",
+      "date": "2021-11-25 13:48:27+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSDCgByKBm7FWpX2yTG=RwWbpv4Hd_okPgifY0an2gkhw@mail.gmail.com>",
+      "key": 120,
+      "subject": "Fwd: Fw:Order ID CEDX211125262062 AlphaSSL - Approve SSL Application",
+      "date": "2021-11-25 13:48:19+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<7f9df8779e861832a6ad6a10e551e31c$2c2458f2@mail3.nate.com>",
+      "key": 130,
+      "subject": "Fw:Order ID CEDX211125262059 AlphaSSL - Approve SSL Application",
+      "date": "2021-11-25 13:45:39+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>",
+        "\"Jaewon Taiji\" <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTUEPNh+=XSBbhZg5iDSM2j3CPY63wgoua5yMaSDDzX3Q@mail.gmail.com>",
+      "key": 62,
+      "subject": "Fwd: 가비아 SSL 인증서 연장 관련",
+      "date": "2021-11-25 13:45:31+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<05fb996c93329b8383f87365eb57421b$2c2458f2@mail3.nate.com>",
+      "key": 121,
+      "subject": "Fw:Order ID CEDX211125262062 AlphaSSL - Approve SSL Application",
+      "date": "2021-11-25 13:45:22+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>",
+        "\"Jaewon Taiji\" <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<36029118dd090a117316b3a98f63ac20$2c2458f2@mail3.nate.com>",
+      "key": 63,
+      "subject": "가비아 SSL 인증서 연장 관련",
+      "date": "2021-11-25 13:43:30+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"Jaewon Taiji\" <taiji0021@gmail.com>",
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQ312+nWBxsSqLbEB41Xu-AsTMk-mPkZPXQ4HYcGxKxGw@mail.gmail.com>",
+      "key": 220,
+      "subject": "[현원소프트] ios App 테스트를 위한 계정 요청",
+      "date": "2021-11-23 15:54:58+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerrygs@naver.com",
+        "이상은 <kboom8002@gmail.com>",
+        "케이비 박상언 <atticfor@kakao.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20211121233810.32bMgWlKQfSXIaGDINrSwQ@atticfor.kakao.com>",
+      "key": 30,
+      "subject": "산출물 최종 정리",
+      "date": "2021-11-21 23:38:10+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQyJfftksxfHn47sWAXtRE_au3fNV9x2Ko4UaeguZRucA@mail.gmail.com>",
+      "key": 187,
+      "subject": "Fwd: 에이아이네이션 메일 보내실때 참조에 같이넣어주세요~",
+      "date": "2021-11-16 12:53:13+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "케이비 박상언 <atticfor@kakao.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<94f82dc16d458220fb8e5fc23a9bc12b@cweb006.nm.nfra.io>",
+      "key": 188,
+      "subject": "에이아이네이션 메일 보내실때 참조에 같이넣어주세요~",
+      "date": "2021-11-16 12:49:29+09:00",
+      "sender": "조길수 jerry <jerrygs@naver.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wS9xZMBxLnD_e2XqY7XYjt+q1qD4cd5trqK8ZV2jNnmCw@mail.gmail.com>",
+      "key": 37,
+      "subject": "[현원소프트] 프로젝트 완료를 위한 산출물 전달",
+      "date": "2021-11-08 15:30:48+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerrygs@naver.com",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "강용구 <antihera@kakao.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "KaiBy_REST_API v1.0.docx",
+          "size": 33703,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        },
+        {
+          "filename": "KAIBY_프로젝트_산출물목록.xls",
+          "size": 37376,
+          "content_type": "application/vnd.ms-excel"
+        },
+        {
+          "filename": "Kaiby_테이블_정의서 v1.0.xlsx",
+          "size": 73474,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "filename": "Kaiby_ERD_001.png",
+          "size": 662023,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "Kaiby_개발인수인계서.docx",
+          "size": 627780,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 1434356
+    },
+    {
+      "id": "<CAOCD9wSsuFJCN8Bv7Ls-5a131-dXxYOoUv0Nui1k_z84eTTTfg@mail.gmail.com>",
+      "key": 179,
+      "subject": "Re: [공지] 현원소프트 시연 관련",
+      "date": "2021-10-28 21:12:38+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "소연양 <soyeon.yang.1357@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "정지환 <iyoano@gmail.com>",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "한승호 <s.han@geomin.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXKwCNuMHb85X4Hpv+gsAibMCmS5ps9qprD_BPeN9H-a3Q@mail.gmail.com>",
+      "key": 180,
+      "subject": "Re: [공지] 현원소프트 시연 관련",
+      "date": "2021-10-28 15:37:52+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "한승호 <s.han@geomin.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "정지환 <iyoano@gmail.com>",
+        "소연양 <soyeon.yang.1357@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSde5M1iz=0gP1ZHX-0zwdFGsuBiXyYt_LxHL1Fnc-CZg@mail.gmail.com>",
+      "key": 181,
+      "subject": "[공지] 현원소프트 시연 관련",
+      "date": "2021-10-28 13:03:29+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "한승호 <s.han@geomin.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "정지환 <iyoano@gmail.com>",
+        "소연양 <soyeon.yang.1357@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20211014015243.819.78571@me233.mailplug.com>",
+      "key": 26,
+      "subject": "[에이아이네이션_이상덕] 구글법인계정 결제 하였습니다 48시간안에 활성화 된다고합니다",
+      "date": "2021-10-14 10:52:40+09:00",
+      "sender": "이상덕 <lsd@aination.kr>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com",
+        "조길수이사 <jerrygs@aination.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQyB7O_Abdztc6PdoPoiaQKjA3Nnx7NFaL6E+G1VN1cgA@mail.gmail.com>",
+      "key": 0,
+      "subject": "Fwd: Fw:[가비아] SSL 보안서버인증서 파일을 다운로드해 주세요.",
+      "date": "2021-10-12 17:09:01+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<7730fcd3436788ee9706d763999c449f$2c2458f2@mail3.nate.com>",
+      "key": 1,
+      "subject": "Fw:[가비아] SSL 보안서버인증서 파일을 다운로드해 주세요.",
+      "date": "2021-10-12 17:07:45+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<567293e023cfbb1e17092028b244f6a1$2c2458f2@mail3.nate.com>",
+      "key": 2,
+      "subject": "Fw:[가비아] 인증번호를 알려드립니다.",
+      "date": "2021-10-12 16:39:22+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXJnqkzEUFEhE+b0L93cB4a003aYPZXFX-1TfqNkAQk1Lg@mail.gmail.com>",
+      "key": 212,
+      "subject": "Re: [써드아이시스템] 시놀로지 장비 초기화 완료",
+      "date": "2021-10-01 20:34:38+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSvjxWcqmOxOipDbQxk3ujWVsd_Kq5yLjNa2ZExxcicEA@mail.gmail.com>",
+      "key": 213,
+      "subject": "Fwd: [써드아이시스템] 시놀로지 장비 초기화 완료",
+      "date": "2021-10-01 20:13:58+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "강용구 <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "1633077196744.png",
+          "size": 1588455,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 1588455
+    },
+    {
+      "id": "<92B326AF-65BB-43F4-B42E-84567AA02A25@ipartners.co.kr>",
+      "key": 214,
+      "subject": "Fwd: [써드아이시스템] 시놀로지 장비 초기화 완료",
+      "date": "2021-10-01 20:11:44+09:00",
+      "sender": "박영무 <crossman@ipartners.co.kr>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSOwgCq6rCv8En_4zCPM9we1xGxt9jMRFH4nmWQuwoUBg@mail.gmail.com>",
+      "key": 161,
+      "subject": "Fwd: [이상덕] 홈페이지 팝업공지요청",
+      "date": "2021-09-29 11:01:07+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "소연양 <soyeon.yang.1357@gmail.com>",
+        "정지환 <iyoano@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "210929-팝업공지.jpg",
+          "size": 205843,
+          "content_type": "image/jpeg"
+        }
+      ],
+      "size": 205843
+    },
+    {
+      "id": "<530db726305f95f0d81359610d42fac7$2c2458f2@mail3.nate.com>",
+      "key": 162,
+      "subject": "[이상덕] 홈페이지 팝업공지요청",
+      "date": "2021-09-29 10:48:41+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "210929-팝업공지.jpg",
+          "size": 205843,
+          "content_type": "image/jpeg"
+        }
+      ],
+      "size": 205843
+    },
+    {
+      "id": "<202109281351192059_Ems@116.67.103.55>",
+      "key": 123,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-09-28 13:51:19+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202109281349412042_Ems@116.67.103.101>",
+      "key": 124,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-09-28 13:49:41+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CACcmeX+tgwnXAqBYC-_Emvtkn+fo9WbmfZuv+R5kz2Uncr_2rg@mail.gmail.com>",
+      "key": 82,
+      "subject": "Re: 에이아이네이션 자산 관련",
+      "date": "2021-09-23 15:05:07+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202109171531518087_Ems@116.67.103.111>",
+      "key": 68,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-09-17 15:31:51+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<CAOCD9wQwZ=NWLwey69Wne2No8PmwT9JsW9=yaDQdAaia_qBSfw@mail.gmail.com>",
+      "key": 23,
+      "subject": "Fwd: [이상덕] 홈페이지 팝업이미지와 링크걸주소 보내드립니다.",
+      "date": "2021-09-13 17:24:27+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "소연양 <soyeon.yang.1357@gmail.com>",
+        "정지환 <iyoano@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "pop-1.png",
+          "size": 181644,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 181644
+    },
+    {
+      "id": "<c11934cbd1eadf1a8d06a070901503b6$2c2458f2@mail3.nate.com>",
+      "key": 24,
+      "subject": "[이상덕] 홈페이지 팝업이미지와 링크걸주소 보내드립니다. ",
+      "date": "2021-09-13 17:13:38+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "pop-1.png",
+          "size": 181644,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 181644
+    },
+    {
+      "id": "<CAOCD9wR=z=Pui9MLVyRWVrY5dsXQfmZZWZvGvvh35yv7ZkaTOw@mail.gmail.com>",
+      "key": 171,
+      "subject": "Fwd: 팁스 시스템 테스트 요청",
+      "date": "2021-08-25 13:02:59+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "image.png",
+          "size": 173619,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "시험절차서_20-xxxx(에이아이네이션)_v03.docx",
+          "size": 321256,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 494875
+    },
+    {
+      "id": "<9C580402-0C68-4C46-9ABC-528C0F021841@gmail.com>",
+      "key": 172,
+      "subject": "Fwd: 팁스 시스템 테스트 요청",
+      "date": "2021-08-25 12:55:46+09:00",
+      "sender": "YOUNGMOO PARK <crossman73@gmail.com>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "시험절차서_20-xxxx(에이아이네이션)_v03.docx",
+          "size": 321256,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 321256
+    },
+    {
+      "id": "<CACcmeXKzviGLkHk4rTOsyfQzdL08wtnu+CpTthESf=9Hcj__0w@mail.gmail.com>",
+      "key": 146,
+      "subject": "앱 TPS 테스트 중 오류 문의",
+      "date": "2021-08-25 12:05:45+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<6123671f.1c69fb81.118f2.6783.GMR@mx.google.com>",
+      "key": 92,
+      "subject": "Delivery Status Notification (Failure)",
+      "date": "2021-08-23 02:15:11-07:00",
+      "sender": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "icon.png",
+          "size": 5747,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 5747
+    },
+    {
+      "id": "<61220c25.1c69fb81.b18b2.923b.GMR@mx.google.com>",
+      "key": 93,
+      "subject": "Delivery Status Notification (Delay)",
+      "date": "2021-08-22 01:34:45-07:00",
+      "sender": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "icon.png",
+          "size": 3910,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 3910
+    },
+    {
+      "id": "<6120909f.1c69fb81.395fc.2df1.GMR@mx.google.com>",
+      "key": 94,
+      "subject": "Delivery Status Notification (Delay)",
+      "date": "2021-08-20 22:35:27-07:00",
+      "sender": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "icon.png",
+          "size": 3910,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 3910
+    },
+    {
+      "id": "<682522b8a81a3b5286db81b585af7e4d@cweb016.nm.nfra.io>",
+      "key": 228,
+      "subject": "긴급수정 사항.png",
+      "date": "2021-08-20 17:15:53+09:00",
+      "sender": "슈뢰딩어의 고양이 <jerrygs@naver.com>",
+      "recipients": [
+        "박영무무 <hyunwonnsoft@gmail.com>",
+        "케이비 박상언 <atticfor@kakao.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "긴급수정 사항.png",
+          "size": 778086,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 778086
+    },
+    {
+      "id": "<CAOCD9wQ-8vvSZsK+XBEoKt9oXe41_PvkKcboNuqqdSkmK_Dj-g@mail.gmail.com>",
+      "key": 95,
+      "subject": "Re: kaiby app 오류사항 1차",
+      "date": "2021-08-20 12:54:53+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jerry@lbstory.com",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "에이아이 신채연 <worldinsia@gmail.com>",
+        "강용구 <antihera@kakao.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CABUv1B=RZwfe6ENNpTjqNZbp4ZF_SRc3zFaSkpt3JmWrR0Dz7Q@mail.gmail.com>",
+      "key": 96,
+      "subject": "Re: kaiby app 오류사항 1차",
+      "date": "2021-08-20 11:17:08+09:00",
+      "sender": "장현철 <janghc0695@gmail.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "taiji0021@gmail.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20210819232416.lctsf6GPTa2MWmphlj5pPA@atticfor.kakao.com>",
+      "key": 97,
+      "subject": "FW: kaiby app 오류사항 1차",
+      "date": "2021-08-19 23:24:16+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "hyunwonnsoft <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "kaiby app 수정사항 819.docx",
+          "size": 15725,
+          "content_type": "application/haansoftdocx"
+        },
+        {
+          "filename": "kaiby app 수정사항_피드백.docx",
+          "size": 17331,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 33056
+    },
+    {
+      "id": "<CABUv1BksX-P6OhLZHKc3TmrbPJ5pGxo4jRhLFzb3c5m5s+2aAA@mail.gmail.com>",
+      "key": 98,
+      "subject": "Re: kaiby app 오류사항 1차",
+      "date": "2021-08-19 17:03:20+09:00",
+      "sender": "장현철 <janghc0695@gmail.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "taiji0021@gmail.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQB6=kLutVMZrUNsXZ7whE6uJkTXB9jMhca7b=8qGKXSA@mail.gmail.com>",
+      "key": 99,
+      "subject": "Fwd: kaiby app 오류사항 1차",
+      "date": "2021-08-19 15:03:55+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "kaiby app 수정사항 819.docx",
+          "size": 15725,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 15725
+    },
+    {
+      "id": "<8067daddbdeeefda9ddf67c97a655715@cweb007.nm.nfra.io>",
+      "key": 100,
+      "subject": "kaiby app 오류사항 1차",
+      "date": "2021-08-19 15:00:38+09:00",
+      "sender": "슈뢰딩어의 고양이 <jerrygs@naver.com>",
+      "recipients": [
+        "박영무무 <hyunwonnsoft@gmail.com>",
+        "케이비 박상언 <atticfor@kakao.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "에이아이 신채연 <worldinsia@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "kaiby app 수정사항 819.docx",
+          "size": 15725,
+          "content_type": "application/haansoftdocx"
+        }
+      ],
+      "size": 15725
+    },
+    {
+      "id": "<CAOCD9wQqxFDPDFZo_axoDe_LANYVSReeRiX3dec6ErTTvGcUiw@mail.gmail.com>",
+      "key": 57,
+      "subject": "개발 진행을 위한 일정 확인 요망",
+      "date": "2021-08-11 16:03:19+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "정지환 <iyoano@gmail.com>",
+        "atticfor@kakao.com",
+        "강용구 <antihera@kakao.com>",
+        "소연양 <soyeon.yang.1357@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQKHOvBTNq2EzxTD8x+cG9Qhmq88YcRgSqx6MdxytqazQ@mail.gmail.com>",
+      "key": 104,
+      "subject": "Fwd: 앱 회의록",
+      "date": "2021-08-11 12:35:43+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "정지환 <iyoano@gmail.com>",
+        "소연양 <soyeon.yang.1357@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "2021-08-09 현원 미팅.pptx",
+          "size": 38672,
+          "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ],
+      "size": 38672
+    },
+    {
+      "id": "<CAOCD9wRAoA8HnYUmPf0XpXU7XimuVHMJHdt1o7jLqyL2wRT5Fg@mail.gmail.com>",
+      "key": 131,
+      "subject": "Re: FW: [에이아이네이션] K-Beauty API 설계관련",
+      "date": "2021-08-10 14:01:22+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "20210810_KAIBY_Service_configuration.pptx",
+          "size": 425309,
+          "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ],
+      "size": 425309
+    },
+    {
+      "id": "<CAOCD9wQKycVp8HLo4HoUxGwfvsYzRmNnLGct6LJyx4L2=FZDfA@mail.gmail.com>",
+      "key": 132,
+      "subject": "Fwd: FW: [에이아이네이션] K-Beauty API 설계관련",
+      "date": "2021-08-10 12:05:06+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "KaiBy 인터페이스 정의서_20210611.docx",
+          "size": 42363,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 42363
+    },
+    {
+      "id": "<CAG-8DHC12tUuuvpmfyeh93us2FUedaszcqn_8sJ5YXhZFiVNeQ@mail.gmail.com>",
+      "key": 133,
+      "subject": "Fwd: FW: [에이아이네이션] K-Beauty API 설계관련",
+      "date": "2021-08-10 12:02:37+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "KaiBy 인터페이스 정의서_20210611.docx",
+          "size": 42363,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 42363
+    },
+    {
+      "id": "<CAOCD9wRHwhZZc4vTEW3M6B90Gz0r2AT3DEnM1sXZcmFr4MgMwA@mail.gmail.com>",
+      "key": 105,
+      "subject": "Fwd: 앱 회의록",
+      "date": "2021-08-10 12:01:00+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "atticfor@kakao.com",
+        "강용구 <antihera@kakao.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "2021-08-09 현원 미팅.pptx",
+          "size": 38672,
+          "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ],
+      "size": 38672
+    },
+    {
+      "id": "<CAOCD9wToYRbL+wqehXHXM80fx4kLgYVFd185ET8qbC=0aTP_Cg@mail.gmail.com>",
+      "key": 106,
+      "subject": "Re: 앱 회의록",
+      "date": "2021-08-10 10:19:11+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXLLiv=a1Xg1yVCfuL6VivCukYqBjKRWbZUZck29f=rxgg@mail.gmail.com>",
+      "key": 107,
+      "subject": "앱 회의록",
+      "date": "2021-08-10 10:06:02+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "2021-08-09 현원 미팅.pptx",
+          "size": 38672,
+          "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ],
+      "size": 38672
+    },
+    {
+      "id": "<CACcmeX+w2zPR64Vr-Qj4e0kB-7ib-EQr1k0jwHsFw+R=c6wX=w@mail.gmail.com>",
+      "key": 83,
+      "subject": "Re: 에이아이네이션 자산 관련",
+      "date": "2021-08-05 17:08:44+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wR09ajy5J8gjfFAadt2fnF4VYj56gjTAFj16FxV-6WPZQ@mail.gmail.com>",
+      "key": 84,
+      "subject": "에이아이네이션 자산 관련",
+      "date": "2021-08-05 16:49:20+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "AINATION_Servers_List_20210805.xlsx",
+          "size": 56832,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 56832
+    },
+    {
+      "id": "<CAG-8DHDhY+j982tKD3_q30Z=skDosnTH=4x1FF1qHJTNmpr7Cg@mail.gmail.com>",
+      "key": 231,
+      "subject": "Re: RE: Re: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-08-05 15:32:12+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net",
+        "백기돈 <neoff77@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20210802043353.qUcOcqs0TSemK47o-BzgIg@atticfor.kakao.com>",
+      "key": 232,
+      "subject": "RE: RE: Re: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-08-02 04:33:53+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net",
+        "백기돈 <neoff77@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202108012206416493_Ems@116.67.103.104>",
+      "key": 69,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-08-01 22:06:41+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202108012204385517_Ems@116.67.103.113>",
+      "key": 70,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-08-01 22:04:38+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CAG-8DHBqt9wYe_jBwmDVTNhC3jwQpXhTRsVP6HosnxnWwi__wg@mail.gmail.com>",
+      "key": 233,
+      "subject": "Re: Re: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-26 18:06:23+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net",
+        "백기돈 <neoff77@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAG-8DHC1WhHF9gqA-ZCN62hZJWcwQBJLrbMLdgYdWDMeEKZqPg@mail.gmail.com>",
+      "key": 234,
+      "subject": "Re: Re: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-26 18:02:51+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net",
+        "백기돈 <neoff77@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20210726065657.5KjfPD9oSGWm6vMA-XOlhA@atticfor.kakao.com>",
+      "key": 235,
+      "subject": "RE: Re: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-26 06:56:57+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net",
+        "백기돈 <neoff77@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAG-8DHAcz67TiA62uG-XZ3i4kda6=zbzk5dR7XKY9JRN2An5Wg@mail.gmail.com>",
+      "key": 236,
+      "subject": "Re: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-22 11:10:37+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202107221038549197_Ems@116.67.103.115>",
+      "key": 36,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-07-22 10:38:54+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CAG-8DHC8pQRB8LeLjePvYEkiGMmi8TnwUSd0sKbOaDw6uveRtA@mail.gmail.com>",
+      "key": 237,
+      "subject": "Re: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-21 09:45:26+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202107201207056772_Ems@116.67.103.114>",
+      "key": 45,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-07-20 12:07:05+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<CAOCD9wSJNwVreUK0GMhxDnbjKCX+W_FnjKUnLnqHncRLqk3DMw@mail.gmail.com>",
+      "key": 152,
+      "subject": "Fwd: FW: [써드아이시스템] IDC 작업 완료 안내",
+      "date": "2021-07-19 10:36:04+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "image001.jpg",
+          "size": 50074,
+          "content_type": "image/jpeg"
+        },
+        {
+          "filename": "image002.jpg",
+          "size": 92331,
+          "content_type": "image/jpeg"
+        },
+        {
+          "filename": "image003.jpg",
+          "size": 81531,
+          "content_type": "image/jpeg"
+        },
+        {
+          "filename": "image004.jpg",
+          "size": 73149,
+          "content_type": "image/jpeg"
+        },
+        {
+          "filename": "image005.jpg",
+          "size": 35182,
+          "content_type": "image/jpeg"
+        },
+        {
+          "filename": "image006.jpg",
+          "size": 41654,
+          "content_type": "image/jpeg"
+        }
+      ],
+      "size": 373921
+    },
+    {
+      "id": "<!&!AAAAAAAAAAAYAAAAAAAAAHzpJngIUwNAutF4eqwuLm/CgAAAEAAAAC19R7ddKNVDtqSjNkBS/b8BAAAAAA==@ipartners.co.kr>",
+      "key": 153,
+      "subject": "FW: [써드아이시스템] IDC 작업 완료 안내",
+      "date": "2021-07-19 10:32:47+09:00",
+      "sender": "<crossman@ipartners.co.kr>",
+      "recipients": [
+        "<hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wT3cnyxKL8SrGdftzAP+mM=d3p=Ujzt5piAx=OcYGBc3w@mail.gmail.com>",
+      "key": 12,
+      "subject": "Fwd: 안녕하세요 조길수 입니다~",
+      "date": "2021-07-17 15:20:55+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "\"atticfor@kakao.com\" <atticfor@kakao.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "케이비 kaiby푸터.docx",
+          "size": 14980,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 14980
+    },
+    {
+      "id": "<924ea1b6f49a2892d9b3c948357a0a3@cweb005.nm.nfra.io>",
+      "key": 13,
+      "subject": "안녕하세요 조길수 입니다~",
+      "date": "2021-07-15 15:08:00+09:00",
+      "sender": "슈뢰딩어의 고양이 <jerrygs@naver.com>",
+      "recipients": [
+        "박영무무 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "케이비 kaiby푸터.docx",
+          "size": 14980,
+          "content_type": "application/haansoftdocx"
+        }
+      ],
+      "size": 14980
+    },
+    {
+      "id": "<CAOCD9wT1P9h=abFCDgWVx+2UWKQj6gXCDau==pZ6chH+t9q_bA@mail.gmail.com>",
+      "key": 66,
+      "subject": "[공지] 서버 이동 관련",
+      "date": "2021-07-15 14:32:34+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "강용구 <antihera@kakao.com>",
+        "강석주 <sjkang@3rdeyesys.com>",
+        "한승호 <s.han@geomin.kr>",
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202107151123291131_Ems@116.67.103.60>",
+      "key": 58,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-07-15 11:23:29+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<20210713111301.p3UVZnnnS0W_fBOC_3IcHA@atticfor.kakao.com>",
+      "key": 238,
+      "subject": "RE: Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-13 11:13:01+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAG-8DHAgZ_Cu3y2mtJKiCDNWNjHrwnPcrVHoyi_BTqkSvcrpmQ@mail.gmail.com>",
+      "key": 239,
+      "subject": "Re: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-13 10:50:07+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRbHtAghiDY2Dnqoxt12OhrZ2NaA3HkeXhWNMuyKH_JHQ@mail.gmail.com>",
+      "key": 65,
+      "subject": "서버 작업 공지",
+      "date": "2021-07-09 14:30:23+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "강용구 <antihera@kakao.com>",
+        "atticfor@kakao.com",
+        "Jaewon Taiji <taiji0021@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQ9BEq4-6QEvU--bxKH+sa4mXW7-ngBqE5OWzPf4i_SfA@mail.gmail.com>",
+      "key": 166,
+      "subject": "Kaiby 개발 진행 참조",
+      "date": "2021-07-09 13:09:38+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20210706164441.I6bCh7OyTxKQ7FR9Ur3TnA@atticfor.kakao.com>",
+      "key": 240,
+      "subject": "RE: Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-06 16:44:41+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAG-8DHCDtm=4NxwxtB_hdpE3p-2B9sjwqybJ1532WRLTOYbjnA@mail.gmail.com>",
+      "key": 241,
+      "subject": "Re: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-06 16:21:20+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXKh_HTPQf_9eqj5Z5by3N++2rdnL4UT6xFA=8vmACF62A@mail.gmail.com>",
+      "key": 134,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-07-06 10:15:18+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "ks.lee@dasandata.co.kr",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20210706023432.jKC8FkZCTJ6EHzCv6GEOmQ@atticfor.kakao.com>",
+      "key": 242,
+      "subject": "RE: Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-06 02:34:32+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAG-8DHCjn7NOSMSn4cvxHob5JD3pqRMfS4WtZkwWm2XWMceh2A@mail.gmail.com>",
+      "key": 243,
+      "subject": "Re: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-05 15:38:40+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTwhp0vYyh9h5oXDcuDAWLCYiFOeXoE+aBBogJ8KCxWRw@mail.gmail.com>",
+      "key": 122,
+      "subject": "[현원소프트] 추가 상면 견적비",
+      "date": "2021-07-05 15:03:57+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "코로케이션 견적서__210705(현원소프트).xlsx",
+          "size": 23831,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 23831
+    },
+    {
+      "id": "<2b5363bc2f1161bfda1bbd5d12e9d712@cvweb024.wmail.nhnsystem.com>",
+      "key": 135,
+      "subject": "RE: Fwd: IDC 입고 관련 연락처",
+      "date": "2021-07-05 14:39:13+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "써드아이_기술 <tech@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "코로케이션 견적서(상면추가)__21705.pdf",
+          "size": 101000,
+          "content_type": "application/pdf"
+        }
+      ],
+      "size": 101000
+    },
+    {
+      "id": "<CAOCD9wTGNo9+zd55vLy51usiSWmLY8=ACmJx_Rhv0V9H8aUtMw@mail.gmail.com>",
+      "key": 158,
+      "subject": "[현원소프트] 상품 관련 참조 컨텐츠",
+      "date": "2021-07-05 13:34:44+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "nakata1977@hanmail.net",
+        "강용구 <antihera@kakao.com>",
+        "atticfor@kakao.com"
+      ],
+      "attachments": [
+        {
+          "filename": "상품.zip",
+          "size": 6796552,
+          "content_type": "application/x-zip-compressed"
+        }
+      ],
+      "size": 6796552
+    },
+    {
+      "id": "<20210705100255.VWYmJvxsRKWDxQlFMvluzQ@atticfor.kakao.com>",
+      "key": 244,
+      "subject": "RE: Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-05 10:02:55+09:00",
+      "sender": "atticfor <atticfor@kakao.com>",
+      "recipients": [
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAG-8DHBty79jW4vxXSk4_cSN3OuFcDNFbTWSrxjLrfh=5JSaxA@mail.gmail.com>",
+      "key": 245,
+      "subject": "Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-07-05 09:41:50+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTW1J3=HxBP3wpQOLnYAgSustB2407c32siuz7eaL6nMQ@mail.gmail.com>",
+      "key": 136,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-07-02 14:46:01+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "ks.lee@dasandata.co.kr",
+        "강 명주 <mkang@snu.ac.kr>",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXJRfNm20TtmUPiFYvNN7qE9iJKDUOWFs7H1h39bLDVOXQ@mail.gmail.com>",
+      "key": 137,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-07-02 14:36:38+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "ks.lee@dasandata.co.kr",
+        "강 명주 <mkang@snu.ac.kr>",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTyx40=c7C4dXO-7kw1OdmEFBk66xvRCRLxaZxMaUitXw@mail.gmail.com>",
+      "key": 138,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-07-02 14:16:44+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "ks.lee@dasandata.co.kr",
+        "강 명주 <mkang@snu.ac.kr>",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXLV_w817cSroc9Fxe-mYidaQ-qGh-Fvyt+07RB8Gc8ARA@mail.gmail.com>",
+      "key": 139,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-07-01 18:45:58+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "ks.lee@dasandata.co.kr",
+        "강 명주 <mkang@snu.ac.kr>",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRTrNUR0O50anpL16c=huwJNdSTEF_Zs-=Qy77qauMdXw@mail.gmail.com>",
+      "key": 140,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-07-01 18:40:14+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "ks.lee@dasandata.co.kr",
+        "강 명주 <mkang@snu.ac.kr>",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<f71350c75db0c1df6e3baff75328505d@cvweb030.wmail.nhnsystem.com>",
+      "key": 141,
+      "subject": "RE: Fwd: IDC 입고 관련 연락처",
+      "date": "2021-07-01 18:35:48+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRZqxuYXB3AJjBCjBu6R6_dNU_X3YKQQmFSmTCGmx=28A@mail.gmail.com>",
+      "key": 142,
+      "subject": "Fwd: IDC 입고 관련 연락처",
+      "date": "2021-07-01 17:50:45+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "강석주 <sjkang@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXJp+ss2A89NtoDoe8Mdb8cTCOsYR2ewA1ESUuot_4gzZw@mail.gmail.com>",
+      "key": 143,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-07-01 17:43:36+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "ks.lee@dasandata.co.kr",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "강 명주 <mkang@snu.ac.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<edbfb5dd3183ba97cc5b20a32e7b6128@cweb013.nm.nfra.io>",
+      "key": 159,
+      "subject": "상품사진입니다.",
+      "date": "2021-07-01 14:57:16+09:00",
+      "sender": "슈뢰딩어의 고양이 <jerrygs@naver.com>",
+      "recipients": [
+        "<hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "상품.zip",
+          "size": 6796552,
+          "content_type": "application/x-zip-compressed"
+        }
+      ],
+      "size": 6796552
+    },
+    {
+      "id": "<CAG-8DHCnBwmfdL8j52u_ynWWbQ8JCnboN3ZrSNyUWHgDjVtiAQ@mail.gmail.com>",
+      "key": 246,
+      "subject": "Re: 기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-06-30 17:58:52+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "nakata1977@hanmail.net"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wR8w8XmydJjET_RPy5Ov=N1wy2+vr4Nq8x2pUmKmhCFPg@mail.gmail.com>",
+      "key": 90,
+      "subject": "Fwd: 조이사입니다.사진",
+      "date": "2021-06-30 14:42:19+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "nakata1977@hanmail.net",
+        "atticfor@kakao.com",
+        "강용구 <antihera@kakao.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202106301439123724_Ems@116.67.103.60>",
+      "key": 38,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-06-30 14:39:12+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93697,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93697
+    },
+    {
+      "id": "<202106301438208912_Ems@116.67.103.61>",
+      "key": 39,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-06-30 14:38:20+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<84ff695834673c5964b81646ef177319@cweb014.nm.nfra.io>",
+      "key": 91,
+      "subject": "조이사입니다.사진",
+      "date": "2021-06-30 14:23:11+09:00",
+      "sender": "슈뢰딩어의 고양이 <jerrygs@naver.com>",
+      "recipients": [
+        "<hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAG-8DHAH1Aax_z+6BsKN6FaU+=BTcMhrWhROw+hEkK8aoZdy-A@mail.gmail.com>",
+      "key": 247,
+      "subject": "기획/퍼블 확인 요청 리스트 전달 드립니다.",
+      "date": "2021-06-29 17:50:16+09:00",
+      "sender": "Jaewon Taiji <taiji0021@gmail.com>",
+      "recipients": [
+        "atticfor <atticfor@kakao.com>",
+        "nakata1977@hanmail.net",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera <antihera@kakao.com>",
+        "장현철 <janghc0695@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wStN6PJNmCEuuZPVkzNPhfX+ivmBBdFZ_Ti12k8U5afww@mail.gmail.com>",
+      "key": 144,
+      "subject": "Re: IDC 입고 관련 연락처",
+      "date": "2021-06-29 17:09:15+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "다산데이타 <mail@dasandata.co.kr>",
+        "ks.lee@dasandata.co.kr",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeX+2kV-Hv9QP7tEf45bjPtj05G3_59PeKuVvfSHZ4KeW8Q@mail.gmail.com>",
+      "key": 145,
+      "subject": "IDC 입고 관련 연락처",
+      "date": "2021-06-28 14:04:35+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "다산데이타 <mail@dasandata.co.kr>",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "ks.lee@dasandata.co.kr"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<dc10a0ee161daa9208c8a0ded1cb3f35$2c2458f4@mail3.nate.com>",
+      "key": 221,
+      "subject": "Fw:답변: 안녕하세요.",
+      "date": "2021-06-22 12:56:37+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<26ae4fe1759aceed9bcc79f6346a226d@cvweb026.wmail.nhnsystem.com>",
+      "key": 224,
+      "subject": "Re: IDC 작업 세부 일정 안내",
+      "date": "2021-06-18 13:04:32+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이재형 <ljh0519@3rdeyesys.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "강용구 <antihera@kakao.com>",
+        "<tech@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<bc75d057593c7c92cb7024d0d40f165d$2c2458f4@mail3.nate.com>",
+      "key": 190,
+      "subject": "[이상덕] 변경했습니다^^",
+      "date": "2021-06-18 09:35:01+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<fc0d4ff49b666a8b3d2dd2f0e528ce1e$2c2458f4@mail3.nate.com>",
+      "key": 111,
+      "subject": "[이상덕] 홈페이지 메뉴명 견경관련",
+      "date": "2021-06-18 09:33:47+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "홈페이지-타이틀변경.png",
+          "size": 170053,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 170053
+    },
+    {
+      "id": "<CACcmeXK5E5Q2wRoDAnzUpqADhRRdRWoRo1vUdtZA5QhBLf1JTA@mail.gmail.com>",
+      "key": 126,
+      "subject": "Re: 서버 구매 관련",
+      "date": "2021-06-17 15:13:53+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "강석주 <sjkang@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTcgDkCBufdwF8Ni-uM5R20BJ9UVR20wNwcU0GSSTbwoA@mail.gmail.com>",
+      "key": 127,
+      "subject": "Re: 서버 구매 관련",
+      "date": "2021-06-17 15:04:55+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "강석주 <sjkang@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXLQzsU4ROhU19Bj4xz28wh0TZrsY5wSbFsPzTDKoGoXPA@mail.gmail.com>",
+      "key": 128,
+      "subject": "서버 구매 관련",
+      "date": "2021-06-17 14:57:40+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTh7V7SU+-oXbOC9XDL3z9HZ58-dXCR6HUhR3et+Q1O9Q@mail.gmail.com>",
+      "key": 225,
+      "subject": "Fwd: IDC 작업 세부 일정 안내",
+      "date": "2021-06-17 14:48:24+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRd-+WSJoVUz030XCO-mgfsK3hNZDQwa57dAwZmmZVyoQ@mail.gmail.com>",
+      "key": 226,
+      "subject": "Re: IDC 작업 세부 일정 안내",
+      "date": "2021-06-17 14:48:00+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "강석주 <sjkang@3rdeyesys.com>",
+        "이재형 <ljh0519@3rdeyesys.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "강용구 <antihera@kakao.com>",
+        "tech@3rdeyesys.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<a5bf7f7fed4836cc5dd3a3158caeb@cvweb005.wmail.nhnsystem.com>",
+      "key": 227,
+      "subject": "IDC 작업 세부 일정 안내",
+      "date": "2021-06-17 11:38:19+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이재형 <ljh0519@3rdeyesys.com>",
+        "Jaewon Taiji <taiji0021@gmail.com>",
+        "장현철 <janghc0695@gmail.com>",
+        "강용구 <antihera@kakao.com>",
+        "<tech@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTrH=Oyf0zXF_KZmP6rdmaK1GksoZmaLu30y+m9mBRnjQ@mail.gmail.com>",
+      "key": 116,
+      "subject": "Fwd: KAIBY AI 및 추천기능",
+      "date": "2021-06-13 17:06:49+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "\"atticfor@kakao.com\" <atticfor@kakao.com>",
+        "강용구 <antihera@kakao.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "20210613_KAIBY AI 및 추천 기능.pptx",
+          "size": 1795103,
+          "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ],
+      "size": 1795103
+    },
+    {
+      "id": "<CAAJzjZ=HyDu5GnL2vVLwVZQudO5QKTNh2ZTTb_0VikjWajFsJA@mail.gmail.com>",
+      "key": 117,
+      "subject": "KAIBY AI 및 추천기능",
+      "date": "2021-06-13 15:14:54+09:00",
+      "sender": "이상은 <kboom8002@gmail.com>",
+      "recipients": [
+        "s.han@geomin.kr",
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "veroroot@geomin.kr"
+      ],
+      "attachments": [
+        {
+          "filename": "20210613_KAIBY AI 및 추천 기능.pptx",
+          "size": 1795103,
+          "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ],
+      "size": 1795103
+    },
+    {
+      "id": "<CAOCD9wT31Rz=5WZOkSrNzOMu_PhVvqjkkb6A5MPocwg8K_LJxQ@mail.gmail.com>",
+      "key": 33,
+      "subject": "[알림] 현원소프트 서비스 진행 비용 관련",
+      "date": "2021-06-01 14:15:38+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "lsd@aination.kr",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<ef2046dc36245b56f5d537eec2784bf5@cvweb025.wmail.nhnsystem.com>",
+      "key": 204,
+      "subject": "RE: [에이아이네이션] 서버배송관련",
+      "date": "2021-05-31 15:52:57+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "이상덕 <lsd@aination.kr>",
+        "<hyunwonnsoft@gmail.com>",
+        "써드아이_기술 <tech@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<20210531053258.20618.28100@me233.mailplug.com>",
+      "key": 205,
+      "subject": "[에이아이네이션] 서버배송관련",
+      "date": "2021-05-31 14:32:56+09:00",
+      "sender": "이상덕 <lsd@aination.kr>",
+      "recipients": [
+        "sjkang@3rdeyesys.com",
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "01.jpg",
+          "size": 1842280,
+          "content_type": "image/jpeg"
+        },
+        {
+          "filename": "02.jpg",
+          "size": 1910486,
+          "content_type": "image/jpeg"
+        }
+      ],
+      "size": 3752766
+    },
+    {
+      "id": "<CAOCD9wR2Fqn2n-4B-wX8CR--Tb9m2Hb3c9MhfshHWeLUJraFtw@mail.gmail.com>",
+      "key": 27,
+      "subject": "Re: IDC 위치 안내",
+      "date": "2021-05-28 15:10:37+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "\"lsd@aination.kr\" <lsd@aination.kr>"
+      ],
+      "attachments": [
+        {
+          "filename": "1621217884375.png",
+          "size": 262786,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 262786
+    },
+    {
+      "id": "<CAOCD9wQkum0eLUDw+8g4bpFvE9Y+fSXfQHeA3dKT38qqzO0O1g@mail.gmail.com>",
+      "key": 40,
+      "subject": "[현원소프트]  인프라 이전 관련 내용",
+      "date": "2021-05-27 15:39:51+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "lsd@aination.kr"
+      ],
+      "attachments": [
+        {
+          "filename": "코로케이션 견적서__210318.xlsx",
+          "size": 23823,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "filename": "3rdeye.png",
+          "size": 64836,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 88659
+    },
+    {
+      "id": "<20210527061814.20644.79722@me233.mailplug.com>",
+      "key": 118,
+      "subject": "[RE]Re: [에이아이네이션_이상덕] NAS, 웹서버 중고 구입 관련",
+      "date": "2021-05-27 15:18:12+09:00",
+      "sender": "이상덕 <lsd@aination.kr>",
+      "recipients": [
+        "7 Tera <7teracom@gmail.com>",
+        "곽지훈 대표님 <jkwak314@snu.ac.kr>",
+        "곽지훈 대표님회사 <jkwak@aination.kr>",
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXLGA22JQYgGzLbSDoNPx+ixDtzLO6GkqrE480_YDWgtEw@mail.gmail.com>",
+      "key": 46,
+      "subject": "Re: [써드아이시스템] IDC 계약서 검토 요청",
+      "date": "2021-05-26 17:03:40+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "강석주 <sjkang@3rdeyesys.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRX+p__oM3-of3wRjEZYJeX_qmVAqtPdTgMO9uhEH0m3Q@mail.gmail.com>",
+      "key": 47,
+      "subject": "Fwd: [써드아이시스템] IDC 계약서 검토 요청",
+      "date": "2021-05-26 16:59:03+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "강석주 <sjkang@3rdeyesys.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTT8+jMF1k4FyPw9sUoo-Uh_u3h40ufsRknd9td9XRjJQ@mail.gmail.com>",
+      "key": 48,
+      "subject": "Re: [써드아이시스템] IDC 계약서 검토 요청",
+      "date": "2021-05-26 16:55:57+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "강석주 <sjkang@3rdeyesys.com>",
+        "써드아이_사업 <biz@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<f3cb5cc7fb622bd575d797e86fbfd46@cvweb003.wmail.nhnsystem.com>",
+      "key": 49,
+      "subject": "Re: [써드아이시스템] IDC 계약서 검토 요청",
+      "date": "2021-05-26 16:36:48+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "써드아이_사업 <biz@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeX+1UD_c07TPt5BjsbBBj=+fHK1EfDPG3Ou7Jb07V0Pptg@mail.gmail.com>",
+      "key": 182,
+      "subject": "Re: NAS, 웹서버 중고 구입 문의",
+      "date": "2021-05-26 15:19:48+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTBb1C6596P-T_6LXtDadmLVoB3cqVVnGLpsZicKaidhw@mail.gmail.com>",
+      "key": 183,
+      "subject": "Re: NAS, 웹서버 중고 구입 문의",
+      "date": "2021-05-26 15:10:28+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<000901d751dd$2d9300f0$88b902d0$@3rdeyesys.com>",
+      "key": 184,
+      "subject": "RE: NAS, 웹서버 중고 구입 문의",
+      "date": "2021-05-26 12:14:01+09:00",
+      "sender": "장원진 <qxsilver@3rdeyesys.com>",
+      "recipients": [
+        "'현원소프트' <hyunwonnsoft@gmail.com>",
+        "<sjkang@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wS0irq2V=QrojU3R1pbBURfE_K-U6Fz=D84dGgrOhJE5w@mail.gmail.com>",
+      "key": 185,
+      "subject": "Fwd: NAS, 웹서버 중고 구입 문의",
+      "date": "2021-05-26 10:43:06+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "R630_20210525.pdf",
+          "size": 118691,
+          "content_type": "application/pdf"
+        },
+        {
+          "filename": "윤재흠실장.jpg",
+          "size": 24993,
+          "content_type": "image/jpeg"
+        }
+      ],
+      "size": 143684
+    },
+    {
+      "id": "<CACcmeXL2G4FA7==mqRiqG7+=57=0mQyJLXfNE9Jk0xF0XqGhfg@mail.gmail.com>",
+      "key": 186,
+      "subject": "Fwd: NAS, 웹서버 중고 구입 문의",
+      "date": "2021-05-26 09:36:39+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "hyunwonnsoft@gmail.com"
+      ],
+      "attachments": [
+        {
+          "filename": "R630_20210525.pdf",
+          "size": 118691,
+          "content_type": "application/pdf"
+        },
+        {
+          "filename": "윤재흠실장.jpg",
+          "size": 24993,
+          "content_type": "image/jpeg"
+        }
+      ],
+      "size": 143684
+    },
+    {
+      "id": "<CAOCD9wTjDaSq=i6yQoiKSvP1Q1nAhdPb9noiF6UtwinA1gXP7A@mail.gmail.com>",
+      "key": 50,
+      "subject": "Re: [써드아이시스템] IDC 계약서 검토 요청",
+      "date": "2021-05-24 14:37:00+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "강석주 <sjkang@3rdeyesys.com>",
+        "써드아이_사업 <biz@3rdeyesys.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "IDC 이용신청서(현원소프트).xls",
+          "size": 61952,
+          "content_type": "application/vnd.ms-excel"
+        },
+        {
+          "filename": "IDC 서비스 이용 계약서(현원소프트).doc",
+          "size": 154624,
+          "content_type": "application/msword"
+        }
+      ],
+      "size": 216576
+    },
+    {
+      "id": "<CAOCD9wSmjZW2SwExTBo=OjfW=H-+3N7J_PihMzKiDaS0YzDzUQ@mail.gmail.com>",
+      "key": 261,
+      "subject": "Re: 서버 견적 문의",
+      "date": "2021-05-24 14:32:49+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "image001.png",
+          "size": 4784,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image002.png",
+          "size": 4083,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image003.png",
+          "size": 3590,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 12457
+    },
+    {
+      "id": "<CACcmeX+G4tm=EfWp6pempncQa3CoNrjmL+_QuMpggkYKVhNFVQ@mail.gmail.com>",
+      "key": 262,
+      "subject": "Re: 서버 견적 문의",
+      "date": "2021-05-24 14:31:53+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRgyy82tvvJ43EQ+YinJ91Z-AnAmi+RUcrpCkZWYFf2EA@mail.gmail.com>",
+      "key": 263,
+      "subject": "Re: 서버 견적 문의",
+      "date": "2021-05-24 14:27:52+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "image001.png",
+          "size": 4784,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image002.png",
+          "size": 4083,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image003.png",
+          "size": 3590,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 12457
+    },
+    {
+      "id": "<a4983f12555af9ebc10817b8e8c97f2@cvweb010.wmail.nhnsystem.com>",
+      "key": 51,
+      "subject": "RE: [써드아이시스템] IDC 계약서 검토 요청",
+      "date": "2021-05-21 17:33:00+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "써드아이_사업 <biz@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<SLXP216MB0143473967A8BDF5E80EBA82B3299@SLXP216MB0143.KORP216.PROD.OUTLOOK.COM>",
+      "key": 264,
+      "subject": "RE: 서버 견적 문의",
+      "date": "2021-05-21 00:12:04+00:00",
+      "sender": "다산데이타 <mail@dasandata.co.kr>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "\"antihera@kakao.com\" <antihera@kakao.com>",
+        "\"sjkang@3rdeyesys.com\" <sjkang@3rdeyesys.com>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진<qxsilver@3rdeyesys.com>",
+        "현원소프트<hyunwonnsoft@gmail.com>",
+        "다산데이타<mail@dasandata.co.kr>"
+      ],
+      "attachments": [
+        {
+          "filename": "에이아이네이션_곽지훈대표님_Dell PowerEdge R340 Server_발주_20210520.xlsx",
+          "size": 603552,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "filename": "에이아이네이션_곽지훈대표님_시놀로지 RS1619XS+ NAS_발주_20210520.xlsx",
+          "size": 561591,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 1165143
+    },
+    {
+      "id": "<CACcmeXJN-bjA+4N3oE5OySBeLZE0wBaRgbDLfKWJTHMdA3AEfQ@mail.gmail.com>",
+      "key": 265,
+      "subject": "Re: 서버 견적 문의",
+      "date": "2021-05-20 13:59:15+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "다산데이타 <mail@dasandata.co.kr>",
+        "antihera@kakao.com",
+        "sjkang@3rdeyesys.com",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wT8djx2ZXxWyRpfFsOVyzFCPi9e6SXdqWK-fn+a0OAd_A@mail.gmail.com>",
+      "key": 266,
+      "subject": "Re: 서버 견적 문의",
+      "date": "2021-05-20 11:27:59+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "antihera@kakao.com",
+        "sjkang@3rdeyesys.com",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "image001.png",
+          "size": 4784,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image002.png",
+          "size": 4083,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image003.png",
+          "size": 3590,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 12457
+    },
+    {
+      "id": "<CACcmeXLhfu2xcQXgKKaC-X-kDZbV6JsWDcy9f=6dkNAK_03ktg@mail.gmail.com>",
+      "key": 267,
+      "subject": "Fwd: 서버 견적 문의",
+      "date": "2021-05-20 11:21:39+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "antihera@kakao.com",
+        "sjkang@3rdeyesys.com",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "에이아이네이션_곽지훈대표님_Dell PowerEdge R340 Server_견적_20210520.xlsx",
+          "size": 603509,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 603509
+    },
+    {
+      "id": "<CAOCD9wQBj28ZYiHaOddNbhaS-+JkqA3W+NSWNukUz_v63WW3BA@mail.gmail.com>",
+      "key": 193,
+      "subject": "Re: NAS 진행 상황 문의",
+      "date": "2021-05-18 15:24:54+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "antihera@kakao.com",
+        "sjkang@3rdeyesys.com",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "image.png",
+          "size": 109481,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 109481
+    },
+    {
+      "id": "<CACcmeXLjo9rWBWux=M++wYGMahYAAV5czBz7LKUm4auZO=zSNA@mail.gmail.com>",
+      "key": 194,
+      "subject": "Re: NAS 진행 상황 문의",
+      "date": "2021-05-18 13:26:37+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "sjkang@3rdeyesys.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<e0e9fbc6d930b8cf9a8a3bb51cde3d4e@cvweb012.wmail.nhnsystem.com>",
+      "key": 52,
+      "subject": "[써드아이시스템] IDC 계약서 검토 요청",
+      "date": "2021-05-17 11:34:50+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "써드아이_사업 <biz@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "IDC 서비스 이용 계약서(아이파트너스).doc",
+          "size": 154624,
+          "content_type": "application/octet-stream"
+        },
+        {
+          "filename": "IDC 이용신청서(아이파트너스).xls",
+          "size": 52224,
+          "content_type": "application/vnd.ms-excel"
+        }
+      ],
+      "size": 206848
+    },
+    {
+      "id": "<CAOCD9wQN4X=Bon=Q-1ypWyj_wWAr0J6-mRpb_fQHaSOydvoq9A@mail.gmail.com>",
+      "key": 28,
+      "subject": "Fwd: IDC 위치 안내",
+      "date": "2021-05-17 11:28:43+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>"
+      ],
+      "attachments": [
+        {
+          "filename": "1621217884375.png",
+          "size": 262786,
+          "content_type": "image/png"
+        }
+      ],
+      "size": 262786
+    },
+    {
+      "id": "<CAOCD9wSoX=G+zNhdcDa_9sWjq9XWmqW6L9xPFTBB5xrZmLBetg@mail.gmail.com>",
+      "key": 195,
+      "subject": "Re: NAS 진행 상황 문의",
+      "date": "2021-05-17 11:26:48+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "sjkang@3rdeyesys.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<835ae934adf8d5fd4f3330357fd798@cvweb004.wmail.nhnsystem.com>",
+      "key": 29,
+      "subject": "IDC 위치 안내",
+      "date": "2021-05-17 11:26:07+09:00",
+      "sender": "강석주 <sjkang@3rdeyesys.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "써드아이_기술 <tech@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202105141346224526_Ems@116.67.103.55>",
+      "key": 81,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-05-14 13:46:22+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<CAOCD9wQVOEA=sXedMx_TyMWZ_=PA0pEjHmpH7emAsyq+7i0e6g@mail.gmail.com>",
+      "key": 196,
+      "subject": "Re: NAS 진행 상황 문의",
+      "date": "2021-05-11 15:38:34+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "antihera@kakao.com",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wS_9ZdESy35vJj6PCkX9JFvqQbXHJmEzs5Mr8RdcD+8vA@mail.gmail.com>",
+      "key": 268,
+      "subject": "Fwd: 서버 견적 문의",
+      "date": "2021-05-11 15:37:04+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "image002.png",
+          "size": 4083,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image001.png",
+          "size": 4784,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "image003.png",
+          "size": 3590,
+          "content_type": "image/png"
+        },
+        {
+          "filename": "서울대학교_곽지훈대표님_시놀로지 RS1619XS+ NAS 및 웹서버 R340_견적_20210407.xlsx",
+          "size": 604652,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 617109
+    },
+    {
+      "id": "<CACcmeXJ8p2GwjdAHfEUZ+higrniogJvCz_-SqcV8saF+tVCJ_A@mail.gmail.com>",
+      "key": 197,
+      "subject": "Re: NAS 진행 상황 문의",
+      "date": "2021-05-11 15:36:48+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXJ-bCY06vw2jxLodONk3qtJYR+agEhcX2T4ETgmYSdkjA@mail.gmail.com>",
+      "key": 269,
+      "subject": "Fwd: 서버 견적 문의",
+      "date": "2021-05-11 15:33:53+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [
+        {
+          "filename": "서울대학교_곽지훈대표님_시놀로지 RS1619XS+ NAS 및 웹서버 R340_견적_20210407.xlsx",
+          "size": 604652,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 604652
+    },
+    {
+      "id": "<CAOCD9wSXPuoBx2OWjYq=vnoPNoPbth7CUqZC+pdMrrER+8mBQw@mail.gmail.com>",
+      "key": 174,
+      "subject": "Fwd: [현원소프트] 서버 인프라 이전 관련",
+      "date": "2021-05-11 14:45:56+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRYUnGpYir7XBchvsVW8STQ_C2UomSuS9=J2deXaMvNtQ@mail.gmail.com>",
+      "key": 198,
+      "subject": "NAS 진행 상황 문의",
+      "date": "2021-05-11 14:33:17+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTgmiqz9V4RoncNZ5pg4XGu9SY8kh3zfZYgK5mzzjveGw@mail.gmail.com>",
+      "key": 222,
+      "subject": "Re: [현원소프트] 인프라 이전을 했습니다.",
+      "date": "2021-05-11 14:28:17+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "IMG_2131.jpg",
+          "size": 322255,
+          "content_type": "image/jpeg"
+        },
+        {
+          "filename": "IDC 이용신청서(현원소프트).xls",
+          "size": 61440,
+          "content_type": "application/vnd.ms-excel"
+        },
+        {
+          "filename": "IDC 서비스 이용 계약서(현원소프트).doc",
+          "size": 154624,
+          "content_type": "application/msword"
+        },
+        {
+          "filename": "코로케이션 견적서__210511(현원소프트).xlsx",
+          "size": 23795,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 562114
+    },
+    {
+      "id": "<202105030858459612_Ems@116.67.103.53>",
+      "key": 173,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-05-03 08:58:45+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<CAOCD9wRxUN9kuMC6vY0cNo2+2TB1XfkB+8DYdM29AMJeYA5DuA@mail.gmail.com>",
+      "key": 31,
+      "subject": "Re: [현원소프트] SB 현황화 버젼 2021.04.29",
+      "date": "2021-04-29 17:20:45+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "정지환 <iyoano@gmail.com>",
+        "atticfor@kakao.com",
+        "antihera@kakao.com",
+        "소연양 <soyeon.yang.1357@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTgJZJ4H8c0Z7o31528utUAPJphqeO9cRxU-eZnNsPEQQ@mail.gmail.com>",
+      "key": 223,
+      "subject": "[현원소프트] 인프라 이전을 했습니다. ",
+      "date": "2021-04-29 16:54:46+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상덕 <yaky99@nate.com>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "IMG_2131.jpg",
+          "size": 322255,
+          "content_type": "image/jpg"
+        }
+      ],
+      "size": 322255
+    },
+    {
+      "id": "<CAOCD9wTsX2=cqbwbACjt-R1b0R0oF9NAfoq6sgCFT1mk7QewwA@mail.gmail.com>",
+      "key": 32,
+      "subject": "[현원소프트] SB 현황화 버젼 2021.04.29",
+      "date": "2021-04-29 11:01:28+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "정지환 <iyoano@gmail.com>",
+        "atticfor@kakao.com",
+        "antihera@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQWB6Jdn_aS3zJ5EYCf+L=gOdY9E9QMqdjDwNdZ1BYEBw@mail.gmail.com>",
+      "key": 206,
+      "subject": "Re: [현원소프트] 서버 이전 관련",
+      "date": "2021-04-29 10:47:01+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXLxi3=1vAtqad=8O=8-9mDdnrN7tAt7dEMYy+G3n4_SEA@mail.gmail.com>",
+      "key": 207,
+      "subject": "Re: [현원소프트] 서버 이전 관련",
+      "date": "2021-04-29 10:44:48+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRmLzEFhJW9Xgi-qFeqGfAGJaDKGABg2b=Z=AFxY4pWNQ@mail.gmail.com>",
+      "key": 208,
+      "subject": "[현원소프트] 서버 이전 관련",
+      "date": "2021-04-29 10:33:12+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXKUTwxijnh=2YFcuDfs_uHBB=C8jERHgJ5LKPoGkyRjOA@mail.gmail.com>",
+      "key": 54,
+      "subject": "Re: [현원소프트] 인프라 이전 관련",
+      "date": "2021-04-26 22:27:47+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "atticfor@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXJpa2_kAZavTnorfHbxfx3tPaSS2sgZGCE4EANWeTsEQg@mail.gmail.com>",
+      "key": 55,
+      "subject": "Re: [현원소프트] 인프라 이전 관련",
+      "date": "2021-04-26 12:50:47+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "atticfor@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQw1h-ZpSvAOYN=4e3N7ce8UnGRXXzMV9c3b=e5APunww@mail.gmail.com>",
+      "key": 56,
+      "subject": "[현원소프트] 인프라 이전 관련",
+      "date": "2021-04-26 12:35:13+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "장원진 <qxsilver@3rdeyesys.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "atticfor@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQ8GgGgywDOpOUR+1ZLDFReK7NSz_8GhdXZsTOAiLT3tw@mail.gmail.com>",
+      "key": 108,
+      "subject": "Re: [현원소프트] 인프라 이전 관련 문의",
+      "date": "2021-04-21 11:33:59+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeX+4Cb98kkh7jE5tuQVp0GLaZLaw6AMkvCQHWAzO-eoWnA@mail.gmail.com>",
+      "key": 109,
+      "subject": "Re: [현원소프트] 인프라 이전 관련 문의",
+      "date": "2021-04-20 14:53:35+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTAUiuj2aWGN=LUEETgwBi1FuMSJ+JANEq=YEVtZfmeRA@mail.gmail.com>",
+      "key": 110,
+      "subject": "[현원소프트] 인프라 이전 관련 문의",
+      "date": "2021-04-20 14:45:21+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com",
+        "이상덕 <yaky99@nate.com>",
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRv6mpCcpvmnw6vYbbFCsWPL+RzLCeHif9HS8hw2cvJFQ@mail.gmail.com>",
+      "key": 44,
+      "subject": "[현원소프트] 인프라 이전 문의",
+      "date": "2021-04-13 14:37:22+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTW6QY6OYu89E_WP2i=uuQdtjuPyt=biZZ3qZkrU7+cHA@mail.gmail.com>",
+      "key": 209,
+      "subject": "Fwd: [현원소프트] 2020.04.02 회의록",
+      "date": "2021-04-05 14:16:05+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "antihera@kakao.com",
+        "박상언 <ashymir@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXJLj=-Wo_dZK0CcE+T2ZEDGqvoOu1kBnGddS+bH0+vcGg@mail.gmail.com>",
+      "key": 210,
+      "subject": "Re: [현원소프트] 2020.04.02 회의록",
+      "date": "2021-04-05 14:13:16+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSvOSzVyDCNfdbNzYOvHMJ9DUDH5odt9AvoMF7E-XURfA@mail.gmail.com>",
+      "key": 101,
+      "subject": "Re: aination 앱 담당자",
+      "date": "2021-04-05 14:12:46+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "Jihoon Kwak <jkwak314@snu.ac.kr>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTKzRoxAFHHMAHyeb-06eheJ-UYS0n8-s=bj0qSHWc7Yw@mail.gmail.com>",
+      "key": 102,
+      "subject": "Fwd: aination 앱 담당자",
+      "date": "2021-04-05 14:11:12+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "antihera@kakao.com",
+        "박상언 <ashymir@naver.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "beauty app data type - 여드름.xlsx",
+          "size": 11997,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "filename": "beauty app data type - 뷰티스코어.xlsx",
+          "size": 9838,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "filename": "beauty app data type - 추천.xlsx",
+          "size": 11207,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 33042
+    },
+    {
+      "id": "<CACcmeX+bCxa4jBd6PZg4np=Q+8D9uNWkS5wt72zzLSChowqkGQ@mail.gmail.com>",
+      "key": 103,
+      "subject": "Fwd: aination 앱 담당자",
+      "date": "2021-04-05 14:08:18+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>",
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "beauty app data type - 여드름.xlsx",
+          "size": 11997,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "filename": "beauty app data type - 뷰티스코어.xlsx",
+          "size": 9838,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "filename": "beauty app data type - 추천.xlsx",
+          "size": 11207,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 33042
+    },
+    {
+      "id": "<CAOCD9wRKvdpZM7efhZMJcbxmpc0Py1jbaE23bH3j_5afEO9WkQ@mail.gmail.com>",
+      "key": 211,
+      "subject": "[현원소프트] 2020.04.02 회의록 ",
+      "date": "2021-04-05 13:57:54+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jkwak314@snu.ac.kr",
+        "이상은 <kboom8002@gmail.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [
+        {
+          "filename": "20210402_KAIBY_ 회의록.docx",
+          "size": 24027,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 24027
+    },
+    {
+      "id": "<CAOCD9wQGaLbLyxx9WgGTz7YSpmZT9A3-XgE5_4P548BSG64Rxg@mail.gmail.com>",
+      "key": 229,
+      "subject": "kaiby 메인 시안",
+      "date": "2021-04-01 15:31:52+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "IMG_2110.jpg",
+          "size": 397683,
+          "content_type": "image/jpg"
+        }
+      ],
+      "size": 397683
+    },
+    {
+      "id": "<CAOCD9wSohraKB9p-RoXbEiLNMVRs7Gt9-mEwPQVK47-c5qzqCA@mail.gmail.com>",
+      "key": 80,
+      "subject": "대표님 메인 시안 가안 보내드립니다. ",
+      "date": "2021-04-01 15:30:57+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<202103301320123150_Ems@116.67.103.111>",
+      "key": 112,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-03-30 13:20:12+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<CAOCD9wSxHkAzfBuzW+CqZFwwp7wsXRSQfikGGTdj_111cuVJtA@mail.gmail.com>",
+      "key": 53,
+      "subject": "대표님 SB 전달 해 드립니다.",
+      "date": "2021-03-29 17:35:31+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>",
+        "정지환 <iyoano@gmail.com>",
+        "이상덕 <yaky99@nate.com>",
+        "소연양 <soyeon.yang.1357@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQ7uvHZwkCPn6J5F0BPWpXoT63Ctywy=jLshw0+_YYHxw@mail.gmail.com>",
+      "key": 165,
+      "subject": "3월 귀속 인건비대장 보내드립니다.",
+      "date": "2021-03-26 15:04:57+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "박혜경 <admin@taxgran.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRKcYJVjWDwit15-PHyZXJsmxf1gLX7a8RUZsxRt=257w@mail.gmail.com>",
+      "key": 169,
+      "subject": "[현원소프트] 안녕하세요. ",
+      "date": "2021-03-24 09:38:57+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "\"jkwak314@snu.ac.kr\" <jkwak314@snu.ac.kr>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wR35xL8AnQZbWRiVqwDzoTqx7OpTh0DZZd_4P0+ywBWpw@mail.gmail.com>",
+      "key": 248,
+      "subject": "[현원소프트] SB 현재 버젼 전달해 드립니다.",
+      "date": "2021-03-22 15:17:46+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "정지환 <iyoano@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTbht3+eqmncnqsxH16LFP6Fs1F27dRrhEF9JuxcnYmbg@mail.gmail.com>",
+      "key": 11,
+      "subject": "[현원소프트] SB 전달 해 드립니다.",
+      "date": "2021-03-22 11:43:59+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSMmsCk55M9NhTGH5Tst5KW8SdY37g3HW5CMVu8-Vy6NQ@mail.gmail.com>",
+      "key": 175,
+      "subject": "[현원소프트] 서버 인프라 이전 관련",
+      "date": "2021-03-19 12:43:57+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "jkwak314@snu.ac.kr"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTYsRdr3-=inTZWbP2swLSUb5o4J66bR6bxTj7O25eCFw@mail.gmail.com>",
+      "key": 270,
+      "subject": "[현원소프트] 보강된 SB 보내드립니다.",
+      "date": "2021-03-19 12:38:36+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "설계_0319.7z",
+          "size": 21217100,
+          "content_type": "application/octet-stream"
+        },
+        {
+          "filename": "코로케이션 견적서__210318.xlsx",
+          "size": 23589,
+          "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ],
+      "size": 21240689
+    },
+    {
+      "id": "<CAOCD9wRwtugnsiY98C-Nio1=WRd2s4GYLdvWS7hpJvrqU6Yh7w@mail.gmail.com>",
+      "key": 89,
+      "subject": "[현원소프트] SB 메인 파트 추가",
+      "date": "2021-03-16 11:28:34+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "KaiBy_MN.메인_0.1.pptx",
+          "size": 13095693,
+          "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ],
+      "size": 13095693
+    },
+    {
+      "id": "<CAOCD9wT5j=zit0inv+s3EuK4oOMzT72Rjw=FTNe9fPon6xCpvQ@mail.gmail.com>",
+      "key": 192,
+      "subject": "[현원소프트] Kaiby SB 관련",
+      "date": "2021-03-15 11:35:01+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "KAIBY_210307.zip",
+          "size": 19038824,
+          "content_type": "application/zip"
+        }
+      ],
+      "size": 19038824
+    },
+    {
+      "id": "<CAOCD9wRyjTrh4infeVukhyttnXS5L3CeR7Z0ZoW+C1e1AFPyWg@mail.gmail.com>",
+      "key": 260,
+      "subject": "[현원소프트] 견적 문의 ",
+      "date": "2021-03-09 14:20:11+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "장원진 <qxsilver@3rdeyesys.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CACcmeXKfbD2WzEEAZXWghdexqSrSf-32zvy1dbGcrjS-orY=uA@mail.gmail.com>",
+      "key": 202,
+      "subject": "Re: [현원소프트] 2021.02.26 회의록",
+      "date": "2021-03-02 17:51:25+09:00",
+      "sender": "Jihoon Kwak <jkwak314@snu.ac.kr>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wTiP1c0LzP4WM4SYiSE=Lf2En-uS2KsaB7-mBc4CWzt8A@mail.gmail.com>",
+      "key": 203,
+      "subject": "[현원소프트] 2021.02.26 회의록",
+      "date": "2021-03-02 16:20:58+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>",
+        "jkwak314@snu.ac.kr",
+        "pivv@snu.ac.kr",
+        "박상언 <ashymir@naver.com>",
+        "antihera@kakao.com"
+      ],
+      "attachments": [
+        {
+          "filename": "20210226_KAIBY_ 회의록.docx",
+          "size": 23555,
+          "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ],
+      "size": 23555
+    },
+    {
+      "id": "<202103011533277331_Ems@116.67.103.60>",
+      "key": 115,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-03-01 15:33:27+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93757,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93757
+    },
+    {
+      "id": "<CAOCD9wR8qJKXseH0opDJAWd3tOZMsNpANhddYcoatLAarOsEaw@mail.gmail.com>",
+      "key": 67,
+      "subject": "(주)현원소프트 서류",
+      "date": "2021-02-24 13:26:43+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "admin@taxgran.com"
+      ],
+      "attachments": [
+        {
+          "filename": "2020이자원천징수영수증.pdf",
+          "size": 89516,
+          "content_type": "application/pdf"
+        },
+        {
+          "filename": "법인통장내역2020년.xls",
+          "size": 44246,
+          "content_type": "application/vnd.ms-excel"
+        }
+      ],
+      "size": 133762
+    },
+    {
+      "id": "<202102021648259913_Ems@116.67.103.102>",
+      "key": 160,
+      "subject": "（주）현원소프트 (（주）현원소프트->(주)에이아이네이션)",
+      "date": "2021-02-02 16:48:25+09:00",
+      "sender": "\"국세청\" <hometaxadmin@hometax.go.kr>",
+      "recipients": [
+        "\"（주）현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "NTS_eTaxInvoice.html",
+          "size": 93717,
+          "content_type": "text/html"
+        }
+      ],
+      "size": 93717
+    },
+    {
+      "id": "<fd059ce777388465d42cf59f54cf1ad2$2c2458f4@mail3.nate.com>",
+      "key": 76,
+      "subject": "Re:Re: [이상덕] 접속로르 요청",
+      "date": "2021-01-27 09:10:58+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wQNFX7B1_90ntPhvjFrvB3Va7kuX18QSW0a3SvKpcM-qQ@mail.gmail.com>",
+      "key": 77,
+      "subject": "Re: [이상덕] 접속로르 요청",
+      "date": "2021-01-26 18:44:51+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상덕 <yaky99@nate.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "jdcaccesslog_.zip",
+          "size": 172615,
+          "content_type": "application/x-zip-compressed"
+        }
+      ],
+      "size": 172615
+    },
+    {
+      "id": "<d3adf65d3626afc9230d5bea4de6532a$2c2458f4@mail3.nate.com>",
+      "key": 78,
+      "subject": "[이상덕] 접속로르 요청",
+      "date": "2021-01-26 11:42:07+09:00",
+      "sender": "\"이상덕\" <yaky99@nate.com>",
+      "recipients": [
+        "\"현원소프트\" <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wRj5NHbddDnNqtwJHPOAMYFCaqbhHnv7Zr-+DE71hKS2A@mail.gmail.com>",
+      "key": 41,
+      "subject": "[현원] 개발 내역서 전달 해 드립니다.",
+      "date": "2021-01-19 15:22:01+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "20210101_KAIBY_과업내역서.DOC",
+          "size": 216064,
+          "content_type": "application/msword"
+        }
+      ],
+      "size": 216064
+    },
+    {
+      "id": "<CAAJzjZ=1VAPW8epMxsYBvG8toXfhU92bR5F-GBk2dKa4MMROnA@mail.gmail.com>",
+      "key": 15,
+      "subject": "Re: 대표님 견적서 전달 해 드립니다.",
+      "date": "2021-01-14 13:18:49+09:00",
+      "sender": "이상은 <kboom8002@gmail.com>",
+      "recipients": [
+        "현원소프트 <hyunwonnsoft@gmail.com>"
+      ],
+      "attachments": [],
+      "size": 0
+    },
+    {
+      "id": "<CAOCD9wSHr=ayAgyH419nez1_spM8TG9cySAwM=-twzq4d8vh0g@mail.gmail.com>",
+      "key": 16,
+      "subject": "대표님 견적서 전달 해 드립니다.",
+      "date": "2021-01-13 15:42:39+09:00",
+      "sender": "현원소프트 <hyunwonnsoft@gmail.com>",
+      "recipients": [
+        "이상은 <kboom8002@gmail.com>"
+      ],
+      "attachments": [
+        {
+          "filename": "20210102_KPB_공수_근거.pdf",
+          "size": 74396,
+          "content_type": "application/pdf"
+        },
+        {
+          "filename": "20210102_KPB_현원소프트_견적서.pdf",
+          "size": 258295,
+          "content_type": "application/pdf"
+        }
+      ],
+      "size": 332691
+    }
+  ],
+  "filename": "AINation.mbox",
+  "parsed_at": "2025-09-02 16:49:56.700304",
+  "total_count": 271,
+  "task_id": "2e2f61a6-05f1-4d56-90a6-96ea97de72ea"
+}

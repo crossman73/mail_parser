@@ -1,0 +1,173 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="jumbotron bg-light p-5 rounded-3 mb-4">
+      <h1 class="display-4">
+        <i class="fas fa-envelope-open-text text-primary me-3"></i>
+        이메일 증거 처리 시스템
+      </h1>
+      <p class="lead">
+        mbox 파일을 업로드하여 법정 증거 문서를 자동 생성하고 관리하는
+        시스템입니다.
+      </p>
+      <hr class="my-4" />
+      <p>
+        이메일 파싱, 증거 생성, 타임라인 분석, 무결성 검증 등의 기능을
+        제공합니다.
+      </p>
+      <a class="btn btn-primary btn-lg" href="/upload" role="button">
+        <i class="fas fa-upload me-2"></i>
+        mbox 파일 업로드하기
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6 col-lg-3">
+    <div class="card feature-card h-100">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-file-upload fa-3x text-primary"></i>
+        </div>
+        <h5 class="card-title">파일 업로드</h5>
+        <p class="card-text">
+          mbox 파일을 업로드하여 이메일 데이터를 처리합니다.
+        </p>
+        <a href="/upload" class="btn btn-outline-primary">
+          <i class="fas fa-upload me-1"></i>업로드
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card feature-card h-100">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-gavel fa-3x text-success"></i>
+        </div>
+        <h5 class="card-title">증거 생성</h5>
+        <p class="card-text">법정 제출용 증거 문서를 자동으로 생성합니다.</p>
+        <a href="/evidence" class="btn btn-outline-success">
+          <i class="fas fa-file-alt me-1"></i>증거 관리
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card feature-card h-100">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-timeline fa-3x text-info"></i>
+        </div>
+        <h5 class="card-title">타임라인</h5>
+        <p class="card-text">이메일 송수신 타임라인을 시각화합니다.</p>
+        <a href="/timeline" class="btn btn-outline-info">
+          <i class="fas fa-chart-line me-1"></i>타임라인
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card feature-card h-100">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-shield-alt fa-3x text-warning"></i>
+        </div>
+        <h5 class="card-title">무결성 검증</h5>
+        <p class="card-text">증거 파일의 무결성을 확인합니다.</p>
+        <a href="/integrity" class="btn btn-outline-warning">
+          <i class="fas fa-check-circle me-1"></i>검증
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if evidence_stats %}
+<div class="row mt-5">
+  <div class="col-12">
+    <h2 class="mb-4">
+      <i class="fas fa-chart-bar me-2"></i>
+      시스템 현황
+    </h2>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-primary">
+          {{ evidence_stats.get('total_evidence', 0) }}
+        </h3>
+        <p class="card-text">총 증거 건수</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-success">
+          {{ evidence_stats.get('processed_emails', 0) }}
+        </h3>
+        <p class="card-text">처리된 이메일</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-info">{{ evidence_stats.get('attachments', 0) }}</h3>
+        <p class="card-text">첨부파일</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-warning">
+          {{ evidence_stats.get('verified_count', 0) }}
+        </h3>
+        <p class="card-text">검증된 증거</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="row mt-5">
+  <div class="col-12">
+    <h2 class="mb-4">
+      <i class="fas fa-info-circle me-2"></i>
+      API 엔드포인트
+    </h2>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">RESTful API</h5>
+        <p class="card-text">다음 API 엔드포인트들을 사용할 수 있습니다:</p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <code>POST /api/emails/load</code> - 이메일 파일 로드
+          </li>
+          <li class="list-group-item">
+            <code>GET /api/emails/search</code> - 이메일 검색
+          </li>
+          <li class="list-group-item">
+            <code>GET /api/evidence</code> - 증거 목록 조회
+          </li>
+          <li class="list-group-item">
+            <code>GET /api/timeline</code> - 타임라인 생성
+          </li>
+        </ul>
+        <a href="/api" class="btn btn-primary mt-3">
+          <i class="fas fa-code me-1"></i>API 문서 보기
+        </a>
+        <a href="/admin" class="btn btn-warning mt-3 ms-2">
+          <i class="fas fa-cog me-1"></i>시스템 관리
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

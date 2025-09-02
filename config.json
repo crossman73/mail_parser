@@ -1,0 +1,65 @@
+{
+  "_comment": "메일 파싱 필터링 설정 파일",
+  "_usage": "python main.py email_files/example.mbox --party 갑 --config config.json",
+
+  "exclude_keywords": [
+    "광고",
+    "프로모션",
+    "뉴스레터",
+    "newsletter",
+    "unsubscribe",
+    "구독해지",
+    "마케팅",
+    "marketing",
+    "이벤트",
+    "event",
+    "쿠폰",
+    "할인",
+    "discount"
+  ],
+
+  "exclude_senders": [
+    "noreply@",
+    "no-reply@",
+    "marketing@",
+    "newsletter@",
+    "promotion@",
+    "event@",
+    "notification@",
+    "system@"
+  ],
+
+  "exclude_domains": [
+    "mailchimp.com",
+    "constantcontact.com",
+    "sendinblue.com",
+    "mailgun.net",
+    "sendgrid.net"
+  ],
+
+  "date_range": {
+    "_comment": "사건 관련 기간 설정 (YYYY-MM-DD 형식)",
+    "start": "2020-01-01",
+    "end": "2025-12-31"
+  },
+
+  "required_keywords": {
+    "_comment": "반드시 포함되어야 할 키워드 (빈 배열이면 모든 메일 허용)",
+    "_examples": ["계약", "합의", "송금", "지급"],
+    "keywords": []
+  },
+
+  "processing_options": {
+    "max_subject_length": 100,
+    "preserve_thread_structure": true,
+    "generate_hash_verification": true,
+    "create_backup": true
+  },
+
+  "output_settings": {
+    "evidence_number_format": "{party} 제{number}호증",
+    "folder_name_format": "[{date}]_{subject}",
+    "pdf_title_position": "center_top",
+    "include_metadata": true
+  }
+}

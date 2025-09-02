@@ -1,0 +1,949 @@
+{% extends "base.html" %} {% block content %}
+<!-- 메일 클라이언트 스타일 헤더 -->
+<div class="email-header border-bottom bg-light">
+  <div class="container-fluid py-3">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <div class="d-flex align-items-center">
+          <div class="folder-icon me-3">
+            <i class="fas fa-inbox fa-2x text-primary"></i>
+          </div>
+          <div>
+            <h4 class="mb-1 text-dark">받은편지함</h4>
+            <small class="text-muted"
+              >{{ filename }} - {{ emails|length }}개 메일</small
+            >
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-end">
+        <div class="btn-group me-2" role="group">
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm"
+            onclick="refreshEmails()"
+          >
+            <i class="fas fa-sync-alt me-1"></i>새로고침
+          </button>
+          <a
+            href="{{ url_for('upload') }}"
+            class="btn btn-outline-primary btn-sm"
+          >
+            <i class="fas fa-upload me-1"></i>새 파일
+          </a>
+        </div>
+        <a
+          href="{{ url_for('index') }}"
+          class="btn btn-outline-secondary btn-sm"
+        >
+          <i class="fas fa-home me-1"></i>홈
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 파싱 성공 안내 -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div
+        class="alert alert-success alert-dismissible fade show mt-3"
+        role="alert"
+      >
+        <div class="d-flex align-items-center">
+          <i class="fas fa-check-circle text-success me-2"></i>
+          <div>
+            <strong>파싱 완료!</strong> {{ emails|length }}개의 이메일이
+            성공적으로 파싱되었습니다.
+            <small class="d-block text-muted"
+              >아래 목록에서 증거로 생성할 이메일을 선택해주세요.</small
+            >
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 메일 클라이언트 스타일 툴바 -->
+<div class="email-toolbar border-bottom bg-white">
+  <div class="container-fluid py-2">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="btn-group me-2" role="group">
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm"
+            id="selectAllBtn"
+            onclick="toggleSelectAll()"
+          >
+            <i class="fas fa-check-square me-1"></i>전체선택
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger btn-sm"
+            onclick="clearSelection()"
+            disabled
+            id="clearBtn"
+          >
+            <i class="fas fa-times me-1"></i>선택해제
+          </button>
+        </div>
+        <div class="btn-group" role="group">
+          {% if not evidence_generated %}
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            id="generateEvidenceBtn"
+            onclick="showEvidenceOptions()"
+            disabled
+          >
+            <i class="fas fa-gavel me-1"></i>증거생성 (<span id="selectedCount"
+              >0</span
+            >)
+          </button>
+          {% else %}
+          <button
+            type="button"
+            class="btn btn-success btn-sm"
+            onclick="viewGeneratedEvidence()"
+          >
+            <i class="fas fa-folder-open me-1"></i>생성된 증거보기
+          </button>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-md-6 text-end">
+        <div class="d-flex align-items-center justify-content-end">
+          <small class="text-muted me-3">
+            <i class="fas fa-envelope me-1"></i>
+            {{ emails|length }}개 중
+            <span id="selectedCountText">0개 선택</span>
+          </small>
+          <div class="btn-group btn-group-sm" role="group">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              onclick="sortEmails('date')"
+            >
+              <i class="fas fa-sort-amount-down me-1"></i>날짜순
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              onclick="sortEmails('sender')"
+            >
+              <i class="fas fa-sort-alpha-down me-1"></i>발신자순
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 메일 목록 (메일 클라이언트 스타일) -->
+<div class="email-list-container">
+  <div class="container-fluid px-0">
+    {% if emails %}
+    <div class="email-list">
+      <div class="email-list-header border-bottom bg-light sticky-top">
+        <div class="container-fluid">
+          <div class="row py-2 small text-muted fw-bold">
+            <div class="col-md-1 text-center">
+              <input
+                type="checkbox"
+                id="masterCheckbox"
+                class="form-check-input"
+              />
+            </div>
+            <div class="col-md-1 text-center">
+              <i class="fas fa-paperclip"></i>
+            </div>
+            <div class="col-md-2">발신자</div>
+            <div class="col-md-3">제목</div>
+            <div class="col-md-2 text-center">날짜</div>
+            <div class="col-md-2 text-center">상태</div>
+            <div class="col-md-1 text-center">액션</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="email-list-body">
+        {% for email in emails %}
+        <div
+          class="email-item border-bottom"
+          data-email-index="{{ loop.index0 }}"
+          onclick="toggleEmailSelection({{ loop.index0 }}, event)"
+        >
+          <div class="container-fluid">
+            <div
+              class="row align-items-center py-3 email-row"
+              style="cursor: pointer"
+            >
+              <!-- 체크박스 -->
+              <div class="col-md-1 text-center">
+                <input
+                  type="checkbox"
+                  class="form-check-input email-checkbox"
+                  value="{{ loop.index0 }}"
+                  onclick="event.stopPropagation();"
+                />
+              </div>
+
+              <!-- 첨부파일 표시 -->
+              <div class="col-md-1 text-center">
+                {% if email.attachments_count and email.attachments_count > 0 %}
+                <i
+                  class="fas fa-paperclip text-warning"
+                  title="{{ email.attachments_count }}개 첨부파일"
+                ></i>
+                {% else %}
+                <span class="text-muted">-</span>
+                {% endif %}
+              </div>
+
+              <!-- 발신자 -->
+              <div class="col-md-2">
+                <div class="sender-info">
+                  <div
+                    class="sender-name text-truncate fw-bold"
+                    title="{{ email.sender }}"
+                  >
+                    {% if email.sender %} {% if '@' in email.sender %} {{
+                    email.sender.split('@')[0] }} {% else %} {{ email.sender }}
+                    {% endif %} {% else %}
+                    <span class="text-muted">알 수 없음</span>
+                    {% endif %}
+                  </div>
+                  <div class="sender-email text-muted small text-truncate">
+                    {{ email.sender if email.sender else 'N/A' }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- 제목 -->
+              <div class="col-md-3">
+                <div class="subject-info">
+                  <div
+                    class="subject text-truncate fw-bold"
+                    title="{{ email.subject }}"
+                  >
+                    {{ email.subject or '(제목 없음)' }}
+                  </div>
+                  <div class="preview text-muted small text-truncate">
+                    {% if email.preview %} {{ email.preview[:80] }}... {% else
+                    %} 내용 미리보기 없음 {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- 날짜 -->
+              <div class="col-md-2 text-center">
+                <div class="date-info">
+                  {% if email.date %}
+                  <div class="date-main">
+                    {{ email.date.strftime('%m/%d') }}
+                  </div>
+                  <div class="date-time text-muted small">
+                    {{ email.date.strftime('%H:%M') }}
+                  </div>
+                  {% else %}
+                  <span class="text-muted">N/A</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- 상태 -->
+              <div class="col-md-2 text-center">
+                <div class="status-info">
+                  {% if evidence_generated %}
+                  <span class="badge bg-success">증거생성완료</span>
+                  {% else %}
+                  <span class="badge bg-secondary">대기중</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- 액션 버튼 -->
+              <div class="col-md-1 text-center">
+                <button
+                  type="button"
+                  class="btn btn-outline-info btn-sm"
+                  onclick="viewEmailDetail({{ loop.index0 }}); event.stopPropagation();"
+                  title="상세보기"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <div class="empty-state">
+        <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+        <h5 class="text-muted">메일이 없습니다</h5>
+        <p class="text-muted">표시할 이메일이 없습니다.</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- 증거 생성 옵션 모달 -->
+<div class="modal fade" id="evidenceOptionsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-gavel me-2"></i>
+          증거 생성 옵션 설정
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">증거 번호 접두사</label>
+            <select class="form-select" id="evidencePrefix">
+              <option value="갑">갑 제○호증</option>
+              <option value="을">을 제○호증</option>
+              <option value="병">병 제○호증</option>
+              <option value="정">정 제○호증</option>
+            </select>
+            <small class="text-muted"
+              >법정 증거 번호의 접두사를 선택하세요.</small
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">선택된 이메일</label>
+            <div class="alert alert-info mb-0">
+              <i class="fas fa-check-circle me-1"></i>
+              <span id="selectedEmailCount">0</span>개 이메일이 선택되었습니다.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-12">
+            <label class="form-label fw-bold">생성 옵션</label>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="generateTimeline"
+                    checked
+                  />
+                  <label class="form-check-label" for="generateTimeline">
+                    <i class="fas fa-timeline me-1 text-info"></i>타임라인 생성
+                  </label>
+                  <small class="d-block text-muted"
+                    >이메일 시간순 타임라인 문서</small
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="extractAttachments"
+                    checked
+                  />
+                  <label class="form-check-label" for="extractAttachments">
+                    <i class="fas fa-paperclip me-1 text-warning"></i>첨부파일
+                    추출
+                  </label>
+                  <small class="d-block text-muted">첨부파일 별도 저장</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="verifyIntegrity"
+                    checked
+                  />
+                  <label class="form-check-label" for="verifyIntegrity">
+                    <i class="fas fa-shield-alt me-1 text-success"></i>무결성
+                    검증
+                  </label>
+                  <small class="d-block text-muted">디지털 해시 생성</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-warning">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <strong>주의사항:</strong>
+              <ul class="mb-0 mt-2">
+                <li>한 번 생성된 증거는 수정할 수 없습니다.</li>
+                <li>증거 번호는 순차적으로 자동 할당됩니다.</li>
+                <li>무결성 검증은 법정 제출용으로 권장합니다.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i>취소
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="generateSelectedEvidence()"
+        >
+          <i class="fas fa-gavel me-1"></i>증거 생성 시작
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="evidenceProgressModal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-cog fa-spin me-2"></i>
+          증거 생성 진행 중
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="progress" style="height: 25px">
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              id="evidenceProgressBar"
+              role="progressbar"
+              style="width: 0%"
+            >
+              <span id="evidenceProgressText">0%</span>
+            </div>
+          </div>
+        </div>
+        <div id="evidenceStatusMessage" class="text-muted">
+          증거 생성을 시작합니다...
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="evidenceCompleteBtn"
+          onclick="window.location.reload()"
+          style="display: none"
+        >
+          <i class="fas fa-check me-1"></i>완료 - 페이지 새로고침
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 관리자 링크 섹션 -->
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12 text-center">
+        <a href="/admin" class="btn btn-warning">
+          <i class="fas fa-cog me-1"></i>시스템 관리
+        </a>
+        <a href="/" class="btn btn-secondary ms-2">
+          <i class="fas fa-home me-1"></i>홈으로
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  <!-- 이메일 상세보기 모달 (새로 추가) -->
+  <div class="modal fade" id="emailDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-envelope me-2"></i>
+            이메일 상세보기
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+          <div id="emailDetailContent">
+            <!-- 이메일 상세 내용이 여기에 동적으로 로드됩니다 -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="button" class="btn btn-primary" id="selectFromDetailBtn">
+            <i class="fas fa-check me-1"></i>이 이메일 선택
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 증거 생성 진행 상황 모달 -->
+  <div class="modal fade" id="evidenceProgressModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-cog fa-spin me-2"></i>
+            증거 생성 진행 중
+          </h5>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <div class="progress" style="height: 25px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated"
+                   id="evidenceProgressBar" role="progressbar" style="width: 0%">
+                <span id="evidenceProgressText">0%</span>
+              </div>
+            </div>
+          </div>
+          <div id="evidenceStatusMessage" class="text-muted">
+            증거 생성을 시작합니다...
+          </div>
+
+          <!-- 진행 상태 로그 -->
+          <div class="mt-3">
+            <h6>진행 상태 로그</h6>
+            <div class="border rounded p-2" style="height: 200px; overflow-y: auto; background-color: #f8f9fa;">
+              <div id="progressLog" class="small text-monospace">
+                <!-- 로그 메시지들이 여기에 추가됩니다 -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="evidenceCompleteBtn"
+                  onclick="window.location.reload()" style="display: none;">
+            <i class="fas fa-check me-1"></i>완료 - 페이지 새로고침
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block scripts %}
+  <style>
+  /* 메일 클라이언트 스타일 CSS */
+  .email-header {
+    background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+  }
+
+  .email-toolbar {
+    background-color: #fff;
+    border-top: 1px solid #e9ecef;
+  }
+
+  .email-list-container {
+    background-color: #ffffff;
+  }
+
+  .email-list-header {
+    background-color: #f8f9fa !important;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .email-item {
+    transition: background-color 0.2s ease;
+    border-left: 4px solid transparent;
+  }
+
+  .email-item:hover {
+    background-color: #f8f9fa;
+    border-left-color: #007bff;
+  }
+
+  .email-item.selected {
+    background-color: #e3f2fd;
+    border-left-color: #2196f3;
+  }
+
+  .email-row {
+    min-height: 60px;
+  }
+
+  .sender-name {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .sender-email {
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+
+  .subject {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .preview {
+    font-size: 0.875rem;
+    color: #6c757d;
+    line-height: 1.3;
+  }
+
+  .date-main {
+    font-weight: 600;
+    color: #495057;
+  }
+
+  .date-time {
+    font-size: 0.75rem;
+  }
+
+  .status-info .badge {
+    font-size: 0.75rem;
+  }
+
+  .empty-state {
+    padding: 3rem 0;
+  }
+
+  /* 반응형 디자인 */
+  @media (max-width: 768px) {
+    .email-item .col-md-2:nth-child(3),
+    .email-item .col-md-4,
+    .email-item .col-md-2:nth-child(5),
+    .email-item .col-md-2:nth-child(6) {
+      flex: 0 0 100%;
+      max-width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .sender-email, .preview, .date-time {
+      display: none;
+    }
+  }
+  </style>
+
+  <script>
+    let evidenceProgressInterval;
+    let selectedEmails = [];
+
+    // DOM 로드 완료 후 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeEmailList();
+    });
+
+    function initializeEmailList() {
+      // 마스터 체크박스 이벤트
+      const masterCheckbox = document.getElementById('masterCheckbox');
+      if (masterCheckbox) {
+        masterCheckbox.addEventListener('change', function() {
+          const checkboxes = document.querySelectorAll('.email-checkbox');
+          checkboxes.forEach(cb => {
+            cb.checked = this.checked;
+            toggleEmailRowSelection(cb.closest('.email-item'), this.checked);
+          });
+          updateSelectionUI();
+        });
+      }
+
+      // 개별 체크박스 이벤트
+      document.querySelectorAll('.email-checkbox').forEach(cb => {
+        cb.addEventListener('change', function(e) {
+          e.stopPropagation();
+          toggleEmailRowSelection(this.closest('.email-item'), this.checked);
+          updateMasterCheckbox();
+          updateSelectionUI();
+        });
+      });
+
+      updateSelectionUI();
+    }
+
+    function toggleEmailSelection(index, event) {
+      if (event.target.type === 'checkbox') return;
+
+      const checkbox = document.querySelector(`.email-checkbox[value="${index}"]`);
+      if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        toggleEmailRowSelection(checkbox.closest('.email-item'), checkbox.checked);
+        updateMasterCheckbox();
+        updateSelectionUI();
+      }
+    }
+
+    function toggleEmailRowSelection(emailItem, isSelected) {
+      if (isSelected) {
+        emailItem.classList.add('selected');
+      } else {
+        emailItem.classList.remove('selected');
+      }
+    }
+
+    function updateMasterCheckbox() {
+      const allCheckboxes = document.querySelectorAll('.email-checkbox');
+      const checkedCheckboxes = document.querySelectorAll('.email-checkbox:checked');
+      const masterCheckbox = document.getElementById('masterCheckbox');
+
+      if (masterCheckbox) {
+        if (checkedCheckboxes.length === 0) {
+          masterCheckbox.indeterminate = false;
+          masterCheckbox.checked = false;
+        } else if (checkedCheckboxes.length === allCheckboxes.length) {
+          masterCheckbox.indeterminate = false;
+          masterCheckbox.checked = true;
+        } else {
+          masterCheckbox.indeterminate = true;
+        }
+      }
+    }
+
+    function updateSelectionUI() {
+      const selected = document.querySelectorAll('.email-checkbox:checked');
+      const count = selected.length;
+
+      // 선택 카운트 업데이트
+      const selectedCountElement = document.getElementById('selectedCount');
+      const selectedCountTextElement = document.getElementById('selectedCountText');
+      const generateBtn = document.getElementById('generateEvidenceBtn');
+      const clearBtn = document.getElementById('clearBtn');
+
+      if (selectedCountElement) selectedCountElement.textContent = count;
+      if (selectedCountTextElement) selectedCountTextElement.textContent = `${count}개 선택`;
+
+      if (generateBtn) {
+        generateBtn.disabled = count === 0;
+      }
+
+      if (clearBtn) {
+        clearBtn.disabled = count === 0;
+      }
+    }
+
+    function toggleSelectAll() {
+      const masterCheckbox = document.getElementById('masterCheckbox');
+      if (masterCheckbox) {
+        masterCheckbox.click();
+      }
+    }
+
+    function clearSelection() {
+      const checkboxes = document.querySelectorAll('.email-checkbox:checked');
+      checkboxes.forEach(cb => {
+        cb.checked = false;
+        toggleEmailRowSelection(cb.closest('.email-item'), false);
+      });
+      updateMasterCheckbox();
+      updateSelectionUI();
+    }
+
+    function showEvidenceOptions() {
+      const selected = document.querySelectorAll('.email-checkbox:checked');
+      if (selected.length === 0) {
+        alert('증거를 생성할 이메일을 먼저 선택해주세요.');
+        return;
+      }
+
+      // 모달에 선택된 이메일 수 표시
+      document.getElementById('selectedEmailCount').textContent = selected.length;
+
+      const modal = new bootstrap.Modal(document.getElementById('evidenceOptionsModal'));
+      modal.show();
+    }
+
+    function generateSelectedEvidence() {
+      // 옵션 모달 닫기
+      const optionsModal = bootstrap.Modal.getInstance(document.getElementById('evidenceOptionsModal'));
+      if (optionsModal) {
+        optionsModal.hide();
+      }
+
+      const selected = document.querySelectorAll('.email-checkbox:checked');
+      if (selected.length === 0) {
+        alert('증거를 생성할 이메일을 선택해주세요.');
+        return;
+      }
+
+      const selectedIndices = Array.from(selected).map(cb => parseInt(cb.value));
+      const options = {
+        evidence_prefix: document.getElementById('evidencePrefix').value,
+        generate_timeline: document.getElementById('generateTimeline').checked,
+        extract_attachments: document.getElementById('extractAttachments').checked,
+        verify_integrity: document.getElementById('verifyIntegrity').checked
+      };
+
+      // 진행 상황 모달 표시
+      const progressModal = new bootstrap.Modal(document.getElementById('evidenceProgressModal'));
+      progressModal.show();
+
+      // 증거 생성 요청
+      fetch(`/generate_evidence/{{ file_id }}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          selected_indices: selectedIndices,
+          ...options
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          startEvidenceProgressPolling(data.evidence_task_id);
+        } else {
+          alert(`증거 생성 실패: ${data.error}`);
+          progressModal.hide();
+        }
+      })
+      .catch(error => {
+        alert(`오류 발생: ${error.message}`);
+        progressModal.hide();
+      });
+    }
+
+    function startEvidenceProgressPolling(taskId) {
+      evidenceProgressInterval = setInterval(() => {
+        fetch(`/api/evidence_progress/${taskId}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              console.error('Progress fetch error:', data.error);
+              return;
+            }
+
+            // 진행률 업데이트
+            const progressBar = document.getElementById('evidenceProgressBar');
+            const progressText = document.getElementById('evidenceProgressText');
+            const statusMessage = document.getElementById('evidenceStatusMessage');
+            const progressLog = document.getElementById('progressLog');
+
+            progressBar.style.width = `${data.progress}%`;
+            progressText.textContent = `${Math.round(data.progress)}%`;
+            statusMessage.textContent = data.current_message;
+
+            // 로그 추가
+            if (data.current_message && progressLog) {
+              const logEntry = document.createElement('div');
+              logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${data.current_message}`;
+              progressLog.appendChild(logEntry);
+              progressLog.scrollTop = progressLog.scrollHeight;
+            }
+
+            if (data.status === 'completed') {
+              progressBar.style.width = '100%';
+              progressText.textContent = '100%';
+              statusMessage.innerHTML = `<i class="fas fa-check-circle text-success me-2"></i>${data.current_message}`;
+
+              // 완료 버튼 표시
+              document.getElementById('evidenceCompleteBtn').style.display = 'block';
+
+              // 폴링 중지
+              clearInterval(evidenceProgressInterval);
+            } else if (data.status === 'error') {
+              statusMessage.innerHTML = `<i class="fas fa-exclamation-triangle text-danger me-2"></i>오류: ${data.error}`;
+              clearInterval(evidenceProgressInterval);
+            }
+          })
+          .catch(error => {
+            console.error('Progress polling error:', error);
+          });
+      }, 1000);
+    }
+
+    function refreshEmails() {
+      window.location.reload();
+    }
+
+    function sortEmails(criteria) {
+      // 추후 구현: 이메일 정렬 기능
+      alert(`${criteria} 기준 정렬 기능은 추후 구현 예정입니다.`);
+    }
+
+    function viewEmailDetail(index) {
+      // 이메일 상세보기 모달 표시 (새로 구현)
+      const emails = {{ emails | tojson }};
+      if (index >= 0 && index < emails.length) {
+        const email = emails[index];
+        const modalContent = document.getElementById('emailDetailContent');
+
+        modalContent.innerHTML = `
+          <div class="card">
+            <div class="card-header bg-light">
+              <div class="row">
+                <div class="col-md-6">
+                  <strong>발신자:</strong> ${email.sender || 'N/A'}
+                </div>
+                <div class="col-md-6 text-end">
+                  <strong>날짜:</strong> ${email.date ? new Date(email.date).toLocaleString() : 'N/A'}
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12">
+                  <strong>제목:</strong> ${email.subject || '(제목 없음)'}
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h6>이메일 내용:</h6>
+                <div class="border rounded p-3" style="background-color: #f8f9fa; max-height: 400px; overflow-y: auto;">
+                  <pre style="white-space: pre-wrap; margin: 0;">${email.content || '내용이 없습니다.'}</pre>
+                </div>
+              </div>
+              ${email.attachments_count && email.attachments_count > 0 ?
+                `<div class="alert alert-info">
+                  <i class="fas fa-paperclip me-1"></i>
+                  첨부파일: ${email.attachments_count}개
+                </div>` : ''}
+            </div>
+          </div>
+        `;
+
+        // 모달에서 선택 버튼 이벤트 설정
+        document.getElementById('selectFromDetailBtn').onclick = function() {
+          const checkbox = document.querySelector(`.email-checkbox[value="${index}"]`);
+          if (checkbox && !checkbox.checked) {
+            checkbox.checked = true;
+            toggleEmailRowSelection(checkbox.closest('.email-item'), true);
+            updateMasterCheckbox();
+            updateSelectionUI();
+          }
+          bootstrap.Modal.getInstance(document.getElementById('emailDetailModal')).hide();
+        };
+
+        // 모달 표시
+        new bootstrap.Modal(document.getElementById('emailDetailModal')).show();
+      }
+    }
+
+    function viewGeneratedEvidence() {
+      window.location.href = '/evidence';
+    }
+</script>
+{% endblock %}

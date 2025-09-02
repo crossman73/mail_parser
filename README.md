@@ -1,51 +1,203 @@
-# Python Script Project
+# 📧 법원 제출용 메일박스 증거 분류 시스템
 
-This project is a simple Python application that demonstrates how to execute a script functionality.
+한국 법원의 디지털 증거 제출 규정과 디지털 포렌식 무결성 요구사항을 충족하는 메일박스 증거 처리 및 분류 시스템입니다.
 
-## Project Structure
+## 🎯 주요 기능
+
+- **mbox 파일 파싱**: 다양한 메일 클라이언트의 mbox 형식 지원
+- **자동 증거 분류**: 갑/을 당사자별 증거번호 자동 할당
+- **법원 형식 변환**: HTML → PDF 변환 시 법원 제출 규격 준수
+- **첨부파일 원본 보존**: 첨부파일 별도 디렉토리 저장 및 무결성 관리
+- **날짜별 구조화**: 메일 발송일 기준 폴더 자동 생성
+- **필터링 시스템**: 관련 없는 메일 자동 제외 및 수동 검토 지원
+
+## 📁 프로젝트 구조
 
 ```
-python-script-project
-├── src
-│   └── main.py
-├── requirements.txt
-└── README.md
+python-email/
+├── main.py                    # 메인 실행 파일
+├── config.json               # 설정 파일 (필터링 규칙 등)
+├── requirements.txt          # Python 의존성
+├── README.md                 # 이 문서
+├── docs/                     # 문서
+│   ├── RFP_Mail_parser.md    # 상세 요구사항
+│   └── improvement_plan.md   # 개선 계획서
+├── src/mail_parser/          # 핵심 처리 모듈
+│   ├── processor.py          # 메일 처리 메인 로직
+│   ├── analyzer.py           # 메일 스레드 분석
+│   ├── formatter.py          # 법원 형식 변환
+│   ├── utils.py              # 유틸리티 함수
+│   └── reporter.py           # 보고서 생성
+├── email_files/              # 입력 mbox 파일
+└── processed_emails/         # 처리된 결과물 저장
 ```
 
-## Getting Started
+## 🚀 시작하기
 
-To get a copy of this project up and running on your local machine, follow these steps.
+### 사전 요구사항
 
-### Prerequisites
+- Python 3.7 이상
+- Windows/Linux/macOS 지원
 
-Make sure you have Python installed on your machine. You can download it from [python.org](https://www.python.org/downloads/).
+### 설치
 
-### Installation
+1. **저장소 복제**
 
-1. Clone the repository:
+
+
+   ```powershell
+   git clone https://github.com/crossman73/mail_parser.git
+   cd mail_parser
    ```
-   git clone <repository-url>
-   ```
-2. Navigate to the project directory:
-   ```
-   cd python-script-project
-   ```
-3. Install the required packages:
-   ```
+
+
+
+2. **의존성 설치**
+
+   ```powershell
+
    pip install -r requirements.txt
    ```
 
-### Running the Script
 
-To run the main script, execute the following command:
+3. **설정 파일 구성** (선택사항)
+
+   ```json
+   {
+     "exclude_keywords": ["광고", "프로모션", "뉴스레터"],
+     "exclude_senders": ["noreply@", "marketing@"],
+     "date_range": {
+       "start": "2020-01-01",
+       "end": "2025-12-31"
+     },
+     "required_keywords": []
+
+   }
+   ```
+
+
+### 사용법
+
+
+#### 1. 기본 메일 처리
+
+```powershell
+
+python main.py email_files/example.mbox --party 갑
 ```
-python src/main.py
+
+#### 2. 선택적 메일 처리
+
+
+```powershell
+# 특정 메일만 처리 (1, 3, 5번)
+python main.py email_files/example.mbox --party 갑 --select-emails "1,3,5"
+
+
+
+# 모든 메일 처리
+python main.py email_files/example.mbox --party 갑 --select-emails "all"
 ```
 
-## Contributing
+#### 3. PDF 변환
 
-If you would like to contribute to this project, please fork the repository and submit a pull request.
 
-## License
+```powershell
+# HTML 처리 후 PDF 변환까지
+python main.py email_files/example.mbox --party 갑 --select-emails "all" --select-pdfs "all"
+```
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+#### 4. 사용자 정의 설정
+
+```powershell
+python main.py email_files/example.mbox --party 갑 --config custom_config.json
+```
+
+### 명령행 옵션
+
+| 옵션 | 설명 | 예시 |
+|------|------|------|
+| `mbox_file` | 처리할 mbox 파일 경로 (필수) | `email_files/mail.mbox` |
+| `--party` | 당사자 구분 (필수) | `갑` 또는 `을` |
+| `--config` | 설정 파일 경로 | `config.json` (기본값) |
+| `--select-emails` | 처리할 메일 선택 | `"1,3,5"`, `"all"`, `"none"` |
+| `--select-pdfs` | PDF 변환할 파일 선택 | `"1,3,5"`, `"all"`, `"none"` |
+
+## 📋 출력 구조
+
+처리 완료 후 `processed_emails/` 디렉토리에 다음과 같이 저장됩니다:
+
+```
+processed_emails/
+├── [2021-01-13]_메일제목/
+│   ├── email.html              # 메일 내용 (HTML)
+│   ├── email.pdf               # 법원 제출용 PDF (증거번호 포함)
+│   ├── attachments/            # 첨부파일 원본
+│   │   ├── document.pdf
+│   │   └── image.jpg
+│   └── metadata.json           # 메일 메타데이터
+└── evidence_list.xlsx          # 증거목록 (Excel)
+```
+
+## ⚖️ 법원 제출 준수사항
+
+- **증거번호 표기**: "갑 제○호증" 형식으로 PDF 상단 중앙에 삽입
+- **첨부파일 원본성**: 원본 파일명 및 확장자 보존
+- **무결성 검증**: SHA-256 해시값 계산 및 기록
+- **처리 과정 로깅**: 모든 처리 단계 상세 기록
+
+
+## 🔧 고급 설정
+
+### 필터링 규칙
+
+`config.json`에서 다음 규칙을 설정할 수 있습니다:
+
+- **키워드 제외**: 광고, 스팸성 메일 자동 필터링
+
+- **발신자 제외**: 특정 도메인/주소 제외
+- **날짜 범위**: 사건 관련 기간만 처리
+- **필수 키워드**: 반드시 포함되어야 할 키워드
+
+### 배치 처리
+
+대용량 mbox 파일 처리를 위한 배치 스크립트 예시:
+
+```powershell
+# 여러 mbox 파일 일괄 처리
+foreach ($file in Get-ChildItem email_files/*.mbox) {
+    python main.py $file.FullName --party 갑 --select-emails "all"
+}
+```
+
+## 🆘 문제 해결
+
+### 자주 발생하는 오류
+
+1. **인코딩 오류**:
+   - 한글 메일 처리 시 발생
+   - 해결: mbox 파일을 UTF-8로 변환 후 재시도
+
+2. **메모리 부족**:
+   - 대용량 mbox 파일 처리 시 발생
+   - 해결: 배치 모드 사용 또는 파일 분할
+
+3. **PDF 변환 실패**:
+
+   - HTML 구조가 복잡한 메일에서 발생
+   - 해결: HTML 출력 확인 후 수동 변환
+
+## 📞 지원 및 기여
+
+- **이슈 리포팅**: [GitHub Issues](https://github.com/crossman73/mail_parser/issues)
+- **기능 제안**: Pull Request 환영
+- **문의사항**: 프로젝트 관리자에게 연락
+
+
+## 📄 라이선스
+
+이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
+
+---
+
+> **⚠️ 중요**: 이 도구는 법적 증거 자료 생성을 위한 것입니다. 실제 법원 제출 전 반드시 법무팀의 검토를 받으시기 바랍니다.

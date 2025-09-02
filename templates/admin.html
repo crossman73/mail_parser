@@ -1,0 +1,226 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <h4 class="mb-0">
+          <i class="fas fa-cog me-2"></i>
+          시스템 관리
+        </h4>
+        <button type="button" class="btn btn-warning" onclick="cleanupTasks()">
+          <i class="fas fa-trash-alt me-2"></i>
+          비정상 작업 정리
+        </button>
+      </div>
+      <div class="card-body">
+        <!-- 현재 작업 상태 -->
+        <div class="mb-4">
+          <h5><i class="fas fa-tasks me-2"></i>현재 작업 상태</h5>
+          <div class="row" id="taskStats">
+            <div class="col-md-3">
+              <div class="card border-primary">
+                <div class="card-body text-center">
+                  <h3 class="text-primary" id="totalTasks">0</h3>
+                  <p class="mb-0">전체 작업</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-warning">
+                <div class="card-body text-center">
+                  <h3 class="text-warning" id="activeTasks">0</h3>
+                  <p class="mb-0">진행 중</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-success">
+                <div class="card-body text-center">
+                  <h3 class="text-success" id="completedTasks">0</h3>
+                  <p class="mb-0">완료</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-danger">
+                <div class="card-body text-center">
+                  <h3 class="text-danger" id="errorTasks">0</h3>
+                  <p class="mb-0">오류</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 작업 목록 -->
+        <div class="mb-4">
+          <h5><i class="fas fa-list me-2"></i>작업 목록</h5>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>작업 ID</th>
+                  <th>작업명</th>
+                  <th>상태</th>
+                  <th>진행률</th>
+                  <th>시작 시간</th>
+                  <th>마지막 업데이트</th>
+                  <th>작업</th>
+                </tr>
+              </thead>
+              <tbody id="taskList">
+                <!-- 작업 목록이 여기에 동적으로 추가됩니다 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 시스템 정보 -->
+        <div class="mb-4">
+          <h5><i class="fas fa-info-circle me-2"></i>시스템 정보</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between">
+                  <strong>서버 상태:</strong>
+                  <span class="badge bg-success">정상</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <strong>메모리 사용량:</strong>
+                  <span id="memoryUsage">-</span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between">
+                  <strong>업로드된 파일:</strong>
+                  <span id="uploadedFiles">-</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <strong>처리된 이메일:</strong>
+                  <span id="processedEmails">-</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  let refreshInterval;
+
+  function loadTaskData() {
+    fetch("/api/admin/tasks")
+      .then((response) => response.json())
+      .then((data) => {
+        // 통계 업데이트
+        document.getElementById("totalTasks").textContent = data.total_tasks;
+        document.getElementById("activeTasks").textContent =
+          data.active_tasks.length;
+
+        let completed = 0,
+          errors = 0;
+        Object.values(data.tasks).forEach((task) => {
+          if (task.status === "completed") completed++;
+          if (task.status === "error") errors++;
+        });
+
+        document.getElementById("completedTasks").textContent = completed;
+        document.getElementById("errorTasks").textContent = errors;
+
+        // 작업 목록 업데이트
+        const taskList = document.getElementById("taskList");
+        taskList.innerHTML = "";
+
+        Object.entries(data.tasks).forEach(([taskId, task]) => {
+          const row = document.createElement("tr");
+          const statusClass =
+            task.status === "completed"
+              ? "success"
+              : task.status === "error"
+              ? "danger"
+              : task.status === "processing"
+              ? "warning"
+              : "secondary";
+
+          // 작업명에서 파일명만 추출 (상태 정보 제거)
+          let displayName = task.task_name;
+          if (displayName && displayName.includes(" 파싱")) {
+            // "파일명 파싱 중" -> "파일명 처리"로 변경
+            displayName = displayName.replace(/ 파싱.*$/, " 처리");
+          }
+
+          row.innerHTML = `
+            <td><code>${taskId.substring(0, 8)}...</code></td>
+            <td>${displayName}</td>
+            <td><span class="badge bg-${statusClass}">${task.status}</span></td>
+            <td>
+              <div class="progress" style="height: 20px;">
+                <div class="progress-bar" style="width: ${
+                  task.progress
+                }%">${Math.round(task.progress)}%</div>
+              </div>
+            </td>
+            <td>${new Date(task.started_at).toLocaleString()}</td>
+            <td>${new Date(task.updated_at).toLocaleString()}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" onclick="removeTask('${taskId}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          `;
+          taskList.appendChild(row);
+        });
+      })
+      .catch((error) => {
+        console.error("작업 데이터 로드 실패:", error);
+      });
+  }
+
+  function cleanupTasks() {
+    if (confirm("비정상 종료된 작업들을 정리하시겠습니까?")) {
+      fetch("/api/admin/cleanup", { method: "POST" })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert(data.message);
+            loadTaskData(); // 데이터 새로고침
+          } else {
+            alert("정리 실패: " + data.error);
+          }
+        })
+        .catch((error) => {
+          alert("정리 중 오류 발생: " + error);
+        });
+    }
+  }
+
+  function removeTask(taskId) {
+    if (confirm("이 작업을 제거하시겠습니까?")) {
+      // TODO: 개별 작업 제거 API 구현
+      alert("개별 작업 제거 기능은 추후 구현됩니다.");
+    }
+  }
+
+  // 페이지 로드 시 데이터 로드
+  document.addEventListener("DOMContentLoaded", function () {
+    loadTaskData();
+
+    // 10초마다 자동 새로고침
+    refreshInterval = setInterval(loadTaskData, 10000);
+  });
+
+  // 페이지 떠날 때 interval 정리
+  window.addEventListener("beforeunload", function () {
+    if (refreshInterval) {
+      clearInterval(refreshInterval);
+    }
+  });
+</script>
+{% endblock %}

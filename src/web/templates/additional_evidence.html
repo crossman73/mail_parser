@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>추가 증거 관리 - {{ app_name }}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      .evidence-card {
+        transition: transform 0.2s;
+      }
+      .evidence-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .category-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+      }
+      .file-size {
+        color: #6c757d;
+        font-size: 0.8rem;
+      }
+      .evidence-number {
+        font-family: "Courier New", monospace;
+        font-weight: bold;
+        color: #0d6efd;
+      }
+      .stats-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .add-evidence-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1000;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+          <i class="bi bi-folder-plus me-2"></i>추가 증거 관리
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="{{ url_for('index') }}">
+            <i class="bi bi-house me-1"></i>메인
+          </a>
+          <a class="nav-link" href="{{ url_for('verify_integrity') }}">
+            <i class="bi bi-shield-check me-1"></i>무결성 검증
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <!-- 플래시 메시지 -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <!-- 통계 정보 -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <h4 class="card-title text-white mb-2">
+                    <i class="bi bi-archive me-2"></i>추가 증거 자료 현황
+                  </h4>
+                  <p class="mb-0 text-white-50">
+                    이메일 외의 추가 증거 자료들을 법원 제출 형식으로 관리합니다
+                  </p>
+                </div>
+                <div class="col-md-4 text-end">
+                  <div class="display-6 text-white fw-bold">
+                    {{ statistics.total_files }}건
+                  </div>
+                  <small class="text-white-50">총 증거 수</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카테고리별 통계 -->
+      <div class="row mb-4">
+        {% for category, count in statistics.categories.items() %} {% if count >
+        0 %}
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <div class="category-icon mb-2">
+                {% if category == 'documents' %}
+                <i class="bi bi-file-earmark-text fs-2 text-primary"></i>
+                {% elif category == 'images' %}
+                <i class="bi bi-image fs-2 text-success"></i>
+                {% elif category == 'audio' %}
+                <i class="bi bi-music-note fs-2 text-warning"></i>
+                {% elif category == 'video' %}
+                <i class="bi bi-camera-video fs-2 text-danger"></i>
+                {% elif category == 'archives' %}
+                <i class="bi bi-archive fs-2 text-info"></i>
+                {% elif category == 'spreadsheets' %}
+                <i class="bi bi-table fs-2 text-success"></i>
+                {% elif category == 'presentations' %}
+                <i class="bi bi-easel fs-2 text-purple"></i>
+                {% else %}
+                <i class="bi bi-file fs-2 text-secondary"></i>
+                {% endif %}
+              </div>
+              <h5 class="card-title">
+                {{ statistics.category_names[category] }}
+              </h5>
+              <h3 class="text-primary mb-0">{{ count }}</h3>
+              <small class="text-muted">개 파일</small>
+            </div>
+          </div>
+        </div>
+        {% endif %} {% endfor %}
+      </div>
+
+      <!-- 액션 버튼 -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <h5 class="card-title mb-1">
+                    <i class="bi bi-gear me-2"></i>증거 관리 작업
+                  </h5>
+                  <p class="text-muted mb-0">
+                    추가 증거 자료의 등록, 편집, 법원 제출 준비
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a
+                      href="{{ url_for('add_evidence') }}"
+                      class="btn btn-primary"
+                    >
+                      <i class="bi bi-plus-circle me-1"></i>증거 등록
+                    </a>
+                    {% if statistics.total_files > 0 %}
+                    <a
+                      href="{{ url_for('download_evidence_index') }}"
+                      class="btn btn-outline-secondary"
+                    >
+                      <i class="bi bi-list-ul me-1"></i>목록서 다운로드
+                    </a>
+                    <a
+                      href="{{ url_for('export_additional_evidence') }}"
+                      class="btn btn-success"
+                    >
+                      <i class="bi bi-box-arrow-up me-1"></i>법원 제출용 패키징
+                    </a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 증거 목록 -->
+      {% if evidence_list %}
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="bi bi-files me-2"></i>등록된 추가 증거 목록
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                {% for evidence in evidence_list %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card evidence-card h-100">
+                    <div class="card-body">
+                      <div
+                        class="d-flex justify-content-between align-items-start mb-2"
+                      >
+                        <span class="evidence-number"
+                          >{{ evidence.evidence_number }}</span
+                        >
+                        <div class="dropdown">
+                          <button
+                            class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                          >
+                            <i class="bi bi-three-dots"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li>
+                              <a
+                                class="dropdown-item"
+                                href="{{ url_for('edit_evidence', file_id=evidence.file_id) }}"
+                              >
+                                <i class="bi bi-pencil me-1"></i>편집
+                              </a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                              <form
+                                method="POST"
+                                action="{{ url_for('delete_evidence', file_id=evidence.file_id) }}"
+                                onsubmit="return confirm('정말 삭제하시겠습니까?')"
+                                class="m-0"
+                              >
+                                <button
+                                  type="submit"
+                                  class="dropdown-item text-danger"
+                                >
+                                  <i class="bi bi-trash me-1"></i>삭제
+                                </button>
+                              </form>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <h6 class="card-title">{{ evidence.title }}</h6>
+
+                      {% if evidence.description %}
+                      <p class="card-text text-muted small">
+                        {{ evidence.description[:100] }}{% if
+                        evidence.description|length > 100 %}...{% endif %}
+                      </p>
+                      {% endif %}
+
+                      <div class="mb-2">
+                        <span
+                          class="badge category-badge {% if evidence.category == 'documents' %}bg-primary {% elif evidence.category == 'images' %}bg-success {% elif evidence.category == 'audio' %}bg-warning {% elif evidence.category == 'video' %}bg-danger {% elif evidence.category == 'archives' %}bg-info {% elif evidence.category == 'spreadsheets' %}bg-success {% elif evidence.category == 'presentations' %}bg-purple {% else %}bg-secondary{% endif %}"
+                        >
+                          {{ evidence.category_name }}
+                        </span>
+                        <span class="badge bg-light text-dark"
+                          >{{ evidence.party }}</span
+                        >
+                      </div>
+
+                      <div class="small text-muted">
+                        <div>
+                          <i class="bi bi-calendar me-1"></i>{{
+                          evidence.evidence_date }}
+                        </div>
+                        <div class="file-size">
+                          <i class="bi bi-file-binary me-1"></i>{{ "%.1f" |
+                          format(evidence.file_size / 1024) }} KB
+                        </div>
+                        {% if evidence.related_email_ids %}
+                        <div>
+                          <i class="bi bi-envelope me-1"></i>관련 이메일 {{
+                          evidence.related_email_ids|length }}건
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="card-footer text-muted small">
+                      <i class="bi bi-clock me-1"></i>등록: {{
+                      evidence.added_at[:16].replace('T', ' ') }}
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <!-- 빈 상태 -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body text-center py-5">
+              <i
+                class="bi bi-folder2-open text-muted"
+                style="font-size: 4rem"
+              ></i>
+              <h4 class="mt-3 text-muted">등록된 추가 증거가 없습니다</h4>
+              <p class="text-muted mb-4">
+                이메일 외의 증거 자료(계약서, 회의록, 사진, 음성파일 등)를<br />
+                법원 제출 형식에 맞게 등록하고 관리할 수 있습니다.
+              </p>
+              <a
+                href="{{ url_for('add_evidence') }}"
+                class="btn btn-primary btn-lg"
+              >
+                <i class="bi bi-plus-circle me-2"></i>첫 번째 증거 등록하기
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- 도움말 -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card border-info">
+            <div class="card-header bg-info text-white">
+              <h6 class="mb-0">
+                <i class="bi bi-info-circle me-2"></i>추가 증거 등록 가이드
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>
+                    <i class="bi bi-check-circle text-success me-1"></i>지원되는
+                    파일 형식
+                  </h6>
+                  <ul class="small">
+                    <li><strong>문서:</strong> PDF, DOC, DOCX, HWP, TXT</li>
+                    <li><strong>이미지:</strong> JPG, PNG, GIF, BMP</li>
+                    <li><strong>음성:</strong> MP3, WAV, M4A</li>
+                    <li><strong>영상:</strong> MP4, AVI, MOV</li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h6>
+                    <i class="bi bi-shield-check text-primary me-1"></i>법원
+                    제출 규칙
+                  </h6>
+                  <ul class="small">
+                    <li>증거번호 자동 할당 (갑제1호증 형식)</li>
+                    <li>SHA-256 해시값으로 무결성 보장</li>
+                    <li>원본 파일 메타데이터 보존</li>
+                    <li>수집 경위 및 일시 기록</li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h6>
+                    <i class="bi bi-lightbulb text-warning me-1"></i>권장사항
+                  </h6>
+                  <ul class="small">
+                    <li>명확하고 구체적인 제목 작성</li>
+                    <li>증거 발생 일자 정확히 기입</li>
+                    <li>관련 이메일과 연결 설정</li>
+                    <li>상세한 설명 및 배경 정보 제공</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 플로팅 추가 버튼 -->
+    <a
+      href="{{ url_for('add_evidence') }}"
+      class="btn btn-primary add-evidence-btn d-flex align-items-center justify-content-center"
+    >
+      <i class="bi bi-plus fs-4"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // 카드 호버 효과
+      document.querySelectorAll(".evidence-card").forEach((card) => {
+        card.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-2px)";
+        });
+
+        card.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0)";
+        });
+      });
+
+      // 삭제 확인
+      function confirmDelete(evidenceNumber) {
+        return confirm(
+          `정말로 "${evidenceNumber}" 증거를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`
+        );
+      }
+    </script>
+  </body>
+</html>

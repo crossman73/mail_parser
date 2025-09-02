@@ -1,0 +1,7 @@
+2025-09-02 16:19:01,802 - EmailEvidenceProcessor - INFO - __init__:25 - 프로세서 초기화 시작 (설정 파일: C:\dev\python-email\src\web\..\..\config.json)
+2025-09-02 16:19:01,824 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: C:\dev\python-email\src\web\..\..\config.json
+2025-09-02 16:19:01,910 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료
+2025-09-02 16:19:01,921 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 1] mbox 파일 로드 시작: C:\Users\cross\AppData\Local\Temp\af1eca66-8cdb-4830-899c-d4594acd1381_AINation.mbox
+2025-09-02 16:19:01,942 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 mbox 로드 성공: C:\Users\cross\AppData\Local\Temp\af1eca66-8cdb-4830-899c-d4594acd1381_AINation.mbox
+2025-09-02 16:19:01,942 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 2] 메타데이터 수집 시작
+2025-09-02 16:19:13,581 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 2] 메타데이터 수집 완료: 총 271개의 고유 메시지

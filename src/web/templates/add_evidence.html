@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>추가 증거 등록 - {{ app_name }}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      .file-upload-area {
+        border: 2px dashed #dee2e6;
+        border-radius: 0.375rem;
+        padding: 3rem 1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .file-upload-area.dragover {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+      }
+      .file-upload-area:hover {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.05);
+      }
+      .file-info {
+        background: #f8f9fa;
+        border-radius: 0.375rem;
+        padding: 1rem;
+        margin-top: 1rem;
+        display: none;
+      }
+      .required-field::after {
+        content: " *";
+        color: #dc3545;
+      }
+      .form-section {
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('additional_evidence') }}">
+          <i class="bi bi-arrow-left me-2"></i>추가 증거 등록
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="{{ url_for('additional_evidence') }}">
+            <i class="bi bi-list me-1"></i>증거 목록
+          </a>
+          <a class="nav-link" href="{{ url_for('index') }}">
+            <i class="bi bi-house me-1"></i>메인
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <!-- 플래시 메시지 -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <form method="POST" enctype="multipart/form-data" id="evidenceForm">
+        <!-- 파일 업로드 섹션 -->
+        <div class="form-section">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="bi bi-cloud-upload me-2"></i>1단계: 증거 파일 선택
+            </h5>
+          </div>
+          <div class="card-body">
+            <div
+              class="file-upload-area"
+              id="fileUploadArea"
+              onclick="document.getElementById('evidenceFile').click()"
+            >
+              <i class="bi bi-cloud-upload fs-1 text-muted mb-3"></i>
+              <h5 class="text-muted">
+                파일을 여기에 끌어다 놓거나 클릭하여 선택하세요
+              </h5>
+              <p class="text-muted mb-0">
+                지원 형식: PDF, DOC, DOCX, HWP, TXT, JPG, PNG, GIF, MP3, WAV,
+                MP4, AVI 등
+              </p>
+              <small class="text-muted">최대 파일 크기: 100MB</small>
+            </div>
+
+            <input
+              type="file"
+              id="evidenceFile"
+              name="evidence_file"
+              class="d-none"
+              accept=".pdf,.doc,.docx,.hwp,.txt,.rtf,.jpg,.jpeg,.png,.gif,.bmp,.tiff,.mp3,.wav,.m4a,.aac,.wma,.mp4,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z,.tar,.gz,.xls,.xlsx,.csv,.ppt,.pptx"
+              required
+            />
+
+            <div class="file-info" id="fileInfo">
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <h6 class="mb-1" id="fileName">선택된 파일</h6>
+                  <div class="small text-muted">
+                    <span id="fileSize"></span> • <span id="fileType"></span>
+                  </div>
+                </div>
+                <div class="col-md-4 text-end">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    onclick="clearFile()"
+                  >
+                    <i class="bi bi-x me-1"></i>제거
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 증거 정보 입력 섹션 -->
+        <div class="form-section">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+              <i class="bi bi-info-circle me-2"></i>2단계: 증거 정보 입력
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="mb-3">
+                  <label for="title" class="form-label required-field"
+                    >증거 제목</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    placeholder="예: 2024년 3월 계약서, 회의 녹음파일, 현장 사진 등"
+                    required
+                  />
+                  <div class="form-text">
+                    법원 제출 시 식별 가능한 명확한 제목을 입력하세요.
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label for="party" class="form-label">당사자 구분</label>
+                  <select class="form-select" id="party" name="party">
+                    <option value="갑" selected>갑 (신청인/원고)</option>
+                    <option value="을">을 (상대방/피고)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">증거 설명</label>
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+                rows="3"
+                placeholder="증거의 내용, 배경, 중요성 등을 상세히 설명하세요. 법원에서 이 증거의 가치를 이해할 수 있도록 작성해주세요."
+              ></textarea>
+              <div class="form-text">
+                증거의 내용과 의미를 법원이 이해할 수 있도록 상세히 작성하세요.
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="evidenceDate" class="form-label"
+                    >증거 발생 일자</label
+                  >
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="evidenceDate"
+                    name="evidence_date"
+                  />
+                  <div class="form-text">
+                    해당 증거가 생성되거나 발생한 실제 날짜를 선택하세요.
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="relatedEmails" class="form-label"
+                    >관련 이메일 ID</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="relatedEmails"
+                    name="related_emails"
+                    placeholder="예: email_001, email_002 (쉼표로 구분)"
+                  />
+                  <div class="form-text">
+                    이 증거와 관련된 이메일 ID들을 쉼표로 구분하여 입력하세요.
+                    (선택사항)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 법적 고지사항 -->
+        <div class="form-section">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">
+              <i class="bi bi-exclamation-triangle me-2"></i>3단계: 법적
+              확인사항
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-info">
+              <h6>
+                <i class="bi bi-info-circle me-2"></i>증거 제출 전 확인사항
+              </h6>
+              <ul class="mb-0">
+                <li>이 증거가 합법적으로 수집되었음을 확인합니다</li>
+                <li>타인의 개인정보나 저작권을 침해하지 않음을 확인합니다</li>
+                <li>증거의 원본성과 진정성을 보장합니다</li>
+                <li>필요시 증거 수집 경위를 별도로 설명할 수 있습니다</li>
+              </ul>
+            </div>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="legalConfirm"
+                required
+              />
+              <label class="form-check-label" for="legalConfirm">
+                <strong
+                  >위 사항들을 확인했으며, 이 증거가 법원 제출에 적합함을
+                  확인합니다.</strong
+                >
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <div class="text-center mb-5">
+          <button
+            type="button"
+            class="btn btn-secondary btn-lg me-3"
+            onclick="history.back()"
+          >
+            <i class="bi bi-arrow-left me-2"></i>취소
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg"
+            id="submitBtn"
+            disabled
+          >
+            <i class="bi bi-check-circle me-2"></i>증거 등록
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // 파일 업로드 관련 변수
+      const fileUploadArea = document.getElementById("fileUploadArea");
+      const evidenceFile = document.getElementById("evidenceFile");
+      const fileInfo = document.getElementById("fileInfo");
+      const fileName = document.getElementById("fileName");
+      const fileSize = document.getElementById("fileSize");
+      const fileType = document.getElementById("fileType");
+      const submitBtn = document.getElementById("submitBtn");
+      const legalConfirm = document.getElementById("legalConfirm");
+
+      // 드래그 앤 드롭 이벤트
+      fileUploadArea.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        this.classList.add("dragover");
+      });
+
+      fileUploadArea.addEventListener("dragleave", function (e) {
+        e.preventDefault();
+        this.classList.remove("dragover");
+      });
+
+      fileUploadArea.addEventListener("drop", function (e) {
+        e.preventDefault();
+        this.classList.remove("dragover");
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          evidenceFile.files = files;
+          handleFileSelect();
+        }
+      });
+
+      // 파일 선택 이벤트
+      evidenceFile.addEventListener("change", handleFileSelect);
+
+      // 법적 확인 체크박스 이벤트
+      legalConfirm.addEventListener("change", function () {
+        updateSubmitButton();
+      });
+
+      function handleFileSelect() {
+        const file = evidenceFile.files[0];
+        if (file) {
+          fileName.textContent = file.name;
+          fileSize.textContent = formatFileSize(file.size);
+          fileType.textContent = file.type || "Unknown";
+
+          fileInfo.style.display = "block";
+          fileUploadArea.style.display = "none";
+
+          updateSubmitButton();
+        }
+      }
+
+      function clearFile() {
+        evidenceFile.value = "";
+        fileInfo.style.display = "none";
+        fileUploadArea.style.display = "block";
+        updateSubmitButton();
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      }
+
+      function updateSubmitButton() {
+        const hasFile = evidenceFile.files.length > 0;
+        const isLegalConfirmed = legalConfirm.checked;
+
+        submitBtn.disabled = !(hasFile && isLegalConfirmed);
+      }
+
+      // 폼 제출 시 로딩 상태 표시
+      document
+        .getElementById("evidenceForm")
+        .addEventListener("submit", function () {
+          submitBtn.innerHTML =
+            '<i class="bi bi-hourglass-split me-2"></i>등록 중...';
+          submitBtn.disabled = true;
+        });
+
+      // 오늘 날짜를 기본값으로 설정
+      document.getElementById("evidenceDate").valueAsDate = new Date();
+
+      // 제목 입력 시 자동 제안
+      document.getElementById("title").addEventListener("input", function () {
+        const file = evidenceFile.files[0];
+        if (file && this.value === "") {
+          // 파일명에서 확장자 제거하여 제안
+          const baseName = file.name.replace(/\.[^/.]+$/, "");
+          this.placeholder = `예: ${baseName}`;
+        }
+      });
+    </script>
+  </body>
+</html>

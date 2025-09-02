@@ -1,0 +1,449 @@
+{% extends "base.html" %} {% block title %}이메일 목록 - {{ filename }}{%
+endblock %} {% block content %}
+<div class="container-fluid mt-4">
+  <!-- 헤더 -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('index') }}">홈</a>
+          </li>
+          <li class="breadcrumb-item active">이메일 목록</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- 파일 정보 및 컨트롤 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h4 class="mb-0">
+            <i class="bi bi-envelope-paper"></i>
+            {{ filename }}
+          </h4>
+          <div>
+            <span class="badge bg-primary me-2"
+              >총 {{ emails|length }}개 이메일</span
+            >
+            <button
+              class="btn btn-success btn-sm"
+              onclick="processSelectedEmails(false)"
+            >
+              <i class="bi bi-file-earmark-text"></i> 선택된 메일 HTML 생성
+            </button>
+            <button
+              class="btn btn-danger btn-sm"
+              onclick="processSelectedEmails(true)"
+            >
+              <i class="bi bi-file-earmark-pdf"></i> 선택된 메일 PDF 생성
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- 일괄 선택 및 필터 -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="btn-group" role="group">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  onclick="selectAll()"
+                >
+                  <i class="bi bi-check-square"></i> 전체 선택
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm"
+                  onclick="clearSelection()"
+                >
+                  <i class="bi bi-square"></i> 선택 해제
+                </button>
+              </div>
+              <span id="selectedCount" class="ms-3 text-muted"
+                >선택된 메일: 0개</span
+              >
+            </div>
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="searchInput"
+                  placeholder="제목, 발신자, 수신자로 검색..."
+                  onkeyup="filterEmails()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 당사자 선택 -->
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label class="form-label">당사자 구분 (PDF 생성 시)</label>
+              <select class="form-select" id="partySelect">
+                <option value="갑">갑</option>
+                <option value="을">을</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 이메일 목록 테이블 -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0" id="emailTable">
+              <thead class="table-light">
+                <tr>
+                  <th width="50">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="selectAllCheckbox"
+                        onchange="toggleAll()"
+                      />
+                    </div>
+                  </th>
+                  <th width="60">#</th>
+                  <th>제목</th>
+                  <th width="200">발신자</th>
+                  <th width="150">발송일시</th>
+                  <th width="100">첨부파일</th>
+                  <th width="80">크기</th>
+                  <th width="100">액션</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for email in emails %}
+                <tr data-email-index="{{ loop.index0 }}" class="email-row">
+                  <td>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input email-checkbox"
+                        type="checkbox"
+                        value="{{ loop.index0 }}"
+                        onchange="updateSelectedCount()"
+                      />
+                    </div>
+                  </td>
+                  <td>{{ loop.index }}</td>
+                  <td>
+                    <a
+                      href="{{ url_for('email_detail', file_id=file_id, email_index=loop.index0) }}"
+                      class="text-decoration-none"
+                    >
+                      <strong>{{ email.subject[:80] }}</strong>
+                      {% if email.subject|length > 80 %}...{% endif %}
+                    </a>
+                    {% if email.attachments %}
+                    <i
+                      class="bi bi-paperclip text-muted ms-1"
+                      title="첨부파일 있음"
+                    ></i>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div class="text-truncate" title="{{ email.sender }}">
+                      {{ email.sender[:30] }} {% if email.sender|length > 30
+                      %}...{% endif %}
+                    </div>
+                  </td>
+                  <td>
+                    <small class="text-muted">{{ email.date }}</small>
+                  </td>
+                  <td class="text-center">
+                    {% if email.attachments %}
+                    <span class="badge bg-info"
+                      >{{ email.attachments|length }}</span
+                    >
+                    {% else %}
+                    <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-end">
+                    {% if email.size %}
+                    <small class="text-muted"
+                      >{{ "%.1f KB" | format(email.size / 1024) }}</small
+                    >
+                    {% else %}
+                    <small class="text-muted">-</small>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                      <a
+                        href="{{ url_for('email_detail', file_id=file_id, email_index=loop.index0) }}"
+                        class="btn btn-outline-primary btn-sm"
+                        title="상세보기"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 처리 결과 모달 -->
+  <div class="modal fade" id="processResultModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            처리 결과
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body" id="processResultContent">
+          <!-- 처리 결과가 여기에 표시됩니다 -->
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 진행률 모달 -->
+  <div
+    class="modal fade"
+    id="progressModal"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center py-4">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">처리 중...</span>
+          </div>
+          <h5>이메일 처리 중...</h5>
+          <p class="text-muted mb-0">잠시만 기다려주세요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedEmails = new Set();
+
+  // 전체 선택/해제
+  function selectAll() {
+    const checkboxes = document.querySelectorAll(".email-checkbox");
+    const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+
+    checkboxes.forEach((cb) => {
+      cb.checked = true;
+      selectedEmails.add(parseInt(cb.value));
+    });
+    selectAllCheckbox.checked = true;
+    updateSelectedCount();
+  }
+
+  function clearSelection() {
+    const checkboxes = document.querySelectorAll(".email-checkbox");
+    const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+
+    checkboxes.forEach((cb) => {
+      cb.checked = false;
+    });
+    selectAllCheckbox.checked = false;
+    selectedEmails.clear();
+    updateSelectedCount();
+  }
+
+  function toggleAll() {
+    const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+    if (selectAllCheckbox.checked) {
+      selectAll();
+    } else {
+      clearSelection();
+    }
+  }
+
+  // 선택된 메일 개수 업데이트
+  function updateSelectedCount() {
+    const checkboxes = document.querySelectorAll(".email-checkbox:checked");
+    selectedEmails.clear();
+
+    checkboxes.forEach((cb) => {
+      selectedEmails.add(parseInt(cb.value));
+    });
+
+    document.getElementById(
+      "selectedCount"
+    ).textContent = `선택된 메일: ${selectedEmails.size}개`;
+
+    // 전체 선택 체크박스 상태 업데이트
+    const allCheckboxes = document.querySelectorAll(".email-checkbox");
+    const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+    selectAllCheckbox.checked =
+      allCheckboxes.length > 0 && checkboxes.length === allCheckboxes.length;
+  }
+
+  // 이메일 검색 필터
+  function filterEmails() {
+    const searchTerm = document
+      .getElementById("searchInput")
+      .value.toLowerCase();
+    const rows = document.querySelectorAll(".email-row");
+
+    rows.forEach((row) => {
+      const subject = row.cells[2].textContent.toLowerCase();
+      const sender = row.cells[3].textContent.toLowerCase();
+
+      if (subject.includes(searchTerm) || sender.includes(searchTerm)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+
+  // 선택된 이메일 처리
+  function processSelectedEmails(convertToPdf) {
+    if (selectedEmails.size === 0) {
+      alert("처리할 이메일을 선택해주세요.");
+      return;
+    }
+
+    const party = document.getElementById("partySelect").value;
+    const progressModal = new bootstrap.Modal(
+      document.getElementById("progressModal")
+    );
+    progressModal.show();
+
+    fetch("/process_selected", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        file_id: "{{ file_id }}",
+        selected_emails: Array.from(selectedEmails),
+        party: party,
+        convert_to_pdf: convertToPdf,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        progressModal.hide();
+
+        if (data.error) {
+          showAlert("처리 실패: " + data.error, "danger");
+        } else {
+          // 결과 모달 내용 생성
+          let resultHtml = `
+                <div class="alert alert-success">
+                    <h6><i class="bi bi-check-circle"></i> 처리 완료</h6>
+                    <p>총 ${selectedEmails.size}개 이메일 중 ${data.processed_count}개가 성공적으로 처리되었습니다.</p>
+                </div>
+            `;
+
+          if (data.html_files && data.html_files.length > 0) {
+            resultHtml += `
+                    <h6><i class="bi bi-file-earmark-text"></i> 생성된 HTML 파일 (${data.html_files.length}개)</h6>
+                    <div class="bg-light p-2 rounded mb-3" style="max-height: 200px; overflow-y: auto;">
+                `;
+            data.html_files.forEach((file) => {
+              resultHtml += `<div><code>${file}</code></div>`;
+            });
+            resultHtml += "</div>";
+          }
+
+          if (convertToPdf && data.pdf_files && data.pdf_files.length > 0) {
+            resultHtml += `
+                    <h6><i class="bi bi-file-earmark-pdf"></i> 생성된 PDF 파일 (${data.pdf_files.length}개)</h6>
+                    <div class="bg-light p-2 rounded mb-3" style="max-height: 200px; overflow-y: auto;">
+                `;
+            data.pdf_files.forEach((file) => {
+              resultHtml += `<div><code>${file}</code></div>`;
+            });
+            resultHtml += "</div>";
+          }
+
+          if (data.pdf_error) {
+            resultHtml += `<div class="alert alert-warning">PDF 변환 오류: ${data.pdf_error}</div>`;
+          }
+
+          document.getElementById("processResultContent").innerHTML =
+            resultHtml;
+          const resultModal = new bootstrap.Modal(
+            document.getElementById("processResultModal")
+          );
+          resultModal.show();
+
+          showAlert(
+            `${data.processed_count}개 이메일이 성공적으로 처리되었습니다!`,
+            "success"
+          );
+        }
+      })
+      .catch((error) => {
+        progressModal.hide();
+        showAlert("처리 중 오류가 발생했습니다: " + error, "danger");
+      });
+  }
+
+  function showAlert(message, type) {
+    const alertDiv = document.createElement("div");
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document
+      .querySelector(".container-fluid")
+      .insertBefore(
+        alertDiv,
+        document.querySelector(".container-fluid").firstChild
+      );
+
+    // 5초 후 자동 제거
+    setTimeout(() => {
+      if (alertDiv.parentNode) {
+        alertDiv.remove();
+      }
+    }, 5000);
+  }
+
+  // 페이지 로드 시 초기화
+  document.addEventListener("DOMContentLoaded", function () {
+    updateSelectedCount();
+  });
+</script>
+{% endblock %}

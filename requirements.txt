@@ -1,3 +1,18 @@
-Flask
-requests
-numpy
+# 메일 처리 및 파싱
+# mailbox (내장 모듈이므로 별도 설치 불필요)
+
+# PDF 생성
+reportlab>=3.6.0
+
+# Excel 파일 처리
+openpyxl>=3.0.0
+
+# 시스템 성능 모니터링
+psutil>=5.8.0
+
+# 웹 인터페이스
+flask>=2.0.0
+
+# 추가 유틸리티 (필요시)
+# chardet>=4.0.0  # 인코딩 자동 감지용 (현재 미사용)
+# python-dateutil>=2.8.0  # 날짜 파싱 강화용 (현재 미사용)

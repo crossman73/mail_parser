@@ -1,0 +1,6 @@
+2025-09-01 13:20:45,462 - EmailEvidenceProcessor - INFO - __init__:24 - 프로세서 초기화 시작 (설정 파일: C:\Users\cross\AppData\Local\Temp\tmpw3zxfhlz.json)
+2025-09-01 13:20:45,489 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: C:\Users\cross\AppData\Local\Temp\tmpw3zxfhlz.json
+2025-09-01 13:20:45,758 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료
+2025-09-01 13:20:45,911 - EmailEvidenceProcessor - INFO - __init__:24 - 프로세서 초기화 시작 (설정 파일: C:\Users\cross\AppData\Local\Temp\tmpt3iq9hlt.json)
+2025-09-01 13:20:45,931 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: C:\Users\cross\AppData\Local\Temp\tmpt3iq9hlt.json
+2025-09-01 13:20:46,192 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료

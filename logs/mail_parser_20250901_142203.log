@@ -1,0 +1,2 @@
+2025-09-01 14:22:03,496 - EmailEvidenceProcessor - INFO - __init__:69 - 기본 설정으로 프로세서 초기화
+2025-09-01 14:22:03,666 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료

@@ -1,0 +1,619 @@
+{% extends "base.html" %} {% block title %}이메일 증거 처리 시스템{% endblock %}
+{% block content %}
+<div class="container-fluid mt-4">
+  <!-- 시스템 상태 표시 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-primary">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">
+            <i class="bi bi-shield-check"></i>
+            법원 제출용 이메일 증거 처리 시스템
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div id="systemStatus" class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                <strong>시스템 준비 완료</strong> - 메일박스 파일(.mbox)을
+                업로드하여 증거 처리를 시작하세요.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-end">
+                <div class="small text-muted mb-1">시스템 버전: 1.0</div>
+                <div class="small text-muted">법원 제출 표준 규격 준수</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 처리 단계 표시 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-list-ol"></i>
+            증거 처리 단계
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <div
+                id="step1"
+                class="text-center p-3 border rounded step-item active"
+              >
+                <div class="step-icon">
+                  <i class="bi bi-upload fs-2 text-primary"></i>
+                </div>
+                <h6 class="mt-2">1단계: 파일 업로드</h6>
+                <small class="text-muted">mbox 파일 선택 및 업로드</small>
+                <div class="step-status mt-2">
+                  <span class="badge bg-primary">진행 가능</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div
+                id="step2"
+                class="text-center p-3 border rounded step-item disabled"
+              >
+                <div class="step-icon">
+                  <i class="bi bi-envelope-open fs-2 text-muted"></i>
+                </div>
+                <h6 class="mt-2">2단계: 이메일 파싱</h6>
+                <small class="text-muted">메일 내용 분석 및 분류</small>
+                <div class="step-status mt-2">
+                  <span class="badge bg-secondary">대기</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div
+                id="step3"
+                class="text-center p-3 border rounded step-item disabled"
+              >
+                <div class="step-icon">
+                  <i class="bi bi-file-earmark-pdf fs-2 text-muted"></i>
+                </div>
+                <h6 class="mt-2">3단계: 증거 생성</h6>
+                <small class="text-muted">HTML/PDF 증거 파일 생성</small>
+                <div class="step-status mt-2">
+                  <span class="badge bg-secondary">대기</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div
+                id="step4"
+                class="text-center p-3 border rounded step-item disabled"
+              >
+                <div class="step-icon">
+                  <i class="bi bi-shield-check fs-2 text-muted"></i>
+                </div>
+                <h6 class="mt-2">4단계: 법원 제출 검증</h6>
+                <small class="text-muted"
+                  >무결성 증명 및 법원 적합성 검증</small
+                >
+                <div class="step-status mt-2">
+                  <span class="badge bg-secondary">대기</span>
+                </div>
+                <div class="step-actions mt-2" style="display: none">
+                  <a
+                    href="{{ url_for('verify_integrity') }}"
+                    class="btn btn-primary btn-sm"
+                  >
+                    <i class="bi bi-shield-check me-1"></i>법원 검증 시작
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 통계 정보 -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <i class="bi bi-file-earmark-arrow-up fs-2 text-primary mb-2"></i>
+          <h4 class="mb-0">{{ stats.total_files }}</h4>
+          <small class="text-muted">업로드된 파일</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <i class="bi bi-envelope fs-2 text-success mb-2"></i>
+          <h4 class="mb-0">{{ stats.total_emails }}</h4>
+          <small class="text-muted">파싱된 이메일</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <i class="bi bi-file-earmark-check fs-2 text-warning mb-2"></i>
+          <h4 class="mb-0">{{ stats.processed_files }}</h4>
+          <small class="text-muted">처리 완료</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <i class="bi bi-percent fs-2 text-info mb-2"></i>
+          <h4 class="mb-0">{{ stats.success_rate }}%</h4>
+          <small class="text-muted">성공률</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 주요 기능 카드 -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="card-title">
+                <i class="bi bi-upload text-primary"></i>
+                파일 업로드 및 파싱
+              </h5>
+            </div>
+            <span class="badge bg-success">활성</span>
+          </div>
+          <p class="card-text">
+            메일박스 파일(.mbox, .eml, .msg)을 업로드하고 이메일 내용을 자동으로
+            파싱합니다. 첨부파일까지 함께 추출하여 날짜별로 정리합니다.
+          </p>
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-check-circle-fill text-success"></i> UTF-8 인코딩
+              자동 처리<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 첨부파일 원본
+              보존<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 메타데이터
+              추출
+            </small>
+          </div>
+          <a href="{{ url_for('upload_file') }}" class="btn btn-primary">
+            <i class="bi bi-upload"></i>
+            파일 업로드 시작
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card h-100" id="evidenceCard">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="card-title">
+                <i class="bi bi-file-earmark-pdf text-danger"></i>
+                증거 파일 생성
+              </h5>
+            </div>
+            <span class="badge bg-secondary" id="evidenceBadge">비활성</span>
+          </div>
+          <p class="card-text">
+            선택된 이메일을 법원 제출용 HTML/PDF 형식으로 변환합니다. 증거번호
+            자동 부여 및 당사자 구분 지원.
+          </p>
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-exclamation-circle text-warning"></i> 파일 파싱 후
+              이용 가능<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 법원 표준
+              형식 준수<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 증거번호 자동
+              부여
+            </small>
+          </div>
+          <button class="btn btn-secondary" id="evidenceBtn" disabled>
+            <i class="bi bi-file-earmark-pdf"></i>
+            증거 생성 (파일 업로드 필요)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card h-100" id="timelineCard">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="card-title">
+                <i class="bi bi-clock-history text-info"></i>
+                타임라인 생성
+              </h5>
+            </div>
+            <span class="badge bg-secondary" id="timelineBadge">비활성</span>
+          </div>
+          <p class="card-text">
+            이메일 발송 시간순으로 타임라인을 생성하여 시간적 흐름을
+            시각화합니다. Excel 파일로 내보내기 지원.
+          </p>
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-exclamation-circle text-warning"></i> 증거 생성 후
+              이용 가능<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 시간순 자동
+              정렬<br />
+              <i class="bi bi-check-circle-fill text-success"></i> Excel
+              내보내기
+            </small>
+          </div>
+          <button class="btn btn-secondary" id="timelineBtn" disabled>
+            <i class="bi bi-clock-history"></i>
+            타임라인 생성 (증거 생성 필요)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 추가 증거 관리 -->
+    <div class="col-md-6 mb-4">
+      <div class="card h-100" id="additionalEvidenceCard">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="card-title">
+                <i class="bi bi-folder-plus text-info"></i>
+                추가 증거 관리
+              </h5>
+            </div>
+            <span class="badge bg-success">활성</span>
+          </div>
+          <p class="card-text">
+            이메일 외의 추가 증거 자료(계약서, 회의록, 사진, 음성파일 등)를 법원
+            제출 형식으로 등록하고 관리합니다.
+          </p>
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-check-circle-fill text-success"></i> 법원 표준
+              형식 준수<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 증거번호 자동
+              부여<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 무결성 해시값
+              생성
+            </small>
+          </div>
+          <div class="d-grid gap-2">
+            <a href="{{ url_for('additional_evidence') }}" class="btn btn-info">
+              <i class="bi bi-folder-plus me-1"></i>
+              추가 증거 관리
+            </a>
+            <a
+              href="{{ url_for('add_evidence') }}"
+              class="btn btn-outline-info btn-sm"
+            >
+              <i class="bi bi-plus-circle me-1"></i>
+              새 증거 등록
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card h-100" id="integrityCard">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="card-title">
+                <i class="bi bi-shield-check text-success"></i>
+                무결성 검증
+              </h5>
+            </div>
+            <span class="badge bg-secondary" id="integrityBadge">비활성</span>
+          </div>
+          <p class="card-text">
+            생성된 증거 파일들의 해시값을 계산하여 무결성을 검증합니다. 법정에서
+            원본성 입증에 활용.
+          </p>
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-exclamation-circle text-warning"></i> 타임라인
+              생성 후 이용 가능<br />
+              <i class="bi bi-check-circle-fill text-success"></i> SHA-256 해시
+              생성<br />
+              <i class="bi bi-check-circle-fill text-success"></i> 무결성 보고서
+              작성
+            </small>
+          </div>
+          <button class="btn btn-secondary" id="integrityBtn" disabled>
+            <i class="bi bi-shield-check"></i>
+            무결성 검증 (타임라인 필요)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 최근 처리 이력 -->
+  {% if stats.total_files > 0 %}
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-clock"></i>
+            최근 처리 이력
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>파일명</th>
+                  <th>업로드 시간</th>
+                  <th>이메일 수</th>
+                  <th>상태</th>
+                  <th>액션</th>
+                </tr>
+              </thead>
+              <tbody id="recentFiles">
+                <!-- 최근 파일 목록이 여기에 표시됩니다 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<style>
+  .step-item {
+    transition: all 0.3s ease;
+  }
+
+  .step-item.active {
+    border-color: #0d6efd !important;
+    background-color: rgba(13, 110, 253, 0.05);
+  }
+
+  .step-item.completed {
+    border-color: #198754 !important;
+    background-color: rgba(25, 135, 84, 0.05);
+  }
+
+  .step-item.disabled {
+    opacity: 0.6;
+  }
+
+  .step-icon i {
+    transition: all 0.3s ease;
+  }
+
+  .step-item.active .step-icon i {
+    color: #0d6efd !important;
+  }
+
+  .step-item.completed .step-icon i {
+    color: #198754 !important;
+  }
+</style>
+
+<script>
+  let filesData = {};
+
+  // 페이지 로드 시 상태 확인
+  document.addEventListener("DOMContentLoaded", function () {
+    checkSystemStatus();
+    loadRecentFiles();
+  });
+
+  function checkSystemStatus() {
+    // API를 통해 현재 시스템 상태 확인
+    fetch("/api/files")
+      .then((response) => response.json())
+      .then((data) => {
+        filesData = data;
+        updateSystemStatus(data);
+      })
+      .catch((error) => {
+        console.error("상태 확인 실패:", error);
+      });
+  }
+
+  function updateSystemStatus(data) {
+    const totalFiles = Object.keys(data).length;
+    const processedFiles = Object.values(data).filter(
+      (f) => f.processed
+    ).length;
+
+    // 단계별 상태 업데이트
+    if (processedFiles > 0) {
+      // 2단계 활성화 (파싱 완료)
+      updateStep("step2", "completed", "완료");
+      updateStep("step3", "active", "진행 가능");
+
+      // 증거 생성 버튼 활성화
+      enableFeature("evidence", "이메일 목록 보기");
+
+      if (hasEvidenceFiles()) {
+        // 3단계 완료시 4단계 활성화
+        updateStep("step3", "completed", "완료");
+        updateStep("step4", "active", "진행 가능");
+
+        enableFeature("timeline", "타임라인 생성");
+        enableFeature("integrity", "무결성 검증");
+      }
+    }
+  }
+
+  function updateStep(stepId, status, badgeText) {
+    const step = document.getElementById(stepId);
+    step.className = `text-center p-3 border rounded step-item ${status}`;
+
+    const badge = step.querySelector(".step-status span");
+    badge.className = `badge bg-${
+      status === "active"
+        ? "primary"
+        : status === "completed"
+        ? "success"
+        : "secondary"
+    }`;
+    badge.textContent = badgeText;
+
+    // 아이콘 색상 업데이트
+    const icon = step.querySelector(".step-icon i");
+    if (status === "active") {
+      icon.className = icon.className.replace("text-muted", "text-primary");
+    } else if (status === "completed") {
+      icon.className = icon.className.replace("text-muted", "text-success");
+    }
+  }
+
+  function enableFeature(featureType, buttonText) {
+    const badge = document.getElementById(`${featureType}Badge`);
+    const btn = document.getElementById(`${featureType}Btn`);
+
+    badge.className = "badge bg-success";
+    badge.textContent = "활성";
+
+    btn.className = "btn btn-primary";
+    btn.disabled = false;
+    btn.innerHTML = `<i class="bi bi-${getFeatureIcon(
+      featureType
+    )}"></i> ${buttonText}`;
+
+    // 클릭 이벤트 추가
+    btn.onclick = function () {
+      if (featureType === "evidence") {
+        // 첫 번째 파일의 이메일 목록으로 이동
+        const firstFileId = Object.keys(filesData)[0];
+        if (firstFileId) {
+          window.location.href = `/emails/${firstFileId}`;
+        }
+      } else {
+        window.location.href = `/${featureType}`;
+      }
+    };
+  }
+
+  function getFeatureIcon(featureType) {
+    const icons = {
+      evidence: "envelope-open",
+      timeline: "clock-history",
+      integrity: "shield-check",
+    };
+    return icons[featureType] || "gear";
+  }
+
+  function hasEvidenceFiles() {
+    // processed_emails 디렉토리 확인 (실제로는 API로)
+    return false; // 임시
+  }
+
+  function loadRecentFiles() {
+    fetch("/api/files")
+      .then((response) => response.json())
+      .then((data) => {
+        updateRecentFilesTable(data);
+      })
+      .catch((error) => {
+        console.error("최근 파일 로드 실패:", error);
+      });
+  }
+
+  function updateRecentFilesTable(data) {
+    const tbody = document.getElementById("recentFiles");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    Object.entries(data).forEach(([fileId, fileInfo]) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+            <td>${fileInfo.filename}</td>
+            <td>${new Date(
+              fileInfo.uploaded_at || Date.now()
+            ).toLocaleString()}</td>
+            <td>${fileInfo.total_emails || 0}</td>
+            <td>
+                <span class="badge bg-${
+                  fileInfo.processed ? "success" : "warning"
+                }">
+                    ${fileInfo.processed ? "처리 완료" : "처리 중"}
+                </span>
+            </td>
+            <td>
+                <a href="/emails/${fileId}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-eye"></i> 보기
+                </a>
+            </td>
+        `;
+      tbody.appendChild(row);
+    });
+
+    // 데이터가 있으면 4단계 활성화
+    if (Object.keys(data).length > 0) {
+      activateStep4();
+    }
+  }
+
+  function activateStep4() {
+    const step4 = document.getElementById("step4");
+    if (step4) {
+      // 단계 활성화
+      step4.classList.remove("disabled");
+      step4.classList.add("active");
+
+      // 아이콘 색상 변경
+      const icon = step4.querySelector("i");
+      if (icon) {
+        icon.classList.remove("text-muted");
+        icon.classList.add("text-primary");
+      }
+
+      // 상태 배지 업데이트
+      const badge = step4.querySelector(".badge");
+      if (badge) {
+        badge.classList.remove("bg-secondary");
+        badge.classList.add("bg-success");
+        badge.textContent = "준비됨";
+      }
+
+      // 액션 버튼 표시
+      const actions = step4.querySelector(".step-actions");
+      if (actions) {
+        actions.style.display = "block";
+      }
+    }
+  }
+
+  // 페이지 로드 시 처리된 이메일이 있는지 확인
+  document.addEventListener("DOMContentLoaded", function () {
+    // processed_emails 디렉토리 확인
+    fetch("/api/check_processed_emails")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.has_processed_emails) {
+          activateStep4();
+        }
+      })
+      .catch((error) => {
+        console.log("처리된 이메일 확인 중 오류:", error);
+        // 오류가 있어도 4단계는 활성화 (안전장치)
+        activateStep4();
+      });
+  });
+</script>
+{% endblock %}
