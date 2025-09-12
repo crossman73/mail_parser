@@ -39,8 +39,9 @@ echo ====================================
 if exist server.log (
     echo 📄 최근 서버 로그 (마지막 10줄):
     echo.
-    tail -n 10 server.log 2>nul || (
-        echo server.log 파일을 직접 열어서 확인해주세요.
+    tail server.log 2>nul
+    if %errorlevel% neq 0 (
+        echo 로그를 읽을 수 없습니다.
     )
 ) else (
     echo 📄 로그 파일이 없습니다.

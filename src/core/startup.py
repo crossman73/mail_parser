@@ -72,6 +72,13 @@ def check_and_init(app) -> List[Dict[str, Any]]:
             'statistics': {},
             'features_status': {},
             'evidence_list': [],
+            'page': 1,
+            'total_pages': 1,
+            'admin_csrf': '',
+            'jobs': [],
+            'file_info': {},
+            'uploaded_files': {},
+            'processed_emails': {},
         }
         with app.test_request_context('/'):
             for name in tmpl_names:

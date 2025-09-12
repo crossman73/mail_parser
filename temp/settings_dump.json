@@ -1,0 +1,6 @@
+{
+  "ENABLE_DEV_RELOAD": "True",
+  "DEV_RELOAD_TOKEN": "test-token-123",
+  "ALLOW_REMOTE_RELOAD": "True",
+  "ALLOW_REMOTE_RELOAD_IPS": null
+}

@@ -30,5 +30,7 @@ with out_path.open('w', encoding='utf-8') as log:
             log.write(f"MODULE FAIL: {mod} -> {repr(e)}\n")
         log.write('\n')
 
-log.write('Done.\n')
-print(f"Wrote MCP import log to: {out_path}")
+        # final marker while file still open
+        log.write('Done.\n')
+
+    print(f"Wrote MCP import log to: {out_path}")

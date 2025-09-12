@@ -113,27 +113,36 @@ def admin_reload():
     """
     enabled = current_app.config.get('ENABLE_DEV_RELOAD', False)
     if not enabled:
-        abort(403)
+        current_app.logger.warning(
+            'admin_reload blocked: ENABLE_DEV_RELOAD is False')
+        return {'error': 'disabled', 'reason': 'ENABLE_DEV_RELOAD is False'}, 403
 
     # Allow only local requests unless explicitly permitted
     allow_remote = current_app.config.get('ALLOW_REMOTE_RELOAD', False)
     remote = request.headers.get('X-Forwarded-For', request.remote_addr)
     if not allow_remote:
         if remote is None:
-            abort(403)
+            current_app.logger.warning(
+                'admin_reload blocked: remote address missing')
+            return {'error': 'forbidden', 'reason': 'remote address missing'}, 403
         if isinstance(remote, str):
             remote_ip = remote.split(',')[0].strip()
         else:
             remote_ip = str(remote)
+        # Accept local addresses first
         if remote_ip not in ('127.0.0.1', '::1', 'localhost'):
             # check whitelist
             ip_whitelist = current_app.config.get('DEV_RELOAD_IP_WHITELIST')
             if ip_whitelist:
                 # allow if remote_ip in whitelist
                 if remote_ip not in ip_whitelist:
-                    abort(403)
+                    current_app.logger.warning(
+                        f'admin_reload blocked: {remote_ip} not in DEV_RELOAD_IP_WHITELIST')
+                    return {'error': 'forbidden', 'reason': f'{remote_ip} not in DEV_RELOAD_IP_WHITELIST'}, 403
             else:
-                abort(403)
+                current_app.logger.warning(
+                    f'admin_reload blocked: {remote_ip} is not local and no whitelist configured')
+                return {'error': 'forbidden', 'reason': f'{remote_ip} not allowed'}, 403
 
     # Token check: header X-DEV-RELOAD-TOKEN or json/form 'token'
     # Token precedence: 1) DB setting 2) app config
@@ -154,13 +163,15 @@ def admin_reload():
         if not token:
             token = request.headers.get('X-DEV-RELOAD-TOKEN')
         if token != expected:
-            abort(403)
+            current_app.logger.warning('admin_reload blocked: token mismatch')
+            return {'error': 'forbidden', 'reason': 'token mismatch'}, 403
 
     # CSRF check for form-based admin actions
     form_csrf = request.form.get('admin_csrf') or ((request.get_json(
         silent=True) or {}).get('admin_csrf') if request.is_json else None)
     if form_csrf and session.get('admin_csrf') != form_csrf:
-        abort(403)
+        current_app.logger.warning('admin_reload blocked: csrf mismatch')
+        return {'error': 'forbidden', 'reason': 'csrf mismatch'}, 403
 
     # Accept JSON body {"modules": ["mod.name", ...]} or form 'modules' CSV
     modules = None

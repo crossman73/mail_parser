@@ -1,0 +1,15 @@
+{
+  "entities": [
+    {
+      "id": "mail_parser",
+      "type": "project",
+      "title": "mail_parser",
+      "observations": [
+        "Project root: C:\\\dev\\\python-email",
+        "Entry points: main.py, run_server.py, app.py",
+        "Key scripts: scripts/check_mcp_imports.py, scripts/inspect_installed_mcp.py",
+        "Uses MCP integrations: mcp, mcp_server_fetch"
+      ]
+    }
+  ]
+}

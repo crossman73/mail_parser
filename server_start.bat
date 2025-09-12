@@ -60,9 +60,9 @@ if %errorlevel% == 0 (
         if exist server.log (
             echo.
             echo === 최근 로그 내용 (마지막 10줄) ===
-            powershell -Command "Get-Content server.log -Tail 10" 2>nul || (
-                echo 로그 내용을 확인할 수 없습니다.
-                echo server.log 파일을 직접 열어서 확인해주세요.
+            powershell -Command "Get-Content server.log -Tail 10" 2>nul
+            if %errorlevel% neq 0 (
+                echo 로그 내용을 읽을 수 없습니다. server.log 파일을 직접 확인하세요.
             )
         )
         pause

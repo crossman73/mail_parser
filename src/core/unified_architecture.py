@@ -3,10 +3,17 @@
 """
 import json
 import logging
+import os
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+try:
+    import psutil
+except Exception:
+    psutil = None
 
 
 @dataclass
@@ -41,6 +48,8 @@ class UnifiedArchitecture:
         self.logger = self._setup_logging()
         self.services: Dict[str, Any] = {}
         self._initialized = False
+    # track start time for uptime reporting
+    self.start_time = datetime.now()
 
     def initialize(self):
         """시스템 초기화"""
@@ -173,7 +182,7 @@ class UnifiedArchitecture:
 
     def get_system_status(self) -> Dict[str, Any]:
         """시스템 상태 조회"""
-        return {
+        status: Dict[str, Any] = {
             "app_name": self.config.app_name,
             "version": self.config.version,
             "debug_mode": self.config.debug_mode,
@@ -187,6 +196,74 @@ class UnifiedArchitecture:
             },
             "timestamp": datetime.now().isoformat()
         }
+
+        # Uptime (seconds)
+        try:
+            status['uptime_seconds'] = (
+                datetime.now() - self.start_time).total_seconds()
+        except Exception:
+            status['uptime_seconds'] = None
+
+        # psutil-based system/process metrics (best-effort)
+        try:
+            if psutil:
+                # overall CPU and memory
+                status['system_cpu_percent'] = psutil.cpu_percent(interval=0.1)
+                vm = psutil.virtual_memory()
+                status['system_memory'] = {
+                    'total': vm.total,
+                    'available': vm.available,
+                    'percent': vm.percent,
+                    'used': vm.used,
+                    'free': vm.free
+                }
+
+                # current process metrics
+                proc = psutil.Process(os.getpid())
+                # cpu_percent with short interval; may report 0.0 on first call
+                status['process_cpu_percent'] = proc.cpu_percent(interval=0.1)
+                mem = proc.memory_info()
+                status['process_memory'] = {
+                    'rss': getattr(mem, 'rss', None),
+                    'vms': getattr(mem, 'vms', None),
+                }
+                status['process_threads'] = proc.num_threads()
+
+                # port listening check (5000)
+                try:
+                    conns = psutil.net_connections(kind='inet')
+                    status['port_5000_listening'] = any(
+                        (c.laddr and getattr(c.laddr, 'port', None)
+                         == 5000 and c.status == 'LISTEN')
+                        for c in conns
+                    )
+                except Exception:
+                    status['port_5000_listening'] = None
+            else:
+                status['system_cpu_percent'] = None
+                status['system_memory'] = None
+                status['process_cpu_percent'] = None
+                status['process_memory'] = None
+                status['process_threads'] = None
+                status['port_5000_listening'] = None
+        except Exception as e:
+            # non-fatal: include error note
+            status['metrics_error'] = str(e)
+
+        # DB connectivity quick check (best-effort)
+        try:
+            from src.core import db_manager
+
+            try:
+                # attempt a harmless read
+                _ = db_manager.get_setting('DEV_RELOAD_TOKEN')
+                status['db_accessible'] = True
+            except Exception:
+                status['db_accessible'] = False
+        except Exception:
+            status['db_accessible'] = False
+
+        return status
 
 
 # 전역 아키텍처 인스턴스
