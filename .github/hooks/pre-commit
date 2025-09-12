@@ -1,0 +1,54 @@
+#!/bin/sh
+# Pre-commit hook: 자동 문서 생성
+# Phase 2.4: Git Hook 기반 문서 자동화
+
+echo "🔄 Pre-commit: 문서 자동 업데이트 확인 중..."
+
+# Python 파일 변경 여부 확인
+python_changed=$(git diff --cached --name-only | grep -E '\.(py)$' | wc -l)
+template_changed=$(git diff --cached --name-only | grep -E 'templates/.*\.html$' | wc -l)
+
+if [ "$python_changed" -gt 0 ] || [ "$template_changed" -gt 0 ]; then
+    echo "📝 Python/템플릿 파일 변경 감지 - 문서 업데이트 실행..."
+
+    # 문서 생성 실행
+    python -c "
+try:
+    from src.docs import generate_all_documentation
+    print('🔍 API 스캔 및 문서 생성 중...')
+    result = generate_all_documentation()
+
+    if result and 'generated_docs' in result:
+        generated_docs = result['generated_docs']
+        scan_result = result.get('scan_result', {})
+        statistics = scan_result.get('statistics', {})
+
+        print(f'✅ 문서 생성 완료: {len(generated_docs)}개 파일')
+        print(f'🔍 스캔된 엔드포인트: {statistics.get(\"total_endpoints\", 0)}개')
+
+        # 생성된 문서 파일들을 스테이징에 추가
+        import subprocess
+        import os
+
+        for doc_type, file_path in generated_docs.items():
+            if os.path.exists(file_path):
+                subprocess.run(['git', 'add', file_path], check=True)
+                print(f'📄 스테이징 추가: {file_path}')
+
+        print('📚 문서 파일들이 커밋에 포함됩니다.')
+    else:
+        print('⚠️ 문서 생성에 문제가 있었지만 커밋을 계속합니다.')
+
+except Exception as e:
+    print(f'⚠️ 문서 자동 생성 실패: {e}')
+    print('커밋은 계속 진행됩니다.')
+    import traceback
+    traceback.print_exc()
+"
+
+    echo "✅ Pre-commit 문서 업데이트 완료"
+else
+    echo "📝 Python/템플릿 파일 변경 없음 - 문서 업데이트 생략"
+fi
+
+exit 0

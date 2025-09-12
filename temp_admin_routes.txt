@@ -1,0 +1,4 @@
+✅ 데이터베이스 연결 성공
+/admin -> admin_page
+/api/admin/cleanup -> cleanup_tasks
+/api/admin/tasks -> get_all_tasks

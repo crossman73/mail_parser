@@ -1,14 +1,14 @@
-"""
-Unified web application
-통합 웹 애플리케이션
-"""
+"""src.web 패키지
 
-from src.web.api import register_api_routes
-from src.web.app import create_app
-from src.web.routes import register_routes
+경량화: 패키지 임포트 시 서브모듈을 즉시 불러오지 않도록 구현합니다.
+서브모듈은 필요할 때 (`from src.web import app_factory; app_factory.create_app`) 직접 임포트하세요.
+"""
 
 __all__ = [
-    'create_app',
-    'register_routes',
-    'register_api_routes'
+    'app_factory',
+    'routes',
+    'api'
 ]
+
+# 주의: 패키지 임포트 시 heavy dependencies(openpyxl, numpy 등)를 피하기 위해
+# 하위 모듈을 여기에 직접 import 하지 않습니다. 사용 시 명시적으로 불러오세요.

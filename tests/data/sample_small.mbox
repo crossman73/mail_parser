@@ -1,0 +1,19 @@
+From test@example.com Sat Sep  6 12:00:00 2025
+Subject: Test email 1
+Message-ID: <msg1@example.com>
+From: Sender <sender@example.com>
+To: Recipient <recipient@example.com>
+Date: Sat, 6 Sep 2025 12:00:00 +0900
+
+This is the body of test email 1.
+
+From test2@example.com Sat Sep  6 13:00:00 2025
+Subject: Re: Test email 1
+Message-ID: <msg2@example.com>
+In-Reply-To: <msg1@example.com>
+References: <msg1@example.com>
+From: Sender <sender@example.com>
+To: Recipient <recipient@example.com>
+Date: Sat, 6 Sep 2025 13:00:00 +0900
+
+This is the reply to test email 1.

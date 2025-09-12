@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>관리자 대시보드</title>
+    <link rel="stylesheet" href="/static/css/wireframe.css" />
+  </head>
+
+  <body class="light">
+    <header class="topnav"><div class="brand">메일증거 - 관리자</div></header>
+    <div class="container">
+      <main class="main">
+        <section class="cards">
+          <h2>요약</h2>
+          <div style="display: flex; gap: 12px">
+            <div class="card">
+              총 업로드:
+              <strong>{{ evidences|length if evidences else 0 }}</strong>
+            </div>
+            <div class="card">최근 실패: <strong>--</strong></div>
+            <div class="card">진행중: <strong>--</strong></div>
+          </div>
+        </section>
+
+        <section style="margin-top: 16px">
+          <h3>최근 증거</h3>
+          {% if evidences %}
+          <table class="evidence-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>증거번호</th>
+                <th>제목</th>
+                <th>생성일</th>
+                <th>해시</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for e in evidences %}
+              <tr>
+                <td>{{ e.id }}</td>
+                <td>
+                  <a
+                    href="{{ url_for('admin.evidence_detail', evidence_id=e.id) }}"
+                    >{{ e.evidence_number }}</a
+                  >
+                </td>
+                <td>{{ e.subject }}</td>
+                <td>{{ e.generated_at }}</td>
+                <td>{{ e.integrity_hash[:12] if e.integrity_hash }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <p>등록된 증거가 없습니다.</p>
+          {% endif %}
+        </section>
+
+        <section style="margin-top: 12px">
+          <h3>개발 도구</h3>
+          <form
+            method="post"
+            action="/admin/reload"
+            style="margin-bottom: 12px"
+          >
+            <input type="hidden" name="admin_csrf" value="{{ admin_csrf }}" />
+            <!-- Optional: provide token here if DEV_RELOAD_TOKEN is set on server -->
+            <input type="hidden" name="token" value="" />
+            <button class="btn">Reload modules (dev)</button>
+          </form>
+
+          <div class="pagination">
+            {% if page and total_pages and total_pages > 1 %} {% if page > 1 %}
+            <a
+              class="btn small"
+              href="{{ url_for('admin.admin_index') }}?page={{ page-1 }}"
+              >이전</a
+            >
+            {% endif %}
+            <span>페이지 {{ page }} / {{ total_pages }}</span>
+            {% if page < total_pages %}
+            <a
+              class="btn small"
+              href="{{ url_for('admin.admin_index') }}?page={{ page+1 }}"
+              >다음</a
+            >
+            {% endif %} {% endif %}
+          </div>
+        </section>
+      </main>
+    </div>
+    +
+    <footer class="footer">© 2025 Mail Evidence · Admin</footer>
+    +
+  </body>
+  +
+</html>

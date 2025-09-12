@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이메일 증거 처리 시스템 문서</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .nav {
+            background: #34495e;
+            padding: 15px;
+        }
+        .nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .nav a:hover { background: rgba(255,255,255,0.2); }
+        .content { padding: 30px; }
+        .endpoint {
+            border: 1px solid #e0e6ed;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .endpoint-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #e0e6ed;
+        }
+        .endpoint-body { padding: 20px; }
+        .method-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+        .method-get { background: #28a745; }
+        .method-post { background: #007bff; }
+        .method-put { background: #ffc107; color: #212529; }
+        .method-delete { background: #dc3545; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .section { margin-bottom: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>이메일 증거 처리 시스템</h1>
+            <p>버전 2.0 | 생성일: 2025-09-03</p>
+        </div>
+
+        <div class="nav">
+            <a href="#overview">개요</a>
+            <a href="#web-routes">웹 라우트</a>
+            <a href="#factory-routes">팩토리 라우트</a>
+            <a href="#api-routes">API 엔드포인트</a>
+        </div>
+
+        <div class="content">
+            <section id="overview" class="section">
+                <h2>📊 시스템 개요</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">62</div>
+                        <div>총 엔드포인트</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">38</div>
+                        <div>웹 라우트</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">6</div>
+                        <div>팩토리 라우트</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">18</div>
+                        <div>API 라우트</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1</div>
+                        <div>데이터 모델</div>
+                    </div>
+                </div>
+                <p>한국 법원 제출용 이메일 증거 처리 및 분류 시스템</p>
+            </section>
+
+            <section id="web-routes" class="section">
+                <h2>🌐 웹 라우트</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: index | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>메인 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/add_evidence</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span><span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: add_evidence | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>추가 증거 파일 등록</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/additional_evidence</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: additional_evidence | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>추가 증거 관리 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/admin</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: admin_page | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>관리자 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/admin/cleanup</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: cleanup_tasks | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>비정상 종료된 작업들 정리</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/admin/tasks</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: get_all_tasks | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>모든 진행 중인 작업 확인 (관리용)</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/check_processed_emails</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_check_processed_emails | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>처리된 이메일 존재 여부 확인 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/docs</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_docs | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>API 문서 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/emails/<file_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_email_list | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>API: 이메일 목록 조회</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/evidence_categories</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_evidence_categories | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 카테고리 정보 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/evidence_progress/<task_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: get_evidence_progress | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 생성 진행 상황 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/files</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_file_list | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>API: 업로드된 파일 목록</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/progress/<task_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: get_progress | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>진행 상황 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/upload</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: api_upload | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>API: 파일 업로드</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/verify_integrity</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_verify_integrity | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>법원 제출용 무결성 검증 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/delete_evidence/<file_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: delete_evidence | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>추가 증거 삭제</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/download/<path:filename></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: download_file | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>파일 다운로드</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/download_court_certificate</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: download_court_certificate | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>법원 제출용 무결성 증명서 다운로드</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/download_evidence_index</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: download_evidence_index | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>추가 증거 목록서 다운로드</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/download_timeline_excel</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: download_timeline_excel | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>통합 타임라인 Excel 다운로드</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/download_verification_report</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: download_verification_report | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>무결성 검증 보고서 다운로드</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/edit_evidence/<file_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span><span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: edit_evidence | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>추가 증거 편집</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/email/<file_id>/<int:email_index></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: email_detail | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>이메일 상세 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/emails/<file_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: email_list | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>이메일 목록 페이지 - 선택적 증거 생성 기능 포함</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/evidence</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: evidence_list | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 목록 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/evidence/<folder_name></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: evidence_detail | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 상세 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/export_additional_evidence</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: export_additional_evidence | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>추가 증거 법원 제출용 패키징</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/generate_evidence/<file_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: generate_evidence | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>선택된 이메일들에 대해 증거 생성</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/generate_timeline_package</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: generate_timeline_package | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>법원 제출용 타임라인 패키지 생성</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/integrated_timeline</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: integrated_timeline | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>통합 타임라인 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/integrity</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: integrity | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>무결성 검증 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/process_selected</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: process_selected_emails | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>선택된 이메일들을 HTML/PDF로 처리</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/processing/<task_id></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: processing_status | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>처리 진행 상황 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/search</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: search_page | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>검색 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/settings</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: settings_page | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>설정 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/timeline</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: timeline_page | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>타임라인 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/upload</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span><span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: upload_file | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>파일 업로드 및 처리</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/verify_integrity</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: verify_integrity | 파일: src\web\routes.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>법원 제출용 무결성 검증 페이지</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="factory-routes" class="section">
+                <h2>🌐 팩토리 라우트</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: index | 파일: src\web\app_factory.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>메인 대시보드</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_info | 파일: src\web\app_factory.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>API 정보 엔드포인트</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/docs</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_docs | 파일: src\web\app_factory.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>API 문서 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/health</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: health_check | 파일: src\web\app_factory.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>헬스체크 (Docker/로드밸런서용)</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/system/status</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: system_status | 파일: src\web\app_factory.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>시스템 상태 페이지</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/upload</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span><span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: upload | 파일: src\web\app_factory.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>파일 업로드 페이지 (기본 구현)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="api-routes" class="section">
+                <h2>🌐 API 엔드포인트</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/emails/load</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: api_load_emails | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>이메일 로드 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/emails/process</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: api_process_emails | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>이메일 처리 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/emails/search</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_search_emails | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>이메일 검색 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/emails/statistics</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_email_statistics | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>이메일 통계 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/evidence</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_evidence_list | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 목록 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/evidence/<folder_name></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_evidence_detail | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 상세 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/evidence/<folder_name></strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-delete">DELETE</span>
+                            <span style="color: #6c757d;">함수: api_delete_evidence | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 삭제 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/evidence/export</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_export_evidence | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 목록 내보내기 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/evidence/integrity</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_evidence_integrity | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>증거 무결성 검증 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/files/info</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_file_info | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>파일 정보 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/files/list</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_list_files | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>파일 목록 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/system/cleanup</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: api_cleanup | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>시스템 정리 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/system/disk-usage</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_disk_usage | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>디스크 사용량 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/timeline</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_timeline | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>타임라인 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/timeline/export</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: api_timeline_export | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>타임라인 내보내기 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/api/timeline/filter</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: api_timeline_filter | 파일: src\web\api.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>타임라인 필터링 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/docs-status</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-get">GET</span>
+                            <span style="color: #6c757d;">함수: docs_status | 파일: src\docs\api_endpoints.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>문서 상태 확인 API</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <strong>/regenerate-docs</strong>
+                        <div style="margin-top: 8px;">
+                            <span class="method-badge method-post">POST</span>
+                            <span style="color: #6c757d;">함수: regenerate_docs | 파일: src\docs\api_endpoints.py</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>문서 재생성 API</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

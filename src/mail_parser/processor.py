@@ -5,14 +5,21 @@ import json
 import mailbox
 import os
 import re
+import shutil
 from datetime import datetime
+from email.message import Message
+from typing import Any, Dict, List, Optional, cast
+
+from src.parser.mailbox_processor import process_mailbox
 
 from .analyzer import ThreadAnalyzer
 from .evidence_generator import EvidenceGenerator
+from .forensic_integrity import ForensicIntegrityService
 from .formatter import CourtFormatter
 from .integrity import IntegrityManager
 from .logger import (log_email_processing, log_file_operation,
                      log_processing_step, setup_logger)
+from .streaming_processor import StreamingEmailProcessor
 from .utils import decode_text, get_email_date, sanitize_filename
 
 OUTPUT_DIR = 'processed_emails'
@@ -34,18 +41,38 @@ class EmailEvidenceProcessor:
                                config_path, success=False, error_msg=str(e))
             raise
 
-        self.mbox = None
+        # mbox can be mailbox.mbox or a synthetic mapping produced by the
+        # threaded loader; keep as Any to avoid static type complaints.
+        self.mbox: Any = None
         self.formatter = CourtFormatter()
         self.integrity_manager = IntegrityManager()
-        self.evidence_counter = {}
-        self.metadata_map = {}
+        self.forensic_service = ForensicIntegrityService()
+        self.streaming_processor = StreamingEmailProcessor(
+            chunk_size_mb=self.config.get(
+                'processing_options', {}).get('chunk_size_mb', 64),
+            streaming_threshold_mb=self.config.get(
+                'processing_options', {}).get('streaming_threshold_mb', 500)
+        )
+        self.evidence_counter: Dict[str, int] = {}
+        # metadata_map: message-id -> metadata dict
+        self.metadata_map: Dict[str, Dict[str, Any]] = {}
+        # feature flag: use thread-based mailbox loader (experimental)
+        self.use_threaded_loader: bool = self.config.get(
+            'processing_options', {}).get('use_threaded_loader', False)
         self.evidence_generator = EvidenceGenerator(self)
 
         log_processing_step(self.logger, '초기화', '프로세서 초기화 완료')
 
-    def load_mbox(self, mbox_path):
+    def load_mbox(self, mbox_path: str) -> None:
         log_processing_step(self.logger, 1, f"mbox 파일 로드 시작: {mbox_path}")
 
+        # If experimental flag is enabled, use the thread-based loader which
+        # returns grouped Message objects; this allows a gradual rollout.
+        if self.use_threaded_loader:
+            self.load_mbox_as_threads(mbox_path)
+            return
+
+        # Default: keep original mailbox.mbox behavior for compatibility
         try:
             self.mbox = mailbox.mbox(mbox_path)
             log_file_operation(self.logger, 'mbox 로드', mbox_path, success=True)
@@ -58,6 +85,8 @@ class EmailEvidenceProcessor:
         metadata_count = 0
 
         for key, msg in self.mbox.items():
+            # cast to Message so static checkers know .get is available
+            msg = cast(Message, msg)
             msg_id = msg.get('Message-ID')
             if not msg_id:
                 continue
@@ -76,6 +105,56 @@ class EmailEvidenceProcessor:
             self.logger, 2,
             f"메타데이터 수집 완료: 총 {metadata_count}개의 고유 메시지"
         )
+
+    def backup_mbox(self, mbox_path):
+        """간단한 mbox 백업 유틸리티"""
+        try:
+            dst = f"{mbox_path}.bak"
+            shutil.copy2(mbox_path, dst)
+            log_file_operation(self.logger, 'mbox 백업', dst, success=True)
+            return dst
+        except Exception as e:
+            log_file_operation(self.logger, 'mbox 백업',
+                               mbox_path, success=False, error_msg=str(e))
+            return None
+
+    def load_mbox_as_threads(self, mbox_path):
+        """새로운 프로세서: mbox를 스레드 목록으로 읽어들이는 어댑터"""
+        # backup for safety
+        self.backup_mbox(mbox_path)
+        threads = process_mailbox(mbox_path)
+        # rebuild metadata_map from threads for compatibility
+        self.metadata_map = {}
+        counter = 0
+        for thread in threads:
+            for msg in thread:
+                msg = cast(Message, msg)
+                msg_id = msg.get('Message-ID')
+                if not msg_id:
+                    continue
+                # use incremental key since mailbox keys not available from process_mailbox
+                self.metadata_map[msg_id] = {
+                    'key': counter,
+                    'subject': msg.get('Subject', ''),
+                    'date': get_email_date(msg),
+                    'in_reply_to': msg.get('In-Reply-To'),
+                    'references': (msg.get('References', '').split()[-1] if msg.get('References') else None)
+                }
+                counter += 1
+        log_processing_step(
+            self.logger, 2, f"스레드 기반 메타데이터 수집 완료: 총 {len(self.metadata_map)}개의 메시지")
+        # store a synthetic mbox-like mapping to allow existing get_message_content to work
+
+        class _SimpleMBox(dict):
+            def get_message(self, k):
+                return self.get(k)
+
+        simple = _SimpleMBox()
+        for i, thread in enumerate(threads):
+            for j, msg in enumerate(thread):
+                simple[(i * 100000) + j] = msg
+
+        self.mbox = simple
 
     def get_all_message_metadata(self):
         """모든 메시지의 메타데이터와 기본 정보를 가져옵니다."""
@@ -412,6 +491,69 @@ class EmailEvidenceProcessor:
                 return True, f"필수 키워드 미포함 (요구: {', '.join(required_keywords[:3])}...)"
 
         return False, "포함"
+
+    def process_mbox_with_streaming(self, mbox_path: str, party: str, output_dir: str = None) -> dict:
+        """스트리밍을 지원하는 mbox 파일 처리"""
+        # 포렌식 무결성 기록 시작
+        if self.config.get('forensic_settings', {}).get('enable_chain_of_custody', False):
+            custody_record = self.forensic_service.create_chain_of_custody(
+                mbox_path,
+                f"법정 증거 처리 시작: {party} 관련"
+            )
+            self.logger.info(
+                f"연계보관성 기록 생성: {custody_record.original_hash[:16]}...")
+
+        try:
+            processed_count = 0
+            evidence_files = []
+
+            # 스트리밍 처리
+            for message in self.streaming_processor.stream_emails(mbox_path):
+                if self._should_include_email_streaming(message):
+                    evidence_number = self.get_evidence_number(party)
+                    evidence_data = self.process_email_to_evidence(
+                        message, evidence_number)
+
+                    if evidence_data:
+                        evidence_files.append(evidence_data)
+                        processed_count += 1
+
+                # 통계 로그
+                if processed_count > 0 and processed_count % self.config.get('performance_monitoring', {}).get('stats_interval_emails', 1000) == 0:
+                    stats = self.streaming_processor.get_processing_statistics()
+                    self.logger.info(f"처리 통계: {stats}")
+
+            # 포렌식 보고서 생성
+            if self.config.get('forensic_settings', {}).get('export_custody_log', False):
+                custody_log_path = self.forensic_service.export_custody_log()
+                self.logger.info(f"연계보관성 로그 저장: {custody_log_path}")
+
+            return {
+                'processed_emails': processed_count,
+                'evidence_files': evidence_files,
+                'mode': 'streaming' if self.streaming_processor.should_use_streaming(mbox_path) else 'normal',
+                'processing_stats': self.streaming_processor.get_processing_statistics(),
+                'custody_summary': self.forensic_service.get_custody_summary()
+            }
+
+        except Exception as e:
+            self.logger.error(f"스트리밍 처리 중 오류: {str(e)}")
+            raise
+
+    def _should_include_email_streaming(self, message) -> bool:
+        """스트리밍 처리용 이메일 포함 여부 판단"""
+        try:
+            subject = decode_text(message.get('Subject', ''))
+            sender = decode_text(message.get('From', ''))
+
+            # 기존 필터링 로직 재사용
+            should_exclude, reason = self.should_exclude_email(
+                subject, sender, "")
+            return not should_exclude
+
+        except Exception as e:
+            self.logger.error(f"이메일 필터링 중 오류: {str(e)}")
+            return False
 
     def get_evidence_number(self, prefix='갑'):
         """증거 번호 생성 (EvidenceGenerator 위임)"""

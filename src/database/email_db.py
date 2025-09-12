@@ -67,7 +67,7 @@ class EmailDatabase:
             conn.commit()
 
     def save_uploaded_file(self, file_id: str, filename: str, original_filename: str,
-                           file_size: int, file_path: str = None) -> bool:
+                           file_size: int, file_path: Optional[str] = None) -> bool:
         """업로드된 파일 정보 저장"""
         try:
             with sqlite3.connect(self.db_path) as conn:
@@ -210,5 +210,26 @@ class EmailDatabase:
         return 0
 
 
-# 전역 데이터베이스 인스턴스
-db = EmailDatabase()
+class _LazyEmailDB:
+    """Lazy proxy for EmailDatabase: initialize on first attribute access.
+
+    This preserves the existing import pattern `from src.database.email_db import db`
+    but avoids creating the physical DB file at import time until a method is used.
+    """
+
+    def __init__(self, db_path: str = "email_parser.db"):
+        self._db_path = db_path
+        self._inst: EmailDatabase | None = None
+
+    def _ensure(self):
+        if self._inst is None:
+            self._inst = EmailDatabase(self._db_path)
+        return self._inst
+
+    def __getattr__(self, name):
+        inst = self._ensure()
+        return getattr(inst, name)
+
+
+# Lazily-initialized proxy kept for backward compatibility with imports
+db = _LazyEmailDB()

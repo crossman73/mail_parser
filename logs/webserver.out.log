@@ -1,0 +1,19 @@
+🚀 Flask 웹 서버 시작 중...
+🔌 Swagger UI 서비스 초기화 완료
+🔌 Swagger UI 서비스 통합 완료
+📚 문서 API 블루프린트 등록 완료
+⚠️ Startup checks found issues: [{'phase': 'template', 'template': 'base.html', 'error': "Could not build url for endpoint 'additional_evidence'. Did you mean 'admin_bp.evidence_detail' instead?"}, {'phase': 'template', 'template': 'admin_logs.html', 'error': "Could not build url for endpoint 'additional_evidence'. Did you mean 'admin_bp.evidence_detail' instead?"}, {'phase': 'template', 'template': 'admin_evidence_detail.html', 'error': "'evidence' is undefined"}]
+✅ Flask 애플리케이션 생성 완료
+📍 등록된 라우트: 26개
+
+🌐 서비스 접속 URL:
+  - 메인 페이지: http://localhost:5000/
+  - 📚 문서 페이지: http://localhost:5000/docs
+  - 🔧 Swagger UI: http://localhost:5000/swagger
+  - 📋 API 목록: http://localhost:5000/api/endpoints
+
+🔄 서버를 중지하려면 Ctrl+C를 누르세요
+==================================================
+🔎 현재 프로세스 PID: 40896
+ * Serving Flask app 'src.web.app_factory'
+ * Debug mode: on

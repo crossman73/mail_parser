@@ -1,13 +1,221 @@
-# main.py (root level)
+"""
+이메일 증거 파서 메인 애플리케이션 - 통합 아키텍처 v2.0
+"""
+from src.core.unified_architecture import SystemConfig, UnifiedArchitecture
 import argparse
+import asyncio
+import json
 import os
 import sys
+from pathlib import Path
 
-from src.mail_parser.processor import EmailEvidenceProcessor
-from src.mail_parser.progress import (EmailProcessingProgress,
-                                      display_configuration_info,
-                                      display_error_help,
-                                      display_welcome_message)
+# 현재 파일의 부모 디렉터리를 sys.path에 추가
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
+
+# 통합 아키텍처 임포트
+
+
+def load_system_config(config_path: str = "config.json") -> SystemConfig:
+    """시스템 설정 로드"""
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config_data = json.load(f)
+
+        return SystemConfig(
+            project_root=Path.cwd(),
+            config_data=config_data,
+            app_name="이메일 증거 처리 시스템",
+            version="2.0.0",
+            debug_mode=os.getenv('DEBUG', 'false').lower() == 'true'
+        )
+    except Exception as e:
+        print(f"⚠️ 설정 파일 로드 실패, 기본 설정 사용: {e}")
+        return SystemConfig(
+            project_root=Path.cwd(),
+            config_data={},
+            app_name="이메일 증거 처리 시스템",
+            version="2.0.0"
+        )
+
+
+def main():
+    """메인 실행 함수 - 통합 아키텍처 기반"""
+    parser = argparse.ArgumentParser(description="이메일 증거 파서 v2.0 - 통합 아키텍처")
+    parser.add_argument("input_path", nargs='?', help="입력 파일 또는 폴더 경로")
+    parser.add_argument("--output", "-o", default="output",
+                        help="출력 디렉터리 (기본값: output)")
+    parser.add_argument(
+        "--config", "-c", default="config.json", help="설정 파일 경로")
+    parser.add_argument("--timeline", "-t",
+                        action="store_true", help="타임라인 생성")
+    parser.add_argument("--verbose", "-v", action="store_true", help="상세 출력")
+    parser.add_argument("--web", "-w", action="store_true", help="웹 서버 시작")
+    parser.add_argument("--port", "-p", type=int, default=5000, help="웹 서버 포트")
+    parser.add_argument("--test", action="store_true", help="시스템 테스트 모드")
+
+    args = parser.parse_args()
+
+    # 시스템 설정 로드
+    system_config = load_system_config(args.config)
+    if args.verbose:
+        system_config.debug_mode = True
+
+    # 통합 아키텍처 초기화
+    unified_arch = UnifiedArchitecture(system_config)
+
+    try:
+        # 시스템 초기화
+        print("🚀 시스템 초기화 중...")
+        unified_arch.initialize()
+
+        # 웹 서버 모드
+        if args.web:
+            return start_web_server(unified_arch, args.port, args.verbose)
+
+        # 테스트 모드
+        if args.test:
+            return run_system_test(unified_arch)
+
+        # CLI 처리 모드
+        if not args.input_path:
+            print("❌ 오류: 입력 경로가 필요합니다. (--web 또는 --test 옵션 사용 가능)")
+            print("\n사용 예시:")
+            print(f"  python {sys.argv[0]} email_files/sample.mbox")
+            print(f"  python {sys.argv[0]} --web --port 8080")
+            print(f"  python {sys.argv[0]} --test")
+            return 1
+
+        return process_emails_cli(unified_arch, args)
+
+    except KeyboardInterrupt:
+        print("\n⏹️ 사용자에 의해 중단됨")
+        return 0
+    except Exception as e:
+        unified_arch.logger.error(f"시스템 오류: {e}")
+        print(f"❌ 시스템 오류: {e}", file=sys.stderr)
+        return 1
+    finally:
+        # 정리
+        try:
+            unified_arch.cleanup()
+        except:
+            pass
+
+
+def start_web_server(unified_arch: UnifiedArchitecture, port: int, verbose: bool):
+    """웹 서버 시작"""
+    try:
+        from src.web.app_factory import create_app
+
+        app = create_app(unified_arch)
+
+        print(f"🌐 웹 서버 시작 - http://localhost:{port}")
+        print(f"📊 시스템 상태: http://localhost:{port}/system/status")
+        print(f"🏥 헬스체크: http://localhost:{port}/health")
+        print("⏹️ Ctrl+C로 종료")
+
+        # Flask 실행
+        app.run(
+            host='0.0.0.0',
+            port=port,
+            debug=verbose,
+            use_reloader=False  # 통합 아키텍처와 충돌 방지
+        )
+
+        return 0
+
+    except ImportError as e:
+        print(f"❌ 웹 서버 모듈 로드 실패: {e}")
+        return 1
+    except Exception as e:
+        unified_arch.logger.error(f"웹 서버 시작 실패: {e}")
+        print(f"❌ 웹 서버 시작 실패: {e}")
+        return 1
+
+
+def run_system_test(unified_arch: UnifiedArchitecture):
+    """시스템 테스트 실행"""
+    print("🧪 시스템 테스트 시작...")
+
+    try:
+        # 기본 테스트
+        status = unified_arch.get_system_status()
+        print(f"✅ 시스템 초기화: {status['app_name']} v{status['version']}")
+        print(f"✅ 등록된 서비스: {len(status['registered_services'])}개")
+
+        # 서비스 확인
+        for service_name in status['registered_services']:
+            try:
+                service = unified_arch.get_service(service_name)
+                print(f"  ✅ {service_name}: {type(service).__name__}")
+            except Exception as e:
+                print(f"  ❌ {service_name}: {e}")
+
+        # 디렉터리 확인
+        dirs = unified_arch.get_directories()
+        print(f"✅ 디렉터리 설정: {len(dirs)}개")
+        for name, path in dirs.items():
+            exists = "존재" if path.exists() else "생성필요"
+            print(f"  📁 {name}: {path} ({exists})")
+
+        print("🎉 시스템 테스트 완료!")
+        return 0
+
+    except Exception as e:
+        print(f"❌ 시스템 테스트 실패: {e}")
+        return 1
+
+
+def process_emails_cli(unified_arch: UnifiedArchitecture, args):
+    """CLI 모드 이메일 처리"""
+    try:
+        # 이메일 프로세서 서비스 가져오기
+        try:
+            processor = unified_arch.get_service('email_processor')
+        except:
+            # 서비스가 없으면 직접 생성 (Phase 2에서 개선 예정)
+            from src.mail_parser.processor import EmailProcessor
+            processor = EmailProcessor(unified_arch.config.config_data)
+
+        print(f"📧 이메일 처리 시작: {args.input_path}")
+
+        # 처리 실행
+        results = processor.process_emails(args.input_path, args.output)
+        unified_arch.logger.info(f"이메일 처리 완료: {len(results)}개")
+
+        print(f"✅ 처리 완료: {len(results)}개 이메일")
+
+        # 타임라인 생성 (옵션)
+        if args.timeline:
+            try:
+                timeline_gen = unified_arch.get_service('timeline_generator')
+            except:
+                from src.timeline_system.timeline_generator import \
+                    TimelineGenerator
+                timeline_gen = TimelineGenerator()
+
+            timeline_gen.generate_timeline(results, args.output)
+            print("✅ 타임라인 생성 완료")
+
+        # 종합 보고서 생성
+        try:
+            from src.mail_parser.reporter import create_comprehensive_report
+            report_path = create_comprehensive_report(results, args.output)
+            print(f"✅ 종합 보고서 생성: {report_path}")
+        except Exception as e:
+            print(f"⚠️ 보고서 생성 실패: {e}")
+
+        return 0
+
+    except Exception as e:
+        unified_arch.logger.error(f"CLI 처리 실패: {e}")
+        print(f"❌ 처리 실패: {e}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
 
 OUTPUT_DIR = 'processed_emails'
 

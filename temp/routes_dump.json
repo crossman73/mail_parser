@@ -1,0 +1,172 @@
+[
+  {
+    "rule": "/",
+    "endpoint": "index",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/additional_evidence",
+    "endpoint": "additional_evidence",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api",
+    "endpoint": "api_info",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/docs",
+    "endpoint": "legacy_api_docs_redirect",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/docs-dashboard",
+    "endpoint": "api_docs_dashboard",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/docs-status",
+    "endpoint": "docs_api.docs_status",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/openapi.json",
+    "endpoint": "openapi_json",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/regenerate-docs",
+    "endpoint": "docs_api.regenerate_docs",
+    "methods": [
+      "OPTIONS",
+      "POST"
+    ]
+  },
+  {
+    "rule": "/api/swagger-config",
+    "endpoint": "swagger_config",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/swagger-ui",
+    "endpoint": "swagger_ui",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/upload/job/<job_id>",
+    "endpoint": "upload.job_status",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/api/upload/stream",
+    "endpoint": "upload.upload_stream",
+    "methods": [
+      "OPTIONS",
+      "POST"
+    ]
+  },
+  {
+    "rule": "/docs",
+    "endpoint": "api_docs",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/health",
+    "endpoint": "health_check",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/static/<path:filename>",
+    "endpoint": "static",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/swagger",
+    "endpoint": "legacy_swagger_redirect",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/system/status",
+    "endpoint": "system_status",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/ui/wireframe",
+    "endpoint": "ui.wireframe",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  {
+    "rule": "/upload",
+    "endpoint": "upload",
+    "methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS",
+      "POST"
+    ]
+  }
+]

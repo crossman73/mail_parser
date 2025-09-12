@@ -1,0 +1,77 @@
+{
+  "attempt": "http://127.0.0.1:5000/admin/reload",
+  "status": 403,
+  "body": "<!doctype html>\n<html lang=en>\n<title>403 Forbidden</title>\n<h1>Forbidden</h1>\n<p>You don&#39;t have the permission to access the requested resource. It is either read-protected or not readable by the server.</p>\n",
+  "logs": [
+    {
+      "id": 272,
+      "level": "INFO",
+      "message": "2025-09-10 18:38:32,184 INFO 127.0.0.1 - - [10/Sep/2025 18:38:32] \"\u001b[33mPOST /admin/reload HTTP/1.1\u001b[0m\" 404 -",
+      "extra": "{\"args\": [\"\\u001b[33mPOST /admin/reload HTTP/1.1\\u001b[0m\", \"404\", \"-\"]}",
+      "created_at": "2025-09-10T09:38:32.190276Z"
+    },
+    {
+      "id": 271,
+      "level": "INFO",
+      "message": "2025-09-10 18:38:05,760 INFO 127.0.0.1 - - [10/Sep/2025 18:38:05] \"\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\u001b[0m\" 404 -",
+      "extra": "{\"args\": [\"\\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\\u001b[0m\", \"404\", \"-\"]}",
+      "created_at": "2025-09-10T09:38:05.766120Z"
+    },
+    {
+      "id": 270,
+      "level": "INFO",
+      "message": "2025-09-10 18:38:04,854 INFO 127.0.0.1 - - [10/Sep/2025 18:38:04] \"\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\u001b[0m\" 404 -",
+      "extra": "{\"args\": [\"\\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\\u001b[0m\", \"404\", \"-\"]}",
+      "created_at": "2025-09-10T09:38:04.861406Z"
+    },
+    {
+      "id": 269,
+      "level": "INFO",
+      "message": "2025-09-10 18:38:02,158 INFO 127.0.0.1 - - [10/Sep/2025 18:38:02] \"\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\u001b[0m\" 404 -",
+      "extra": "{\"args\": [\"\\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\\u001b[0m\", \"404\", \"-\"]}",
+      "created_at": "2025-09-10T09:38:02.189070Z"
+    },
+    {
+      "id": 268,
+      "level": "INFO",
+      "message": "2025-09-10 18:38:01,724 INFO 127.0.0.1 - - [10/Sep/2025 18:38:01] \"GET /health HTTP/1.1\" 200 -",
+      "extra": "{\"args\": [\"GET /health HTTP/1.1\", \"200\", \"-\"]}",
+      "created_at": "2025-09-10T09:38:01.732426Z"
+    },
+    {
+      "id": 267,
+      "level": "INFO",
+      "message": "2025-09-10 18:37:49,842 INFO 127.0.0.1 - - [10/Sep/2025 18:37:49] \"\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\u001b[0m\" 404 -",
+      "extra": "{\"args\": [\"\\u001b[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\\u001b[0m\", \"404\", \"-\"]}",
+      "created_at": "2025-09-10T09:37:49.851290Z"
+    },
+    {
+      "id": 266,
+      "level": "INFO",
+      "message": "2025-09-10 18:35:20,400 INFO 127.0.0.1 - - [10/Sep/2025 18:35:20] \"\u001b[33mGET /admin HTTP/1.1\u001b[0m\" 404 -",
+      "extra": "{\"args\": [\"\\u001b[33mGET /admin HTTP/1.1\\u001b[0m\", \"404\", \"-\"]}",
+      "created_at": "2025-09-10T09:35:20.402845Z"
+    },
+    {
+      "id": 265,
+      "level": "INFO",
+      "message": "2025-09-10 18:34:17,244 INFO 127.0.0.1 - - [10/Sep/2025 18:34:17] \"GET /system/status HTTP/1.1\" 200 -",
+      "extra": "{\"args\": [\"GET /system/status HTTP/1.1\", \"200\", \"-\"]}",
+      "created_at": "2025-09-10T09:34:17.247756Z"
+    },
+    {
+      "id": 264,
+      "level": "INFO",
+      "message": "2025-09-10 18:34:14,422 INFO 127.0.0.1 - - [10/Sep/2025 18:34:14] \"GET /upload HTTP/1.1\" 200 -",
+      "extra": "{\"args\": [\"GET /upload HTTP/1.1\", \"200\", \"-\"]}",
+      "created_at": "2025-09-10T09:34:14.425730Z"
+    },
+    {
+      "id": 263,
+      "level": "INFO",
+      "message": "2025-09-10 18:34:12,753 INFO 127.0.0.1 - - [10/Sep/2025 18:34:12] \"GET / HTTP/1.1\" 200 -",
+      "extra": "{\"args\": [\"GET / HTTP/1.1\", \"200\", \"-\"]}",
+      "created_at": "2025-09-10T09:34:12.765728Z"
+    }
+  ]
+}

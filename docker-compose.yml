@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+  email-parser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: email-evidence-processor
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+      - ./processed_emails:/app/processed_emails
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+      - ./temp:/app/temp
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_ENV=production
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # NOTE:
+  # The redis service is included here for production/CI deployments where
+  # adequate CPU/RAM/disk I/O are available. On low-resource local machines
+  # (small VMs, laptops with limited RAM/CPU or restrictive storage), running
+  # Docker + Redis can significantly degrade performance and may fail to start.
+  #
+  # If you're developing locally and the host cannot run Docker reliably,
+  # keep Redis usage disabled and rely on the local fallback worker implemented
+  # in `src/web/upload_stream.py` (this avoids the runtime dependency on Redis).
+  #
+  # Deployment checklist (must do when moving to staging/prod):
+  # - Ensure host has at least: 2 vCPUs, 4GB RAM (8GB recommended), and SSD-backed storage.
+  # - Configure Redis to use persistence and set appropriate memory limits.
+  # - Put Redis behind a private network or enable TLS and authentication.
+  # - Run dedicated RQ worker processes (not in the same container as web) and
+  #   scale workers based on queue depth and CPU availability.
+  # - Replace SQLite with a production-grade DB (Postgres) for concurrent writes.
+
+  redis:
+    image: redis:7-alpine
+    container_name: email-parser-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  redis_data:
+
+networks:
+  default:
+    name: email-parser-network
+    driver: bridge

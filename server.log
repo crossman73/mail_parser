@@ -6,4 +6,26 @@ WARNING: This is a development server. Do not use it in a production deployment.
  * Running on http://127.0.0.1:5000
  * Running on http://192.168.0.104:5000
 Press CTRL+C to quit
-127.0.0.1 - - [02/Sep/2025 18:04:26] "GET /?id=eb9917cb-cad6-4368-9c53-c14d0976e688&vscodeBrowserReqId=1756803865829 HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:00:52] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:00:54] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [11/Sep/2025 16:01:00] "GET /upload HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:08] "GET /system/status HTTP/1.1" 404 -
+127.0.0.1 - - [11/Sep/2025 16:01:12] "GET /docs HTTP/1.1" 404 -
+127.0.0.1 - - [11/Sep/2025 16:01:15] "GET /upload HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:21] "GET /upload HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:24] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:24] "GET /api/admin/tasks HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:34] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:45] "GET /upload HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:48] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:01:49] "GET /api/admin/tasks HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:02:02] "GET /upload HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:03:00] "POST /admin/reload HTTP/1.1" 403 -
+127.0.0.1 - - [11/Sep/2025 16:10:45] "POST /admin/reload HTTP/1.1" 403 -
+127.0.0.1 - - [11/Sep/2025 16:11:09] "POST /admin/reload HTTP/1.1" 403 -
+127.0.0.1 - - [11/Sep/2025 16:11:19] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:11:22] "GET /upload HTTP/1.1" 200 -
+127.0.0.1 - - [11/Sep/2025 16:11:26] "GET /docs HTTP/1.1" 404 -
+127.0.0.1 - - [11/Sep/2025 16:14:20] "POST /admin/reload HTTP/1.1" 403 -
+127.0.0.1 - - [11/Sep/2025 16:28:26] "POST /admin/reload HTTP/1.1" 403 -
+127.0.0.1 - - [11/Sep/2025 16:28:52] "POST /admin/reload HTTP/1.1" 403 -

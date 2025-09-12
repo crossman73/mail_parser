@@ -1,0 +1,2 @@
+killing 4536 ['C:\\Python313\\python.exe', 'run_server.py']
+terminated

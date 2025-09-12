@@ -1,0 +1,76 @@
+{
+  "version": "2.4.0",
+  "created": "2025-09-03T15:27:28.885327",
+  "structure": {
+    "api": {
+      "description": "API 관련 문서 (OpenAPI, Postman 등)",
+      "subdirs": [
+        "openapi",
+        "postman",
+        "references"
+      ]
+    },
+    "guides": {
+      "description": "사용자 및 개발자 가이드",
+      "subdirs": [
+        "developer",
+        "user",
+        "admin"
+      ]
+    },
+    "assets": {
+      "description": "문서용 정적 자원 (이미지, CSS, JS)",
+      "subdirs": [
+        "images",
+        "css",
+        "js",
+        "fonts"
+      ]
+    },
+    "templates": {
+      "description": "문서 템플릿",
+      "subdirs": [
+        "markdown",
+        "html"
+      ]
+    },
+    "archive": {
+      "description": "이전 버전 문서 보관",
+      "subdirs": [
+        "v1",
+        "legacy"
+      ]
+    }
+  },
+  "auto_update": {
+    "enabled": true,
+    "watch_directories": [
+      "src/",
+      "templates/"
+    ],
+    "watch_files": [
+      "*.py",
+      "*.html",
+      "*.md"
+    ],
+    "exclude_patterns": [
+      "__pycache__",
+      "*.pyc",
+      ".git"
+    ]
+  },
+  "generation_settings": {
+    "formats": [
+      "markdown",
+      "html",
+      "json"
+    ],
+    "include_timestamps": true,
+    "include_statistics": true
+  },
+  "ci_cd": {
+    "github_actions": true,
+    "auto_deploy": false,
+    "quality_checks": true
+  }
+}

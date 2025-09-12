@@ -1,0 +1,67 @@
+name: CI - Python smoke
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: [3.11, 3.12]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create virtualenv (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+
+      - name: Create virtualenv (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          & .\.venv\Scripts\Activate.ps1
+
+      - name: Upgrade pip and install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          source .venv/bin/activate
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r requirements.txt -c constraints.txt
+
+      - name: Upgrade pip and install dependencies (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          & .\.venv\Scripts\Activate.ps1
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r requirements.txt -c constraints.txt
+
+      - name: Run mcp import smoke test (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          source .venv/bin/activate
+          python scripts/check_mcp_imports.py
+
+      - name: Run mcp import smoke test (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          & .\.venv\Scripts\Activate.ps1
+          python scripts/check_mcp_imports.py

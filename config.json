@@ -53,13 +53,44 @@
     "max_subject_length": 100,
     "preserve_thread_structure": true,
     "generate_hash_verification": true,
-    "create_backup": true
+    "create_backup": true,
+    "enable_streaming": true,
+    "streaming_threshold_mb": 500,
+    "chunk_size_mb": 64,
+    "memory_limit_mb": 2048
+  },
+
+  "forensic_settings": {
+    "_comment": "포렌식 무결성 검증 설정",
+    "enable_chain_of_custody": true,
+    "hash_algorithm": "SHA-256",
+    "timestamp_format": "ISO-8601",
+    "verification_level": "strict",
+    "auto_backup_evidence": true,
+    "export_custody_log": true
   },
 
   "output_settings": {
     "evidence_number_format": "{party} 제{number}호증",
     "folder_name_format": "[{date}]_{subject}",
     "pdf_title_position": "center_top",
-    "include_metadata": true
+    "include_metadata": true,
+    "export_formats": ["pdf", "html", "json"],
+    "compression_level": 9
+  },
+
+  "compliance_standards": {
+    "_comment": "법적 준수 표준 설정",
+    "rfc5322_strict": true,
+    "mime_validation": true,
+    "encoding_verification": true,
+    "digital_signature_check": false
+  },
+
+  "performance_monitoring": {
+    "log_processing_stats": true,
+    "monitor_memory_usage": true,
+    "enable_progress_tracking": true,
+    "stats_interval_emails": 1000
   }
 }

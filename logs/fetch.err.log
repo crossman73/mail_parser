@@ -1,0 +1,69 @@
+Traceback (most recent call last):
+  File "C:\Python313\Lib\site-packages\anyio\streams\memory.py", line 111, in receive
+    return self.receive_nowait()
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\site-packages\anyio\streams\memory.py", line 106, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\cross\AppData\Roaming\Python\Python313\site-packages\mcp_server_fetch\server.py", line 288, in serve
+    await server.run(read_stream, write_stream, options, raise_exceptions=True)
+  File "C:\Python313\Lib\site-packages\mcp\server\lowlevel\server.py", line 574, in run
+    async with AsyncExitStack() as stack:
+               ~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\contextlib.py", line 768, in __aexit__
+    raise exc
+  File "C:\Python313\Lib\contextlib.py", line 751, in __aexit__
+    cb_suppress = await cb(*exc_details)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\site-packages\mcp\shared\session.py", line 218, in __aexit__
+    return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\site-packages\anyio\_backends\_asyncio.py", line 776, in __aexit__
+    raise exc_val
+  File "C:\Python313\Lib\site-packages\mcp\server\lowlevel\server.py", line 585, in run
+    async with anyio.create_task_group() as tg:
+               ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\site-packages\anyio\_backends\_asyncio.py", line 776, in __aexit__
+    raise exc_val
+  File "C:\Python313\Lib\site-packages\mcp\server\lowlevel\server.py", line 586, in run
+    async for message in session.incoming_messages:
+    ...<8 lines>...
+        )
+  File "C:\Python313\Lib\site-packages\anyio\abc\_streams.py", line 41, in __anext__
+    return await self.receive()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\site-packages\anyio\streams\memory.py", line 119, in receive
+    await receive_event.wait()
+  File "C:\Python313\Lib\site-packages\anyio\_backends\_asyncio.py", line 1774, in wait
+    await self._event.wait()
+  File "C:\Python313\Lib\asyncio\locks.py", line 213, in wait
+    await fut
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\cross\AppData\Roaming\Python\Python313\site-packages\mcp_server_fetch\__main__.py", line 5, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\cross\AppData\Roaming\Python\Python313\site-packages\mcp_server_fetch\__init__.py", line 21, in main
+    asyncio.run(serve(args.user_agent, args.ignore_robots_txt, args.proxy_url))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt

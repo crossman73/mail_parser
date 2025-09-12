@@ -1,0 +1,50 @@
+{% extends 'base.html' %} {% block title %}Admin - Jobs{% endblock %} {% block
+content %}
+<div class="container mt-4">
+  <h2>Background Jobs</h2>
+  <p class="text-muted">
+    Local fallback job store (read-only). Delete is not implemented.
+  </p>
+
+  <table class="table table-sm table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Result</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for j in jobs %}
+      <tr>
+        <td>{{ j.id }}</td>
+        <td>{{ j.status }}</td>
+        <td>
+          <pre style="white-space: pre-wrap; max-width: 360px">
+{{ j.result }}</pre
+          >
+        </td>
+        <td>{{ j.created_at }}</td>
+        <td>{{ j.updated_at }}</td>
+        <td>
+          <button
+            class="btn btn-sm btn-secondary"
+            disabled
+            title="삭제는 미구현 상태입니다"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6" class="text-muted">No jobs found</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

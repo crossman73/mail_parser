@@ -1,0 +1,1500 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "이메일 증거 처리 시스템",
+    "version": "2.0",
+    "description": "한국 법원 제출용 이메일 증거 처리 및 분류 시스템",
+    "contact": {
+      "name": "개발팀",
+      "email": "dev@example.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "개발 서버"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "메인 대시보드",
+        "operationId": "index",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/upload": {
+      "get": {
+        "summary": "파일 업로드 페이지 (기본 구현)",
+        "operationId": "upload",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      },
+      "post": {
+        "summary": "파일 업로드 페이지 (기본 구현)",
+        "operationId": "upload",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/processing/{task_id}": {
+      "get": {
+        "summary": "처리 진행 상황 페이지",
+        "operationId": "processing_status",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api/progress/{task_id}": {
+      "get": {
+        "summary": "진행 상황 API",
+        "operationId": "get_progress",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/admin/tasks": {
+      "get": {
+        "summary": "모든 진행 중인 작업 확인 (관리용)",
+        "operationId": "get_all_tasks",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/admin/cleanup": {
+      "post": {
+        "summary": "비정상 종료된 작업들 정리",
+        "operationId": "cleanup_tasks",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/admin": {
+      "get": {
+        "summary": "admin_index 엔드포인트",
+        "operationId": "admin_index",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/emails/{file_id}": {
+      "get": {
+        "summary": "이메일 목록 페이지 - 선택적 증거 생성 기능 포함",
+        "operationId": "email_list",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/generate_evidence/{file_id}": {
+      "post": {
+        "summary": "선택된 이메일들에 대해 증거 생성",
+        "operationId": "generate_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api/evidence_progress/{task_id}": {
+      "get": {
+        "summary": "증거 생성 진행 상황 API",
+        "operationId": "get_evidence_progress",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/email/{file_id}/{int:email_index}": {
+      "get": {
+        "summary": "이메일 상세 페이지",
+        "operationId": "email_detail",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/process_selected": {
+      "post": {
+        "summary": "선택된 이메일들을 HTML/PDF로 처리",
+        "operationId": "process_selected_emails",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api/docs": {
+      "get": {
+        "summary": "/api/docs 요청을 문서 대시보드로 리다이렉트합니다.",
+        "operationId": "legacy_api_docs_redirect",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/integrity": {
+      "get": {
+        "summary": "무결성 검증 페이지",
+        "operationId": "integrity",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api/upload": {
+      "post": {
+        "summary": "API: 파일 업로드",
+        "operationId": "api_upload",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/emails/{file_id}": {
+      "get": {
+        "summary": "API: 이메일 목록 조회",
+        "operationId": "api_email_list",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/files": {
+      "get": {
+        "summary": "API: 업로드된 파일 목록",
+        "operationId": "api_file_list",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/evidence": {
+      "get": {
+        "summary": "증거 목록 페이지",
+        "operationId": "evidence_list",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/evidence/{folder_name}": {
+      "get": {
+        "summary": "증거 상세 페이지",
+        "operationId": "evidence_detail",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/timeline": {
+      "get": {
+        "summary": "타임라인 페이지",
+        "operationId": "timeline_page",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "검색 페이지",
+        "operationId": "search_page",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/settings": {
+      "get": {
+        "summary": "설정 페이지",
+        "operationId": "settings_page",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/download/{path:filename}": {
+      "get": {
+        "summary": "파일 다운로드",
+        "operationId": "download_file",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/additional_evidence": {
+      "get": {
+        "summary": "추가 증거 관리 페이지",
+        "operationId": "additional_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/add_evidence": {
+      "get": {
+        "summary": "추가 증거 파일 등록",
+        "operationId": "add_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      },
+      "post": {
+        "summary": "추가 증거 파일 등록",
+        "operationId": "add_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api/evidence_categories": {
+      "get": {
+        "summary": "증거 카테고리 정보 API",
+        "operationId": "api_evidence_categories",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/edit_evidence/{file_id}": {
+      "get": {
+        "summary": "추가 증거 편집",
+        "operationId": "edit_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      },
+      "post": {
+        "summary": "추가 증거 편집",
+        "operationId": "edit_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/delete_evidence/{file_id}": {
+      "post": {
+        "summary": "추가 증거 삭제",
+        "operationId": "delete_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/download_evidence_index": {
+      "get": {
+        "summary": "추가 증거 목록서 다운로드",
+        "operationId": "download_evidence_index",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/export_additional_evidence": {
+      "get": {
+        "summary": "추가 증거 법원 제출용 패키징",
+        "operationId": "export_additional_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/integrated_timeline": {
+      "get": {
+        "summary": "통합 타임라인 페이지",
+        "operationId": "integrated_timeline",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/generate_timeline_package": {
+      "get": {
+        "summary": "법원 제출용 타임라인 패키지 생성",
+        "operationId": "generate_timeline_package",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/download_timeline_excel": {
+      "get": {
+        "summary": "통합 타임라인 Excel 다운로드",
+        "operationId": "download_timeline_excel",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/verify_integrity": {
+      "get": {
+        "summary": "법원 제출용 무결성 검증 페이지",
+        "operationId": "verify_integrity",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api/verify_integrity": {
+      "get": {
+        "summary": "법원 제출용 무결성 검증 API",
+        "operationId": "api_verify_integrity",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/check_processed_emails": {
+      "get": {
+        "summary": "처리된 이메일 존재 여부 확인 API",
+        "operationId": "api_check_processed_emails",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/download_verification_report": {
+      "get": {
+        "summary": "무결성 검증 보고서 다운로드",
+        "operationId": "download_verification_report",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/download_court_certificate": {
+      "get": {
+        "summary": "법원 제출용 무결성 증명서 다운로드",
+        "operationId": "download_court_certificate",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/admin/evidence/{int:evidence_id}": {
+      "get": {
+        "summary": "evidence_detail 엔드포인트",
+        "operationId": "evidence_detail",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/jobs": {
+      "get": {
+        "summary": "admin_jobs 엔드포인트",
+        "operationId": "admin_jobs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/logs": {
+      "get": {
+        "summary": "admin_logs 엔드포인트",
+        "operationId": "admin_logs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/logs": {
+      "get": {
+        "summary": "api_admin_logs 엔드포인트",
+        "operationId": "api_admin_logs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/admin/reload": {
+      "post": {
+        "summary": "Dev-only endpoint to reload selected modules at runtime.\n\nEnable by setting app.config['ENABLE_DEV_RELOAD'] = True and optionally\napp.config['DEV_RELOAD_MODULES'] = ['src.core.evidence_store', ...]",
+        "operationId": "admin_reload",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/evidence/{int:evidence_id}/download/{kind}": {
+      "get": {
+        "summary": "evidence_download 엔드포인트",
+        "operationId": "evidence_download",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/evidence/attachment/{int:entry_id}/download": {
+      "get": {
+        "summary": "attachment_download 엔드포인트",
+        "operationId": "attachment_download",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/ui/wireframe": {
+      "get": {
+        "summary": "wireframe 엔드포인트",
+        "operationId": "wireframe",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/regenerate-docs": {
+      "post": {
+        "summary": "문서 재생성 API",
+        "operationId": "regenerate_docs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/docs-status": {
+      "get": {
+        "summary": "문서 상태 확인 API",
+        "operationId": "docs_status",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api/emails/load": {
+      "post": {
+        "summary": "이메일 로드 API",
+        "operationId": "api_load_emails",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/emails/process": {
+      "post": {
+        "summary": "이메일 처리 API",
+        "operationId": "api_process_emails",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/emails/search": {
+      "get": {
+        "summary": "이메일 검색 API",
+        "operationId": "api_search_emails",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/emails/statistics": {
+      "get": {
+        "summary": "이메일 통계 API",
+        "operationId": "api_email_statistics",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/evidence": {
+      "get": {
+        "summary": "증거 목록 API",
+        "operationId": "api_evidence_list",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/evidence/{folder_name}": {
+      "get": {
+        "summary": "증거 상세 API",
+        "operationId": "api_evidence_detail",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      },
+      "delete": {
+        "summary": "증거 삭제 API",
+        "operationId": "api_delete_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/evidence/export": {
+      "get": {
+        "summary": "증거 목록 내보내기 API",
+        "operationId": "api_export_evidence",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/evidence/integrity": {
+      "get": {
+        "summary": "증거 무결성 검증 API",
+        "operationId": "api_evidence_integrity",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/timeline": {
+      "get": {
+        "summary": "타임라인 API",
+        "operationId": "api_timeline",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/timeline/filter": {
+      "post": {
+        "summary": "타임라인 필터링 API",
+        "operationId": "api_timeline_filter",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/timeline/export": {
+      "get": {
+        "summary": "타임라인 내보내기 API",
+        "operationId": "api_timeline_export",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/files/info": {
+      "get": {
+        "summary": "파일 정보 API",
+        "operationId": "api_file_info",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/files/list": {
+      "get": {
+        "summary": "파일 목록 API",
+        "operationId": "api_list_files",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/system/disk-usage": {
+      "get": {
+        "summary": "디스크 사용량 API",
+        "operationId": "api_disk_usage",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/api/system/cleanup": {
+      "post": {
+        "summary": "시스템 정리 API",
+        "operationId": "api_cleanup",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "헬스체크 (Docker/로드밸런서용)",
+        "operationId": "health_check",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/system/status": {
+      "get": {
+        "summary": "시스템 상태 페이지",
+        "operationId": "system_status",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/docs": {
+      "get": {
+        "summary": "API 문서 페이지",
+        "operationId": "api_docs",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/api": {
+      "get": {
+        "summary": "API 정보 엔드포인트",
+        "operationId": "api_info",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    },
+    "/swagger": {
+      "get": {
+        "summary": "과거/테스트에서 /swagger 경로를 요청하면 실제 Swagger UI로 이동시킵니다.",
+        "operationId": "legacy_swagger_redirect",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Web"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {
+      "Success": {
+        "description": "성공 응답",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "object"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "description": "오류 응답",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "error": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

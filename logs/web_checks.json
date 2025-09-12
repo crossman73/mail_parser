@@ -1,0 +1,18 @@
+{
+  "/": {
+    "status": 200,
+    "len": 5606,
+    "snippet": "<!DOCTYPE html>\n<html lang=\"ko\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>이메일 증거 처리 시스템 v2.0</title>\n    <style>\n      body {\n        font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n          sans-serif;\n        margin: 0;\n        padding: 20px;\n        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n        min-height: 100vh;\n        color: #333;\n      }\n      .container {\n        max-width: 1200px;\n        margin: 0 auto;\n        background: white;\n        border-radius: 12px;\n        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);\n        padding: 40px;\n      }\n      .header {\n        text-align: center;\n        margin-bottom: 40px;\n        padding-bottom: 20px;\n        border-bottom: 3px solid #f0f0f0;\n      }\n      .header h1 {\n        color: #2c3e50;\n        margin: 0;\n        font-size: 2.5rem;\n        font-weight: 300;\n      }\n      .header .version {\n        colo"
+  },
+  "/admin": {
+    "status": 404,
+    "error": "HTTP Error 404: NOT FOUND"
+  },
+  "/additional_evidence": {
+    "status": 500,
+    "error": "HTTP Error 500: INTERNAL SERVER ERROR"
+  },
+  "/admin/evidence/<id>": {
+    "note": "no id found in admin page snippet"
+  }
+}

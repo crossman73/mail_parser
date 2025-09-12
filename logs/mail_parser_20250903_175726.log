@@ -1,0 +1,2 @@
+2025-09-03 17:57:26,554 - EmailEvidenceProcessor - INFO - __init__:27 - 프로세서 초기화 시작 (설정 파일: config.json)
+2025-09-03 17:57:26,557 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: config.json

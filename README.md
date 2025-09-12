@@ -1,203 +1,186 @@
-# 📧 법원 제출용 메일박스 증거 분류 시스템
+# 이메일 증거 처리 시스템 📧
 
-한국 법원의 디지털 증거 제출 규정과 디지털 포렌식 무결성 요구사항을 충족하는 메일박스 증거 처리 및 분류 시스템입니다.
+> 한국 법원 제출용 이메일 증거 처리 및 분류 시스템 v2.0
 
 ## 🎯 주요 기능
 
-- **mbox 파일 파싱**: 다양한 메일 클라이언트의 mbox 형식 지원
-- **자동 증거 분류**: 갑/을 당사자별 증거번호 자동 할당
-- **법원 형식 변환**: HTML → PDF 변환 시 법원 제출 규격 준수
-- **첨부파일 원본 보존**: 첨부파일 별도 디렉토리 저장 및 무결성 관리
-- **날짜별 구조화**: 메일 발송일 기준 폴더 자동 생성
-- **필터링 시스템**: 관련 없는 메일 자동 제외 및 수동 검토 지원
+- 📧 **mbox/eml 파일 자동 파싱**: Outlook, Thunderbird 등 다양한 메일 클라이언트 지원
+- ⚖️ **법정 증거 자동 생성**: 한국 법원 규정에 맞는 증거 번호 및 형식 자동 적용
+- 📊 **타임라인 시각화**: 이메일 송수신 흐름을 직관적인 타임라인으로 표시
+- 🔒 **무결성 검증**: SHA-256 해시값 기반 디지털 증거 무결성 보장
+- 🌐 **웹 인터페이스**: 직관적인 웹 UI로 누구나 쉽게 사용 가능
+- 📚 **자동 문서화**: API 스캔을 통한 실시간 문서 생성
 
-## 📁 프로젝트 구조
+## 📊 시스템 현황
 
-```
-python-email/
-├── main.py                    # 메인 실행 파일
-├── config.json               # 설정 파일 (필터링 규칙 등)
-├── requirements.txt          # Python 의존성
-├── README.md                 # 이 문서
-├── docs/                     # 문서
-│   ├── RFP_Mail_parser.md    # 상세 요구사항
-│   └── improvement_plan.md   # 개선 계획서
-├── src/mail_parser/          # 핵심 처리 모듈
-│   ├── processor.py          # 메일 처리 메인 로직
-│   ├── analyzer.py           # 메일 스레드 분석
-│   ├── formatter.py          # 법원 형식 변환
-│   ├── utils.py              # 유틸리티 함수
-│   └── reporter.py           # 보고서 생성
-├── email_files/              # 입력 mbox 파일
-└── processed_emails/         # 처리된 결과물 저장
-```
+- **총 엔드포인트**: 73개
+- **웹 라우트**: 47개
+- **팩토리 라우트**: 8개
+- **API 라우트**: 18개
+- **데이터 모델**: 1개
 
-## 🚀 시작하기
+## 🚀 빠른 시작
 
-### 사전 요구사항
+### 1. 설치
 
-- Python 3.7 이상
-- Windows/Linux/macOS 지원
+```bash
+# 저장소 클론
+git clone [repository-url]
+cd python-email
 
-### 설치
-
-1. **저장소 복제**
-
-
-
-   ```powershell
-   git clone https://github.com/crossman73/mail_parser.git
-   cd mail_parser
-   ```
-
-
-
-2. **의존성 설치**
-
-   ```powershell
-
-   pip install -r requirements.txt
-   ```
-
-
-3. **설정 파일 구성** (선택사항)
-
-   ```json
-   {
-     "exclude_keywords": ["광고", "프로모션", "뉴스레터"],
-     "exclude_senders": ["noreply@", "marketing@"],
-     "date_range": {
-       "start": "2020-01-01",
-       "end": "2025-12-31"
-     },
-     "required_keywords": []
-
-   }
-   ```
-
-
-### 사용법
-
-
-#### 1. 기본 메일 처리
-
-```powershell
-
-python main.py email_files/example.mbox --party 갑
+# 의존성 설치
+pip install -r requirements.txt
 ```
 
-#### 2. 선택적 메일 처리
+### 2. 실행
 
+```bash
+# 웹 서버 시작
+python app.py
 
-```powershell
-# 특정 메일만 처리 (1, 3, 5번)
-python main.py email_files/example.mbox --party 갑 --select-emails "1,3,5"
+# CLI 모드 (mbox 파일 직접 처리)
+python main.py email_files/sample.mbox --party 갑
 
-
-
-# 모든 메일 처리
-python main.py email_files/example.mbox --party 갑 --select-emails "all"
+# Docker로 실행
+docker-compose up -d
 ```
 
-#### 3. PDF 변환
+### 3. 접속
 
+- **웹 인터페이스**: http://localhost:5000
+- **API 문서**: http://localhost:5000/docs
+- **시스템 상태**: http://localhost:5000/system/status
+- **헬스체크**: http://localhost:5000/health
 
-```powershell
-# HTML 처리 후 PDF 변환까지
-python main.py email_files/example.mbox --party 갑 --select-emails "all" --select-pdfs "all"
+## 📋 사용법
+
+### 웹 인터페이스 사용
+
+1. **파일 업로드**: mbox 또는 eml 파일을 업로드
+2. **이메일 선택**: 증거로 사용할 이메일들 선택
+3. **증거 생성**: 당사자 구분(갑/을) 설정 후 증거 자동 생성
+4. **결과 다운로드**: PDF, HTML, Excel 형식으로 다운로드
+
+### CLI 사용
+
+```bash
+# 기본 사용법
+python main.py [mbox파일] --party [갑|을]
+
+# 웹 서버 모드
+python main.py --web --port 8080
+
+# 시스템 테스트
+python main.py --test
+
+# Phase 1 검증
+python test_phase1.py
 ```
 
-#### 4. 사용자 정의 설정
+## 🏗️ 아키텍처
 
-```powershell
-python main.py email_files/example.mbox --party 갑 --config custom_config.json
-```
+### Phase 1: 통합 아키텍처 ✅
+- **SystemConfig**: 중앙 집중식 설정 관리
+- **UnifiedArchitecture**: 서비스 레지스트리 패턴
+- **Flask Factory**: 모듈화된 웹 애플리케이션
 
-### 명령행 옵션
+### Phase 2: API 문서 자동화 ✅
+- **APIScanner**: 코드 자동 스캔 및 분석
+- **DocumentGenerator**: 다양한 형식 문서 생성
+- **실시간 문서화**: 코드 변경 시 자동 업데이트
 
-| 옵션 | 설명 | 예시 |
-|------|------|------|
-| `mbox_file` | 처리할 mbox 파일 경로 (필수) | `email_files/mail.mbox` |
-| `--party` | 당사자 구분 (필수) | `갑` 또는 `을` |
-| `--config` | 설정 파일 경로 | `config.json` (기본값) |
-| `--select-emails` | 처리할 메일 선택 | `"1,3,5"`, `"all"`, `"none"` |
-| `--select-pdfs` | PDF 변환할 파일 선택 | `"1,3,5"`, `"all"`, `"none"` |
+### Phase 3: 백그라운드 서비스 (구현 예정)
+- 터미널 블록 없는 서비스 실행
+- 로그 모니터링 시스템
+- 서비스 상태 관리
 
-## 📋 출력 구조
+## 🔧 설정
 
-처리 완료 후 `processed_emails/` 디렉토리에 다음과 같이 저장됩니다:
+### config.json 주요 설정
 
-```
-processed_emails/
-├── [2021-01-13]_메일제목/
-│   ├── email.html              # 메일 내용 (HTML)
-│   ├── email.pdf               # 법원 제출용 PDF (증거번호 포함)
-│   ├── attachments/            # 첨부파일 원본
-│   │   ├── document.pdf
-│   │   └── image.jpg
-│   └── metadata.json           # 메일 메타데이터
-└── evidence_list.xlsx          # 증거목록 (Excel)
-```
-
-## ⚖️ 법원 제출 준수사항
-
-- **증거번호 표기**: "갑 제○호증" 형식으로 PDF 상단 중앙에 삽입
-- **첨부파일 원본성**: 원본 파일명 및 확장자 보존
-- **무결성 검증**: SHA-256 해시값 계산 및 기록
-- **처리 과정 로깅**: 모든 처리 단계 상세 기록
-
-
-## 🔧 고급 설정
-
-### 필터링 규칙
-
-`config.json`에서 다음 규칙을 설정할 수 있습니다:
-
-- **키워드 제외**: 광고, 스팸성 메일 자동 필터링
-
-- **발신자 제외**: 특정 도메인/주소 제외
-- **날짜 범위**: 사건 관련 기간만 처리
-- **필수 키워드**: 반드시 포함되어야 할 키워드
-
-### 배치 처리
-
-대용량 mbox 파일 처리를 위한 배치 스크립트 예시:
-
-```powershell
-# 여러 mbox 파일 일괄 처리
-foreach ($file in Get-ChildItem email_files/*.mbox) {
-    python main.py $file.FullName --party 갑 --select-emails "all"
+```json
+{
+  "exclude_keywords": ["광고", "스팸"],
+  "date_range": {
+    "start": "2020-01-01",
+    "end": "2025-12-31"
+  },
+  "processing_options": {
+    "generate_hash_verification": true,
+    "create_backup": true
+  },
+  "output_settings": {
+    "evidence_number_format": "{party} 제{number}호증"
+  }
 }
 ```
 
-## 🆘 문제 해결
+## 🧪 테스트
 
-### 자주 발생하는 오류
+```bash
+# Phase 1 검증
+python test_phase1.py
 
-1. **인코딩 오류**:
-   - 한글 메일 처리 시 발생
-   - 해결: mbox 파일을 UTF-8로 변환 후 재시도
+# Phase 2 문서 생성 테스트
+python test_docs_generation.py
 
-2. **메모리 부족**:
-   - 대용량 mbox 파일 처리 시 발생
-   - 해결: 배치 모드 사용 또는 파일 분할
+# 시스템 전체 테스트
+python main.py --test
+```
 
-3. **PDF 변환 실패**:
+## 📚 문서
 
-   - HTML 구조가 복잡한 메일에서 발생
-   - 해결: HTML 출력 확인 후 수동 변환
+**자동 생성된 문서들**:
+- [📖 API Reference](docs/API_Reference.md) - 전체 API 문서
+- [🔧 Developer Guide](docs/Developer_Guide.md) - 개발자 가이드
+- [🌐 HTML 문서](docs/api_docs.html) - 웹용 API 문서
+- [🔌 OpenAPI 명세](docs/openapi.json) - OpenAPI 3.0 스펙
+- [📮 Postman Collection](docs/postman_collection.json) - API 테스트 컬렉션
 
-## 📞 지원 및 기여
+**수동 문서들**:
+- [⚙️ Config Guide](docs/config_guide.md) - 설정 가이드 (생성 예정)
+- [🏗️ Architecture](docs/architecture_refactoring.md) - 아키텍처 문서
 
-- **이슈 리포팅**: [GitHub Issues](https://github.com/crossman73/mail_parser/issues)
-- **기능 제안**: Pull Request 환영
-- **문의사항**: 프로젝트 관리자에게 연락
+## 🐳 Docker 지원
 
+```bash
+# 개발 환경
+docker-compose -f docker-compose.dev.yml up
+
+# 프로덕션 환경
+docker-compose up -d
+
+# 서비스 상태 확인
+docker-compose ps
+```
+
+## 🔌 API 엔드포인트
+
+현재 발견된 엔드포인트 (73개):
+
+**주요 엔드포인트**:
+- `GET /` - 메인 페이지
+- `GET /health` - 시스템 헬스체크
+- `GET /system/status` - 시스템 상태 정보
+- `GET /docs` - API 문서 페이지
+- `GET /upload` - 파일 업로드 페이지 (구현 예정)
+
+자세한 API 문서는 [API Reference](docs/API_Reference.md)를 참고하세요.
+
+## 🤝 기여하기
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## 📄 라이선스
 
-이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
+이 프로젝트는 MIT 라이선스하에 배포됩니다.
 
 ---
 
-> **⚠️ 중요**: 이 도구는 법적 증거 자료 생성을 위한 것입니다. 실제 법원 제출 전 반드시 법무팀의 검토를 받으시기 바랍니다.
+**마지막 업데이트**: 2025-09-05 17:41:50
+**문서 자동 생성**: Phase 2 API 문서 생성 시스템
+**문서 버전**: v2.0 (통합 아키텍처 + 자동 문서화)

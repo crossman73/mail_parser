@@ -1,0 +1,83 @@
+import ok
+has admin attr: True
+register failed
+Traceback (most recent call last):
+  File "C:\dev\python-email\script_register_admin_debug.py", line 12, in <module>
+    app.register_blueprint(admin_bp)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\cross\AppData\Roaming\Python\Python313\site-packages\flask\sansio\scaffold.py", line 47, in wrapper_func
+    return f(self, *args, **kwargs)
+  File "C:\Users\cross\AppData\Roaming\Python\Python313\site-packages\flask\sansio\app.py", line 595, in register_blueprint
+    blueprint.register(self, options)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\cross\AppData\Roaming\Python\Python313\site-packages\flask\sansio\blueprints.py", line 310, in register
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: The name 'admin' is already registered for this blueprint. Use 'name=' to provide a unique name.
+
+routes:
+/ -> index
+/add_evidence -> add_evidence
+/additional_evidence -> additional_evidence
+/admin -> admin.admin_index
+/admin -> admin_page
+/admin/evidence/<int:evidence_id> -> admin.evidence_detail
+/admin/jobs -> admin.admin_jobs
+/admin/logs -> admin.admin_logs
+/admin/reload -> admin.admin_reload
+/api/admin/cleanup -> cleanup_tasks
+/api/admin/logs -> admin.api_admin_logs
+/api/admin/tasks -> get_all_tasks
+/api/check_processed_emails -> api_check_processed_emails
+/api/docs -> api_docs
+/api/emails/<file_id> -> api_email_list
+/api/emails/load -> api_load_emails
+/api/emails/process -> api_process_emails
+/api/emails/search -> api_search_emails
+/api/emails/statistics -> api_email_statistics
+/api/evidence -> api_evidence_list
+/api/evidence/<folder_name> -> api_delete_evidence
+/api/evidence/<folder_name> -> api_evidence_detail
+/api/evidence/<int:evidence_id>/download/<kind> -> admin.evidence_download
+/api/evidence/attachment/<int:entry_id>/download -> admin.attachment_download
+/api/evidence/export -> api_export_evidence
+/api/evidence/integrity -> api_evidence_integrity
+/api/evidence_categories -> api_evidence_categories
+/api/evidence_progress/<task_id> -> get_evidence_progress
+/api/files -> api_file_list
+/api/files/info -> api_file_info
+/api/files/list -> api_list_files
+/api/progress/<task_id> -> get_progress
+/api/system/cleanup -> api_cleanup
+/api/system/disk-usage -> api_disk_usage
+/api/timeline -> api_timeline
+/api/timeline/export -> api_timeline_export
+/api/timeline/filter -> api_timeline_filter
+/api/upload -> api_upload
+/api/verify_integrity -> api_verify_integrity
+/delete_evidence/<file_id> -> delete_evidence
+/download/<path:filename> -> download_file
+/download_court_certificate -> download_court_certificate
+/download_evidence_index -> download_evidence_index
+/download_timeline_excel -> download_timeline_excel
+/download_verification_report -> download_verification_report
+/edit_evidence/<file_id> -> edit_evidence
+/email/<file_id>/<int:email_index> -> email_detail
+/emails/<file_id> -> email_list
+/evidence -> evidence_list
+/evidence/<folder_name> -> evidence_detail
+/export_additional_evidence -> export_additional_evidence
+/generate_evidence/<file_id> -> generate_evidence
+/generate_timeline_package -> generate_timeline_package
+/health -> health_check
+/integrated_timeline -> integrated_timeline
+/integrity -> integrity
+/process_selected -> process_selected_emails
+/processing/<task_id> -> processing_status
+/search -> search_page
+/settings -> settings_page
+/static/<path:filename> -> static
+/timeline -> timeline_page
+/upload -> upload_file
+/verify_integrity -> verify_integrity

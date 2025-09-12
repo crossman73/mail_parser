@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>증거 상세 - {{ evidence.evidence_number }}</title>
+    <link rel="stylesheet" href="/static/css/wireframe.css" />
+  </head>
+  <body class="light">
+    <header class="topnav"><div class="brand">메일증거 - 상세</div></header>
+    <div class="container">
+      <main class="main">
+        <h2>{{ evidence.evidence_number }}</h2>
+        <p><strong>제목:</strong> {{ evidence.subject }}</p>
+        <p><strong>생성일:</strong> {{ evidence.generated_at }}</p>
+        <p>
+          <strong>무결성 해시:</strong>
+          <code>{{ evidence.integrity_hash }}</code>
+        </p>
+
+        <div style="margin-top: 12px">
+          <a
+            class="btn"
+            href="{{ url_for('admin.evidence_download', evidence_id=evidence.id, kind='html') }}"
+            >HTML 다운로드</a
+          >
+          <a
+            class="btn"
+            href="{{ url_for('admin.evidence_download', evidence_id=evidence.id, kind='pdf') }}"
+            >PDF 다운로드</a
+          >
+        </div>
+
+        <h3 style="margin-top: 18px">미리보기</h3>
+        <div class="upload" style="padding: 8px">
+          {% if evidence.html_file %}
+          <iframe
+            id="evidencePreview"
+            src="/api/evidence/{{ evidence.id }}/download/html"
+            style="
+              width: 100%;
+              height: 480px;
+              border: 1px solid #e8eef8;
+              border-radius: 6px;
+            "
+          ></iframe>
+          {% else %}
+          <p class="hint">
+            HTML 증거 파일이 없으면 미리보기를 사용할 수 없습니다.
+          </p>
+          {% endif %}
+        </div>
+
+        <h3 style="margin-top: 16px">체인 항목</h3>
+        {% if chain %}
+        <table class="evidence-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>파일 경로</th>
+              <th>파일 해시</th>
+              <th>체인 해시</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i, c in enumerate(chain, start=1) %}
+            <tr>
+              <td>{{ i }}</td>
+              <td>{{ c.file_path }}</td>
+              <td><code>{{ c.file_hash }}</code></td>
+              <td><code>{{ c.chain_hash }}</code></td>
+              <td>
+                <a
+                  class="btn small"
+                  href="{{ url_for('admin.attachment_download', entry_id=c.id) }}"
+                  >다운로드</a
+                >
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>체인 항목이 없습니다.</p>
+        {% endif %}
+      </main>
+    </div>
+    <footer class="footer">© 2025 Mail Evidence</footer>
+  </body>
+</html>

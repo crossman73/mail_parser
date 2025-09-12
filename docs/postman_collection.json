@@ -1,0 +1,1844 @@
+{
+  "info": {
+    "name": "이메일 증거 처리 시스템 Collection",
+    "description": "한국 법원 제출용 이메일 증거 처리 및 분류 시스템",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET /",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /upload",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /upload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /processing/<task_id>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/processing/<task_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "processing",
+            "<task_id>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/progress/<task_id>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/progress/<task_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "progress",
+            "<task_id>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/admin/tasks",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/tasks",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /api/admin/cleanup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/cleanup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "cleanup"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /admin",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /emails/<file_id>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/emails/<file_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "emails",
+            "<file_id>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /generate_evidence/<file_id>",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/generate_evidence/<file_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "generate_evidence",
+            "<file_id>"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence_progress/<task_id>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence_progress/<task_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence_progress",
+            "<task_id>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /email/<file_id>/<int:email_index>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/email/<file_id>/<int:email_index>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "email",
+            "<file_id>",
+            "<int:email_index>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /process_selected",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/process_selected",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "process_selected"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/docs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/docs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "docs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /integrity",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/integrity",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "integrity"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /api/upload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "upload"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/emails/<file_id>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/emails/<file_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "emails",
+            "<file_id>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/files",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/files",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "files"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /evidence",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/evidence",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "evidence"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /evidence/<folder_name>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/evidence/<folder_name>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "evidence",
+            "<folder_name>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /timeline",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/timeline",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "timeline"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /search",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/search",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "search"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /settings",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/settings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "settings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /download/<path:filename>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/download/<path:filename>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "download",
+            "<path:filename>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /additional_evidence",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/additional_evidence",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "additional_evidence"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /add_evidence",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/add_evidence",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "add_evidence"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /add_evidence",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/add_evidence",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "add_evidence"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence_categories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence_categories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence_categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /edit_evidence/<file_id>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/edit_evidence/<file_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "edit_evidence",
+            "<file_id>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /edit_evidence/<file_id>",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/edit_evidence/<file_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "edit_evidence",
+            "<file_id>"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /delete_evidence/<file_id>",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/delete_evidence/<file_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "delete_evidence",
+            "<file_id>"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /download_evidence_index",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/download_evidence_index",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "download_evidence_index"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /export_additional_evidence",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/export_additional_evidence",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "export_additional_evidence"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /integrated_timeline",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/integrated_timeline",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "integrated_timeline"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /generate_timeline_package",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/generate_timeline_package",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "generate_timeline_package"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /download_timeline_excel",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/download_timeline_excel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "download_timeline_excel"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /verify_integrity",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/verify_integrity",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "verify_integrity"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/verify_integrity",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/verify_integrity",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "verify_integrity"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/check_processed_emails",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/check_processed_emails",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "check_processed_emails"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /download_verification_report",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/download_verification_report",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "download_verification_report"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /download_court_certificate",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/download_court_certificate",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "download_court_certificate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /admin",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /admin/evidence/<int:evidence_id>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/evidence/<int:evidence_id>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "evidence",
+            "<int:evidence_id>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /admin/jobs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/jobs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "jobs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /admin/logs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/logs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "logs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/admin/logs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/logs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "logs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /admin/reload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/reload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "reload"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence/<int:evidence_id>/download/<kind>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence/<int:evidence_id>/download/<kind>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence",
+            "<int:evidence_id>",
+            "download",
+            "<kind>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence/attachment/<int:entry_id>/download",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence/attachment/<int:entry_id>/download",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence",
+            "attachment",
+            "<int:entry_id>",
+            "download"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /ui/wireframe",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/ui/wireframe",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "ui",
+            "wireframe"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /regenerate-docs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/regenerate-docs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "regenerate-docs"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /docs-status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/docs-status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "docs-status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /api/emails/load",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/emails/load",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "emails",
+            "load"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /api/emails/process",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/emails/process",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "emails",
+            "process"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/emails/search",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/emails/search",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "emails",
+            "search"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/emails/statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/emails/statistics",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "emails",
+            "statistics"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence/<folder_name>",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence/<folder_name>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence",
+            "<folder_name>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE /api/evidence/<folder_name>",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence/<folder_name>",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence",
+            "<folder_name>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence/export",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence/export",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence",
+            "export"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/evidence/integrity",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/evidence/integrity",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "evidence",
+            "integrity"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/timeline",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/timeline",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "timeline"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /api/timeline/filter",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/timeline/filter",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "timeline",
+            "filter"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/timeline/export",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/timeline/export",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "timeline",
+            "export"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/files/info",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/files/info",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "files",
+            "info"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/files/list",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/files/list",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "files",
+            "list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/system/disk-usage",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/system/disk-usage",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "system",
+            "disk-usage"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /api/system/cleanup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/system/cleanup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "system",
+            "cleanup"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /health",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /system/status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/system/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "system",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /docs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/docs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "docs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /swagger",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/swagger",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "swagger"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /api/docs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/docs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "docs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /upload",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /upload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"example\": \"data\"\n}"
+        }
+      },
+      "response": []
+    }
+  ]
+}

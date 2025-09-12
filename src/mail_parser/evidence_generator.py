@@ -10,6 +10,8 @@ from datetime import datetime
 from email.utils import parseaddr
 from pathlib import Path
 
+from src.core import evidence_store
+
 
 class EvidenceGenerator:
     """증거 생성 및 관리 클래스"""
@@ -19,6 +21,13 @@ class EvidenceGenerator:
         self.evidence_counters = {}
         self.output_dir = Path('processed_emails')
         self.output_dir.mkdir(exist_ok=True)
+        # Ensure evidence DB is initialized once (default path inside data/)
+        try:
+            evidence_store.init_db(Path('data') / 'evidence.db')
+        except Exception:
+            # If DB init fails, log and continue; save_evidence will raise if not initialized
+            if hasattr(self.processor, 'logger'):
+                self.processor.logger.warning('evidence_store DB 초기화 실패')
 
     def get_evidence_number(self, prefix='갑'):
         """증거 번호 생성"""
@@ -101,6 +110,15 @@ class EvidenceGenerator:
             with open(metadata_file, 'w', encoding='utf-8') as f:
                 json.dump(headers_info, f, ensure_ascii=False, indent=2)
 
+            # Persist metadata + hash-chain into evidence DB
+            try:
+                file_paths = [str(html_file), str(pdf_file)] + \
+                    [str(a['path']) for a in attachments]
+                evidence_id, chain_entries = evidence_store.save_evidence(
+                    headers_info, file_paths)
+            except Exception:
+                evidence_id, chain_entries = None, []
+
             return {
                 'evidence_number': evidence_number,
                 'subject': subject,
@@ -109,7 +127,9 @@ class EvidenceGenerator:
                 'pdf_file': str(pdf_file),
                 'attachments_count': len(attachments),
                 'integrity_hash': integrity_hash,
-                'generated_at': headers_info['generated_at']
+                'generated_at': headers_info['generated_at'],
+                'evidence_id': evidence_id,
+                'chain_entries_count': len(chain_entries)
             }
 
         except Exception as e:

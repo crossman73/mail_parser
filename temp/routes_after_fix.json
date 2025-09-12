@@ -1,0 +1,110 @@
+[
+  {
+    "rule": "/",
+    "endpoint": "index"
+  },
+  {
+    "rule": "/additional_evidence",
+    "endpoint": "additional_evidence"
+  },
+  {
+    "rule": "/admin",
+    "endpoint": "admin.admin_index"
+  },
+  {
+    "rule": "/admin/evidence/<int:evidence_id>",
+    "endpoint": "admin.evidence_detail"
+  },
+  {
+    "rule": "/admin/jobs",
+    "endpoint": "admin.admin_jobs"
+  },
+  {
+    "rule": "/admin/logs",
+    "endpoint": "admin.admin_logs"
+  },
+  {
+    "rule": "/admin/reload",
+    "endpoint": "admin.admin_reload"
+  },
+  {
+    "rule": "/api",
+    "endpoint": "api_info"
+  },
+  {
+    "rule": "/api/admin/logs",
+    "endpoint": "admin.api_admin_logs"
+  },
+  {
+    "rule": "/api/docs",
+    "endpoint": "legacy_api_docs_redirect"
+  },
+  {
+    "rule": "/api/docs-dashboard",
+    "endpoint": "api_docs_dashboard"
+  },
+  {
+    "rule": "/api/docs-status",
+    "endpoint": "docs_api.docs_status"
+  },
+  {
+    "rule": "/api/evidence/<int:evidence_id>/download/<kind>",
+    "endpoint": "admin.evidence_download"
+  },
+  {
+    "rule": "/api/evidence/attachment/<int:entry_id>/download",
+    "endpoint": "admin.attachment_download"
+  },
+  {
+    "rule": "/api/openapi.json",
+    "endpoint": "openapi_json"
+  },
+  {
+    "rule": "/api/regenerate-docs",
+    "endpoint": "docs_api.regenerate_docs"
+  },
+  {
+    "rule": "/api/swagger-config",
+    "endpoint": "swagger_config"
+  },
+  {
+    "rule": "/api/swagger-ui",
+    "endpoint": "swagger_ui"
+  },
+  {
+    "rule": "/api/upload/job/<job_id>",
+    "endpoint": "upload.job_status"
+  },
+  {
+    "rule": "/api/upload/stream",
+    "endpoint": "upload.upload_stream"
+  },
+  {
+    "rule": "/docs",
+    "endpoint": "api_docs"
+  },
+  {
+    "rule": "/health",
+    "endpoint": "health_check"
+  },
+  {
+    "rule": "/static/<path:filename>",
+    "endpoint": "static"
+  },
+  {
+    "rule": "/swagger",
+    "endpoint": "legacy_swagger_redirect"
+  },
+  {
+    "rule": "/system/status",
+    "endpoint": "system_status"
+  },
+  {
+    "rule": "/ui/wireframe",
+    "endpoint": "ui.wireframe"
+  },
+  {
+    "rule": "/upload",
+    "endpoint": "upload"
+  }
+]

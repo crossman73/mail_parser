@@ -1,0 +1,18 @@
+2025-09-10 13:21:51,615 - EmailEvidenceProcessor - INFO - __init__:32 - 프로세서 초기화 시작 (설정 파일: config.threaded.json)
+2025-09-10 13:21:51,620 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: config.threaded.json
+2025-09-10 13:21:51,775 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료
+2025-09-10 13:21:51,775 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 1] mbox 파일 로드 시작: tests/data/sample_small.mbox
+2025-09-10 13:21:51,782 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 mbox 백업 성공: tests/data/sample_small.mbox.bak
+2025-09-10 13:21:51,806 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 2] 스레드 기반 메타데이터 수집 완료: 총 2개의 메시지
+2025-09-10 13:21:51,814 - EmailEvidenceProcessor - INFO - __init__:32 - 프로세서 초기화 시작 (설정 파일: config.threaded.json)
+2025-09-10 13:21:51,816 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: config.threaded.json
+2025-09-10 13:21:51,933 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료
+2025-09-10 13:21:51,934 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 1] mbox 파일 로드 시작: tests/data/sample_small.mbox
+2025-09-10 13:21:51,937 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 mbox 백업 성공: tests/data/sample_small.mbox.bak
+2025-09-10 13:21:51,940 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 2] 스레드 기반 메타데이터 수집 완료: 총 2개의 메시지
+2025-09-10 13:21:51,944 - EmailEvidenceProcessor - INFO - __init__:32 - 프로세서 초기화 시작 (설정 파일: config.threaded.json)
+2025-09-10 13:21:51,948 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: config.threaded.json
+2025-09-10 13:21:52,083 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료
+2025-09-10 13:21:52,090 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 1] mbox 파일 로드 시작: tests/data/sample_small.mbox
+2025-09-10 13:21:52,099 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 mbox 백업 성공: tests/data/sample_small.mbox.bak
+2025-09-10 13:21:52,102 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 2] 스레드 기반 메타데이터 수집 완료: 총 2개의 메시지

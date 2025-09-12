@@ -7,12 +7,43 @@ reportlab>=3.6.0
 # Excel 파일 처리
 openpyxl>=3.0.0
 
-# 시스템 성능 모니터링
+# 시스템 성능 모니터링 및 리소스 관리
 psutil>=5.8.0
 
 # 웹 인터페이스
 flask>=2.0.0
+werkzeug>=2.0.0
 
-# 추가 유틸리티 (필요시)
-# chardet>=4.0.0  # 인코딩 자동 감지용 (현재 미사용)
-# python-dateutil>=2.8.0  # 날짜 파싱 강화용 (현재 미사용)
+# 보안 및 해시 처리 (포렌식 무결성)
+# hashlib is part of the Python standard library; do not include it in requirements
+# hashlib # 내장 모듈
+cryptography>=3.4.8
+
+# 날짜/시간 처리 개선
+python-dateutil>=2.8.2
+
+# 인코딩 자동 감지 (한글 메일 처리 개선)
+chardet>=4.0.0
+
+# JSON 처리 개선
+ujson>=5.1.0
+
+# 로깅 개선
+colorlog>=6.6.0
+
+# 타입 힌팅 지원
+typing-extensions>=4.0.0
+
+# Phase 2.4: 문서 자동화 시스템
+watchdog>=2.1.0  # 파일 감시 및 자동 문서 업데이트
+
+# Background job queue
+redis>=4.0.0
+rq>=1.10.0
+
+# 개발 및 테스트 (선택사항)
+# pytest>=7.0.0
+# pytest-cov>=4.0.0
+
+# Use `constraints.txt` for platform-sensitive pinned packages (pydantic, pydantic-core, etc.)
+# Install with: python -m pip install -r requirements.txt -c constraints.txt

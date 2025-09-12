@@ -1,0 +1,4 @@
+# Constraints for reproducible installs
+# Pin platform-sensitive and known-good versions
+pydantic==2.11.7
+pydantic-core==2.33.2

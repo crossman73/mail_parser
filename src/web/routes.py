@@ -16,8 +16,9 @@ from flask import (flash, jsonify, redirect, render_template, request,
 from werkzeug.utils import secure_filename
 
 from src.evidence.additional_evidence_manager import AdditionalEvidenceManager
-from src.legal_compliance.court_evidence_verifier import \
-    CourtEvidenceIntegrityVerifier
+# Heavy imports (openpyxl/numpy) moved into functions to avoid import-time cost
+# from src.legal_compliance.court_evidence_verifier import \
+#     CourtEvidenceIntegrityVerifier
 from src.mail_parser.processor import EmailEvidenceProcessor
 from src.mail_parser.progress import EmailProcessingProgress
 from src.timeline.integrated_timeline_generator import \
@@ -50,12 +51,22 @@ except ImportError as e:
 def register_routes(app):
     """웹 라우트 등록"""
 
+    # Avoid duplicating routes when multiple app factories or blueprints
+    # attempt to register the same handlers. If an endpoint named 'index'
+    # already exists, skip registering the legacy routes to prevent
+    # "View function mapping is overwriting an existing endpoint function" errors.
+    existing_endpoints = {r.endpoint for r in app.url_map.iter_rules()}
+    if 'index' in existing_endpoints:
+        app.logger.info(
+            'Skipping register_routes: index endpoint already registered')
+        return
+
     def allowed_file(filename):
         """허용된 파일 확장자 확인"""
         ALLOWED_EXTENSIONS = {'mbox', 'eml', 'msg'}
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-    @app.route('/')
+    @app.route('/', endpoint='index')
     def index():
         """메인 페이지"""
         try:
@@ -302,18 +313,25 @@ def register_routes(app):
                     temp_manager.save_metadata(
                         timeline_data, f"timeline_{task_id}.json")
 
-            # 무결성 검증
+            # 무결성 검증 (heavy module import delayed)
             integrity_report = None
             if options.get('verify_integrity', True):
-                progress_tracker.update_progress(
-                    task_id + "_evidence", 90, "증거 무결성 검증 수행 중...")
-                verifier = CourtEvidenceIntegrityVerifier()
-                integrity_report = verifier.verify_all_evidence()
+                try:
+                    from src.legal_compliance.court_evidence_verifier import \
+                        CourtEvidenceIntegrityVerifier
+                except Exception as e:
+                    app.logger.error(f"무결성 검증 모듈 로드 실패: {e}")
+                    verifier = None
+                else:
+                    progress_tracker.update_progress(
+                        task_id + "_evidence", 90, "증거 무결성 검증 수행 중...")
+                    verifier = CourtEvidenceIntegrityVerifier()
+                    integrity_report = verifier.verify_all_evidence()
 
-                # 무결성 보고서 임시 저장
-                if integrity_report:
-                    temp_manager.save_metadata(
-                        integrity_report, f"integrity_{task_id}.json")
+                    # 무결성 보고서 임시 저장
+                    if integrity_report:
+                        temp_manager.save_metadata(
+                            integrity_report, f"integrity_{task_id}.json")
 
             # 데이터 업데이트
             progress_tracker.update_progress(
@@ -488,8 +506,12 @@ def register_routes(app):
 
     @app.route('/admin')
     def admin_page():
-        """관리자 페이지"""
-        return render_template('admin.html')
+        """관리자 페이지 - 블루프린트로 위임(존재하면 리다이렉트), 없으면 기존 템플릿 렌더링"""
+        try:
+            # prefer blueprint-provided admin index if available
+            return redirect(url_for('admin_bp.admin_index'))
+        except Exception:
+            return render_template('admin.html')
 
     @app.route('/emails/<file_id>')
     def email_list(file_id):
