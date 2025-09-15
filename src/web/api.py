@@ -6,6 +6,7 @@ REST API 라우트 정의
 from pathlib import Path
 
 from flask import jsonify, request
+from werkzeug.utils import secure_filename
 
 from src.services import (EmailService, EvidenceService, FileService,
                           TimelineService)
@@ -316,6 +317,8 @@ def register_api_routes(app):
                 'message': f'파일 정보 조회 오류: {str(e)}'
             }), 500
 
+    # Single /api/upload handler (supports GET: list, POST: multipart upload)
+
     @app.route('/api/files/list', methods=['GET'])
     def api_list_files():
         """파일 목록 API"""
@@ -337,6 +340,150 @@ def register_api_routes(app):
                 'success': False,
                 'message': f'파일 목록 조회 오류: {str(e)}'
             }), 500
+
+    @app.route('/api/upload', methods=['GET', 'POST'])
+    def api_upload_file():
+        """파일 업로드 (GET: 목록, POST: 업로드)"""
+        try:
+            # Respect feature flag for uploads
+            flags = app.config.get('FEATURE_FLAGS', {})
+            if not flags.get('enable_upload', True):
+                return jsonify({'success': False, 'message': '업로드 기능이 비활성화되어 있습니다.'}), 403
+
+            upload_dir = Path(app.config.get('UPLOAD_FOLDER', 'uploads'))
+            upload_dir.mkdir(parents=True, exist_ok=True)
+
+            if request.method == 'GET':
+                files = []
+                for p in sorted(upload_dir.iterdir()):
+                    # skip hidden/temp files
+                    if p.name.startswith('.'):
+                        continue
+                    try:
+                        size = p.stat().st_size
+                    except Exception:
+                        size = None
+                    files.append({
+                        'name': p.name,
+                        'path': str(p),
+                        'size': size,
+                        'is_dir': p.is_dir()
+                    })
+                return jsonify({'success': True, 'upload_folder': str(upload_dir), 'files': files})
+
+            # POST handling
+            # Optional token-based access control: if UPLOAD_API_TOKEN is set in
+            # app config, require Authorization: Bearer <token> header.
+            upload_token = app.config.get('UPLOAD_API_TOKEN')
+            if upload_token:
+                auth = request.headers.get('Authorization', '')
+                if not auth.startswith('Bearer '):
+                    return jsonify({'success': False, 'message': '인증 토큰이 필요합니다.'}), 401
+                provided = auth.split(' ', 1)[1].strip()
+                if provided != upload_token:
+                    return jsonify({'success': False, 'message': '유효하지 않은 인증 토큰입니다.'}), 401
+
+            if 'file' not in request.files:
+                return jsonify({'success': False, 'message': "'file' 필드가 필요합니다."}), 400
+
+            upload = request.files['file']
+            if not upload:
+                return jsonify({'success': False, 'message': "업로드된 파일이 없습니다."}), 400
+
+            # filename may be None (some clients). Guard before calling secure_filename
+            filename_raw = upload.filename
+            if not filename_raw:
+                return jsonify({'success': False, 'message': '파일 이름이 비어 있습니다.'}), 400
+
+            # sanitize and enforce safe filename
+            filename = secure_filename(filename_raw)
+            if not filename:
+                return jsonify({'success': False, 'message': '안전한 파일명을 생성할 수 없습니다.'}), 400
+
+            # Basic filename length guard
+            if len(filename) > 255:
+                return jsonify({'success': False, 'message': '파일 이름이 너무 깁니다.'}), 400
+
+            # Allowed extension check (configurable) - normalize to lowercase
+            allowed = set([e.lower() for e in app.config.get('ALLOWED_UPLOAD_EXTENSIONS', [
+                'mbox', 'eml', 'txt', 'pdf', 'zip', '7z', 'tar', 'gz', 'csv', 'xlsx', 'xls', 'msg'
+            ])])
+            ext = Path(filename).suffix.lower().lstrip('.')
+            if ext and ext not in allowed:
+                return jsonify({'success': False, 'message': f'허용되지 않는 파일 확장자: .{ext}'}), 400
+
+            # Optional content-length pre-check
+            content_length = request.content_length
+            max_len = app.config.get('MAX_CONTENT_LENGTH')
+            if content_length and max_len and content_length > max_len:
+                return jsonify({'success': False, 'message': '업로드 파일이 허용 크기를 초과합니다.'}), 413
+            # Avoid overwriting existing files: create a unique filename if needed
+            dest = upload_dir / filename
+            if dest.exists():
+                base = Path(filename).stem
+                suffix = Path(filename).suffix
+                counter = 1
+                while True:
+                    candidate = f"{base}_{counter}{suffix}"
+                    candidate_path = upload_dir / candidate
+                    if not candidate_path.exists():
+                        dest = candidate_path
+                        filename = candidate
+                        break
+                    counter += 1
+
+            # Save uploaded file atomically to a temp file then rename
+            import os
+            import tempfile
+            tmp_path = None
+            try:
+                fd, tmp_name = tempfile.mkstemp(
+                    prefix='.tmp_upload_', dir=str(upload_dir))
+                os.close(fd)
+                tmp_path = Path(tmp_name)
+                # Use the Werkzeug FileStorage.save() to write to temp path
+                upload.save(str(tmp_path))
+                # Move into place atomically
+                try:
+                    os.replace(str(tmp_path), str(dest))
+                except Exception:
+                    # Fall back to rename
+                    os.rename(str(tmp_path), str(dest))
+                # Try to set restrictive permissions (best-effort; Windows may ignore)
+                try:
+                    os.chmod(str(dest), 0o600)
+                except Exception:
+                    pass
+            except Exception as e:
+                # cleanup temp file if present
+                try:
+                    if tmp_path and tmp_path.exists():
+                        tmp_path.unlink()
+                except Exception:
+                    pass
+                if hasattr(app, 'logger'):
+                    app.logger.error(f"파일 저장 실패: {e}")
+                return jsonify({'success': False, 'message': f'파일 저장 실패: {e}'}), 500
+
+            # Validate / gather file info using existing file_service
+            try:
+                info = file_service.get_file_info(str(dest))
+            except Exception:
+                # fall back to basic info if service fails
+                info = {
+                    'path': str(dest),
+                    'size': dest.stat().st_size if dest.exists() else None,
+                }
+
+            return jsonify({
+                'success': True,
+                'message': '파일 업로드 완료',
+                'filename': filename,
+                'file_info': info
+            })
+
+        except Exception as e:
+            return jsonify({'success': False, 'message': f'업로드 오류: {str(e)}'}), 500
 
     @app.route('/api/system/disk-usage', methods=['GET'])
     def api_disk_usage():

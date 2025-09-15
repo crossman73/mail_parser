@@ -1,0 +1,7 @@
+2025-09-15 18:10:06,048 - EmailEvidenceProcessor - INFO - __init__:32 - 프로세서 초기화 시작 (설정 파일: config.json)
+2025-09-15 18:10:06,071 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 설정 파일 로드 성공: config.json
+2025-09-15 18:10:06,213 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 초기화] 프로세서 초기화 완료
+2025-09-15 18:10:06,236 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 1] mbox 파일 로드 시작: C:\Users\cross\AppData\Local\Temp\upload_vtap1h9w.mbox
+2025-09-15 18:10:06,280 - EmailEvidenceProcessor - INFO - log_file_operation:75 - 파일 mbox 로드 성공: C:\Users\cross\AppData\Local\Temp\upload_vtap1h9w.mbox
+2025-09-15 18:10:06,308 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 2] 메타데이터 수집 시작
+2025-09-15 18:10:06,333 - EmailEvidenceProcessor - INFO - log_processing_step:67 - [단계 2] 메타데이터 수집 완료: 총 0개의 고유 메시지

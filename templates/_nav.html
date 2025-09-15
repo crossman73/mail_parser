@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a
+      class="navbar-brand"
+      href="{{ safe_url_for('index') if has_endpoint('index') else '/' }}"
+    >
+      <i class="fas fa-envelope-open-text me-2"></i>
+      이메일 증거 처리 시스템
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a
+            class="nav-link {% if has_endpoint('index') and request.path == safe_url_for('index') %}active{% endif %}"
+            href="{{ safe_url_for('index') if has_endpoint('index') else '/' }}"
+          >
+            <i class="fas fa-home me-1"></i>홈
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if request.path.startswith('/upload') %}active{% endif %}"
+            href="/upload"
+          >
+            <i class="fas fa-upload me-1"></i>업로드
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          {% set evidence_active =
+          request.path.startswith('/additional_evidence') or
+          request.path.startswith('/integrated_timeline') or
+          request.path.startswith('/verify_integrity') %}
+          <a
+            class="nav-link dropdown-toggle {% if evidence_active %}active{% endif %}"
+            href="#"
+            id="evidenceDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
+            <i class="fas fa-folder-open me-1"></i>증거 관리
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a
+                class="dropdown-item {% if request.path.startswith('/additional_evidence') %}active{% endif %}"
+                href="{{ safe_url_for('additional_evidence') if has_endpoint('additional_evidence') else '#' }}"
+              >
+                <i class="fas fa-plus me-1"></i>추가 증거
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item {% if request.path.startswith('/integrated_timeline') %}active{% endif %}"
+                href="{{ safe_url_for('integrated_timeline') if has_endpoint('integrated_timeline') else '#' }}"
+              >
+                <i class="fas fa-clock me-1"></i>통합 타임라인
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item {% if request.path.startswith('/verify_integrity') %}active{% endif %}"
+                href="{{ safe_url_for('verify_integrity') if has_endpoint('verify_integrity') else '#' }}"
+              >
+                <i class="fas fa-shield-alt me-1"></i>무결성 검증
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if request.path.startswith('/api') or request.path.startswith('/docs') or request.path.startswith('/api/docs') %}active{% endif %}"
+            href="/api"
+          >
+            <i class="fas fa-code me-1"></i>API
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if request.path.startswith('/admin') %}active{% endif %}"
+            href="/admin"
+          >
+            <i class="fas fa-user-shield me-1"></i>관리자
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

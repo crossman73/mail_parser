@@ -1,0 +1,636 @@
+2025-09-15 12:20:00,948 - 이메일 증거 처리 시스템 - INFO - _load_configuration:122 - 설정 로드 완료: 12 항목
+2025-09-15 12:20:01,013 - 이메일 증거 처리 시스템 - INFO - _register_default_services:130 - 기본 서비스 등록 중...
+2025-09-15 12:20:01,046 - 이메일 증거 처리 시스템 - INFO - initialize:64 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:22:13,335 - 이메일 증거 처리 시스템 - INFO - _load_configuration:122 - 설정 로드 완료: 12 항목
+2025-09-15 12:22:13,353 - 이메일 증거 처리 시스템 - INFO - _register_default_services:130 - 기본 서비스 등록 중...
+2025-09-15 12:22:13,521 - 이메일 증거 처리 시스템 - INFO - initialize:64 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:24:12,853 - 이메일 증거 처리 시스템 - INFO - _load_configuration:122 - 설정 로드 완료: 12 항목
+2025-09-15 12:24:12,865 - 이메일 증거 처리 시스템 - INFO - _register_default_services:130 - 기본 서비스 등록 중...
+2025-09-15 12:24:12,868 - 이메일 증거 처리 시스템 - INFO - initialize:64 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:24:14,897 - 이메일 증거 처리 시스템 - INFO - _load_configuration:122 - 설정 로드 완료: 12 항목
+2025-09-15 12:24:14,930 - 이메일 증거 처리 시스템 - INFO - _register_default_services:130 - 기본 서비스 등록 중...
+2025-09-15 12:24:14,977 - 이메일 증거 처리 시스템 - INFO - initialize:64 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:24:53,819 - 이메일 증거 처리 시스템 - INFO - _load_configuration:122 - 설정 로드 완료: 12 항목
+2025-09-15 12:24:53,845 - 이메일 증거 처리 시스템 - INFO - _register_default_services:130 - 기본 서비스 등록 중...
+2025-09-15 12:24:53,852 - 이메일 증거 처리 시스템 - INFO - initialize:64 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:24:55,786 - 이메일 증거 처리 시스템 - INFO - _load_configuration:122 - 설정 로드 완료: 12 항목
+2025-09-15 12:24:55,827 - 이메일 증거 처리 시스템 - INFO - _register_default_services:130 - 기본 서비스 등록 중...
+2025-09-15 12:24:55,863 - 이메일 증거 처리 시스템 - INFO - initialize:64 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:27:39,864 - 이메일 증거 처리 시스템 - INFO - _load_configuration:122 - 설정 로드 완료: 12 항목
+2025-09-15 12:27:39,868 - 이메일 증거 처리 시스템 - INFO - _register_default_services:130 - 기본 서비스 등록 중...
+2025-09-15 12:27:39,869 - 이메일 증거 처리 시스템 - INFO - initialize:64 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:28:25,253 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 12:28:25,463 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 12:28:51,890 - 이메일 증거 처리 시스템 - ERROR - initialize_core_services:189 - 서비스 초기화 실패: expected str, bytes or os.PathLike object, not dict
+2025-09-15 12:28:52,100 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 12:30:32,003 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 12:30:32,027 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 12:30:34,978 - 이메일 증거 처리 시스템 - WARNING - initialize_core_services:182 - email_processor 생성 실패: EmailEvidenceProcessor.__init__() missing 1 required positional argument: 'config_path'
+2025-09-15 12:30:35,029 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 12:30:35,082 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 12:30:35,161 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 12:30:35,197 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:212 - 핵심 서비스 초기화 완료
+2025-09-15 12:30:35,244 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 13:21:24,287 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 13:21:24,289 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 13:21:25,160 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 13:21:25,162 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 13:21:25,165 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 13:21:25,166 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 13:21:25,167 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:228 - 핵심 서비스 초기화 완료
+2025-09-15 13:21:25,168 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 13:21:41,860 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 13:21:41,866 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 13:21:43,194 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 13:21:43,196 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 13:21:43,197 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 13:21:43,198 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 13:21:43,199 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:228 - 핵심 서비스 초기화 완료
+2025-09-15 13:21:43,202 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 13:21:57,352 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 13:21:57,356 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 13:21:58,713 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 13:21:58,714 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 13:21:58,715 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 13:21:58,717 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 13:21:58,718 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:228 - 핵심 서비스 초기화 완료
+2025-09-15 13:21:58,720 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 13:55:23,774 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 13:55:23,781 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 13:55:24,878 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 13:55:24,880 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 13:55:24,880 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 13:55:24,881 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 13:55:24,882 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 13:55:24,887 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 13:56:10,746 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 13:56:10,752 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 13:56:11,694 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 13:56:11,696 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 13:56:11,697 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 13:56:11,698 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 13:56:11,701 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 13:56:11,704 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 13:58:12,886 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 13:58:13,047 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 13:58:31,830 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 13:58:32,056 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 13:58:32,251 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 13:58:32,252 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 13:58:32,253 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 13:58:32,253 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 14:03:10,302 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 14:03:10,307 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 14:03:12,925 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 14:03:12,927 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 14:03:12,929 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 14:03:12,932 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 14:03:12,940 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 14:03:12,945 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 14:05:11,638 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 14:05:11,645 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 14:05:13,063 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 14:05:13,081 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 14:05:13,107 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 14:05:13,124 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 14:05:13,141 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 14:05:13,169 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 14:05:48,778 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 14:05:48,815 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 14:05:51,086 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 14:05:51,088 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 14:05:51,089 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 14:05:51,090 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 14:05:51,095 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 14:05:51,098 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 14:07:14,113 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 14:07:14,124 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 14:07:16,152 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 14:07:16,155 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 14:07:16,158 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 14:07:16,161 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 14:07:16,162 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 14:07:16,164 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 14:10:53,924 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 14:10:53,937 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 14:10:56,683 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 14:10:56,768 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 14:10:56,818 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 14:10:56,849 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 14:10:56,898 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 14:10:56,982 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 14:17:22,734 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 14:17:22,737 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 14:17:23,669 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 14:17:23,669 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 14:17:23,686 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 14:17:23,686 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 14:17:23,686 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 14:17:23,687 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:16:39,463 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:16:39,471 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:16:41,038 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:16:41,039 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:16:41,063 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:16:41,064 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:16:41,064 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:16:41,064 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:17:37,059 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:17:37,064 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:17:37,646 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:17:37,646 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:17:37,670 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:17:37,670 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:17:37,670 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:17:37,670 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:17:38,064 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:17:38,121 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:17:38,282 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:17:38,300 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:17:38,316 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:17:38,335 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:17:38,354 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:17:38,372 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:17:58,569 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:17:58,572 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:17:59,341 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:17:59,343 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:17:59,372 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:17:59,373 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:17:59,373 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:17:59,373 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:18:00,024 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:18:00,071 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:18:00,247 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:18:00,264 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:18:00,283 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:18:00,302 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:18:00,318 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:18:00,336 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:21:20,746 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:21:20,751 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:21:21,625 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:21:21,626 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:21:21,649 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:21:21,650 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:21:21,650 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:21:21,651 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:21:22,143 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:21:22,165 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:21:22,540 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:21:22,576 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:21:22,613 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:21:22,655 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:21:22,696 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:21:22,725 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:22:05,611 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:22:05,615 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:22:06,419 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:22:06,420 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:22:06,421 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:22:06,421 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:22:06,422 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:22:06,422 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:22:26,323 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:22:26,328 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:22:26,988 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:22:26,990 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:22:26,993 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:22:26,994 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:22:26,995 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:22:26,996 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:31:31,325 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:31:31,330 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:31:33,760 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:31:33,843 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:31:33,920 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:31:33,961 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:31:33,992 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:31:34,030 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:35:31,396 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:35:31,403 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:35:32,180 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:35:32,181 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:35:32,182 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:35:32,182 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:35:32,183 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:35:32,183 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:36:10,986 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:36:10,989 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:36:11,395 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:36:11,396 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:36:11,397 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:36:11,397 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:36:11,397 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:36:11,398 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:45:21,855 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:45:21,869 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:45:23,254 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:45:23,260 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:45:23,263 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:45:23,266 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:45:23,267 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:45:23,268 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 15:45:36,397 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 15:45:36,402 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 15:45:37,265 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 15:45:37,307 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 15:45:37,345 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 15:45:37,375 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 15:45:37,410 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 15:45:37,425 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 16:41:24,326 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 16:41:24,339 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 16:41:25,929 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 16:41:25,931 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 16:41:25,935 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 16:41:25,937 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 16:41:25,939 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 16:41:25,942 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 16:43:40,942 - 이메일 증거 처리 시스템 - WARNING - admin_reload:116 - admin_reload blocked: ENABLE_DEV_RELOAD is False
+2025-09-15 16:43:44,819 - 이메일 증거 처리 시스템 - WARNING - admin_reload:116 - admin_reload blocked: ENABLE_DEV_RELOAD is False
+2025-09-15 17:11:18,086 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:11:18,091 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:11:20,922 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:11:20,966 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:11:20,991 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:11:21,011 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:11:21,077 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:11:21,164 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:13:54,672 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:13:54,701 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:13:58,642 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:13:58,684 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:13:58,720 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:13:58,742 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:13:58,769 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:13:58,788 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:14:36,622 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:14:36,743 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:14:39,560 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:14:39,575 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:14:39,580 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:14:39,583 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:14:39,586 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:14:39,590 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:14:40,661 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:14:40,911 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:14:41,330 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:14:41,414 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:14:41,460 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:14:41,546 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:14:41,598 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:14:41,783 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:14:43,115 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:14:43,250 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:14:43,868 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:14:43,940 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:14:44,164 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:14:44,249 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:14:44,317 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:14:44,510 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:14:46,593 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:14:46,700 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:14:47,317 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:14:47,592 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:14:47,796 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:14:47,900 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:14:47,989 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:14:48,114 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:20:33,255 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:20:33,259 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:20:35,426 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:20:35,433 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:20:35,436 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:20:35,438 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:20:35,440 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:20:35,452 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:21:05,780 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:21:05,788 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:21:07,492 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:21:07,495 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:21:07,497 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:21:07,501 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:21:07,502 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:21:07,504 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:21:08,106 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:21:08,154 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:21:08,549 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:21:08,583 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:21:08,621 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:21:08,659 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:21:08,719 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:21:08,756 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:21:09,759 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:21:09,809 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:21:10,247 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:21:10,317 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:21:10,371 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:21:10,435 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:21:10,509 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:21:10,568 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:21:11,291 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:21:11,377 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:21:11,912 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:21:12,014 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:21:12,111 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:21:12,196 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:21:12,290 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:21:12,387 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:24:46,753 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:24:46,780 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:24:47,607 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:24:47,607 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:24:47,608 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:24:47,608 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:24:47,610 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:24:47,611 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:24:48,424 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:24:48,484 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:24:48,856 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:24:49,115 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:24:49,317 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:24:49,351 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:24:49,396 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:24:49,472 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:24:50,375 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:24:50,432 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:24:50,780 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:24:50,831 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:24:50,946 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:24:51,003 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:24:51,054 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:24:51,111 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:24:51,849 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:24:51,959 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:24:52,364 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:24:52,430 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:24:52,492 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:24:52,555 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:24:52,621 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:24:52,693 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:26:02,639 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:26:02,645 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:26:04,205 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:26:04,217 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:26:04,241 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:26:04,263 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:26:04,308 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:26:04,329 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:26:05,006 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:26:05,057 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:26:05,691 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:26:05,747 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:26:05,806 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:26:05,862 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:26:05,909 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:26:05,948 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:26:06,755 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:26:06,826 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:26:07,297 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:26:07,349 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:26:07,399 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:26:07,449 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:26:07,505 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:26:07,562 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:26:08,224 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:26:08,313 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:26:08,740 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:26:08,809 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:26:08,879 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:26:08,951 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:26:09,035 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:26:09,122 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:33:05,108 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:33:05,112 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:33:05,873 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:33:05,875 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:33:05,876 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:33:05,876 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:33:05,877 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:33:05,878 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:50:24,677 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:50:24,680 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:50:25,210 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:50:25,210 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:50:25,211 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:50:25,212 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:50:25,212 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:50:25,212 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:50:25,470 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:50:25,497 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:50:25,877 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:50:25,923 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:50:26,042 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:50:26,069 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:50:26,104 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:50:26,134 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:50:26,858 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:50:26,926 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:50:27,329 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:50:27,385 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:50:27,438 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:50:27,490 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:50:27,550 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:50:27,601 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:50:28,311 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:50:28,410 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:50:28,810 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:50:28,884 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:50:28,961 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:50:29,040 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:50:29,110 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:50:29,179 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:54:01,921 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:54:01,925 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:54:02,500 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:54:02,500 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:54:02,501 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:54:02,502 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:54:02,502 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:54:02,503 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:54:13,555 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:54:13,558 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:54:14,148 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:54:14,159 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:54:14,162 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:54:14,164 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:54:14,166 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:54:14,168 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:54:14,481 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:54:14,509 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:54:14,804 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:54:14,831 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:54:14,862 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:54:14,890 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:54:14,922 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:54:14,953 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:54:15,755 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:54:15,816 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:54:16,169 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:54:16,211 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:54:16,268 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:54:16,364 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:54:16,448 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:54:16,512 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 17:54:17,123 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 17:54:17,197 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 17:54:17,882 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 17:54:17,971 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 17:54:18,050 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 17:54:18,152 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 17:54:18,235 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 17:54:18,309 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:08:59,181 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:08:59,187 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:09:00,417 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:09:00,419 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:09:00,423 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:09:00,427 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:09:00,429 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:09:00,431 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:09:25,550 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:09:25,553 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:09:26,479 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:09:26,481 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:09:26,482 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:09:26,483 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:09:26,485 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:09:26,486 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:09:26,990 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:09:27,031 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:09:28,143 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:09:28,219 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:09:28,263 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:09:28,303 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:09:28,345 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:09:28,386 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:09:29,880 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:09:30,040 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:09:30,454 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:09:30,517 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:09:30,584 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:09:30,642 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:09:30,703 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:09:30,763 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:09:31,641 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:09:31,764 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:09:32,342 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:09:32,461 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:09:32,568 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:09:32,666 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:09:32,760 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:09:32,849 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:09:54,911 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:09:54,914 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:09:55,549 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:09:55,551 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:09:55,552 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:09:55,553 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:09:55,554 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:09:55,555 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:10:04,635 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:10:04,638 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:10:05,239 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:10:05,240 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:10:05,241 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:10:05,242 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:10:05,242 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:10:05,243 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:10:05,961 - 이메일 증거 처리 시스템 - WARNING - upload_stream:76 - RQ enqueue failed, falling back to local thread: No module named 'redis'
+2025-09-15 18:16:36,681 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:16:36,684 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:16:37,783 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:16:37,785 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:16:37,786 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:16:37,794 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:16:37,812 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:16:37,821 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:16:43,869 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:16:43,877 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:16:44,759 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:16:44,761 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:16:44,766 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:16:44,770 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:16:44,776 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:16:44,778 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:16:45,167 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:16:45,200 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:16:45,458 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:16:45,482 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:16:45,510 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:16:45,532 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:16:45,558 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:16:45,581 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:16:46,231 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:16:46,298 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:16:46,702 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:16:46,790 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:16:46,867 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:16:46,949 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:16:47,017 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:16:47,094 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:16:48,647 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:16:48,739 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:16:49,213 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:16:49,285 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:16:49,360 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:16:49,431 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:16:49,518 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:16:49,601 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:21:07,194 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:21:07,199 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:21:08,135 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:21:08,137 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:21:08,138 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:21:08,139 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:21:08,140 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:21:08,141 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:21:14,378 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:21:14,382 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:21:15,310 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:21:15,316 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:21:15,324 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:21:15,343 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:21:15,372 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:21:15,382 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:22:24,687 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:22:24,691 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:22:25,681 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:22:25,690 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:22:25,706 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:22:25,723 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:22:25,732 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:22:25,736 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:22:26,086 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:22:26,115 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:22:26,388 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:22:26,424 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:22:26,450 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:22:26,486 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:22:26,513 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:22:26,541 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:22:27,340 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:22:27,427 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:22:27,798 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:22:27,848 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:22:27,904 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:22:28,039 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:22:28,100 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:22:28,165 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:22:29,366 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:22:29,456 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:22:29,919 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:22:30,010 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:22:30,130 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:22:30,415 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:22:30,863 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:22:31,161 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0
+2025-09-15 18:33:44,641 - 이메일 증거 처리 시스템 - INFO - _load_configuration:130 - 설정 로드 완료: 12 항목
+2025-09-15 18:33:44,644 - 이메일 증거 처리 시스템 - INFO - _register_default_services:138 - 기본 서비스 등록 중...
+2025-09-15 18:33:45,433 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: email_processor - EmailEvidenceProcessor
+2025-09-15 18:33:45,435 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: performance_monitor - PerformanceMonitor
+2025-09-15 18:33:45,436 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: forensic_service - ForensicIntegrityService
+2025-09-15 18:33:45,438 - 이메일 증거 처리 시스템 - INFO - register_service:149 - 서비스 등록: streaming_processor - StreamingEmailProcessor
+2025-09-15 18:33:45,439 - 이메일 증거 처리 시스템 - INFO - initialize_core_services:230 - 핵심 서비스 초기화 완료
+2025-09-15 18:33:45,440 - 이메일 증거 처리 시스템 - INFO - initialize:72 - 시스템 초기화 완료: 이메일 증거 처리 시스템 v2.0.0

@@ -1,0 +1,16 @@
+{
+  "session_id": "801c390e-f3a6-4b30-b72d-7f711b7e8bf4",
+  "filename": "AINation.mbox",
+  "temp_path": "C:\\Users\\cross\\AppData\\Local\\Temp\\801c390e-f3a6-4b30-b72d-7f711b7e8bf4_AINation.mbox",
+  "session_dir": "temp\\20250915\\801c390e-f3a6-4b30-b72d-7f711b7e8bf4",
+  "parsing_options": {
+    "evidence_prefix": "갑",
+    "generate_timeline": true,
+    "extract_attachments": true,
+    "verify_integrity": true,
+    "commit_to_github": false
+  },
+  "parsed_at": "2025-09-15 16:08:05.463170",
+  "total_emails": 271,
+  "status": "parsing_complete"
+}

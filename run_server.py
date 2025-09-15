@@ -3,10 +3,36 @@
 실제 서비스 실행 스크립트
 """
 
+import os
 import sys
 import time
 
-from src.web.app_factory import create_app
+# App factory selection policy
+# - For day-to-day development we prefer the legacy/full UI (src.web.app)
+#   because it provides the richer `/upload` template and developer UX.
+# - In CI / production or when explicitly requested, you can choose the
+#   lighter-weight compatibility factory (`src.web.app_factory`) by setting
+#   USE_MINIMAL_UI=1 in the environment.
+# - For backwards compatibility we also honor USE_FULL_UI truthy values.
+try:
+    use_minimal = os.environ.get(
+        'USE_MINIMAL_UI', '').lower() in ('1', 'true', 'yes', 'on')
+    use_full = os.environ.get('USE_FULL_UI', '').lower() in (
+        '1', 'true', 'yes', 'on')
+
+    if use_minimal and not use_full:
+        # Explicit: developer asked for minimal compatibility UI
+        from src.web.app_factory import create_app
+    else:
+        # Default: prefer legacy full UI for development and testing
+        try:
+            from src.web.app import create_app
+        except Exception:
+            # Fallback to the compatibility factory if legacy app import fails
+            from src.web.app_factory import create_app
+except Exception:
+    # Absolute fallback
+    from src.web.app_factory import create_app
 
 try:
     import psutil
@@ -50,7 +76,7 @@ def _terminate_process(pid: int, timeout: float = 5.0):
     return False
 
 
-def main(port: int = 5000, auto_kill: bool = True):
+def main(port: int = 5000, auto_kill: bool = False, start_server: bool = True):
     print('🚀 Flask 웹 서버 시작 중...')
 
     # 포트 사용 중인 프로세스 확인
@@ -67,7 +93,8 @@ def main(port: int = 5000, auto_kill: bool = True):
             # 잠시 대기
             time.sleep(1)
         else:
-            print('⚠️ 자동 종료 비활성화. 먼저 사용 중인 프로세스를 종료하세요.')
+            # Non-destructive default: do not kill processes automatically.
+            print('⚠️ 포트가 사용 중입니다. 자동 종료가 비활성화되어 있습니다.\n   - 기존 프로세스를 수동으로 종료하거나\n   - --auto-kill 옵션 또는 AUTO_KILL=1 환경변수로 강제 종료를 허용하세요.')
             sys.exit(1)
 
     # Flask 애플리케이션 생성
@@ -89,12 +116,16 @@ def main(port: int = 5000, auto_kill: bool = True):
     try:
         # 개발 서버 실행
         print(f'🔎 현재 프로세스 PID: {os.getpid()}')
-        app.run(
-            host='0.0.0.0',
-            port=port,
-            debug=True,
-            use_reloader=False
-        )
+        if start_server:
+            app.run(
+                host='0.0.0.0',
+                port=port,
+                debug=True,
+                use_reloader=False
+            )
+        else:
+            # For testability: skip starting the blocking server loop
+            print('ℹ️ start_server=False 이므로 Flask 서버 시작을 건너뜁니다 (테스트 모드).')
     except KeyboardInterrupt:
         print('\n🛑 서버가 종료되었습니다.')
 
@@ -102,5 +133,11 @@ def main(port: int = 5000, auto_kill: bool = True):
 if __name__ == '__main__':
     import os
 
-    # 기본 포트는 5000, 자동 종료 모드 활성화
-    main(port=5000, auto_kill=True)
+    # 기본 포트는 5000
+    # 자동 종료는 기본적으로 비활성화되어 있어 무중단 배포 상황에서
+    # 의도치 않은 프로세스 종료를 방지합니다. 필요하면 --auto-kill
+    # 옵션(또는 AUTO_KILL=1)을 사용해 강제 종료할 수 있습니다.
+    env_auto = os.environ.get('AUTO_KILL', '').lower() in (
+        '1', 'true', 'yes', 'on')
+    cmd_auto = '--auto-kill' in sys.argv
+    main(port=5000, auto_kill=(env_auto or cmd_auto))

@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block title %}API 문서 - 이메일 증거 처리 시스템{%
+endblock %} {% block content %}
+<div class="container mt-4">
+  <h1>API 문서</h1>
+  <p>
+    아래는 서비스에서 제공하는 주요 API 목록입니다. 더 자세한 명세는 OpenAPI
+    스펙을 통해 제공됩니다.
+  </p>
+
+  <div class="list-group">
+    <a href="/api" class="list-group-item list-group-item-action"
+      >/api - API 정보</a
+    >
+    <a href="/api/docs" class="list-group-item list-group-item-action"
+      >/api/docs - 문서 대시보드</a
+    >
+    <a href="/health" class="list-group-item list-group-item-action"
+      >/health - 헬스체크</a
+    >
+    <a href="/system/status" class="list-group-item list-group-item-action"
+      >/system/status - 시스템 상태 (HTML/JSON)</a
+    >
+    <a href="/upload" class="list-group-item list-group-item-action"
+      >/upload - 파일 업로드 UI</a
+    >
+    <a href="/admin" class="list-group-item list-group-item-action"
+      >/admin - 관리자 대시보드</a
+    >
+  </div>
+
+  <hr />
+  <h4>Swagger / OpenAPI</h4>
+  <p>
+    만약 Swagger UI가 통합되어 있다면 우측 상단의
+    <code>/api/docs</code> 링크에서 시각화된 명세를 확인할 수 있습니다.
+  </p>
+</div>
+{% endblock %}

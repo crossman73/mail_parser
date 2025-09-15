@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block title %}시스템 개요 - 이메일 증거 처리
+시스템{% endblock %} {% block content %}
+<div class="container mt-4">
+  <h1>시스템 개요</h1>
+  <p class="text-muted">서비스 상태 요약과 주요 구성 정보를 제공합니다.</p>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-3">
+        <div class="card-header">요약</div>
+        <div class="card-body">
+          <p>
+            <strong>앱:</strong> {{ status.app_name or '이메일 증거 처리 시스템'
+            }}
+          </p>
+          <p><strong>버전:</strong> {{ status.version or '2.0.0' }}</p>
+          <p><strong>상태:</strong> {{ status.status }}</p>
+          <p><strong>타임스탬프:</strong> {{ status.timestamp }}</p>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header">등록 서비스</div>
+        <div class="card-body">
+          <ul>
+            {% for s in status.registered_services %}
+            <li>{{ s.name }} - {{ s.status }}</li>
+            {% else %}
+            <li>서비스 정보가 없습니다.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-header">리소스</div>
+        <div class="card-body">
+          <p>
+            <strong>CPU:</strong> {{ status.cpu_percent if status.cpu_percent is
+            defined else 'N/A' }}%
+          </p>
+          <p>
+            <strong>메모리:</strong> {{ status.memory_percent if
+            status.memory_percent is defined else 'N/A' }}%
+          </p>
+          <p>
+            <strong>디스크:</strong> {{ status.disk_percent if
+            status.disk_percent is defined else 'N/A' }}%
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">관리</div>
+        <div class="card-body">
+          <a href="/admin" class="btn btn-sm btn-warning mb-2">관리 대시보드</a>
+          <a href="/" class="btn btn-sm btn-secondary">홈</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

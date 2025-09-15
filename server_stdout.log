@@ -1,0 +1,32 @@
+🚀 Flask 웹 서버 시작 중...
+🔍 포트 5000 사용 프로세스 발견:
+  - PID=0 name=System Idle Process cmd=[]
+  - PID=0 name=System Idle Process cmd=[]
+  - PID=0 name=System Idle Process cmd=[]
+  - PID=0 name=System Idle Process cmd=[]
+ℹ️ 자동 종료 모드가 활성화되어 사용 중인 프로세스를 종료합니다...
+⚠️ 종료 시도: PID=0, name=System Idle Process
+❌ PID=0 종료 실패: (pid=0, name='System Idle Process')
+⚠️ 종료 시도: PID=0, name=System Idle Process
+❌ PID=0 종료 실패: (pid=0, name='System Idle Process')
+⚠️ 종료 시도: PID=0, name=System Idle Process
+❌ PID=0 종료 실패: (pid=0, name='System Idle Process')
+⚠️ 종료 시도: PID=0, name=System Idle Process
+❌ PID=0 종료 실패: (pid=0, name='System Idle Process')
+🔌 Swagger UI 서비스 초기화 완료
+🔌 Swagger UI 서비스 통합 완료
+📚 문서 API 블루프린트 등록 완료
+✅ Flask 애플리케이션 생성 완료
+📍 등록된 라우트: 40개
+
+🌐 서비스 접속 URL:
+  - 메인 페이지: http://localhost:5000/
+  - 📚 문서 페이지: http://localhost:5000/docs
+  - 🔧 Swagger UI: http://localhost:5000/swagger
+  - 📋 API 목록: http://localhost:5000/api/endpoints
+
+🔄 서버를 중지하려면 Ctrl+C를 누르세요
+==================================================
+🔎 현재 프로세스 PID: 12524
+ * Serving Flask app 'src.web.app_factory'
+ * Debug mode: on

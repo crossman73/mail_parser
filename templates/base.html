@@ -33,78 +33,7 @@
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container">
-        <a class="navbar-brand" href="{{ url_for('index') }}">
-          <i class="fas fa-envelope-open-text me-2"></i>
-          이메일 증거 처리 시스템
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('index') }}">
-                <i class="fas fa-home me-1"></i>홈
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/upload">
-                <i class="fas fa-upload me-1"></i>업로드
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="evidenceDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-              >
-                <i class="fas fa-folder-open me-1"></i>증거 관리
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="{{ url_for('additional_evidence') }}"
-                  >
-                    <i class="fas fa-plus me-1"></i>추가 증거
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="{{ url_for('integrated_timeline') }}"
-                  >
-                    <i class="fas fa-clock me-1"></i>통합 타임라인
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="{{ url_for('verify_integrity') }}"
-                  >
-                    <i class="fas fa-shield-alt me-1"></i>무결성 검증
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/api">
-                <i class="fas fa-code me-1"></i>API
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    {% include '_nav.html' %}
 
     <main class="container my-4">
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
@@ -123,16 +52,10 @@
       {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer bg-light">
-      <div class="container text-center">
-        <span class="text-muted">
-          <i class="fas fa-gavel me-2"></i>
-          이메일 증거 처리 시스템 v2.0 - 법정 증거 생성 및 관리
-        </span>
-      </div>
-    </footer>
+    {% include '_footer.html' %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/static/js/common.js"></script>
     {% block scripts %}{% endblock %}
   </body>
 </html>

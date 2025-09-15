@@ -80,12 +80,20 @@ def check_and_init(app) -> List[Dict[str, Any]]:
             'uploaded_files': {},
             'processed_emails': {},
         }
+        # Use Flask's render_template inside a test_request_context so that
+        # app context processors and template globals (like has_endpoint)
+        # are applied during startup rendering checks. Calling the template
+        # engine directly (tpl.render) bypasses those processors and can
+        # produce false-positive 'undefined' errors for helpers injected by
+        # the app. We still guard against exceptions to collect real issues.
+        from flask import render_template
+
         with app.test_request_context('/'):
             for name in tmpl_names:
                 try:
-                    tpl = app.jinja_env.get_template(name)
-                    # render with safe context to avoid startup-time failures
-                    tpl.render(**safe_context)
+                    # render_template will combine provided context with
+                    # context processors and template globals.
+                    render_template(name, **safe_context)
                 except Exception as e:
                     errors.append(
                         {'phase': 'template', 'template': name, 'error': str(e)})

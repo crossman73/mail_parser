@@ -5,6 +5,7 @@ venv/
 # User data and results
 email_files/
 processed_emails/
+ .mcp_memory/
 
 # Python cache
 __pycache__/

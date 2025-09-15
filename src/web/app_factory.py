@@ -2,10 +2,10 @@
 Flask 애플리케이션 팩토리 - 통합 아키텍처 기반
 """
 import os
-import sys
 from pathlib import Path
 
-from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask import (Flask, jsonify, redirect, render_template,
+                   render_template_string, request, url_for)
 
 
 def create_app(unified_arch=None):
@@ -28,14 +28,175 @@ def create_app(unified_arch=None):
         'SEND_FILE_MAX_AGE_DEFAULT': 0,  # 캐시 비활성화 (개발용)
     })
 
+    # File upload default directory (can be overridden in config.json)
+    app_root = Path(__file__).parent.parent.parent
+    # Normalize configured upload folder to an absolute path under project root
+    configured_upload = os.environ.get('UPLOAD_FOLDER') or app.config.get(
+        'UPLOAD_FOLDER') or str(app_root / 'uploads')
+    upload_path = Path(configured_upload)
+    if not upload_path.is_absolute():
+        upload_path = app_root / upload_path
+    try:
+        upload_path = upload_path.resolve()
+    except Exception:
+        # fallback to the joined path if resolve fails (e.g., permissions)
+        upload_path = app_root / upload_path
+    app.config['UPLOAD_FOLDER'] = str(upload_path)
+
+    # Ensure common runtime directories exist and have best-effort restrictive perms
+    try:
+        upload_path.mkdir(parents=True, exist_ok=True)
+        try:
+            os.chmod(str(upload_path), 0o700)
+        except Exception:
+            # Non-fatal on Windows or filesystems that don't support POSIX perms
+            pass
+    except Exception as e:
+        print(f"⚠️ 업로드 폴더 생성 실패: {e}")
+
+    # Create other expected runtime directories (logs, temp, processed_emails)
+    for d in ('logs', 'temp', 'processed_emails'):
+        try:
+            p = app_root / d
+            p.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            pass
+
+    # Default allowed upload extensions (operators can override in config.json)
+    app.config.setdefault('ALLOWED_UPLOAD_EXTENSIONS', [
+        'mbox', 'eml', 'txt', 'pdf', 'zip', '7z', 'tar', 'gz', 'csv', 'xlsx', 'xls', 'msg'
+    ])
+
     # 통합 아키텍처 연결
+    # If an instance was provided, use it. Otherwise try to create a
+    # lightweight default UnifiedArchitecture so endpoints like /system
+    # and /health can provide real status in dev and integration runs.
     if unified_arch:
         app.unified_arch = unified_arch
         app.logger = unified_arch.logger
+    else:
+        # Allow opt-out via env var for very lightweight runs
+        if os.environ.get('DISABLE_AUTO_UNIFIED_ARCH', '').lower() in ('1', 'true', 'yes', 'on'):
+            app.logger.debug(
+                '자동 UnifiedArchitecture 초기화를 건너뜁니다 (DISABLE_AUTO_UNIFIED_ARCH).')
+        else:
+            try:
+                # Create a SystemConfig using the application root so paths
+                # (uploads, logs, etc.) resolve to the project tree.
+                from src.core.unified_architecture import (SystemConfig,
+                                                           UnifiedArchitecture)
+
+                config = SystemConfig(project_root=app_root)
+                _ua = UnifiedArchitecture(config)
+                _ua.initialize()
+                app.unified_arch = _ua
+                # prefer unified logger if available
+                try:
+                    app.logger = _ua.logger
+                except Exception:
+                    pass
+                print('🔧 기본 UnifiedArchitecture 인스턴스가 앱에 연결되었습니다')
+            except Exception as e:
+                # Non-fatal: leave app without unified_arch but log for debugging
+                try:
+                    app.logger.warning(f"UnifiedArchitecture 자동 초기화 실패: {e}")
+                except Exception:
+                    print(f"UnifiedArchitecture 자동 초기화 실패: {e}")
 
     # 라우트 등록
     register_core_routes(app)
-    register_api_routes(app)
+    # Prefer external API module (src.web.api) if available. Fall back to
+    # the in-file `register_api_routes` if import fails.
+    try:
+        from src.web import api as external_api
+        external_api.register_api_routes(app)
+    except Exception:
+        # fallback to local registration
+        register_api_routes(app)
+    # Compatibility: ensure light-weight /docs and /upload routes exist for
+    # older clients or test scripts. Register only if not already present.
+
+    def register_compat_routes(app):
+        try:
+            # /docs endpoint (endpoint name: 'api_docs')
+            if 'api_docs' not in app.view_functions:
+                @app.route('/docs')
+                def api_docs():
+                    try:
+                        return render_template('api_docs.html', title='API 문서')
+                    except Exception:
+                        return """
+                        <html>
+                        <head><title>API 문서</title></head>
+                        <body>
+                            <h1>📧 이메일 증거 처리 시스템 API v2.0</h1>
+                            <h2>주요 엔드포인트</h2>
+                            <ul>
+                                <li><a href="/">/</a> - 메인 페이지</li>
+                                <li><a href="/health">/health</a> - 헬스체크</li>
+                                <li><a href="/system/status">/system/status</a> - 시스템 상태</li>
+                                <li><a href="/api">/api</a> - API 정보</li>
+                                <li><a href="/upload">/upload</a> - 파일 업로드 (구현 예정)</li>
+                            </ul>
+                        </body>
+                        </html>
+                        """
+
+            # NOTE: /upload compatibility route intentionally removed here to avoid
+            # duplicate route registrations. The canonical upload implementation
+            # lives in `src.web.routes` (full UI) and the API upload is provided
+            # as `/api/upload` in `src.web.api`. Keeping one implementation avoids
+            # unpredictable inline HTML fallbacks or conflicting handlers.
+        except Exception:
+            # Don't let compatibility helpers break app startup
+            try:
+                app.logger.debug('Compatibility route registration failed.')
+            except Exception:
+                pass
+
+    register_compat_routes(app)
+    # Provide a lightweight /api root and /api/docs compatibility routes
+    try:
+        if '/api' not in [r.rule for r in app.url_map.iter_rules()]:
+            @app.route('/api')
+            def api_info_compat():
+                return jsonify({
+                    'name': 'Email Evidence Processing API',
+                    'version': '2.0',
+                    'description': 'Compatibility root for legacy /api requests',
+                    'endpoints': {
+                        'health': '/health',
+                        'system_status': '/system/status',
+                        'upload': '/upload',
+                        'docs': '/docs',
+                    }
+                })
+
+            if '/api/docs' not in [r.rule for r in app.url_map.iter_rules()]:
+                @app.route('/api/docs')
+                def api_docs_redirect_compat():
+                    # Prefer serving the API docs dashboard directly if available
+                    try:
+                        # If Swagger UI registered an API docs dashboard endpoint, call it
+                        if 'api_docs_dashboard' in app.view_functions:
+                            return app.view_functions['api_docs_dashboard']()
+                        if 'api_docs' in app.view_functions:
+                            return app.view_functions['api_docs']()
+                    except Exception:
+                        pass
+                    # Fallback: simple HTML
+                    try:
+                        return render_template('api_docs.html', title='API 문서')
+                    except Exception:
+                        return """
+                        <html><body><h1>API 문서</h1><p>문서를 사용할 수 없습니다.</p></body></html>
+                        """
+    except Exception:
+        try:
+            app.logger.debug(
+                'API compatibility route registration skipped/failed')
+        except Exception:
+            pass
     # UI wireframe routes (minimal)
     try:
         from src.web.ui_routes import ui as ui_bp
@@ -69,10 +230,51 @@ def create_app(unified_arch=None):
     def inject_feature_flags():
         return {'FEATURE_FLAGS': app.config.get('FEATURE_FLAGS', {})}
 
+    @app.context_processor
+    def inject_template_helpers():
+        # Helper to test if an endpoint is registered
+        def has_endpoint(name):
+            try:
+                return name in app.view_functions
+            except Exception:
+                return False
+
+        # Safe url_for that returns a fallback string when endpoint missing
+        def safe_url_for(endpoint, **kwargs):
+            try:
+                return url_for(endpoint, **kwargs)
+            except Exception:
+                # Fallback to root to avoid template crashes
+                return '/'
+
+        return {
+            'has_endpoint': has_endpoint,
+            'safe_url_for': safe_url_for
+        }
+
+    @app.context_processor
+    def inject_helpers():
+        # Template helpers to safely build URLs and check endpoint presence.
+        def has_endpoint(name):
+            try:
+                return name in app.view_functions
+            except Exception:
+                return False
+
+        def safe_url_for(name, **kwargs):
+            try:
+                return url_for(name, **kwargs)
+            except Exception:
+                return '#'
+
+        return {'has_endpoint': has_endpoint, 'safe_url_for': safe_url_for}
+
     # Phase 2.3: Swagger UI 통합
     try:
         from src.docs import init_swagger_ui
-        swagger_service = init_swagger_ui(app, "docs/openapi.json")
+
+        # Initialize swagger UI (assignment not needed)
+        init_swagger_ui(app, "docs/openapi.json")
         print("🔌 Swagger UI 서비스 통합 완료")
 
         # 문서 API 등록
@@ -133,40 +335,117 @@ def register_core_routes(app):
     def health_check():
         """헬스체크 (Docker/로드밸런서용)"""
         try:
+            # If the unified architecture is available, derive health from its
+            # startup errors and basic metrics. Otherwise return a lightweight
+            # healthy response for container health-checks.
             if hasattr(app, 'unified_arch'):
                 status = app.unified_arch.get_system_status()
-                return jsonify({
-                    'status': 'healthy',
-                    'version': status['version'],
-                    'services': len(status['registered_services']),
-                    'timestamp': status['timestamp']
-                })
+                startup_errors = app.config.get('STARTUP_ERRORS') or []
+                healthy = (not startup_errors)
+                payload = {
+                    'status': 'healthy' if healthy else 'unhealthy',
+                    'version': status.get('version'),
+                    'services': len(status.get('registered_services', [])),
+                    'timestamp': status.get('timestamp'),
+                    'uptime_seconds': status.get('uptime_seconds')
+                }
+                if startup_errors:
+                    payload['startup_errors'] = startup_errors
+
+                return (jsonify(payload), 200) if healthy else (jsonify(payload), 503)
             else:
+                # Minimal response for probes when unified architecture is not
+                # initialized (development). Return 200 to avoid orchestration
+                # restarts during dev runs.
                 return jsonify({
                     'status': 'healthy',
                     'version': '2.0.0',
                     'services': 0,
                     'timestamp': 'unknown'
-                })
+                }), 200
         except Exception as e:
             return jsonify({
                 'status': 'unhealthy',
                 'error': str(e)
             }), 500
 
-    @app.route('/system/status')
-    def system_status():
-        """시스템 상태 페이지"""
+    @app.route('/system')
+    def system_overview():
+        """시스템 대시보드(간단한 JSON 또는 HTML)"""
         try:
             if hasattr(app, 'unified_arch'):
                 status = app.unified_arch.get_system_status()
-                return jsonify(status)
+                # If templates available, render a human-friendly page
+                try:
+                    return render_template('system_overview.html', status=status)
+                except Exception:
+                    return jsonify(status)
             else:
                 return jsonify({
                     'error': 'Unified architecture not initialized',
                     'app_name': '이메일 증거 처리 시스템',
                     'version': '2.0.0'
                 })
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    @app.route('/system/status')
+    def system_status():
+        """시스템 상태 페이지"""
+        try:
+            # If a browser (Accept: text/html) requests this endpoint, render
+            # a human-friendly HTML page. Otherwise return JSON for API clients.
+            accepts_html = request.accept_mimetypes['text/html'] >= request.accept_mimetypes['application/json']
+
+            if hasattr(app, 'unified_arch'):
+                status = app.unified_arch.get_system_status()
+                # Prepare optional admin links for services if admin blueprint
+                # exposes a 'service' endpoint. This is done defensively so
+                # templates can render links only when available.
+                service_admin_links = {}
+                try:
+                    for s in status.get('registered_services', []) or []:
+                        name = None
+                        if isinstance(s, dict):
+                            name = s.get('name')
+                        elif isinstance(s, str):
+                            name = s
+                        if not name:
+                            continue
+                        try:
+                            admin_url = url_for('admin.service', name=name)
+                            service_admin_links[name] = admin_url
+                        except Exception:
+                            try:
+                                admin_url = url_for(
+                                    'admin.service', service=name)
+                                service_admin_links[name] = admin_url
+                            except Exception:
+                                # no admin link available for this service
+                                pass
+                except Exception:
+                    # Be resilient if status shape changes
+                    service_admin_links = {}
+
+                if accepts_html:
+                    try:
+                        return render_template('system_status.html', status=status, service_admin_links=service_admin_links)
+                    except Exception:
+                        # If template missing or rendering fails, fall back to JSON
+                        return jsonify(status)
+                return jsonify(status)
+            else:
+                payload = {
+                    'error': 'Unified architecture not initialized',
+                    'app_name': '이메일 증거 처리 시스템',
+                    'version': '2.0.0'
+                }
+                if accepts_html:
+                    try:
+                        return render_template('system_status.html', status=payload)
+                    except Exception:
+                        return jsonify(payload)
+                return jsonify(payload)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
@@ -183,7 +462,7 @@ def register_api_routes(app):
         """API 문서 페이지"""
         try:
             return render_template('api_docs.html', title='API 문서')
-        except:
+        except Exception:
             # 템플릿이 없으면 간단한 HTML 반환
             return """
             <html>
@@ -238,26 +517,12 @@ def register_api_routes(app):
         except Exception:
             return redirect('/api/docs-dashboard')
 
-    @app.route('/upload', methods=['GET', 'POST'])
-    def upload():
-        """파일 업로드 페이지 (기본 구현)"""
-        if request.method == 'POST':
-            return jsonify({
-                'status': 'success',
-                'message': '업로드 기능은 다음 단계에서 구현됩니다.',
-                'phase': 'Phase 2 - API 구현 예정'
-            })
-        else:
-            return """
-            <html>
-            <head><title>파일 업로드</title></head>
-            <body>
-                <h1>📧 파일 업로드</h1>
-                <p>이 기능은 Phase 2에서 구현될 예정입니다.</p>
-                <a href="/">메인으로 돌아가기</a>
-            </body>
-            </html>
-            """
+    # NOTE: The in-file compatibility /upload route has been intentionally
+    # removed from this factory to avoid conflicting handlers. The canonical
+    # UI upload implementation is provided by `src.web.routes.upload_file` and
+    # the API upload endpoint is `src.web.api.api_upload_file` (located at
+    # `/api/upload`). Keeping a single implementation prevents unpredictable
+    # inline HTML fallbacks and makes behavior consistent across factory modes.
 
 
 def register_error_handlers(app):

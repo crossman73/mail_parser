@@ -48,8 +48,8 @@ class UnifiedArchitecture:
         self.logger = self._setup_logging()
         self.services: Dict[str, Any] = {}
         self._initialized = False
-    # track start time for uptime reporting
-    self.start_time = datetime.now()
+        # track start time for uptime reporting
+        self.start_time = datetime.now()
 
     def initialize(self):
         """시스템 초기화"""
@@ -59,6 +59,14 @@ class UnifiedArchitecture:
         self._load_configuration()
         self.config.ensure_directories()
         self._register_default_services()
+        # Attempt to initialize core services (best-effort). This may
+        # import optional modules; don't fail the whole initialization
+        # if some services are unavailable.
+        try:
+            self.initialize_core_services()
+        except Exception as e:
+            self.logger.warning(f"핵심 서비스 초기화 중 일부 오류 발생(무시): {e}")
+
         self._initialized = True
 
         self.logger.info(
@@ -151,18 +159,58 @@ class UnifiedArchitecture:
             from src.mail_parser.performance import PerformanceMonitor
             from src.mail_parser.processor import EmailEvidenceProcessor
 
-            # 핵심 서비스들 등록
-            self.register_service("email_processor",
-                                  EmailEvidenceProcessor(self.config.config_data))
-            self.register_service("performance_monitor",
-                                  PerformanceMonitor())
+            # helper to try multiple constructor signatures
+            def try_construct(klass, *args_options):
+                last_exc = None
+                for args in args_options:
+                    try:
+                        return klass(*args)
+                    except Exception as e:
+                        last_exc = e
+                raise last_exc
+
+            # 핵심 서비스들 등록 (시그니처가 다양한 경우를 핸들링)
+            try:
+                # Common config file path
+                config_file_path = self.config.project_root / 'config.json'
+
+                # Build candidate arg lists in order of likelihood
+                arg_candidates = []
+                if config_file_path.exists():
+                    arg_candidates.append((str(config_file_path),))
+                    arg_candidates.append((config_file_path,))
+                # fallback to passing full config dict
+                if self.config.config_data:
+                    arg_candidates.append((self.config.config_data,))
+                # fallback to project root
+                arg_candidates.append((self.config.project_root,))
+                # try no-arg
+                arg_candidates.append(())
+
+                email_processor_instance = try_construct(
+                    EmailEvidenceProcessor, *arg_candidates)
+                self.register_service(
+                    "email_processor", email_processor_instance)
+            except Exception as e:
+                self.logger.warning(f"email_processor 생성 실패: {e}")
+
+            try:
+                perf_instance = try_construct(
+                    PerformanceMonitor, (), (self.config.config_data,))
+                self.register_service("performance_monitor", perf_instance)
+            except Exception as e:
+                self.logger.warning(f"performance_monitor 생성 실패: {e}")
 
             # 포렌식 무결성 서비스 (있으면 로드)
             try:
                 from src.mail_parser.forensic_integrity import \
                     ForensicIntegrityService
-                self.register_service("forensic_service",
-                                      ForensicIntegrityService())
+                try:
+                    inst = try_construct(
+                        ForensicIntegrityService, (), (self.config.config_data,))
+                    self.register_service("forensic_service", inst)
+                except Exception as e:
+                    self.logger.warning(f"forensic_service 생성 실패: {e}")
             except ImportError:
                 self.logger.warning("포렌식 무결성 서비스를 찾을 수 없습니다")
 
@@ -170,8 +218,12 @@ class UnifiedArchitecture:
             try:
                 from src.mail_parser.streaming_processor import \
                     StreamingEmailProcessor
-                self.register_service(
-                    "streaming_processor", StreamingEmailProcessor())
+                try:
+                    inst = try_construct(
+                        StreamingEmailProcessor, (), (self.config.config_data,))
+                    self.register_service("streaming_processor", inst)
+                except Exception as e:
+                    self.logger.warning(f"streaming_processor 생성 실패: {e}")
             except ImportError:
                 self.logger.warning("스트리밍 프로세서를 찾을 수 없습니다")
 

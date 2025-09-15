@@ -193,174 +193,94 @@
   </div>
 </div>
 {% endblock %} {% block scripts %}
-<script>
-  let uploadInProgress = false;
+<script type="module">
+  import { submitFormAsync } from "/static/js/common.js";
 
-  document
-    .getElementById("uploadForm")
-    .addEventListener("submit", function (e) {
-      e.preventDefault();
+  const form = document.getElementById("uploadForm");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const progressContainer = document.getElementById("progressContainer");
+  const progressBar = document.getElementById("progressBar");
+  const statusText = document.getElementById("statusText");
 
-      if (uploadInProgress) {
-        return;
-      }
+  // Keep drag/drop behavior from previous implementation
+  const card = document.querySelector(".card-body");
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((ev) =>
+    card.addEventListener(ev, preventDefaults, false)
+  );
+  ["dragenter", "dragover"].forEach((ev) =>
+    card.addEventListener(ev, () => card.classList.add("bg-light"), false)
+  );
+  ["dragleave", "drop"].forEach((ev) =>
+    card.addEventListener(ev, () => card.classList.remove("bg-light"), false)
+  );
+  card.addEventListener("drop", (e) => {
+    const dt = e.dataTransfer;
+    if (dt.files.length) {
+      document.getElementById("mbox_file").files = dt.files;
+    }
+  });
 
-      const fileInput = document.getElementById("mbox_file");
-      const uploadBtn = document.getElementById("uploadBtn");
-      const progressContainer = document.getElementById("progressContainer");
+  form.addEventListener("submit", async (e) => {
+    // If JS disabled, the browser will perform a regular form POST as fallback.
+    e.preventDefault();
 
-      if (!fileInput.files.length) {
-        alert("파일을 선택해주세요.");
-        return;
-      }
-
-      // 파일 크기 확인 (1GB)
-      const maxSize = 1024 * 1024 * 1024;
-      if (fileInput.files[0].size > maxSize) {
-        alert("파일 크기가 1GB를 초과합니다.");
-        return;
-      }
-
-      uploadFileWithProgress();
-    });
-
-  function uploadFileWithProgress() {
-    const formData = new FormData();
+    // basic validations
     const fileInput = document.getElementById("mbox_file");
-    const uploadBtn = document.getElementById("uploadBtn");
-    const progressContainer = document.getElementById("progressContainer");
-    const progressBar = document.getElementById("progressBar");
-    const statusText = document.getElementById("statusText");
+    if (!fileInput.files.length) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+    const maxSize = 1024 * 1024 * 1024;
+    if (fileInput.files[0].size > maxSize) {
+      alert("파일 크기가 1GB를 초과합니다.");
+      return;
+    }
 
-    uploadInProgress = true;
-
-    // 폼 데이터 준비
-    formData.append("mbox_file", fileInput.files[0]);
-    formData.append(
-      "evidence_prefix",
-      document.getElementById("evidence_prefix").value
-    );
-    formData.append(
-      "generate_timeline",
-      document.getElementById("generate_timeline").checked
-    );
-    formData.append(
-      "extract_attachments",
-      document.getElementById("extract_attachments").checked
-    );
-    formData.append(
-      "verify_integrity",
-      document.getElementById("verify_integrity").checked
-    );
-
-    // UI 업데이트
+    // UI
     uploadBtn.disabled = true;
     uploadBtn.innerHTML =
       '<i class="fas fa-spinner fa-spin me-2"></i>업로드 중...';
     progressContainer.style.display = "block";
 
-    // XMLHttpRequest로 업로드
-    const xhr = new XMLHttpRequest();
-
-    // 업로드 진행률
-    xhr.upload.addEventListener("progress", function (e) {
-      if (e.lengthComputable) {
-        const percentComplete = (e.loaded / e.total) * 100;
-        progressBar.style.width = percentComplete + "%";
-        progressBar.textContent = Math.round(percentComplete) + "%";
-
-        if (percentComplete < 50) {
-          statusText.textContent = "파일 업로드 중...";
-        } else if (percentComplete < 100) {
-          statusText.textContent = "업로드 완료, 서버에서 처리 중...";
-        }
-      }
-    });
-
-    // 업로드 완료
-    xhr.addEventListener("load", function () {
-      if (xhr.status === 200 || xhr.status === 302) {
-        progressBar.style.width = "100%";
-        progressBar.textContent = "100%";
-        statusText.textContent = "처리 페이지로 이동 중...";
-
-        // 응답이 리다이렉트인 경우 URL 추출해서 이동
+    try {
+      const xhr = await submitFormAsync(form, {
+        onProgress: (p) => {
+          progressBar.style.width = p + "%";
+          progressBar.textContent = p + "%";
+          statusText.textContent =
+            p < 50
+              ? "파일 업로드 중..."
+              : p < 100
+              ? "업로드 완료, 서버에서 처리 중..."
+              : "완료";
+        },
+      });
+      // 성공 처리: 서버가 리다이렉트했다면 responseURL로 이동
+      if (xhr && xhr.status >= 200 && xhr.status < 400) {
         if (xhr.responseURL) {
           window.location.href = xhr.responseURL;
         } else {
-          // 폴백: 파싱된 응답에서 리다이렉트 URL 찾기
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1000);
+          window.location.href = "/";
         }
       } else {
-        handleUploadError("서버 오류가 발생했습니다.");
+        throw new Error("업로드 실패");
       }
-    });
-
-    // 업로드 오류
-    xhr.addEventListener("error", function () {
-      handleUploadError("업로드 중 네트워크 오류가 발생했습니다.");
-    });
-
-    // 업로드 시작
-    xhr.open("POST", "/upload", true);
-    xhr.send(formData);
-  }
-
-  function handleUploadError(message) {
-    uploadInProgress = false;
-    const uploadBtn = document.getElementById("uploadBtn");
-    const progressContainer = document.getElementById("progressContainer");
-
-    alert(message);
-    uploadBtn.disabled = false;
-    uploadBtn.innerHTML = '<i class="fas fa-upload me-2"></i>파일 업로드';
-    progressContainer.style.display = "none";
-  }
-
-  // 드래그 앤 드롭 기능
-  const fileInput = document.getElementById("mbox_file");
-  const card = document.querySelector(".card-body");
-
-  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-    card.addEventListener(eventName, preventDefaults, false);
-  });
-
-  function preventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
-  ["dragenter", "dragover"].forEach((eventName) => {
-    card.addEventListener(eventName, highlight, false);
-  });
-
-  ["dragleave", "drop"].forEach((eventName) => {
-    card.addEventListener(eventName, unhighlight, false);
-  });
-
-  function highlight(e) {
-    card.classList.add("bg-light");
-  }
-
-  function unhighlight(e) {
-    card.classList.remove("bg-light");
-  }
-
-  card.addEventListener("drop", handleDrop, false);
-
-  function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-
-    if (files.length > 0) {
-      fileInput.files = files;
-      // 파일명 표시 업데이트
-      const fileName = files[0].name;
-      const fileSize = (files[0].size / (1024 * 1024)).toFixed(2);
-      console.log(`파일 선택됨: ${fileName} (${fileSize}MB)`);
+    } catch (err) {
+      alert("업로드 중 오류가 발생했습니다: " + (err.message || err));
+      uploadBtn.disabled = false;
+      uploadBtn.innerHTML =
+        '<i class="fas fa-upload me-2"></i>파일 업로드 및 처리 시작';
+      progressContainer.style.display = "none";
     }
-  }
+  });
+
+  // ensure upload button text resets if user reloads
+  window.addEventListener("beforeunload", () => {
+    uploadBtn.disabled = true;
+  });
 </script>
 {% endblock %}
