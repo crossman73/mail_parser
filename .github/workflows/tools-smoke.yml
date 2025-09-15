@@ -1,0 +1,46 @@
+name: Tools smoke tests
+
+on:
+  push:
+    paths:
+      - "tools/**"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "tools/**"
+      - ".github/workflows/**"
+
+jobs:
+  tools-smoke:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Install dependencies (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+
+      - name: Run template linter
+        run: python tools/template_lint.py
+
+      - name: Run system status smoke
+        env:
+          DISABLE_AUTO_UNIFIED_ARCH: "1"
+        run: python tools/request_system_status.py
