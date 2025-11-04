@@ -16,7 +16,14 @@ __pycache__/
 # IDE / Editor specific
 .vscode/
 .idea/
+# workspace env for MCP secrets
+.vscode/.env
 
+# VS Code diagnostics and temporary files
+scripts/vscode_diagnostics_*/
+tmp_*.txt
+diagnostics/
+vscode_diagnostics_*/
 
 #Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
