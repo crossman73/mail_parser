@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+
+# 로컬 데이터
+data/db/*.db
+data/cases/
+data/timelines/
+data/imports/
+logs/*.log
+temp/
+uploads/*.mbox
+processed_emails/
+
+# 백업
+archives/
+workspace_backups/
+repo_cleanup_backups/
+
+# 이메일 파일
+email_files/
+
+# MCP
+mcp/
+
+# 테스트
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
