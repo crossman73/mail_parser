@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block title %}Logs - Admin{% endblock %} {% block
+content %}
+<h1>System Logs</h1>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Level</th>
+      <th>Message</th>
+      <th>Extra</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for l in logs %}
+    <tr>
+      <td>{{ l.id }}</td>
+      <td>{{ l.level }}</td>
+      <td>{{ l.message }}</td>
+      <td>{{ l.extra }}</td>
+      <td>{{ l.created_at }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="5">No logs</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

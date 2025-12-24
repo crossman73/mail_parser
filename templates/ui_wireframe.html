@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>증거 관리 - Wireframe</title>
+    <link rel="stylesheet" href="/static/css/wireframe.css" />
+  </head>
+  <body class="light">
+    <header class="topnav">
+      <div class="brand">메일증거</div>
+      <nav class="actions">
+        <button class="btn primary">증거 업로드</button>
+        <button class="btn">로그아웃</button>
+      </nav>
+    </header>
+
+    <div class="container">
+      <aside class="sidebar">
+        <ul>
+          <li class="active">● 증거 업로드</li>
+          <li>● 증거 관리</li>
+          <li>● 타임라인</li>
+          <li>● 관리</li>
+        </ul>
+      </aside>
+
+      <main class="main">
+        <section class="upload">
+          <h2>파일 업로드</h2>
+          <div class="upload-box">
+            <div class="icon">📁</div>
+            <div class="hint">
+              파일을 드래그 하거나 클릭하여 업로드하세요 (mbox 지원)
+            </div>
+            <button class="btn outline">파일 선택</button>
+          </div>
+
+          <div class="progress-row">
+            <div class="file-meta">[파일명] example.mbox — 123.4MB</div>
+            <div class="progress">
+              <div class="progress-bar" style="width: 55%">55%</div>
+            </div>
+            <button class="btn small">취소</button>
+          </div>
+
+          <div class="upload-result">
+            <div class="pill success">성공: 12,354건</div>
+            <div class="pill danger">실패: 2건</div>
+            <a class="muted" href="#">자세히 보기</a>
+          </div>
+        </section>
+
+        <section class="list">
+          <h3>증거 리스트</h3>
+          <table class="evidence-table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>파일명</th>
+                <th>등록일</th>
+                <th>해시</th>
+                <th>상태</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>example.mbox</td>
+                <td>2025-09-03</td>
+                <td>abcd...1234</td>
+                <td>완료</td>
+                <td><button class="btn small">상세</button></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>sample.mbox</td>
+                <td>2025-09-02</td>
+                <td>ffff...0000</td>
+                <td>실패</td>
+                <td><button class="btn small">상세</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer">© 2025 Mail Evidence · Minimal UI</footer>
+
+    <div id="snackbar" class="snackbar">업로드 성공!</div>
+  </body>
+</html>

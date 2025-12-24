@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% block title %}이메일 상세 - {{ email.subject }}{% endblock %}
+{% block content %}
+<style>
+  .mail-view-body {
+    font-family: 'NanumGothic', 'Segoe UI', Arial, sans-serif;
+    font-size: 1.05rem;
+    background: #fff;
+    color: #222;
+  }
+  .mail-view-body blockquote {
+    border-left: 3px solid #b0b0b0;
+    margin: 0 0 0 1rem;
+    padding-left: 1rem;
+    color: #555;
+    background: #f8f9fa;
+  }
+  .mail-view-body hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 1.5rem 0;
+  }
+  .mail-attachment-list .mail-attachment-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    background: #f7f7fa;
+    border: 1px solid #e9ecef;
+  }
+  .mail-attachment-list .mail-attachment-item i {
+    font-size: 1.3em;
+    margin-right: 0.5em;
+    color: #007bff;
+  }
+  .mail-attachment-list .mail-attachment-item .btn-download {
+    margin-left: auto;
+  }
+  .mail-header-table th {
+    width: 110px;
+    color: #666;
+    font-weight: 500;
+  }
+  .mail-header-table td {
+    font-weight: 600;
+  }
+</style>
+<div class="container-fluid mt-4">
+  <!-- 네비게이션 -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('index') }}">홈</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('email_list', file_id=file_id) }}"
+              >이메일 목록</a
+            >
+          </li>
+          <li class="breadcrumb-item active">이메일 상세</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- 이메일 헤더 정보 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h4 class="mb-0">
+            <i class="bi bi-envelope-open"></i>
+            이메일 상세 정보
+          </h4>
+          <div>
+            <a
+              href="{{ url_for('email_list', file_id=file_id) }}"
+              class="btn btn-secondary btn-sm"
+            >
+              <i class="bi bi-arrow-left"></i> 목록으로
+            </a>
+            <button class="btn btn-primary btn-sm" onclick="processThisEmail()">
+              <i class="bi bi-file-earmark-text"></i> HTML 생성
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="processThisEmailToPdf()">
+              <i class="bi bi-file-earmark-pdf"></i> PDF 생성
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="downloadScreenshot()">
+              <i class="bi bi-camera"></i> 이미지 저장
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <table class="table table-sm">
+                <tr>
+                  <th width="120">제목</th>
+                  <td><strong>{{ email.subject }}</strong></td>
+                </tr>
+                <tr>
+                  <th>발신자</th>
+                  <td>{{ email.sender }}</td>
+                </tr>
+                <tr>
+                  <th>수신자</th>
+                  <td>
+                    {{ email.recipients | join(', ') if email.recipients else
+                    '정보 없음' }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>발송일시</th>
+                  <td>{{ email.date }}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="table table-sm">
+                <tr>
+                  <th width="120">메시지 ID</th>
+                  <td><small class="text-muted">{{ email.id }}</small></td>
+                </tr>
+                <tr>
+                  <th>첨부파일</th>
+                  <td>
+                    {% if email.attachments %}
+                    <span class="badge bg-info"
+                      >{{ email.attachments | length }}개</span
+                    >
+                    {% else %}
+                    <span class="text-muted">없음</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th>크기</th>
+                  <td>
+                    {% if email.size %} {{ "%.1f KB" | format(email.size / 1024)
+                    }} {% else %}
+                    <span class="text-muted">정보 없음</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th>처리 상태</th>
+                  <td>
+                    <span class="badge bg-success">파싱 완료</span>
+                    <span id="processingStatus"></span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 첨부파일 목록 -->
+  {% if email.attachments %}
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-paperclip"></i>
+            첨부파일 ({{ email.attachments | length }}개)
+          </h5>
+        </div>
+        <div class="card-body mail-attachment-list">
+          {% for attachment in email.attachments %}
+          <div class="mail-attachment-item">
+            <i class="bi bi-file-earmark"></i>
+            <span class="fw-bold">{{ attachment.filename }}</span>
+            <span class="text-muted ms-2">{% if attachment.size %}{{ "%.1f KB" | format(attachment.size / 1024) }}{% endif %}</span>
+            {% if attachment.download_url %}
+            <a href="{{ attachment.download_url }}" class="btn btn-outline-primary btn-sm btn-download ms-3" download>
+              <i class="bi bi-download"></i> 다운로드
+            </a>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 이메일 내용 -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-file-text"></i>
+            이메일 내용
+          </h5>
+        </div>
+        <div class="card-body mail-view-body">
+          {% if email.full_content %}
+            {% if email.full_content.html %}
+              <div class="mb-3">
+                <div class="border rounded p-3" style="max-height: 600px; overflow-y: auto; background: #fcfcfc;">
+                  {{ email.full_content.html | safe }}
+                </div>
+              </div>
+            {% endif %}
+            {% if email.full_content.text %}
+              <div class="mb-3">
+                <pre class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap">{{ email.full_content.text }}</pre>
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle"></i>
+              이메일 내용을 불러올 수 없습니다.
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  // 이메일 뷰 전체를 이미지로 저장
+  function downloadScreenshot() {
+    const target = document.querySelector('.mail-view-body');
+    if (!target) return;
+    html2canvas(target, {scale:2}).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'email_view_screenshot.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  }
+</script>
+
+  <!-- 처리 결과 표시 영역 -->
+  <div id="processingResult" class="row mt-4" style="display: none">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-check-circle"></i>
+            처리 결과
+          </h5>
+        </div>
+        <div class="card-body" id="processingResultContent">
+          <!-- 결과 내용이 여기에 표시됩니다 -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 단일 이메일 처리 함수
+  function processThisEmail() {
+      processEmails(false);
+  }
+
+  function processThisEmailToPdf() {
+      processEmails(true);
+  }
+
+  function processEmails(convertToPdf) {
+      const statusElement = document.getElementById('processingStatus');
+      const resultDiv = document.getElementById('processingResult');
+      const resultContent = document.getElementById('processingResultContent');
+
+      // 로딩 상태 표시
+      statusElement.innerHTML = '<span class="badge bg-warning">처리 중...</span>';
+
+      fetch('/process_selected', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              file_id: '{{ file_id }}',
+              selected_emails: [{{ email_index }}],
+              party: '갑',  // 기본값
+              convert_to_pdf: convertToPdf
+          })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              statusElement.innerHTML = '<span class="badge bg-danger">처리 실패</span>';
+              showAlert('처리 실패: ' + data.error, 'danger');
+          } else {
+              statusElement.innerHTML = '<span class="badge bg-success">처리 완료</span>';
+
+              // 결과 표시
+              let resultHtml = `<div class="alert alert-success">
+                  <h6><i class="bi bi-check-circle"></i> 처리 완료</h6>
+                  <p>HTML 파일 ${data.processed_count}개가 생성되었습니다.</p>
+              `;
+
+              if (data.html_files && data.html_files.length > 0) {
+                  resultHtml += '<h6>생성된 HTML 파일:</h6><ul>';
+                  data.html_files.forEach(file => {
+                      resultHtml += `<li><code>${file}</code></li>`;
+                  });
+                  resultHtml += '</ul>';
+              }
+
+              if (convertToPdf && data.pdf_files) {
+                  resultHtml += `<h6>생성된 PDF 파일:</h6><ul>`;
+                  data.pdf_files.forEach(file => {
+                      resultHtml += `<li><code>${file}</code></li>`;
+                  });
+                  resultHtml += '</ul>';
+              }
+
+              if (data.pdf_error) {
+                  resultHtml += `<div class="alert alert-warning mt-2">PDF 변환 오류: ${data.pdf_error}</div>`;
+              }
+
+              resultHtml += '</div>';
+
+              resultContent.innerHTML = resultHtml;
+              resultDiv.style.display = 'block';
+
+              showAlert('이메일이 성공적으로 처리되었습니다!', 'success');
+          }
+      })
+      .catch(error => {
+          statusElement.innerHTML = '<span class="badge bg-danger">오류</span>';
+          showAlert('처리 중 오류가 발생했습니다: ' + error, 'danger');
+      });
+  }
+
+  function showAlert(message, type) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+      alertDiv.innerHTML = `
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+
+      document.querySelector('.container-fluid').insertBefore(alertDiv, document.querySelector('.container-fluid').firstChild);
+
+      // 5초 후 자동 제거
+      setTimeout(() => {
+          if (alertDiv.parentNode) {
+              alertDiv.remove();
+          }
+      }, 5000);
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,319 @@
+{% extends "base.html" %} {% block title %}증거 상세 - 이메일 타임라인 시스템{%
+endblock %} {% block extra_css %}
+<style>
+  .evidence-header {
+    margin-bottom: 2rem;
+  }
+
+  .evidence-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .evidence-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+  }
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+  }
+
+  .back-button:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .stat-item i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+  }
+
+  .stat-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .stat-content p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .search-box {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    background: var(--input-bg);
+    color: var(--text-primary);
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+
+  .evidence-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .evidence-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all var(--transition-base);
+    cursor: pointer;
+  }
+
+  .evidence-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+  }
+
+  .evidence-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+
+  .evidence-date {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .evidence-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .evidence-title i {
+    color: var(--primary-color);
+  }
+
+  .evidence-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .evidence-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .evidence-meta i {
+    color: var(--primary-color);
+  }
+
+  .no-evidence {
+    text-align: center;
+    padding: 3rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+  }
+
+  .no-evidence i {
+    font-size: 3rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+  }
+
+  .no-evidence h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .no-evidence p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <a href="/evidence_management" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>증거 목록으로 돌아가기</span>
+  </a>
+
+  <div class="evidence-header">
+    <h1><i class="fas fa-envelope-open me-2"></i>처리된 이메일 목록</h1>
+    <p>{{ file_id }}</p>
+  </div>
+
+  {% if evidence_folders and evidence_folders|length > 0 %}
+  <!-- 통계 바 -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <i class="fas fa-folder"></i>
+      <div class="stat-content">
+        <h3>{{ total_count }}</h3>
+        <p>처리된 이메일</p>
+      </div>
+    </div>
+    <div class="stat-item">
+      <i class="fas fa-file"></i>
+      <div class="stat-content">
+        <h3>{{ evidence_folders|map(attribute='file_count')|sum }}</h3>
+        <p>총 파일 수</p>
+      </div>
+    </div>
+    <div class="stat-item">
+      <i class="fas fa-database"></i>
+      <div class="stat-content">
+        <h3>
+          {{
+          "%.2f"|format(evidence_folders|map(attribute='size_mb')|map('float')|sum)
+          }} MB
+        </h3>
+        <p>총 용량</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 검색 -->
+  <div class="search-box">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="이메일 제목 또는 날짜로 검색..."
+      onkeyup="filterEvidence()"
+    />
+  </div>
+
+  <!-- 처리된 이메일 목록 -->
+  <div class="evidence-grid" id="evidenceGrid">
+    {% for evidence in evidence_folders %}
+    <div
+      class="evidence-card"
+      onclick="viewEmailDetail('{{ evidence.folder_name }}')"
+    >
+      <div class="evidence-header-row">
+        <span class="evidence-date">{{ evidence.date }}</span>
+      </div>
+      <div class="evidence-title">
+        <i class="fas fa-file-alt"></i>
+        {{ evidence.title }}
+      </div>
+      <div class="evidence-meta">
+        <span>
+          <i class="fas fa-file"></i>
+          {{ evidence.file_count }}개 파일
+        </span>
+        <span>
+          <i class="fas fa-hdd"></i>
+          {{ evidence.size_mb }} MB
+        </span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <!-- 처리된 이메일 없음 -->
+  <div class="no-evidence">
+    <i class="fas fa-inbox"></i>
+    <h3>처리된 이메일이 없습니다</h3>
+    <p>이 파일은 아직 처리되지 않았습니다</p>
+    <a href="/upload" class="btn-primary">
+      <i class="fas fa-upload me-2"></i>파일 업로드
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  function filterEvidence() {
+    const searchInput = document.getElementById("searchInput");
+    const filter = searchInput.value.toLowerCase();
+    const cards = document.querySelectorAll(".evidence-card");
+
+    cards.forEach((card) => {
+      const title = card
+        .querySelector(".evidence-title")
+        .textContent.toLowerCase();
+      const date = card
+        .querySelector(".evidence-date")
+        .textContent.toLowerCase();
+
+      if (title.includes(filter) || date.includes(filter)) {
+        card.style.display = "";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  }
+
+  function viewEmailDetail(folderName) {
+    // 이메일 상세 페이지로 이동 (기존 기능)
+    window.location.href = `/view_email/${folderName}`;
+  }
+</script>
+{% endblock %}

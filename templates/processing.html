@@ -1,0 +1,258 @@
+{% extends "base.html" %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="mb-0">
+          <i class="fas fa-cog fa-spin me-2"></i>
+          파일 처리 중
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="mb-4">
+          <h5 id="taskName">
+            {{ progress.task_name if progress else '처리 중...' }}
+          </h5>
+          <div class="progress mb-3" style="height: 25px">
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              style="width: {{ progress.progress if progress else 0 }}%"
+              id="progressBar"
+            >
+              <span id="progressText"
+                >{{ progress.progress|round(1) if progress else 0 }}%</span
+              >
+            </div>
+          </div>
+          <div id="statusMessage" class="text-muted">
+            {{ progress.current_message if progress else '처리를 시작합니다...'
+            }}
+          </div>
+        </div>
+
+        <!-- 상태별 UI -->
+        <div
+          id="processingStatus"
+          style="display: {{ 'block' if progress and progress.status == 'processing' else 'none' }}"
+        >
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            파일을 처리하고 있습니다. 잠시만 기다려주세요...
+          </div>
+        </div>
+
+        <div
+          id="completedStatus"
+          style="display: {{ 'block' if progress and progress.status == 'completed' else 'none' }}"
+        >
+          <!-- JavaScript에서 동적으로 내용이 생성됩니다 -->
+        </div>
+
+        <div
+          id="errorStatus"
+          style="display: {{ 'block' if progress and progress.status == 'error' else 'none' }}"
+        >
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            처리 중 오류가 발생했습니다.
+          </div>
+          <div class="alert alert-warning">
+            <strong>오류 내용:</strong>
+            <span id="errorMessage"
+              >{{ progress.error if progress and progress.error else '알 수 없는
+              오류' }}</span
+            >
+          </div>
+          <div class="d-grid gap-2">
+            <a href="/upload" class="btn btn-secondary">
+              <i class="fas fa-arrow-left me-2"></i>
+              다시 업로드하기
+            </a>
+            <a href="/" class="btn btn-outline-secondary">
+              <i class="fas fa-home me-2"></i>
+              메인 페이지로
+            </a>
+          </div>
+        </div>
+
+        <!-- 처리 정보 -->
+        <div class="mt-4">
+          <h6 class="text-muted">처리 정보</h6>
+          <div class="row">
+            <div class="col-sm-6">
+              <small class="text-muted">
+                <strong>시작 시간:</strong><br />
+                <span id="startedTime"
+                  >{{ progress.started_at if progress else '' }}</span
+                >
+              </small>
+            </div>
+            <div class="col-sm-6">
+              <small class="text-muted">
+                <strong>최종 업데이트:</strong><br />
+                <span id="updatedTime"
+                  >{{ progress.updated_at if progress else '' }}</span
+                >
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 도움말 -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <h6 class="mb-0">
+          <i class="fas fa-lightbulb me-2"></i>
+          처리 과정 안내
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="text-primary">처리 단계</h6>
+            <ol class="list-unstyled">
+              <li>1️⃣ 파일 검증</li>
+              <li>2️⃣ 처리기 초기화</li>
+              <li>3️⃣ 이메일 파일 로드</li>
+              <li>4️⃣ 메타데이터 추출</li>
+              <li>5️⃣ 데이터 저장</li>
+            </ol>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-success">완료 후 기능</h6>
+            <ul class="list-unstyled">
+              <li>📧 이메일 목록 조회</li>
+              <li>📊 타임라인 분석</li>
+              <li>⚖️ 법정 증거 생성</li>
+              <li>🔒 무결성 검증</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 관리자 링크 섹션 -->
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12 text-center">
+        <a href="/admin" class="btn btn-warning">
+          <i class="fas fa-cog me-1"></i>시스템 관리
+        </a>
+        <a href="/" class="btn btn-secondary ms-2">
+          <i class="fas fa-home me-1"></i>홈으로
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  const taskId = "{{ task_id }}";
+  let pollInterval;
+
+  function updateProgress() {
+    fetch(`/api/progress/${taskId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.error("Progress fetch error:", data.error);
+          return;
+        }
+
+        // 진행률 업데이트
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        const statusMessage = document.getElementById("statusMessage");
+        const taskName = document.getElementById("taskName");
+        const updatedTime = document.getElementById("updatedTime");
+
+        progressBar.style.width = `${data.progress}%`;
+        progressText.textContent = `${Math.round(data.progress)}%`;
+        statusMessage.textContent = data.current_message;
+        taskName.textContent = data.task_name;
+
+        // 시간 포맷팅
+        if (data.updated_at) {
+          const updateTime = new Date(data.updated_at).toLocaleString("ko-KR");
+          updatedTime.textContent = updateTime;
+        }
+
+        // 상태별 UI 업데이트
+        const processingStatus = document.getElementById("processingStatus");
+        const completedStatus = document.getElementById("completedStatus");
+        const errorStatus = document.getElementById("errorStatus");
+
+        // 모든 상태 숨기기
+        processingStatus.style.display = "none";
+        completedStatus.style.display = "none";
+        errorStatus.style.display = "none";
+
+        if (data.status === "processing") {
+          processingStatus.style.display = "block";
+        } else if (data.status === "completed") {
+          completedStatus.style.display = "block";
+          // 완료 시 폴링 중지
+          if (pollInterval) {
+            clearInterval(pollInterval);
+          }
+          // 진행률을 100%로 설정
+          progressBar.style.width = "100%";
+          progressText.textContent = "100%";
+
+          // 완료 시 이메일 목록으로 이동하는 버튼 추가
+          const completedDiv = document.getElementById("completedStatus");
+          completedDiv.innerHTML = `
+            <div class="alert alert-success">
+              <h5><i class="fas fa-check-circle me-2"></i>파싱이 완료되었습니다!</h5>
+              <p class="mb-3">이메일 데이터가 성공적으로 파싱되었습니다. 이제 증거 생성을 위해 이메일을 선택할 수 있습니다.</p>
+              <div class="d-grid gap-2 d-md-block">
+                <a href="/emails/${taskId}" class="btn btn-primary">
+                  <i class="fas fa-list me-1"></i>이메일 목록 보기 및 증거 생성
+                </a>
+                <a href="/" class="btn btn-outline-secondary ms-2">
+                  <i class="fas fa-home me-1"></i>홈으로 돌아가기
+                </a>
+              </div>
+            </div>
+          `;
+
+          // 자동 이동 제거 - 사용자가 직접 선택하도록 함
+          // setTimeout(() => {
+          //   window.location.href = `/emails/${taskId}`;
+          // }, 3000);
+        } else if (data.status === "error") {
+          errorStatus.style.display = "block";
+          document.getElementById("errorMessage").textContent =
+            data.error || "알 수 없는 오류";
+          // 오류 시 폴링 중지
+          if (pollInterval) {
+            clearInterval(pollInterval);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Progress polling error:", error);
+      });
+  }
+
+  // 페이지 로드 시 폴링 시작
+  document.addEventListener("DOMContentLoaded", function () {
+    // 즉시 한 번 업데이트
+    updateProgress();
+
+    // 1초마다 폴링
+    pollInterval = setInterval(updateProgress, 1000);
+  });
+
+  // 페이지를 떠날 때 폴링 중지
+  window.addEventListener("beforeunload", function () {
+    if (pollInterval) {
+      clearInterval(pollInterval);
+    }
+  });
+</script>
+{% endblock %}

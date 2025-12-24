@@ -1,0 +1,159 @@
+<nav class="modern-navbar">
+  <div class="container">
+    <a class="brand" href="/">
+      <i class="fas fa-clock"></i>
+      <span>이메일 타임라인 시스템</span>
+    </a>
+
+    <button
+      class="mobile-menu-toggle"
+      id="mobileMenuToggle"
+      aria-label="메뉴 토글"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li class="nav-item">
+        <a
+          class="nav-link {% if request.path == '/' %}active{% endif %}"
+          href="/"
+        >
+          <i class="fas fa-home"></i>
+          <span>홈</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link {% if request.path.startswith('/upload') %}active{% endif %}"
+          href="/upload"
+        >
+          <i class="fas fa-upload"></i>
+          <span>업로드</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link {% if request.path.startswith('/evidence_management') or request.path.startswith('/additional_evidence') or request.path.startswith('/integrated_timeline') or request.path.startswith('/verify_integrity') %}active{% endif %}"
+          href="/evidence_management"
+        >
+          <i class="fas fa-folder-open"></i>
+          <span>증거 관리</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link {% if request.path.startswith('/api') %}active{% endif %}"
+          href="/api/docs"
+        >
+          <i class="fas fa-code"></i>
+          <span>API</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link {% if request.path.startswith('/admin') %}active{% endif %}"
+          href="/admin"
+        >
+          <i class="fas fa-user-shield"></i>
+          <span>관리자</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link {% if request.path.startswith('/system') %}active{% endif %}"
+          href="/system/status"
+        >
+          <i class="fas fa-server"></i>
+          <span>시스템 상태</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link {% if request.path.startswith('/logs') %}active{% endif %}"
+          href="/logs"
+        >
+          <i class="fas fa-file-alt"></i>
+          <span>로그</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+          <i class="fas fa-moon"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+  // 모바일 메뉴 및 다크모드 토글
+  document.addEventListener("DOMContentLoaded", function () {
+    const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+    const navLinks = document.getElementById("navLinks");
+    const evidenceDropdown = document.getElementById("evidenceDropdown");
+    const themeToggle = document.getElementById("themeToggle");
+
+    // 모바일 메뉴 토글
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener("click", function () {
+        this.classList.toggle("active");
+        navLinks.classList.toggle("active");
+      });
+    }
+
+    // 모바일에서 드롭다운 토글
+    if (evidenceDropdown) {
+      const dropdownToggle = evidenceDropdown.querySelector(".dropdown-toggle");
+      dropdownToggle.addEventListener("click", function (e) {
+        if (window.innerWidth <= 992) {
+          e.preventDefault();
+          evidenceDropdown.classList.toggle("active");
+        }
+      });
+    }
+
+    // 반응형 처리
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 992) {
+        navLinks.classList.remove("active");
+        mobileMenuToggle.classList.remove("active");
+        evidenceDropdown.classList.remove("active");
+      }
+    });
+
+    // 다크모드 토글
+    if (themeToggle) {
+      const currentTheme = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", currentTheme);
+      updateThemeIcon(currentTheme);
+
+      themeToggle.addEventListener("click", function () {
+        const theme = document.documentElement.getAttribute("data-theme");
+        const newTheme = theme === "dark" ? "light" : "dark";
+
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateThemeIcon(newTheme);
+      });
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = themeToggle.querySelector("i");
+      if (theme === "dark") {
+        icon.className = "fas fa-sun";
+      } else {
+        icon.className = "fas fa-moon";
+      }
+    }
+  });
+</script>

@@ -1,0 +1,216 @@
+{% extends "base.html" %} {% block content %} {# Enhanced system status view
+with compact/expanded toggle, service admin links, status color rules, and
+client-side polling to refresh status inline. #}
+
+<div class="container mt-3" id="system-status-root">
+  {%- set app_name = status.app_name if status.app_name is defined else '이메일
+  증거 처리 시스템' -%} {%- set version = status.version if status.version is
+  defined else '2.0.0' -%} {# Determine a normalized status text and severity
+  for color mapping #} {%- if status.status is defined and status.status -%} {%-
+  set status_text = status.status -%} {%- else -%} {%- set status_text = '정상'
+  if (status.registered_services is defined and
+  status.registered_services|length > 0) else '알 수 없음' -%} {%- endif -%} {#
+  severity: 'ok' | 'warning' | 'critical' - default to ok when no errors #} {%-
+  set severity = 'ok' -%} {%- if status.get('startup_errors') -%} {%- set
+  severity = 'critical' -%} {%- elif status.get('warnings') -%} {%- set severity
+  = 'warning' -%} {%- endif -%}
+
+  <div class="d-flex align-items-center" style="gap: 1rem; flex-wrap: wrap">
+    <div style="font-weight: 600; font-size: 1.05rem">
+      📧 {{ app_name }} <small class="text-muted">v{{ version }}</small>
+    </div>
+
+    <div
+      id="status-badge"
+      class="status-badge"
+      data-severity="{{ severity }}"
+      style="padding: 0.25rem 0.6rem; border-radius: 0.3rem; font-weight: 600"
+    >
+      🚦 <span id="status-text">{{ status_text }}</span>
+    </div>
+
+    <div class="text-muted" style="font-size: 0.9rem">
+      🕒 <span id="status-timestamp">{{ status.timestamp }}</span>
+    </div>
+
+    <div style="margin-left: auto; font-size: 0.9rem">
+      <a href="/" class="me-2">홈</a>
+      <a href="/docs" class="me-2">문서</a>
+      <button id="toggle-compact" class="btn btn-sm btn-outline-secondary">
+        토글: 간단/상세
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="status-compact"
+    class="mt-2"
+    style="font-size: 0.95rem; display: none"
+  >
+    {# Compact service list with links when available #} {%- set svc_names = []
+    -%} {%- if status.registered_services is defined -%} {%- for s in
+    status.registered_services -%} {%- if s is mapping -%} {%- set _ =
+    svc_names.append(s.name) -%} {%- else -%} {%- set _ = svc_names.append(s)
+    -%} {%- endif -%} {%- endfor -%} {%- endif -%}
+
+    <strong>⚙️ 서비스:</strong>
+    <span id="compact-services">
+      {% if svc_names %} {%- for n in svc_names -%} {%- if service_admin_links
+      and (n in service_admin_links) -%}
+      <a href="{{ service_admin_links[n] }}">{{ n }}</a>{% if not loop.last %},
+      {% endif %} {%- else -%} {{ n }}{% if not loop.last %}, {% endif %} {%-
+      endif -%} {%- endfor -%} {% else %} 없음 {% endif %}
+    </span>
+  </div>
+
+  <div id="status-expanded" class="mt-3" style="display: none">
+    <h5>서비스 상세</h5>
+    <div class="list-group">
+      {%- if status.registered_services is defined -%} {%- for s in
+      status.registered_services -%} {%- if s is mapping -%} {%- set name =
+      s.name -%} {%- set st = s.status if s.status is defined else 'unknown' -%}
+      {%- else -%} {%- set name = s -%} {%- set st = 'unknown' -%} {%- endif -%}
+      {# Map status text to a bootstrap-like color class #} {%- if st in
+      ['ok','running','online','healthy','정상','정상 운영 중'] -%} {%- set cls
+      = 'bg-success text-white' -%} {%- elif st in ['warn','warning','degraded']
+      -%} {%- set cls = 'bg-warning text-dark' -%} {%- else -%} {%- set cls =
+      'bg-danger text-white' -%} {%- endif -%}
+
+      <div
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div>
+          {%- if service_admin_links and (name in service_admin_links) -%}
+          <a href="{{ service_admin_links[name] }}"
+            ><strong>{{ name }}</strong></a
+          >
+          {%- else -%}
+          <strong>{{ name }}</strong>
+          {%- endif -%}
+          <div class="text-muted small">상태: {{ st }}</div>
+        </div>
+        <div>
+          <span class="badge {{ cls }}">{{ st }}</span>
+        </div>
+      </div>
+      {%- endfor -%} {%- else -%}
+      <div class="list-group-item">등록된 서비스가 없습니다.</div>
+      {%- endif -%}
+    </div>
+
+    <hr />
+    <div>
+      <strong>디렉토리:</strong>
+      <div class="text-muted">
+        {{ status.directories.docs if status.directories is defined and
+        status.directories.docs is defined else (status.project_root if
+        status.project_root is defined else 'N/A') }}
+      </div>
+      <strong class="mt-2 d-block">헬스체크 / API:</strong>
+      <div class="text-muted">
+        <a href="/health">/health</a> · <a href="/api">/api</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* severity color rules */
+  #status-badge[data-severity="ok"] {
+    background: #eef7ea;
+    color: #1a7f2b;
+  }
+  #status-badge[data-severity="warning"] {
+    background: #fff8e1;
+    color: #7a5a00;
+  }
+  #status-badge[data-severity="critical"] {
+    background: #feecec;
+    color: #a30b0b;
+  }
+  .badge.bg-success {
+    background: #28a745 !important;
+  }
+  .badge.bg-warning {
+    background: #ffc107 !important;
+  }
+  .badge.bg-danger {
+    background: #dc3545 !important;
+  }
+</style>
+
+<script>
+  // Client-side polling and compact/expanded toggle state
+  (function(){
+    const root = document.getElementById('system-status-root');
+    if(!root) return;
+
+    const compactEl = document.getElementById('status-compact');
+    const expandedEl = document.getElementById('status-expanded');
+    const toggleBtn = document.getElementById('toggle-compact');
+
+    function setMode(compact){
+      if(compact){
+        compactEl.style.display='block'; expandedEl.style.display='none';
+        toggleBtn.textContent = '간단 보기';
+        localStorage.setItem('system_status_mode','compact');
+      } else {
+        compactEl.style.display='none'; expandedEl.style.display='block';
+        toggleBtn.textContent = '상세 보기';
+        localStorage.setItem('system_status_mode','expanded');
+      }
+    }
+
+    // Initialize mode from localStorage or default to compact
+    const saved = localStorage.getItem('system_status_mode') || 'compact';
+    setMode(saved === 'compact');
+
+    toggleBtn.addEventListener('click', function(){
+      const current = localStorage.getItem('system_status_mode') || 'compact';
+      setMode(current !== 'compact');
+    });
+
+    // Polling function to refresh status JSON and update inline elements
+    async function fetchStatus(){
+      try{
+        const r = await fetch('/system');
+        if(!r.ok) return;
+        const j = await r.json();
+        // update timestamp and badge
+        const ts = document.getElementById('status-timestamp');
+        const st = document.getElementById('status-text');
+        const badge = document.getElementById('status-badge');
+        if(ts && j.timestamp) ts.textContent = j.timestamp;
+        if(st && j.status) st.textContent = j.status;
+        // update severity
+        let sev = 'ok';
+        if(j.startup_errors) sev = 'critical';
+        else if(j.warnings) sev = 'warning';
+        badge.setAttribute('data-severity', sev);
+
+        // update compact service list
+        const compactServices = document.getElementById('compact-services');
+        if(compactServices && j.registered_services){
+          const names = j.registered_services.map(s => (typeof s === 'string') ? s : s.name);
+          compactServices.innerHTML = names.map(n => {
+            const link = (window.__service_admin_links && window.__service_admin_links[n]) ? ('<a href="'+window.__service_admin_links[n]+'">'+n+'</a>') : n;
+            return link;
+          }).join(', ');
+        }
+
+      }catch(e){
+        // silent fail - avoid noisy errors in UI
+        console.debug('status poll failed', e);
+      }
+    }
+
+    // Expose service admin links to client-side for dynamic rendering
+    window.__service_admin_links = {{ service_admin_links|tojson if service_admin_links is defined else '{}' }};
+
+    // Start polling every 30s
+    fetchStatus();
+    setInterval(fetchStatus, 30000);
+  })();
+</script>
+
+{% endblock %}

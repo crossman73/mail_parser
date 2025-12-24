@@ -1,0 +1,593 @@
+{% extends "base.html" %} {% block title %}로그 뷰어 - 이메일 타임라인 시스템{%
+endblock %} {% block extra_css %}
+<style>
+  .log-viewer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .log-header {
+    margin-bottom: 2rem;
+  }
+
+  .log-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .log-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .control-group label {
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .control-group select,
+  .control-group input {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--input-bg);
+    color: var(--text-primary);
+  }
+
+  .btn-refresh,
+  .btn-clear,
+  .btn-download {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-refresh {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .btn-refresh:hover {
+    background: var(--primary-hover);
+  }
+
+  .btn-clear {
+    background: var(--warning-color);
+    color: white;
+  }
+
+  .btn-clear:hover {
+    opacity: 0.9;
+  }
+
+  .btn-download {
+    background: var(--success-color);
+    color: white;
+  }
+
+  .btn-download:hover {
+    opacity: 0.9;
+  }
+
+  .log-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .stat-card i {
+    font-size: 2rem;
+  }
+
+  .stat-card.debug i {
+    color: var(--info-color);
+  }
+
+  .stat-card.info i {
+    color: var(--success-color);
+  }
+
+  .stat-card.warning i {
+    color: var(--warning-color);
+  }
+
+  .stat-card.error i {
+    color: var(--danger-color);
+  }
+
+  .stat-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .stat-content p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .log-container {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .log-entries {
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 0.875rem;
+  }
+
+  .log-entry {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: grid;
+    grid-template-columns: 180px 80px auto;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .log-entry:hover {
+    background: var(--hover-bg);
+  }
+
+  .log-timestamp {
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+  }
+
+  .log-level {
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .log-level.DEBUG {
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--info-color);
+  }
+
+  .log-level.INFO {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+  }
+
+  .log-level.WARNING {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning-color);
+  }
+
+  .log-level.ERROR,
+  .log-level.CRITICAL {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+  }
+
+  .log-message {
+    color: var(--text-primary);
+    word-break: break-word;
+  }
+
+  .log-details {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    margin-top: 0.25rem;
+  }
+
+  .no-logs {
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  .log-files-section {
+    margin-top: 2rem;
+  }
+
+  .log-files-list {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .log-file-item {
+    padding: 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-fast);
+  }
+
+  .log-file-item:hover {
+    border-color: var(--primary-color);
+    background: var(--hover-bg);
+  }
+
+  .log-file-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .log-file-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+  }
+
+  .log-file-details h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+  }
+
+  .log-file-details p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .log-file-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-view,
+  .btn-download-file {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-view {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .btn-view:hover {
+    background: var(--primary-hover);
+  }
+
+  .btn-download-file {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .btn-download-file:hover {
+    background: var(--hover-bg);
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="log-viewer-container">
+  <div class="log-header">
+    <h1><i class="fas fa-file-alt me-2"></i>로그 뷰어</h1>
+    <p>실시간 애플리케이션 로그 모니터링</p>
+  </div>
+
+  <!-- 통계 -->
+  <div class="log-stats">
+    <div class="stat-card debug">
+      <i class="fas fa-bug"></i>
+      <div class="stat-content">
+        <h3 id="debugCount">0</h3>
+        <p>DEBUG</p>
+      </div>
+    </div>
+    <div class="stat-card info">
+      <i class="fas fa-info-circle"></i>
+      <div class="stat-content">
+        <h3 id="infoCount">0</h3>
+        <p>INFO</p>
+      </div>
+    </div>
+    <div class="stat-card warning">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div class="stat-content">
+        <h3 id="warningCount">0</h3>
+        <p>WARNING</p>
+      </div>
+    </div>
+    <div class="stat-card error">
+      <i class="fas fa-times-circle"></i>
+      <div class="stat-content">
+        <h3 id="errorCount">0</h3>
+        <p>ERROR</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 컨트롤 -->
+  <div class="log-controls">
+    <div class="control-group">
+      <label for="levelFilter">레벨:</label>
+      <select id="levelFilter" onchange="loadLogs()">
+        <option value="">전체</option>
+        <option value="DEBUG">DEBUG</option>
+        <option value="INFO">INFO</option>
+        <option value="WARNING">WARNING</option>
+        <option value="ERROR">ERROR</option>
+        <option value="CRITICAL">CRITICAL</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="limitInput">표시 개수:</label>
+      <input
+        type="number"
+        id="limitInput"
+        value="100"
+        min="10"
+        max="1000"
+        step="10"
+        onchange="loadLogs()"
+      />
+    </div>
+    <div class="control-group">
+      <label>
+        <input
+          type="checkbox"
+          id="autoRefresh"
+          checked
+          onchange="toggleAutoRefresh()"
+        />
+        자동 갱신 (5초)
+      </label>
+    </div>
+    <button class="btn-refresh" onclick="loadLogs()">
+      <i class="fas fa-sync-alt"></i>
+      새로고침
+    </button>
+    <button class="btn-clear" onclick="clearLogs()">
+      <i class="fas fa-trash"></i>
+      로그 초기화
+    </button>
+    <button class="btn-download" onclick="downloadLogs()">
+      <i class="fas fa-download"></i>
+      다운로드
+    </button>
+  </div>
+
+  <!-- 로그 엔트리 -->
+  <div class="log-container">
+    <div class="log-entries" id="logEntries">
+      <div class="no-logs">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>로그 불러오는 중...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 로그 파일 목록 -->
+  <div class="log-files-section">
+    <h2><i class="fas fa-folder-open me-2"></i>저장된 로그 파일</h2>
+    <div class="log-files-list" id="logFilesList">
+      <!-- 동적 로드 -->
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  let autoRefreshInterval = null;
+
+  function loadLogs() {
+    const level = document.getElementById("levelFilter").value;
+    const limit = document.getElementById("limitInput").value;
+
+    const params = new URLSearchParams();
+    if (level) params.append("level", level);
+    if (limit) params.append("limit", limit);
+
+    fetch(`/api/logs?${params.toString()}`)
+      .then((response) => response.json())
+      .then((data) => {
+        displayLogs(data.logs);
+        updateStats(data.stats);
+      })
+      .catch((error) => {
+        console.error("로그 로드 실패:", error);
+        document.getElementById("logEntries").innerHTML = `
+          <div class="no-logs">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>로그 로드 실패: ${error.message}</p>
+          </div>
+        `;
+      });
+  }
+
+  function displayLogs(logs) {
+    const container = document.getElementById("logEntries");
+
+    if (!logs || logs.length === 0) {
+      container.innerHTML = `
+        <div class="no-logs">
+          <i class="fas fa-inbox"></i>
+          <p>표시할 로그가 없습니다</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = logs
+      .map(
+        (log) => `
+      <div class="log-entry">
+        <div class="log-timestamp">${new Date(log.timestamp).toLocaleString(
+          "ko-KR"
+        )}</div>
+        <div class="log-level ${log.level}">${log.level}</div>
+        <div>
+          <div class="log-message">${escapeHtml(log.message)}</div>
+          <div class="log-details">${log.module}.${log.funcName}:${
+          log.lineno
+        }</div>
+        </div>
+      </div>
+    `
+      )
+      .join("");
+  }
+
+  function updateStats(stats) {
+    document.getElementById("debugCount").textContent = stats.DEBUG || 0;
+    document.getElementById("infoCount").textContent = stats.INFO || 0;
+    document.getElementById("warningCount").textContent = stats.WARNING || 0;
+    document.getElementById("errorCount").textContent =
+      (stats.ERROR || 0) + (stats.CRITICAL || 0);
+  }
+
+  function clearLogs() {
+    if (
+      !confirm(
+        "메모리의 모든 로그를 초기화하시겠습니까?\n(파일에 저장된 로그는 유지됩니다)"
+      )
+    ) {
+      return;
+    }
+
+    fetch("/api/logs/clear", { method: "POST" })
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.message);
+        loadLogs();
+      })
+      .catch((error) => {
+        console.error("로그 초기화 실패:", error);
+        alert("로그 초기화 실패: " + error.message);
+      });
+  }
+
+  function downloadLogs() {
+    const level = document.getElementById("levelFilter").value;
+    const limit = document.getElementById("limitInput").value;
+
+    const params = new URLSearchParams();
+    if (level) params.append("level", level);
+    if (limit) params.append("limit", limit);
+
+    window.location.href = `/api/logs/download?${params.toString()}`;
+  }
+
+  function toggleAutoRefresh() {
+    const autoRefresh = document.getElementById("autoRefresh").checked;
+
+    if (autoRefresh) {
+      autoRefreshInterval = setInterval(loadLogs, 5000);
+    } else {
+      if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+        autoRefreshInterval = null;
+      }
+    }
+  }
+
+  function loadLogFiles() {
+    fetch("/api/logs/files")
+      .then((response) => response.json())
+      .then((data) => {
+        displayLogFiles(data.files);
+      })
+      .catch((error) => {
+        console.error("로그 파일 목록 로드 실패:", error);
+      });
+  }
+
+  function displayLogFiles(files) {
+    const container = document.getElementById("logFilesList");
+
+    if (!files || files.length === 0) {
+      container.innerHTML = `<p style="text-align: center; color: var(--text-secondary);">저장된 로그 파일이 없습니다</p>`;
+      return;
+    }
+
+    container.innerHTML = files
+      .map(
+        (file) => `
+      <div class="log-file-item">
+        <div class="log-file-info">
+          <i class="fas fa-file-alt log-file-icon"></i>
+          <div class="log-file-details">
+            <h4>${file.name}</h4>
+            <p>${file.size_mb} MB • ${new Date(file.modified).toLocaleString(
+          "ko-KR"
+        )}</p>
+          </div>
+        </div>
+        <div class="log-file-actions">
+          <button class="btn-view" onclick="viewLogFile('${file.name}')">
+            <i class="fas fa-eye"></i> 보기
+          </button>
+          <button class="btn-download-file" onclick="downloadLogFile('${
+            file.name
+          }')">
+            <i class="fas fa-download"></i>
+          </button>
+        </div>
+      </div>
+    `
+      )
+      .join("");
+  }
+
+  function viewLogFile(filename) {
+    window.open(`/api/logs/file/${filename}`, "_blank");
+  }
+
+  function downloadLogFile(filename) {
+    window.location.href = `/api/logs/file/${filename}/download`;
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // 초기 로드
+  document.addEventListener("DOMContentLoaded", () => {
+    loadLogs();
+    loadLogFiles();
+    toggleAutoRefresh();
+  });
+</script>
+{% endblock %}

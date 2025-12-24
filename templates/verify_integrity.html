@@ -1,0 +1,235 @@
+{% extends "base.html" %} {% block title %}무결성 검증 - 이메일 타임라인
+시스템{% endblock %} {% block content %}
+<div class="container mt-4">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="d-flex align-items-center justify-content-between">
+      <div>
+        <h1 class="h2 mb-2">
+          <i class="fas fa-shield-alt me-2"></i>무결성 검증
+        </h1>
+        <p class="text-muted mb-0">법원 제출용 증거 무결성 검증 및 보고서</p>
+      </div>
+      {% if verification_report and not no_data %}
+      <div>
+        <button onclick="window.print()" class="btn btn-outline-primary">
+          <i class="fas fa-print me-2"></i>인쇄
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if no_data %}
+  <!-- No Data State -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body text-center py-5">
+      <div class="mb-4">
+        <i class="fas fa-inbox fa-4x text-muted opacity-50"></i>
+      </div>
+      <h3 class="h4 mb-3">검증할 데이터가 없습니다</h3>
+      <p class="text-muted mb-4">먼저 mbox 파일을 업로드하고 처리해주세요.</p>
+      <a href="{{ url_for('upload_file') }}" class="btn btn-primary">
+        <i class="fas fa-upload me-2"></i>파일 업로드
+      </a>
+    </div>
+  </div>
+  {% else %}
+  <!-- Verification Summary -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <div class="avatar bg-primary bg-opacity-10 text-primary rounded">
+                <i class="fas fa-file fa-lg"></i>
+              </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h6 class="mb-0 text-muted">검증된 파일</h6>
+              <h3 class="mb-0">
+                {{ verification_report.verified_files|length if
+                verification_report and verification_report.verified_files else
+                0 }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <div class="avatar bg-success bg-opacity-10 text-success rounded">
+                <i class="fas fa-check-circle fa-lg"></i>
+              </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h6 class="mb-0 text-muted">검증 성공</h6>
+              <h3 class="mb-0">
+                {{ verification_report.success_count if verification_report else
+                0 }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <div class="avatar bg-danger bg-opacity-10 text-danger rounded">
+                <i class="fas fa-exclamation-triangle fa-lg"></i>
+              </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h6 class="mb-0 text-muted">검증 실패</h6>
+              <h3 class="mb-0">
+                {{ verification_report.failure_count if verification_report else
+                0 }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <div class="avatar bg-info bg-opacity-10 text-info rounded">
+                <i class="fas fa-fingerprint fa-lg"></i>
+              </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h6 class="mb-0 text-muted">해시 알고리즘</h6>
+              <h5 class="mb-0">SHA-256</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verification Status -->
+  {% if verification_report %}
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-bottom">
+      <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>검증 상태</h5>
+    </div>
+    <div class="card-body">
+      {% if verification_report.failure_count == 0 %}
+      <div class="alert alert-success mb-0" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-check-circle fa-2x me-3"></i>
+          <div>
+            <h5 class="alert-heading mb-1">
+              모든 파일의 무결성이 확인되었습니다
+            </h5>
+            <p class="mb-0">
+              총 {{ verification_report.verified_files|length }}개 파일이
+              검증되었으며, 모든 파일의 해시값이 일치합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-danger mb-0" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+          <div>
+            <h5 class="alert-heading mb-1">무결성 검증 실패</h5>
+            <p class="mb-0">
+              {{ verification_report.failure_count }}개 파일의 해시값이 일치하지
+              않습니다. 파일이 변조되었을 가능성이 있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Verification Details -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-bottom">
+      <h5 class="mb-0"><i class="fas fa-list me-2"></i>검증 상세 내역</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 50px"><i class="fas fa-check"></i></th>
+              <th>파일 경로</th>
+              <th style="width: 120px">파일 크기</th>
+              <th>SHA-256 해시</th>
+              <th style="width: 150px">검증 시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for file in verification_report.verified_files %}
+            <tr>
+              <td class="text-center">
+                {% if file.verified %}
+                <i class="fas fa-check-circle text-success"></i>
+                {% else %}
+                <i class="fas fa-times-circle text-danger"></i>
+                {% endif %}
+              </td>
+              <td>
+                <small class="text-muted">{{ file.path }}</small>
+              </td>
+              <td>
+                <small class="text-muted"
+                  >{{ (file.size / 1024) | round(2) }} KB</small
+                >
+              </td>
+              <td>
+                <code class="small">{{ file.hash[:32] }}...</code>
+              </td>
+              <td>
+                <small class="text-muted"
+                  >{{ file.timestamp.strftime('%Y-%m-%d %H:%M:%S') if
+                  file.timestamp else 'N/A' }}</small
+                >
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %} {% endif %}
+</div>
+
+<style>
+  .avatar {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media print {
+    .btn,
+    nav,
+    footer {
+      display: none !important;
+    }
+
+    .card {
+      border: 1px solid #dee2e6 !important;
+      box-shadow: none !important;
+    }
+  }
+</style>
+{% endblock %}

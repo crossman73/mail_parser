@@ -1,0 +1,143 @@
+{% extends "base.html" %} {% block title %}관리자 대시보드{% endblock %} {%
+block content %}
+<div class="container">
+  <h1 class="mb-4">관리자 대시보드</h1>
+
+  <div class="mb-3">
+    <a href="/admin/settings" class="btn btn-primary">
+      <i class="bi bi-gear"></i> 시스템 설정
+    </a>
+    <a href="/admin/logs" class="btn btn-secondary">
+      <i class="bi bi-file-text"></i> 로그
+    </a>
+    <a href="/admin/jobs" class="btn btn-secondary">
+      <i class="bi bi-list-task"></i> 작업
+    </a>
+  </div>
+
+  <section class="mb-4">
+    <h2 class="h4 mb-3">요약</h2>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">총 업로드</h5>
+            <p class="card-text display-6">
+              <strong>{{ evidences|length if evidences else 0 }}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">최근 실패</h5>
+            <p class="card-text display-6">
+              <strong>--</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">진행중</h5>
+            <p class="card-text display-6">
+              <strong>--</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h3 class="h4 mb-3">최근 증거</h3>
+    {% if evidences %}
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>증거번호</th>
+            <th>제목</th>
+            <th>생성일</th>
+            <th>해시</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in evidences %}
+          <tr>
+            <td>{{ e.id }}</td>
+            <td>
+              <a
+                href="{{ url_for('admin.evidence_detail', evidence_id=e.id) }}"
+              >
+                {{ e.evidence_number }}
+              </a>
+            </td>
+            <td>{{ e.subject }}</td>
+            <td>{{ e.generated_at }}</td>
+            <td>{{ e.integrity_hash[:12] if e.integrity_hash }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted">등록된 증거가 없습니다.</p>
+    {% endif %}
+  </section>
+
+  <section class="mb-4">
+    <h3 class="h4 mb-3">개발 도구</h3>
+    <form method="post" action="/admin/reload" class="mb-3">
+      <input type="hidden" name="admin_csrf" value="{{ admin_csrf }}" />
+      <input type="hidden" name="token" value="" />
+      <button type="submit" class="modern-btn modern-btn-secondary">
+        <i class="fas fa-sync"></i> Reload modules (dev)
+      </button>
+    </form>
+
+    {% if page and total_pages and total_pages > 1 %}
+    <nav aria-label="페이지 네비게이션">
+      <ul class="pagination">
+        {% if page > 1 %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="{{ url_for('admin.admin_index') }}?page={{ page-1 }}"
+          >
+            이전
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">이전</span>
+        </li>
+        {% endif %}
+
+        <li class="page-item active">
+          <span class="page-link">페이지 {{ page }} / {{ total_pages }}</span>
+        </li>
+
+        {% if page < total_pages %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="{{ url_for('admin.admin_index') }}?page={{ page+1 }}"
+          >
+            다음
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">다음</span>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
