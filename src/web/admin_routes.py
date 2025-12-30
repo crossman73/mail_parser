@@ -214,14 +214,26 @@ def api_init_settings():
                 'category': 'performance', 'description': '캐시 활성화'},
             {'key': 'max_concurrent_tasks', 'value': 5, 'type': 'int',
                 'category': 'performance', 'description': '최대 동시 처리 작업 수'},
-            
-            # Route 설정
-            {'key': 'route_prefix', 'value': '/api', 'type': 'string',
-                'category': 'route', 'description': 'API 라우트 접두사'},
-            {'key': 'enable_cors', 'value': True, 'type': 'bool',
-                'category': 'route', 'description': 'CORS 활성화'},
-            {'key': 'allowed_origins', 'value': '*', 'type': 'string',
-                'category': 'route', 'description': '허용된 원본 (쉼표로 구분)'},
+
+            # Route 설정 (페이지별 라우트 경로)
+            {'key': 'route_home', 'value': '/', 'type': 'string',
+                'category': 'route', 'description': '홈페이지 라우트 경로'},
+            {'key': 'route_upload', 'value': '/upload', 'type': 'string',
+                'category': 'route', 'description': '파일 업로드 페이지 경로'},
+            {'key': 'route_admin', 'value': '/admin', 'type': 'string',
+                'category': 'route', 'description': '관리자 대시보드 경로'},
+            {'key': 'route_admin_settings', 'value': '/admin/settings', 'type': 'string',
+                'category': 'route', 'description': '시스템 설정 페이지 경로'},
+            {'key': 'route_admin_logs', 'value': '/admin/logs', 'type': 'string',
+                'category': 'route', 'description': '로그 조회 페이지 경로'},
+            {'key': 'route_admin_jobs', 'value': '/admin/jobs', 'type': 'string',
+                'category': 'route', 'description': '작업 관리 페이지 경로'},
+            {'key': 'route_api_prefix', 'value': '/api', 'type': 'string',
+                'category': 'route', 'description': 'API 엔드포인트 접두사'},
+            {'key': 'route_health', 'value': '/health', 'type': 'string',
+                'category': 'route', 'description': '헬스체크 엔드포인트 경로'},
+            {'key': 'route_system_status', 'value': '/system/status', 'type': 'string',
+                'category': 'route', 'description': '시스템 상태 페이지 경로'},
         ]
 
         added = 0
