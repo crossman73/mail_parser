@@ -960,6 +960,12 @@ def api_get_test_history(test_key: str):
         return {'success': False, 'error': str(e)}, 500
 
 
+@admin.route('/system/test/history')
+def test_history_page():
+    """시스템 테스트 실행 이력 페이지"""
+    return render_template('admin_test_history.html')
+
+
 @admin.route('/api/admin/tests/history', methods=['GET'])
 def api_get_all_history():
     """전체 실행 이력 조회"""

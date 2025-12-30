@@ -1,0 +1,661 @@
+{% extends "base.html" %} {% block title %}시스템 테스트 실행 이력 - {{ super()
+}}{% endblock %} {% block extra_head %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  /* 카테고리별 색상 정의 */
+  .category-database {
+    background-color: #0d6efd;
+    color: white;
+  }
+  .category-api {
+    background-color: #6610f2;
+    color: white;
+  }
+  .category-auth {
+    background-color: #6f42c1;
+    color: white;
+  }
+  .category-file {
+    background-color: #d63384;
+    color: white;
+  }
+  .category-email {
+    background-color: #dc3545;
+    color: white;
+  }
+  .category-schedule {
+    background-color: #fd7e14;
+    color: white;
+  }
+  .category-system {
+    background-color: #ffc107;
+    color: #000;
+  }
+  .category-integration {
+    background-color: #198754;
+    color: white;
+  }
+  .category-performance {
+    background-color: #20c997;
+    color: white;
+  }
+  .category-security {
+    background-color: #0dcaf0;
+    color: #000;
+  }
+  .category-default {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .badge.category-badge {
+    font-size: 0.85rem;
+    padding: 0.35em 0.65em;
+    font-weight: 600;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <!-- 헤더 -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3"><i class="fas fa-history"></i> 시스템 테스트 실행 이력</h1>
+    <a href="/system/test" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left"></i> 테스트 관리로 돌아가기
+    </a>
+  </div>
+
+  <!-- 통계 카드 -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card border-primary">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">총 실행 횟수</h6>
+          <h2 class="mb-0" id="totalCount">0</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-success">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">성공</h6>
+          <h2 class="mb-0 text-success" id="successCount">0</h2>
+          <small class="text-muted" id="successRate">0%</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-danger">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">실패</h6>
+          <h2 class="mb-0 text-danger" id="failedCount">0</h2>
+          <small class="text-muted" id="failRate">0%</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-warning">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">오류</h6>
+          <h2 class="mb-0 text-warning" id="errorCount">0</h2>
+          <small class="text-muted" id="errorRate">0%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 필터 영역 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-2">
+          <label class="form-label small">상태 필터</label>
+          <select
+            class="form-select form-select-sm"
+            id="statusFilter"
+            onchange="applyFilters()"
+          >
+            <option value="all">전체 상태</option>
+            <option value="success">성공만</option>
+            <option value="failed">실패만</option>
+            <option value="error">오류만</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small">카테고리 필터</label>
+          <select
+            class="form-select form-select-sm"
+            id="categoryFilter"
+            onchange="applyFilters()"
+          >
+            <option value="all">전체 카테고리</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small">테스트 항목</label>
+          <select
+            class="form-select form-select-sm"
+            id="testNameFilter"
+            onchange="applyFilters()"
+          >
+            <option value="all">전체 테스트</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small">시작 날짜</label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            id="startDate"
+            onchange="applyFilters()"
+          />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small">종료 날짜</label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            id="endDate"
+            onchange="applyFilters()"
+          />
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            onclick="resetFilters()"
+          >
+            <i class="fas fa-redo"></i> 필터 초기화
+          </button>
+          <button
+            class="btn btn-sm btn-outline-primary"
+            onclick="toggleChart()"
+          >
+            <i class="fas fa-chart-bar"></i> 차트 보기
+          </button>
+          <select
+            class="form-select form-select-sm d-inline-block w-auto ms-2"
+            id="limitSelect"
+            onchange="loadHistory()"
+          >
+            <option value="100" selected>최근 100개</option>
+            <option value="200">최근 200개</option>
+            <option value="500">최근 500개</option>
+            <option value="1000">최근 1000개</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 차트 영역 (토글) -->
+  <div class="card mb-4" id="chartContainer" style="display: none">
+    <div class="card-header">
+      <h5 class="mb-0"><i class="fas fa-chart-line"></i> 실행 통계 차트</h5>
+    </div>
+    <div class="card-body">
+      <canvas id="historyChart" style="max-height: 300px"></canvas>
+    </div>
+  </div>
+
+  <!-- 이력 테이블 -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"><i class="fas fa-list"></i> 실행 이력</h5>
+      <span id="statsText" class="text-muted small"></span>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 150px">실행 시간</th>
+              <th>테스트명</th>
+              <th style="width: 150px">카테고리</th>
+              <th style="width: 100px">상태</th>
+              <th style="width: 100px">소요시간</th>
+              <th style="width: 120px">실행자</th>
+              <th>결과 메시지</th>
+              <th style="width: 80px">상세</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr>
+              <td colspan="8" class="text-center text-muted">로딩 중...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-between align-items-center">
+        <span id="pageInfo" class="text-muted small"></span>
+        <nav>
+          <ul class="pagination pagination-sm mb-0" id="pagination"></ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 상세 정보 모달 -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-info-circle"></i> 실행 이력 상세
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="detailContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let allHistory = [];
+  let filteredHistory = [];
+  let currentPage = 1;
+  const itemsPerPage = 20;
+  let historyChart = null;
+
+  // 카테고리별 색상 매핑
+  const categoryColors = {
+    Database: "category-database",
+    API: "category-api",
+    Auth: "category-auth",
+    File: "category-file",
+    Email: "category-email",
+    Schedule: "category-schedule",
+    System: "category-system",
+    Integration: "category-integration",
+    Performance: "category-performance",
+    Security: "category-security",
+  };
+
+  function getCategoryClass(category) {
+    return categoryColors[category] || "category-default";
+  }
+
+  // 페이지 로드 시 이력 가져오기
+  document.addEventListener("DOMContentLoaded", () => {
+    loadHistory();
+  });
+
+  async function loadHistory() {
+    try {
+      const limit = document.getElementById("limitSelect").value;
+      const response = await fetch(`/api/admin/tests/history?limit=${limit}`);
+      const data = await response.json();
+
+      if (data.success) {
+        allHistory = data.history;
+        populateFilters();
+        applyFilters();
+      } else {
+        showError("이력 로드 실패: " + (data.error || "알 수 없는 오류"));
+      }
+    } catch (error) {
+      showError("이력 로드 오류: " + error.message);
+    }
+  }
+
+  function populateFilters() {
+    // 카테고리 필터
+    const categories = [
+      ...new Set(allHistory.map((h) => h.test_category).filter((c) => c)),
+    ];
+    const categoryFilter = document.getElementById("categoryFilter");
+    categoryFilter.innerHTML = '<option value="all">전체 카테고리</option>';
+    categories.forEach((cat) => {
+      categoryFilter.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+
+    // 테스트명 필터
+    const testNames = [
+      ...new Set(allHistory.map((h) => h.test_name).filter((n) => n)),
+    ];
+    const testNameFilter = document.getElementById("testNameFilter");
+    testNameFilter.innerHTML = '<option value="all">전체 테스트</option>';
+    testNames.forEach((name) => {
+      testNameFilter.innerHTML += `<option value="${name}">${name}</option>`;
+    });
+  }
+
+  function applyFilters() {
+    const statusFilter = document.getElementById("statusFilter").value;
+    const categoryFilter = document.getElementById("categoryFilter").value;
+    const testNameFilter = document.getElementById("testNameFilter").value;
+    const startDate = document.getElementById("startDate").value;
+    const endDate = document.getElementById("endDate").value;
+
+    filteredHistory = allHistory.filter((h) => {
+      if (statusFilter !== "all" && h.status !== statusFilter) return false;
+      if (categoryFilter !== "all" && h.test_category !== categoryFilter)
+        return false;
+      if (testNameFilter !== "all" && h.test_name !== testNameFilter)
+        return false;
+
+      if (startDate || endDate) {
+        const execDate = new Date(h.execution_time).toISOString().split("T")[0];
+        if (startDate && execDate < startDate) return false;
+        if (endDate && execDate > endDate) return false;
+      }
+
+      return true;
+    });
+
+    currentPage = 1;
+    updateStats();
+    renderTable();
+  }
+
+  function resetFilters() {
+    document.getElementById("statusFilter").value = "all";
+    document.getElementById("categoryFilter").value = "all";
+    document.getElementById("testNameFilter").value = "all";
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    applyFilters();
+  }
+
+  function updateStats() {
+    if (filteredHistory.length === 0) {
+      document.getElementById("totalCount").textContent = "0";
+      document.getElementById("successCount").textContent = "0";
+      document.getElementById("failedCount").textContent = "0";
+      document.getElementById("errorCount").textContent = "0";
+      document.getElementById("successRate").textContent = "0%";
+      document.getElementById("failRate").textContent = "0%";
+      document.getElementById("errorRate").textContent = "0%";
+      document.getElementById("statsText").textContent =
+        "실행 이력이 없습니다.";
+      return;
+    }
+
+    const total = filteredHistory.length;
+    const success = filteredHistory.filter(
+      (h) => h.status === "success"
+    ).length;
+    const failed = filteredHistory.filter((h) => h.status === "failed").length;
+    const error = filteredHistory.filter((h) => h.status === "error").length;
+
+    const successRate = ((success / total) * 100).toFixed(1);
+    const failRate = ((failed / total) * 100).toFixed(1);
+    const errorRate = ((error / total) * 100).toFixed(1);
+
+    document.getElementById("totalCount").textContent = total;
+    document.getElementById("successCount").textContent = success;
+    document.getElementById("failedCount").textContent = failed;
+    document.getElementById("errorCount").textContent = error;
+    document.getElementById("successRate").textContent = successRate + "%";
+    document.getElementById("failRate").textContent = failRate + "%";
+    document.getElementById("errorRate").textContent = errorRate + "%";
+
+    document.getElementById(
+      "statsText"
+    ).textContent = `총 ${total}건 | 성공: ${success}건 (${successRate}%) | 실패: ${failed}건 (${failRate}%) | 오류: ${error}건 (${errorRate}%)`;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById("historyTableBody");
+
+    if (filteredHistory.length === 0) {
+      tbody.innerHTML =
+        '<tr><td colspan="8" class="text-center text-muted">실행 이력이 없습니다.</td></tr>';
+      document.getElementById("pagination").innerHTML = "";
+      document.getElementById("pageInfo").textContent = "";
+      return;
+    }
+
+    // 페이지네이션
+    const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const pageData = filteredHistory.slice(startIdx, endIdx);
+
+    // 테이블 렌더링
+    tbody.innerHTML = pageData
+      .map((h) => {
+        let statusBadge = "secondary";
+        if (h.status === "success") statusBadge = "success";
+        else if (h.status === "failed") statusBadge = "danger";
+        else if (h.status === "error") statusBadge = "warning";
+
+        const categoryClass = getCategoryClass(h.test_category);
+
+        return `
+        <tr>
+          <td><small>${formatDateTimeFull(h.execution_time)}</small></td>
+          <td><strong>${h.test_name}</strong></td>
+          <td><span class="badge category-badge ${categoryClass}">${
+          h.test_category || "-"
+        }</span></td>
+          <td><span class="badge bg-${statusBadge}">${h.status}</span></td>
+          <td><small>${h.duration_ms}ms</small></td>
+          <td><small>${h.executed_by || "system"}</small></td>
+          <td><small>${h.result_message || "-"}</small></td>
+          <td>
+            <button class="btn btn-sm btn-outline-info" onclick='showDetail(${JSON.stringify(
+              h
+            ).replace(/'/g, "&#39;")})'>
+              <i class="fas fa-search"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+      })
+      .join("");
+
+    // 페이지네이션 UI
+    renderPagination(totalPages);
+    document.getElementById("pageInfo").textContent = `${
+      startIdx + 1
+    }-${Math.min(endIdx, filteredHistory.length)} / 총 ${
+      filteredHistory.length
+    }건`;
+  }
+
+  function renderPagination(totalPages) {
+    const pagination = document.getElementById("pagination");
+    if (totalPages <= 1) {
+      pagination.innerHTML = "";
+      return;
+    }
+
+    let html = "";
+
+    // 이전 버튼
+    html += `<li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="goToPage(${
+        currentPage - 1
+      }); return false;">이전</a>
+    </li>`;
+
+    // 페이지 번호
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<li class="page-item ${i === currentPage ? "active" : ""}">
+        <a class="page-link" href="#" onclick="goToPage(${i}); return false;">${i}</a>
+      </li>`;
+    }
+
+    // 다음 버튼
+    html += `<li class="page-item ${
+      currentPage === totalPages ? "disabled" : ""
+    }">
+      <a class="page-link" href="#" onclick="goToPage(${
+        currentPage + 1
+      }); return false;">다음</a>
+    </li>`;
+
+    pagination.innerHTML = html;
+  }
+
+  function goToPage(page) {
+    const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTable();
+  }
+
+  function showDetail(historyItem) {
+    const content = `
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>테스트명:</strong> ${historyItem.test_name}</p>
+          <p><strong>카테고리:</strong> <span class="badge category-badge ${getCategoryClass(
+            historyItem.test_category
+          )}">${historyItem.test_category || "-"}</span></p>
+          <p><strong>테스트 키:</strong> <code>${
+            historyItem.test_key
+          }</code></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>실행 시간:</strong> ${formatDateTimeFull(
+            historyItem.execution_time
+          )}</p>
+          <p><strong>소요 시간:</strong> ${historyItem.duration_ms}ms</p>
+          <p><strong>실행자:</strong> ${historyItem.executed_by || "system"}</p>
+        </div>
+      </div>
+      <hr>
+      <div>
+        <p><strong>상태:</strong> <span class="badge bg-${
+          historyItem.status === "success"
+            ? "success"
+            : historyItem.status === "failed"
+            ? "danger"
+            : "warning"
+        }">${historyItem.status}</span></p>
+        <p><strong>결과 메시지:</strong></p>
+        <pre class="bg-light p-3 rounded">${
+          historyItem.result_message || "-"
+        }</pre>
+      </div>
+      ${
+        historyItem.error_details
+          ? `
+        <hr>
+        <div>
+          <p><strong>오류 상세:</strong></p>
+          <pre class="bg-danger text-white p-3 rounded">${historyItem.error_details}</pre>
+        </div>
+      `
+          : ""
+      }
+    `;
+
+    document.getElementById("detailContent").innerHTML = content;
+    new bootstrap.Modal(document.getElementById("detailModal")).show();
+  }
+
+  // 차트 토글
+  let chartVisible = false;
+  function toggleChart() {
+    chartVisible = !chartVisible;
+    const container = document.getElementById("chartContainer");
+    container.style.display = chartVisible ? "block" : "none";
+
+    if (chartVisible) {
+      renderChart();
+    }
+  }
+
+  function renderChart() {
+    // 날짜별 통계 계산
+    const dateStats = {};
+    filteredHistory.forEach((h) => {
+      const date = new Date(h.execution_time).toLocaleDateString("ko-KR");
+      if (!dateStats[date]) {
+        dateStats[date] = { success: 0, failed: 0, error: 0 };
+      }
+      dateStats[date][h.status]++;
+    });
+
+    const dates = Object.keys(dateStats).sort();
+    const successData = dates.map((d) => dateStats[d].success || 0);
+    const failedData = dates.map((d) => dateStats[d].failed || 0);
+    const errorData = dates.map((d) => dateStats[d].error || 0);
+
+    const ctx = document.getElementById("historyChart").getContext("2d");
+
+    if (historyChart) {
+      historyChart.destroy();
+    }
+
+    historyChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: dates,
+        datasets: [
+          {
+            label: "성공",
+            data: successData,
+            backgroundColor: "rgba(25, 135, 84, 0.7)",
+            borderColor: "rgba(25, 135, 84, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "실패",
+            data: failedData,
+            backgroundColor: "rgba(220, 53, 69, 0.7)",
+            borderColor: "rgba(220, 53, 69, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "오류",
+            data: errorData,
+            backgroundColor: "rgba(255, 193, 7, 0.7)",
+            borderColor: "rgba(255, 193, 7, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          x: { stacked: true },
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            ticks: { stepSize: 1 },
+          },
+        },
+        plugins: {
+          legend: { position: "top" },
+          title: {
+            display: true,
+            text: "날짜별 테스트 실행 결과",
+          },
+        },
+      },
+    });
+  }
+
+  function showError(message) {
+    alert(message);
+  }
+</script>
+{% endblock %}

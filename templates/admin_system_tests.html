@@ -1,12 +1,8 @@
-{% extends "base.html" %}
-{% block title %}시스템 테스트 - {{ super() }}{% endblock %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% block title %}시스템 테스트 - {{ super() }}{%
+endblock %} {% block extra_head %}
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="container-fluid py-4">
   <h1 class="h3 mb-4"><i class="fas fa-flask"></i> 시스템 테스트</h1>
 
@@ -61,9 +57,9 @@
     <button class="btn btn-info" onclick="loadTests()">
       <i class="fas fa-sync"></i> 새로고침
     </button>
-    <button class="btn btn-secondary" onclick="showHistory()">
+    <a href="/system/test/history" class="btn btn-secondary">
       <i class="fas fa-history"></i> 실행 이력
-    </button>
+    </a>
   </div>
 
   <!-- 테스트 목록 탭 -->
@@ -301,7 +297,10 @@
             />
           </div>
           <div class="col-md-4 d-flex align-items-end gap-2">
-            <button class="btn btn-sm btn-outline-secondary" onclick="resetHistoryFilters()">
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              onclick="resetHistoryFilters()"
+            >
               <i class="fas fa-redo"></i> 필터 초기화
             </button>
             <button class="btn btn-sm btn-secondary" onclick="exportHistory()">
@@ -319,14 +318,18 @@
             </div>
           </div>
           <div class="col-md-4 text-end">
-            <button class="btn btn-sm btn-outline-primary" onclick="toggleHistoryChart()">
-              <i class="fas fa-chart-bar"></i> <span id="chartToggleText">차트 보기</span>
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="toggleHistoryChart()"
+            >
+              <i class="fas fa-chart-bar"></i>
+              <span id="chartToggleText">차트 보기</span>
             </button>
           </div>
         </div>
 
         <!-- 차트 영역 (초기에는 숨김) -->
-        <div class="row mb-3" id="historyChartContainer" style="display: none;">
+        <div class="row mb-3" id="historyChartContainer" style="display: none">
           <div class="col-md-12">
             <div class="card">
               <div class="card-body">
@@ -363,8 +366,10 @@
         <div class="row">
           <div class="col-md-12">
             <nav aria-label="이력 페이지네이션">
-              <ul class="pagination pagination-sm justify-content-center" id="historyPagination">
-              </ul>
+              <ul
+                class="pagination pagination-sm justify-content-center"
+                id="historyPagination"
+              ></ul>
             </nav>
             <div class="text-center text-muted small">
               <span id="historyPageInfo"></span>
@@ -863,10 +868,12 @@
   // 카테고리 필터 옵션 채우기
   function populateCategoryFilter() {
     const categoryFilter = document.getElementById("historyCategoryFilter");
-    const categories = [...new Set(allHistory.map(h => h.test_category).filter(c => c))];
+    const categories = [
+      ...new Set(allHistory.map((h) => h.test_category).filter((c) => c)),
+    ];
 
     categoryFilter.innerHTML = '<option value="all">전체 카테고리</option>';
-    categories.forEach(cat => {
+    categories.forEach((cat) => {
       categoryFilter.innerHTML += `<option value="${cat}">${cat}</option>`;
     });
   }
@@ -874,10 +881,12 @@
   // 테스트명 필터 옵션 채우기
   function populateTestNameFilter() {
     const testNameFilter = document.getElementById("historyTestNameFilter");
-    const testNames = [...new Set(allHistory.map(h => h.test_name).filter(n => n))];
+    const testNames = [
+      ...new Set(allHistory.map((h) => h.test_name).filter((n) => n)),
+    ];
 
     testNameFilter.innerHTML = '<option value="all">전체 테스트</option>';
-    testNames.forEach(name => {
+    testNames.forEach((name) => {
       testNameFilter.innerHTML += `<option value="${name}">${name}</option>`;
     });
   }
@@ -956,8 +965,12 @@
     renderPagination(totalPages);
 
     // 페이지 정보 표시
-    document.getElementById("historyPageInfo").textContent =
-      `전체 ${history.length}건 중 ${startIdx + 1}-${Math.min(endIdx, history.length)}건 표시 (${currentPage}/${totalPages} 페이지)`;
+    document.getElementById("historyPageInfo").textContent = `전체 ${
+      history.length
+    }건 중 ${startIdx + 1}-${Math.min(
+      endIdx,
+      history.length
+    )}건 표시 (${currentPage}/${totalPages} 페이지)`;
   }
 
   function renderPagination(totalPages) {
@@ -971,8 +984,10 @@
     let html = "";
 
     // 이전 버튼
-    html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-      <a class="page-link" href="#" onclick="goToHistoryPage(${currentPage - 1}); return false;">이전</a>
+    html += `<li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="goToHistoryPage(${
+        currentPage - 1
+      }); return false;">이전</a>
     </li>`;
 
     // 페이지 번호
@@ -986,23 +1001,29 @@
 
     if (startPage > 1) {
       html += `<li class="page-item"><a class="page-link" href="#" onclick="goToHistoryPage(1); return false;">1</a></li>`;
-      if (startPage > 2) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+      if (startPage > 2)
+        html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
     }
 
     for (let i = startPage; i <= endPage; i++) {
-      html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+      html += `<li class="page-item ${i === currentPage ? "active" : ""}">
         <a class="page-link" href="#" onclick="goToHistoryPage(${i}); return false;">${i}</a>
       </li>`;
     }
 
     if (endPage < totalPages) {
-      if (endPage < totalPages - 1) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+      if (endPage < totalPages - 1)
+        html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
       html += `<li class="page-item"><a class="page-link" href="#" onclick="goToHistoryPage(${totalPages}); return false;">${totalPages}</a></li>`;
     }
 
     // 다음 버튼
-    html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-      <a class="page-link" href="#" onclick="goToHistoryPage(${currentPage + 1}); return false;">다음</a>
+    html += `<li class="page-item ${
+      currentPage === totalPages ? "disabled" : ""
+    }">
+      <a class="page-link" href="#" onclick="goToHistoryPage(${
+        currentPage + 1
+      }); return false;">다음</a>
     </li>`;
 
     pagination.innerHTML = html;
@@ -1019,8 +1040,12 @@
   // 이력 필터링 (개선된 버전)
   function filterHistory() {
     const statusFilter = document.getElementById("historyStatusFilter").value;
-    const categoryFilter = document.getElementById("historyCategoryFilter").value;
-    const testNameFilter = document.getElementById("historyTestNameFilter").value;
+    const categoryFilter = document.getElementById(
+      "historyCategoryFilter"
+    ).value;
+    const testNameFilter = document.getElementById(
+      "historyTestNameFilter"
+    ).value;
     const startDate = document.getElementById("historyStartDate").value;
     const endDate = document.getElementById("historyEndDate").value;
 
@@ -1029,14 +1054,16 @@
       if (statusFilter !== "all" && h.status !== statusFilter) return false;
 
       // 카테고리 필터
-      if (categoryFilter !== "all" && h.test_category !== categoryFilter) return false;
+      if (categoryFilter !== "all" && h.test_category !== categoryFilter)
+        return false;
 
       // 테스트명 필터
-      if (testNameFilter !== "all" && h.test_name !== testNameFilter) return false;
+      if (testNameFilter !== "all" && h.test_name !== testNameFilter)
+        return false;
 
       // 날짜 범위 필터
       if (startDate || endDate) {
-        const execDate = new Date(h.execution_time).toISOString().split('T')[0];
+        const execDate = new Date(h.execution_time).toISOString().split("T")[0];
         if (startDate && execDate < startDate) return false;
         if (endDate && execDate > endDate) return false;
       }
@@ -1092,65 +1119,65 @@
 
     // 날짜별 통계 계산
     const dateStats = {};
-    filteredHistory.forEach(h => {
-      const date = new Date(h.execution_time).toISOString().split('T')[0];
+    filteredHistory.forEach((h) => {
+      const date = new Date(h.execution_time).toISOString().split("T")[0];
       if (!dateStats[date]) {
         dateStats[date] = { success: 0, failed: 0, error: 0 };
       }
-      if (h.status === 'success') dateStats[date].success++;
-      else if (h.status === 'failed') dateStats[date].failed++;
-      else if (h.status === 'error') dateStats[date].error++;
+      if (h.status === "success") dateStats[date].success++;
+      else if (h.status === "failed") dateStats[date].failed++;
+      else if (h.status === "error") dateStats[date].error++;
     });
 
     const dates = Object.keys(dateStats).sort();
-    const successData = dates.map(d => dateStats[d].success);
-    const failedData = dates.map(d => dateStats[d].failed);
-    const errorData = dates.map(d => dateStats[d].error);
+    const successData = dates.map((d) => dateStats[d].success);
+    const failedData = dates.map((d) => dateStats[d].failed);
+    const errorData = dates.map((d) => dateStats[d].error);
 
     // Chart.js 사용 (CDN 필요)
     historyChart = new Chart(ctx, {
-      type: 'bar',
+      type: "bar",
       data: {
         labels: dates,
         datasets: [
           {
-            label: '성공',
+            label: "성공",
             data: successData,
-            backgroundColor: 'rgba(40, 167, 69, 0.7)',
-            borderColor: 'rgba(40, 167, 69, 1)',
-            borderWidth: 1
+            backgroundColor: "rgba(40, 167, 69, 0.7)",
+            borderColor: "rgba(40, 167, 69, 1)",
+            borderWidth: 1,
           },
           {
-            label: '실패',
+            label: "실패",
             data: failedData,
-            backgroundColor: 'rgba(220, 53, 69, 0.7)',
-            borderColor: 'rgba(220, 53, 69, 1)',
-            borderWidth: 1
+            backgroundColor: "rgba(220, 53, 69, 0.7)",
+            borderColor: "rgba(220, 53, 69, 1)",
+            borderWidth: 1,
           },
           {
-            label: '오류',
+            label: "오류",
             data: errorData,
-            backgroundColor: 'rgba(255, 193, 7, 0.7)',
-            borderColor: 'rgba(255, 193, 7, 1)',
-            borderWidth: 1
-          }
-        ]
+            backgroundColor: "rgba(255, 193, 7, 0.7)",
+            borderColor: "rgba(255, 193, 7, 1)",
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: true,
         scales: {
           x: { stacked: true },
-          y: { stacked: true, beginAtZero: true }
+          y: { stacked: true, beginAtZero: true },
         },
         plugins: {
-          legend: { position: 'top' },
+          legend: { position: "top" },
           title: {
             display: true,
-            text: '날짜별 테스트 실행 결과'
-          }
-        }
-      }
+            text: "날짜별 테스트 실행 결과",
+          },
+        },
+      },
     });
   }
 
