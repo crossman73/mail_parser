@@ -137,14 +137,14 @@ def admin_settings():
                                error=str(e))
 
 
-@admin.route('/admin/system-tests')
+@admin.route('/system/test')
 def admin_system_tests():
     """시스템 테스트 관리 페이지"""
     try:
         # CSRF 토큰 생성
         if 'admin_csrf' not in session:
             session['admin_csrf'] = secrets.token_urlsafe(24)
-        
+
         return render_template('admin_system_tests.html',
                              admin_csrf=session['admin_csrf'])
     except Exception as e:
