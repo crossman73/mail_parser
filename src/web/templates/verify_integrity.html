@@ -87,7 +87,7 @@
         <div class="row align-items-center">
           <div class="col-md-8">
             <h1>
-              <i class="bi bi-shield-check me-2"></i>법원 제출용 전자증거 무결성
+              <i class="fas fa-shield-alt me-2"></i>법원 제출용 전자증거 무결성
               검증
             </h1>
             <p class="mb-0">
@@ -97,10 +97,10 @@
           <div class="col-md-4 text-end">
             <div class="d-grid gap-2">
               <a href="{{ url_for('index') }}" class="btn btn-light">
-                <i class="bi bi-arrow-left me-1"></i>메인으로 돌아가기
+                <i class="fas fa-arrow-left me-1"></i>메인으로 돌아가기
               </a>
               <button class="btn btn-warning" onclick="location.reload()">
-                <i class="bi bi-arrow-clockwise me-1"></i>다시 검증
+                <i class="fas fa-sync me-1"></i>다시 검증
               </button>
             </div>
           </div>
@@ -111,7 +111,7 @@
     <div class="container">
       <!-- 법적 주의사항 -->
       <div class="legal-warning">
-        <h5><i class="bi bi-exclamation-triangle me-2"></i>법적 주의사항</h5>
+        <h5><i class="fas fa-exclamation-triangle me-2"></i>법적 주의사항</h5>
         <p class="mb-2">
           <strong
             >이 검증 시스템은 전자증거의 기술적 무결성을 확인합니다.</strong
@@ -131,7 +131,7 @@
       <div class="card mb-4">
         <div class="card-header bg-primary text-white">
           <h4 class="mb-0">
-            <i class="bi bi-clipboard-data me-2"></i>검증 결과 요약
+            <i class="fas fa-clipboard-list me-2"></i>검증 결과 요약
           </h4>
         </div>
         <div class="card-body">
@@ -141,25 +141,25 @@
                 {% set status = verification_report.integrity_status %} {% if
                 status == 'VERIFIED' %}
                 <i
-                  class="bi bi-check-circle-fill text-success"
+                  class="fas fa-check-circle text-success"
                   style="font-size: 3rem"
                 ></i>
                 <div class="verification-status status-verified">검증 완료</div>
                 {% elif status == 'CAUTION' %}
                 <i
-                  class="bi bi-exclamation-triangle-fill text-warning"
+                  class="fas fa-exclamation-triangle text-warning"
                   style="font-size: 3rem"
                 ></i>
                 <div class="verification-status status-caution">주의 필요</div>
                 {% elif status == 'WARNING' %}
                 <i
-                  class="bi bi-x-circle-fill text-danger"
+                  class="fas fa-times-circle text-danger"
                   style="font-size: 3rem"
                 ></i>
                 <div class="verification-status status-warning">경고</div>
                 {% else %}
                 <i
-                  class="bi bi-x-circle-fill text-danger"
+                  class="fas fa-times-circle text-danger"
                   style="font-size: 3rem"
                 ></i>
                 <div class="verification-status status-failed">검증 실패</div>
@@ -223,7 +223,7 @@
       <div class="card mb-4">
         <div class="card-header">
           <h5 class="mb-0">
-            <i class="bi bi-download me-2"></i>검증 결과 다운로드
+            <i class="fas fa-download me-2"></i>검증 결과 다운로드
           </h5>
         </div>
         <div class="card-body">
@@ -233,7 +233,7 @@
                 href="{{ url_for('download_court_certificate') }}"
                 class="btn btn-primary btn-lg w-100"
               >
-                <i class="bi bi-file-earmark-text me-2"></i>
+                <i class="fas fa-file-alt me-2"></i>
                 법원 제출용 무결성 증명서<br />
                 <small>(.txt 형식, 법원 제출 시 첨부)</small>
               </a>
@@ -243,7 +243,7 @@
                 href="{{ url_for('download_verification_report') }}"
                 class="btn btn-secondary btn-lg w-100"
               >
-                <i class="bi bi-file-earmark-code me-2"></i>
+                <i class="fas fa-file-code me-2"></i>
                 상세 검증 보고서<br />
                 <small>(.json 형식, 기술 검토용)</small>
               </a>
@@ -257,7 +257,7 @@
       <div class="card mb-4">
         <div class="card-header bg-warning text-dark">
           <h5 class="mb-0">
-            <i class="bi bi-exclamation-triangle me-2"></i>발견된 문제점 및
+            <i class="fas fa-exclamation-triangle me-2"></i>발견된 문제점 및
             해결방안
           </h5>
         </div>
@@ -270,15 +270,15 @@
               <div class="col-md-8">
                 <h6 class="fw-bold">
                   {% if violation.severity == 'CRITICAL' %}
-                  <i class="bi bi-x-circle-fill text-danger me-1"></i>치명적 {%
+                  <i class="fas fa-times-circle text-danger me-1"></i>치명적 {%
                   elif violation.severity == 'HIGH' %}
-                  <i class="bi bi-exclamation-circle-fill text-danger me-1"></i
+                  <i class="fas fa-exclamation-circle text-danger me-1"></i
                   >높음 {% elif violation.severity == 'MEDIUM' %}
                   <i
-                    class="bi bi-exclamation-triangle-fill text-warning me-1"
+                    class="fas fa-exclamation-triangle text-warning me-1"
                   ></i
                   >보통 {% else %}
-                  <i class="bi bi-info-circle-fill text-info me-1"></i>낮음 {%
+                  <i class="fas fa-info-circle text-info me-1"></i>낮음 {%
                   endif %} [{{ violation.code }}] {{ violation.description }}
                 </h6>
                 <p class="text-muted mb-1">
@@ -306,7 +306,7 @@
       <div class="card mb-4">
         <div class="card-header">
           <h5 class="mb-0">
-            <i class="bi bi-files me-2"></i>검증된 증거 파일 목록
+            <i class="fas fa-copy me-2"></i>검증된 증거 파일 목록
           </h5>
         </div>
         <div class="card-body">
@@ -326,7 +326,7 @@
                 {% for item in verification_report.evidence_items %}
                 <tr>
                   <td>
-                    <i class="bi bi-file-earmark me-1"></i>
+                    <i class="fas fa-file me-1"></i>
                     {{ item.file_path }}
                   </td>
                   <td>
@@ -360,7 +360,7 @@
           </div>
           {% else %}
           <div class="text-center text-muted py-4">
-            <i class="bi bi-inbox" style="font-size: 3rem"></i>
+            <i class="fas fa-inbox" style="font-size: 3rem"></i>
             <p class="mt-2">검증할 파일이 없습니다.</p>
             <a href="{{ url_for('index') }}" class="btn btn-primary"
               >이메일 파일 업로드하기</a
@@ -373,7 +373,7 @@
       <!-- 법적 근거 -->
       <div class="card mb-4">
         <div class="card-header">
-          <h5 class="mb-0"><i class="bi bi-book me-2"></i>법적 근거</h5>
+          <h5 class="mb-0"><i class="fas fa-book me-2"></i>법적 근거</h5>
         </div>
         <div class="card-body">
           <div class="row">
@@ -398,7 +398,7 @@
       <div class="card">
         <div class="card-body text-center">
           <i
-            class="bi bi-shield-exclamation text-warning"
+            class="fas fa-shield-alt text-warning"
             style="font-size: 4rem"
           ></i>
           <h3 class="mt-3">무결성 검증을 시작하세요</h3>
@@ -407,7 +407,7 @@
           </p>
           <div class="mt-4">
             <button class="btn btn-primary btn-lg" onclick="location.reload()">
-              <i class="bi bi-shield-check me-2"></i>무결성 검증 시작
+              <i class="fas fa-shield-alt me-2"></i>무결성 검증 시작
             </button>
           </div>
         </div>

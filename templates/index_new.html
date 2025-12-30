@@ -7,7 +7,7 @@
       <div class="card border-primary">
         <div class="card-header bg-primary text-white">
           <h3 class="mb-0">
-            <i class="bi bi-shield-check"></i>
+            <i class="fas fa-shield-alt"></i>
             법원 제출용 이메일 증거 처리 시스템
           </h3>
         </div>
@@ -15,7 +15,7 @@
           <div class="row">
             <div class="col-md-8">
               <div id="systemStatus" class="alert alert-info">
-                <i class="bi bi-info-circle"></i>
+                <i class="fas fa-info-circle"></i>
                 <strong>시스템 준비 완료</strong> - 메일박스 파일(.mbox)을
                 업로드하여 증거 처리를 시작하세요.
               </div>
@@ -38,7 +38,7 @@
       <div class="card">
         <div class="card-header">
           <h5 class="mb-0">
-            <i class="bi bi-list-ol"></i>
+            <i class="fas fa-list-ol"></i>
             증거 처리 단계
           </h5>
         </div>
@@ -50,7 +50,7 @@
                 class="text-center p-3 border rounded step-item active"
               >
                 <div class="step-icon">
-                  <i class="bi bi-upload fs-2 text-primary"></i>
+                  <i class="fas fa-upload fs-2 text-primary"></i>
                 </div>
                 <h6 class="mt-2">1단계: 파일 업로드</h6>
                 <small class="text-muted">mbox 파일 선택 및 업로드</small>
@@ -65,7 +65,7 @@
                 class="text-center p-3 border rounded step-item disabled"
               >
                 <div class="step-icon">
-                  <i class="bi bi-envelope-open fs-2 text-muted"></i>
+                  <i class="fas fa-envelope-open fs-2 text-muted"></i>
                 </div>
                 <h6 class="mt-2">2단계: 이메일 파싱</h6>
                 <small class="text-muted">메일 내용 분석 및 분류</small>
@@ -80,7 +80,7 @@
                 class="text-center p-3 border rounded step-item disabled"
               >
                 <div class="step-icon">
-                  <i class="bi bi-file-earmark-pdf fs-2 text-muted"></i>
+                  <i class="fas fa-file-pdf fs-2 text-muted"></i>
                 </div>
                 <h6 class="mt-2">3단계: 증거 생성</h6>
                 <small class="text-muted">HTML/PDF 증거 파일 생성</small>
@@ -95,7 +95,7 @@
                 class="text-center p-3 border rounded step-item disabled"
               >
                 <div class="step-icon">
-                  <i class="bi bi-shield-check fs-2 text-muted"></i>
+                  <i class="fas fa-shield-alt fs-2 text-muted"></i>
                 </div>
                 <h6 class="mt-2">4단계: 법원 제출 검증</h6>
                 <small class="text-muted"
@@ -109,7 +109,7 @@
                     href="{{ url_for('verify_integrity') }}"
                     class="btn btn-primary btn-sm"
                   >
-                    <i class="bi bi-shield-check me-1"></i>법원 검증 시작
+                    <i class="fas fa-shield-alt me-1"></i>법원 검증 시작
                   </a>
                 </div>
               </div>
@@ -125,7 +125,7 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <i class="bi bi-file-earmark-arrow-up fs-2 text-primary mb-2"></i>
+          <i class="fas fa-file-upload fs-2 text-primary mb-2"></i>
           <h4 class="mb-0">{{ stats.total_files }}</h4>
           <small class="text-muted">업로드된 파일</small>
         </div>
@@ -134,7 +134,7 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <i class="bi bi-envelope fs-2 text-success mb-2"></i>
+          <i class="fas fa-envelope fs-2 text-success mb-2"></i>
           <h4 class="mb-0">{{ stats.total_emails }}</h4>
           <small class="text-muted">파싱된 이메일</small>
         </div>
@@ -143,7 +143,7 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <i class="bi bi-file-earmark-check fs-2 text-warning mb-2"></i>
+          <i class="fas fa-file-check fs-2 text-warning mb-2"></i>
           <h4 class="mb-0">{{ stats.processed_files }}</h4>
           <small class="text-muted">처리 완료</small>
         </div>
@@ -152,7 +152,7 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <i class="bi bi-percent fs-2 text-info mb-2"></i>
+          <i class="fas fa-percent fs-2 text-info mb-2"></i>
           <h4 class="mb-0">{{ stats.success_rate }}%</h4>
           <small class="text-muted">성공률</small>
         </div>
@@ -168,7 +168,7 @@
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
               <h5 class="card-title">
-                <i class="bi bi-upload text-primary"></i>
+                <i class="fas fa-upload text-primary"></i>
                 파일 업로드 및 파싱
               </h5>
             </div>
@@ -180,16 +180,15 @@
           </p>
           <div class="mb-3">
             <small class="text-muted">
-              <i class="bi bi-check-circle-fill text-success"></i> UTF-8 인코딩
-              자동 처리<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 첨부파일 원본
+              <i class="fas fa-check-circle text-success"></i> UTF-8 인코딩 자동
+              처리<br />
+              <i class="fas fa-check-circle text-success"></i> 첨부파일 원본
               보존<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 메타데이터
-              추출
+              <i class="fas fa-check-circle text-success"></i> 메타데이터 추출
             </small>
           </div>
           <a href="{{ url_for('upload_file') }}" class="btn btn-primary">
-            <i class="bi bi-upload"></i>
+            <i class="fas fa-upload"></i>
             파일 업로드 시작
           </a>
         </div>
@@ -202,7 +201,7 @@
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
               <h5 class="card-title">
-                <i class="bi bi-file-earmark-pdf text-danger"></i>
+                <i class="fas fa-file-pdf text-danger"></i>
                 증거 파일 생성
               </h5>
             </div>
@@ -214,16 +213,16 @@
           </p>
           <div class="mb-3">
             <small class="text-muted">
-              <i class="bi bi-exclamation-circle text-warning"></i> 파일 파싱 후
-              이용 가능<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 법원 표준
-              형식 준수<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 증거번호 자동
+              <i class="fas fa-exclamation-circle text-warning"></i> 파일 파싱
+              후 이용 가능<br />
+              <i class="fas fa-check-circle text-success"></i> 법원 표준 형식
+              준수<br />
+              <i class="fas fa-check-circle text-success"></i> 증거번호 자동
               부여
             </small>
           </div>
           <button class="btn btn-secondary" id="evidenceBtn" disabled>
-            <i class="bi bi-file-earmark-pdf"></i>
+            <i class="fas fa-file-pdf"></i>
             증거 생성 (파일 업로드 필요)
           </button>
         </div>
@@ -236,7 +235,7 @@
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
               <h5 class="card-title">
-                <i class="bi bi-clock-history text-info"></i>
+                <i class="fas fa-history text-info"></i>
                 타임라인 생성
               </h5>
             </div>
@@ -248,16 +247,15 @@
           </p>
           <div class="mb-3">
             <small class="text-muted">
-              <i class="bi bi-exclamation-circle text-warning"></i> 증거 생성 후
-              이용 가능<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 시간순 자동
+              <i class="fas fa-exclamation-circle text-warning"></i> 증거 생성
+              후 이용 가능<br />
+              <i class="fas fa-check-circle text-success"></i> 시간순 자동
               정렬<br />
-              <i class="bi bi-check-circle-fill text-success"></i> Excel
-              내보내기
+              <i class="fas fa-check-circle text-success"></i> Excel 내보내기
             </small>
           </div>
           <button class="btn btn-secondary" id="timelineBtn" disabled>
-            <i class="bi bi-clock-history"></i>
+            <i class="fas fa-history"></i>
             타임라인 생성 (증거 생성 필요)
           </button>
         </div>
@@ -271,7 +269,7 @@
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
               <h5 class="card-title">
-                <i class="bi bi-folder-plus text-info"></i>
+                <i class="fas fa-folder-plus text-info"></i>
                 추가 증거 관리
               </h5>
             </div>
@@ -283,24 +281,24 @@
           </p>
           <div class="mb-3">
             <small class="text-muted">
-              <i class="bi bi-check-circle-fill text-success"></i> 법원 표준
-              형식 준수<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 증거번호 자동
+              <i class="fas fa-check-circle text-success"></i> 법원 표준 형식
+              준수<br />
+              <i class="fas fa-check-circle text-success"></i> 증거번호 자동
               부여<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 무결성 해시값
+              <i class="fas fa-check-circle text-success"></i> 무결성 해시값
               생성
             </small>
           </div>
           <div class="d-grid gap-2">
             <a href="{{ url_for('additional_evidence') }}" class="btn btn-info">
-              <i class="bi bi-folder-plus me-1"></i>
+              <i class="fas fa-folder-plus me-1"></i>
               추가 증거 관리
             </a>
             <a
               href="{{ url_for('add_evidence') }}"
               class="btn btn-outline-info btn-sm"
             >
-              <i class="bi bi-plus-circle me-1"></i>
+              <i class="fas fa-plus-circle me-1"></i>
               새 증거 등록
             </a>
           </div>
@@ -314,7 +312,7 @@
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
               <h5 class="card-title">
-                <i class="bi bi-shield-check text-success"></i>
+                <i class="fas fa-shield-alt text-success"></i>
                 무결성 검증
               </h5>
             </div>
@@ -326,16 +324,16 @@
           </p>
           <div class="mb-3">
             <small class="text-muted">
-              <i class="bi bi-exclamation-circle text-warning"></i> 타임라인
+              <i class="fas fa-exclamation-circle text-warning"></i> 타임라인
               생성 후 이용 가능<br />
-              <i class="bi bi-check-circle-fill text-success"></i> SHA-256 해시
+              <i class="fas fa-check-circle text-success"></i> SHA-256 해시
               생성<br />
-              <i class="bi bi-check-circle-fill text-success"></i> 무결성 보고서
+              <i class="fas fa-check-circle text-success"></i> 무결성 보고서
               작성
             </small>
           </div>
           <button class="btn btn-secondary" id="integrityBtn" disabled>
-            <i class="bi bi-shield-check"></i>
+            <i class="fas fa-shield-alt"></i>
             무결성 검증 (타임라인 필요)
           </button>
         </div>
@@ -350,7 +348,7 @@
       <div class="card">
         <div class="card-header">
           <h5 class="mb-0">
-            <i class="bi bi-clock"></i>
+            <i class="fas fa-clock"></i>
             최근 처리 이력
           </h5>
         </div>
@@ -490,7 +488,7 @@
 
     btn.className = "btn btn-primary";
     btn.disabled = false;
-    btn.innerHTML = `<i class="bi bi-${getFeatureIcon(
+    btn.innerHTML = `<i class="fas fa-${getFeatureIcon(
       featureType
     )}"></i> ${buttonText}`;
 
@@ -511,10 +509,10 @@
   function getFeatureIcon(featureType) {
     const icons = {
       evidence: "envelope-open",
-      timeline: "clock-history",
-      integrity: "shield-check",
+      timeline: "history",
+      integrity: "shield-alt",
     };
-    return icons[featureType] || "gear";
+    return icons[featureType] || "cog";
   }
 
   async function hasEvidenceFiles() {
@@ -563,7 +561,7 @@
             </td>
             <td>
                 <a href="/emails/${fileId}" class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-eye"></i> 보기
+                    <i class="fas fa-eye"></i> 보기
                 </a>
             </td>
         `;

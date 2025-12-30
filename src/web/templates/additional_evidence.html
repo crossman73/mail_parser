@@ -56,7 +56,7 @@
               <div class="row align-items-center">
                 <div class="col-md-8">
                   <h4 class="card-title text-white mb-2">
-                    <i class="bi bi-archive me-2"></i>추가 증거 자료 현황
+                    <i class="fas fa-archive me-2"></i>추가 증거 자료 현황
                   </h4>
                   <p class="mb-0 text-white-50">
                     이메일 외의 추가 증거 자료들을 법원 제출 형식으로 관리합니다
@@ -83,21 +83,21 @@
             <div class="card-body">
               <div class="category-icon mb-2">
                 {% if category == 'documents' %}
-                <i class="bi bi-file-earmark-text fs-2 text-primary"></i>
+                <i class="fas fa-file-alt fs-2 text-primary"></i>
                 {% elif category == 'images' %}
-                <i class="bi bi-image fs-2 text-success"></i>
+                <i class="fas fa-image fs-2 text-success"></i>
                 {% elif category == 'audio' %}
-                <i class="bi bi-music-note fs-2 text-warning"></i>
+                <i class="fas fa-music fs-2 text-warning"></i>
                 {% elif category == 'video' %}
-                <i class="bi bi-camera-video fs-2 text-danger"></i>
+                <i class="fas fa-video fs-2 text-danger"></i>
                 {% elif category == 'archives' %}
-                <i class="bi bi-archive fs-2 text-info"></i>
+                <i class="fas fa-archive fs-2 text-info"></i>
                 {% elif category == 'spreadsheets' %}
-                <i class="bi bi-table fs-2 text-success"></i>
+                <i class="fas fa-table fs-2 text-success"></i>
                 {% elif category == 'presentations' %}
-                <i class="bi bi-easel fs-2 text-purple"></i>
+                <i class="fas fa-chalkboard fs-2 text-purple"></i>
                 {% else %}
-                <i class="bi bi-file fs-2 text-secondary"></i>
+                <i class="fas fa-file fs-2 text-secondary"></i>
                 {% endif %}
               </div>
               <h5 class="card-title">
@@ -119,7 +119,7 @@
               <div class="row align-items-center">
                 <div class="col-md-8">
                   <h5 class="card-title mb-1">
-                    <i class="bi bi-gear me-2"></i>증거 관리 작업
+                    <i class="fas fa-cog me-2"></i>증거 관리 작업
                   </h5>
                   <p class="text-muted mb-0">
                     추가 증거 자료의 등록, 편집, 법원 제출 준비
@@ -131,20 +131,20 @@
                       href="{{ url_for('add_evidence') }}"
                       class="btn btn-primary"
                     >
-                      <i class="bi bi-plus-circle me-1"></i>증거 등록
+                      <i class="fas fa-plus-circle me-1"></i>증거 등록
                     </a>
                     {% if statistics.total_files > 0 %}
                     <a
                       href="{{ url_for('download_evidence_index') }}"
                       class="btn btn-outline-secondary"
                     >
-                      <i class="bi bi-list-ul me-1"></i>목록서 다운로드
+                      <i class="fas fa-list-ul me-1"></i>목록서 다운로드
                     </a>
                     <a
                       href="{{ url_for('export_additional_evidence') }}"
                       class="btn btn-success"
                     >
-                      <i class="bi bi-box-arrow-up me-1"></i>법원 제출용 패키징
+                      <i class="fas fa-file-export me-1"></i>법원 제출용 패키징
                     </a>
                     {% endif %}
                   </div>
@@ -162,7 +162,7 @@
           <div class="card">
             <div class="card-header">
               <h5 class="mb-0">
-                <i class="bi bi-files me-2"></i>등록된 추가 증거 목록
+                <i class="fas fa-copy me-2"></i>등록된 추가 증거 목록
               </h5>
             </div>
             <div class="card-body">
@@ -183,7 +183,7 @@
                             type="button"
                             data-bs-toggle="dropdown"
                           >
-                            <i class="bi bi-three-dots"></i>
+                            <i class="fas fa-ellipsis-v"></i>
                           </button>
                           <ul class="dropdown-menu">
                             <li>
@@ -191,7 +191,7 @@
                                 class="dropdown-item"
                                 href="{{ url_for('edit_evidence', file_id=evidence.file_id) }}"
                               >
-                                <i class="bi bi-pencil me-1"></i>편집
+                                <i class="fas fa-edit me-1"></i>편집
                               </a>
                             </li>
                             <li><hr class="dropdown-divider" /></li>
@@ -206,7 +206,7 @@
                                   type="submit"
                                   class="dropdown-item text-danger"
                                 >
-                                  <i class="bi bi-trash me-1"></i>삭제
+                                  <i class="fas fa-trash me-1"></i>삭제
                                 </button>
                               </form>
                             </li>
@@ -236,23 +236,23 @@
 
                       <div class="small text-muted">
                         <div>
-                          <i class="bi bi-calendar me-1"></i>{{
+                          <i class="fas fa-calendar me-1"></i>{{
                           evidence.evidence_date }}
                         </div>
                         <div class="file-size">
-                          <i class="bi bi-file-binary me-1"></i>{{ "%.1f" |
+                          <i class="fas fa-file-code me-1"></i>{{ "%.1f" |
                           format(evidence.file_size / 1024) }} KB
                         </div>
                         {% if evidence.related_email_ids %}
                         <div>
-                          <i class="bi bi-envelope me-1"></i>관련 이메일 {{
+                          <i class="fas fa-envelope me-1"></i>관련 이메일 {{
                           evidence.related_email_ids|length }}건
                         </div>
                         {% endif %}
                       </div>
                     </div>
                     <div class="card-footer text-muted small">
-                      <i class="bi bi-clock me-1"></i>등록: {{
+                      <i class="fas fa-clock me-1"></i>등록: {{
                       evidence.added_at[:16].replace('T', ' ') }}
                     </div>
                   </div>
@@ -270,7 +270,7 @@
           <div class="card">
             <div class="card-body text-center py-5">
               <i
-                class="bi bi-folder2-open text-muted"
+                class="fas fa-folder-open text-muted"
                 style="font-size: 4rem"
               ></i>
               <h4 class="mt-3 text-muted">등록된 추가 증거가 없습니다</h4>
@@ -282,7 +282,7 @@
                 href="{{ url_for('add_evidence') }}"
                 class="btn btn-primary btn-lg"
               >
-                <i class="bi bi-plus-circle me-2"></i>첫 번째 증거 등록하기
+                <i class="fas fa-plus-circle me-2"></i>첫 번째 증거 등록하기
               </a>
             </div>
           </div>
@@ -296,14 +296,14 @@
           <div class="card border-info">
             <div class="card-header bg-info text-white">
               <h6 class="mb-0">
-                <i class="bi bi-info-circle me-2"></i>추가 증거 등록 가이드
+                <i class="fas fa-info-circle me-2"></i>추가 증거 등록 가이드
               </h6>
             </div>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-4">
                   <h6>
-                    <i class="bi bi-check-circle text-success me-1"></i>지원되는
+                    <i class="fas fa-check-circle text-success me-1"></i>지원되는
                     파일 형식
                   </h6>
                   <ul class="small">
@@ -315,7 +315,7 @@
                 </div>
                 <div class="col-md-4">
                   <h6>
-                    <i class="bi bi-shield-check text-primary me-1"></i>법원
+                    <i class="fas fa-shield-alt text-primary me-1"></i>법원
                     제출 규칙
                   </h6>
                   <ul class="small">
@@ -327,7 +327,7 @@
                 </div>
                 <div class="col-md-4">
                   <h6>
-                    <i class="bi bi-lightbulb text-warning me-1"></i>권장사항
+                    <i class="fas fa-lightbulb text-warning me-1"></i>권장사항
                   </h6>
                   <ul class="small">
                     <li>명확하고 구체적인 제목 작성</li>
@@ -348,7 +348,7 @@
       href="{{ url_for('add_evidence') }}"
       class="btn btn-primary add-evidence-btn d-flex align-items-center justify-content-center"
     >
-      <i class="bi bi-plus fs-4"></i>
+      <i class="fas fa-plus fs-4"></i>
     </a>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

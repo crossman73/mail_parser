@@ -52,14 +52,14 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
         <a class="navbar-brand" href="{{ url_for('additional_evidence') }}">
-          <i class="bi bi-arrow-left me-2"></i>추가 증거 등록
+          <i class="fas fa-arrow-left me-2"></i>추가 증거 등록
         </a>
         <div class="navbar-nav ms-auto">
           <a class="nav-link" href="{{ url_for('additional_evidence') }}">
-            <i class="bi bi-list me-1"></i>증거 목록
+            <i class="fas fa-list me-1"></i>증거 목록
           </a>
           <a class="nav-link" href="{{ url_for('index') }}">
-            <i class="bi bi-house me-1"></i>메인
+            <i class="fas fa-home me-1"></i>메인
           </a>
         </div>
       </div>
@@ -87,7 +87,7 @@
         <div class="form-section">
           <div class="card-header bg-primary text-white">
             <h5 class="mb-0">
-              <i class="bi bi-cloud-upload me-2"></i>1단계: 증거 파일 선택
+              <i class="fas fa-cloud-upload-alt me-2"></i>1단계: 증거 파일 선택
             </h5>
           </div>
           <div class="card-body">
@@ -96,7 +96,7 @@
               id="fileUploadArea"
               onclick="document.getElementById('evidenceFile').click()"
             >
-              <i class="bi bi-cloud-upload fs-1 text-muted mb-3"></i>
+              <i class="fas fa-cloud-upload-alt fs-1 text-muted mb-3"></i>
               <h5 class="text-muted">
                 파일을 여기에 끌어다 놓거나 클릭하여 선택하세요
               </h5>
@@ -130,7 +130,7 @@
                     class="btn btn-sm btn-outline-danger"
                     onclick="clearFile()"
                   >
-                    <i class="bi bi-x me-1"></i>제거
+                    <i class="fas fa-times me-1"></i>제거
                   </button>
                 </div>
               </div>
@@ -142,7 +142,7 @@
         <div class="form-section">
           <div class="card-header bg-success text-white">
             <h5 class="mb-0">
-              <i class="bi bi-info-circle me-2"></i>2단계: 증거 정보 입력
+              <i class="fas fa-info-circle me-2"></i>2단계: 증거 정보 입력
             </h5>
           </div>
           <div class="card-body">
@@ -233,14 +233,14 @@
         <div class="form-section">
           <div class="card-header bg-warning text-dark">
             <h5 class="mb-0">
-              <i class="bi bi-exclamation-triangle me-2"></i>3단계: 법적
+              <i class="fas fa-exclamation-triangle me-2"></i>3단계: 법적
               확인사항
             </h5>
           </div>
           <div class="card-body">
             <div class="alert alert-info">
               <h6>
-                <i class="bi bi-info-circle me-2"></i>증거 제출 전 확인사항
+                <i class="fas fa-info-circle me-2"></i>증거 제출 전 확인사항
               </h6>
               <ul class="mb-0">
                 <li>이 증거가 합법적으로 수집되었음을 확인합니다</li>
@@ -274,7 +274,7 @@
             class="btn btn-secondary btn-lg me-3"
             onclick="history.back()"
           >
-            <i class="bi bi-arrow-left me-2"></i>취소
+            <i class="fas fa-arrow-left me-2"></i>취소
           </button>
           <button
             type="submit"
@@ -282,7 +282,7 @@
             id="submitBtn"
             disabled
           >
-            <i class="bi bi-check-circle me-2"></i>증거 등록
+            <i class="fas fa-check-circle me-2"></i>증거 등록
           </button>
         </div>
       </form>
@@ -371,7 +371,7 @@
         .getElementById("evidenceForm")
         .addEventListener("submit", function () {
           submitBtn.innerHTML =
-            '<i class="bi bi-hourglass-split me-2"></i>등록 중...';
+            '<i class="fas fa-hourglass-half me-2"></i>등록 중...';
           submitBtn.disabled = true;
         });
 

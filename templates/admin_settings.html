@@ -5,13 +5,13 @@ block content %}
     <h1>시스템 설정 관리</h1>
     <div>
       <a href="/admin" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> 관리자 대시보드
+        <i class="fas fa-arrow-left"></i> 관리자 대시보드
       </a>
       <button class="btn btn-warning" onclick="initDefaultSettings()">
-        <i class="bi bi-download"></i> 기본 설정 초기화
+        <i class="fas fa-download"></i> 기본 설정 초기화
       </button>
       <button class="btn btn-success" onclick="showAddSettingModal()">
-        <i class="bi bi-plus-circle"></i> 설정 추가
+        <i class="fas fa-plus-circle"></i> 설정 추가
       </button>
     </div>
   </div>
@@ -21,7 +21,7 @@ block content %}
     class="alert {% if db_available %}alert-success{% else %}alert-warning{% endif %} mb-4"
   >
     <i
-      class="bi bi-{% if db_available %}check-circle{% else %}exclamation-triangle{% endif %}"
+      class="fas fa-{% if db_available %}check-circle{% else %}exclamation-triangle{% endif %}"
     ></i>
     {% if db_available %}
     <strong>데이터베이스 연결됨</strong> - 설정을 DB에 저장합니다. {% else %}
@@ -91,7 +91,7 @@ block content %}
               <td>
                 <code>{{ setting.key }}</code>
                 {% if setting.is_sensitive %}
-                <i class="bi bi-lock-fill text-warning ms-1" title="민감 정보"></i>
+                <i class="fas fa-lock text-warning ms-1" title="민감 정보"></i>
                 {% endif %}
               </td>
               <td>
@@ -115,7 +115,7 @@ block content %}
                   title="수정"
                   data-bs-toggle="tooltip"
                 >
-                  <i class="bi bi-pencil"></i>
+                  <i class="fas fa-edit"></i>
                 </button>
                 <button
                   class="btn btn-sm btn-info"
@@ -123,7 +123,7 @@ block content %}
                   title="변경 이력 보기"
                   data-bs-toggle="tooltip"
                 >
-                  <i class="bi bi-clock-history"></i>
+                  <i class="fas fa-history"></i>
                 </button>
                 <button
                   class="btn btn-sm btn-danger"
@@ -131,7 +131,7 @@ block content %}
                   title="삭제"
                   data-bs-toggle="tooltip"
                 >
-                  <i class="bi bi-trash"></i>
+                  <i class="fas fa-trash"></i>
                 </button>
               </td>
             </tr>
@@ -172,7 +172,7 @@ block content %}
               <td>
                 <code>{{ setting.key }}</code>
                 {% if setting.is_sensitive %}
-                <i class="bi bi-lock-fill text-warning ms-1" title="민감 정보"></i>
+                <i class="fas fa-lock text-warning ms-1" title="민감 정보"></i>
                 {% endif %}
               </td>
               <td>
@@ -196,7 +196,7 @@ block content %}
                   title="수정"
                   data-bs-toggle="tooltip"
                 >
-                  <i class="bi bi-pencil"></i>
+                  <i class="fas fa-edit"></i>
                 </button>
                 <button
                   class="btn btn-sm btn-info"
@@ -204,7 +204,7 @@ block content %}
                   title="변경 이력 보기"
                   data-bs-toggle="tooltip"
                 >
-                  <i class="bi bi-clock-history"></i>
+                  <i class="fas fa-history"></i>
                 </button>
                 <button
                   class="btn btn-sm btn-danger"
@@ -212,7 +212,7 @@ block content %}
                   title="삭제"
                   data-bs-toggle="tooltip"
                 >
-                  <i class="bi bi-trash"></i>
+                  <i class="fas fa-trash"></i>
                 </button>
               </td>
             </tr>

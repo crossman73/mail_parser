@@ -1,0 +1,1 @@
+﻿No extension host process found by scanning command lines. You can still run Developer: Start Extension Host Profile from VS Code and copy the .cpuprofile here.
