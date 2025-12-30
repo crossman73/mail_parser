@@ -449,6 +449,49 @@ def api_get_setting_history(key: str):
         }), 500
 
 
+@admin.route('/api/admin/restart', methods=['POST'])
+def api_restart_service():
+    """웹서비스 재시작 API"""
+    from flask import jsonify
+    import os
+    import sys
+    import signal
+    
+    try:
+        current_app.logger.info('웹서비스 재시작 요청 받음')
+        
+        # 재시작 스크립트 실행 (비동기)
+        def restart_server():
+            import time
+            time.sleep(2)  # 응답 전송 대기
+            current_app.logger.info('서버 재시작 중...')
+            
+            # Windows에서는 프로세스 재시작
+            if sys.platform == 'win32':
+                os.execv(sys.executable, ['python'] + sys.argv)
+            else:
+                # Unix/Linux에서는 SIGHUP 시그널 사용
+                os.kill(os.getpid(), signal.SIGHUP)
+        
+        # 백그라운드 스레드로 재시작 실행
+        import threading
+        restart_thread = threading.Thread(target=restart_server)
+        restart_thread.daemon = True
+        restart_thread.start()
+        
+        return jsonify({
+            'success': True,
+            'message': '웹서비스 재시작이 시작되었습니다.'
+        })
+        
+    except Exception as e:
+        current_app.logger.exception(f'웹서비스 재시작 오류: {e}')
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 @admin.route('/admin/reload', methods=['POST'])
 def admin_reload():
     """Dev-only endpoint to reload selected modules at runtime.
