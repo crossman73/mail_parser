@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>증거 상세 - {{ evidence.evidence_number }}</title>
     <link rel="stylesheet" href="/static/css/wireframe.css" />
+    <link
+      href="{{ url_for('static', filename='css/modern-ui.css') }}"
+      rel="stylesheet"
+    />
   </head>
   <body class="light">
     <header class="topnav"><div class="brand">메일증거 - 상세</div></header>

@@ -149,7 +149,48 @@ grep -r "bi bi-" templates/ src/web/templates/
 - showHistory(key)
 - formatDateTime(dateStr)
 
+### 4. Phase 4: 디렉토리 재구성 ✅
+
+#### 문제점 발견
+- `src/web_interface/` 디렉토리 완전히 비어있음
+- `app.py` 파일 비어있음 (0 bytes)
+- `templates/index.html` 파일 비어있음 (0 bytes)
+- 프로젝트 코드에서 참조 없음
+
+#### 디렉토리 분석 결과
+1. **src/core/utils/** (유지)
+   - 범용 유틸리티: date_utils, file_utils, hash_utils, text_utils
+   - 1개 import 참조: `mail_parser/__init__.py`
+
+2. **src/utils/** (유지)
+   - 웹/로깅 특화 유틸리티
+   - db_logger, temp_manager, unified_logger, email_utils, file_deleter
+   - 7개 import 참조: routes.py, app.py, blueprints 등
+
+3. **src/web_interface/** (삭제됨)
+   - 완전히 비어있고 사용되지 않음
+
+#### 실행한 작업
+```powershell
+Remove-Item -Path "c:\dev\python-email\src\web_interface" -Recurse -Force
+```
+
+#### Git 커밋: 8cc537a
+```
+2025-12-30 20:00:00_Phase 4: web_interface 빈 디렉토리 삭제
+
+- src/web_interface/app.py 삭제 (비어있음)
+- src/web_interface/templates/index.html 삭제 (비어있음)
+- 프로젝트 코드에서 참조 없음 확인
+- 디렉토리 구조 최적화 (Phase 4 완료)
+```
+
+#### 결정 사항
+- **core/utils와 src/utils 통합하지 않음**: 용도가 다름 (범용 vs 웹 특화)
+- **디렉토리 구조 최적화 완료**: 불필요한 빈 디렉토리 제거
+
 ## 브랜치 상태
 - **현재 브랜치**: feature/admin-settings-clean
 - **기본 브랜치**: master
+- **최근 커밋**: 8cc537a (Phase 4 완료)
 - **상태**: 커밋 완료, 푸시 대기
