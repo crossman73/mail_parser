@@ -1071,47 +1071,10 @@ def register_routes(app):
             flash(f'타임라인 로드 오류: {str(e)}', 'error')
             return redirect(url_for('index'))
 
-    @app.route('/search')
-    def search_page():
-        """검색 페이지"""
-        return render_template('search.html', page_title='이메일 검색')
-
-    @app.route('/settings')
-    def settings_page():
-        """설정 페이지"""
-        try:
-            # 현재 설정 로드
-            config_path = app.config.get(
-                'EMAIL_PROCESSOR_CONFIG', 'config.json')
-
-            import json
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-
-            return render_template('settings.html',
-                                   config=config,
-                                   page_title='시스템 설정')
-
-        except Exception as e:
-            flash(f'설정 로드 오류: {str(e)}', 'error')
-            return redirect(url_for('index'))
-
-    @app.route('/download/<path:filename>')
-    def download_file(filename):
-        """파일 다운로드"""
-        try:
-            # 보안을 위해 processed_emails 디렉토리 내 파일만 허용
-            file_path = Path('processed_emails') / filename
-
-            if not file_path.exists() or not file_path.is_file():
-                flash('다운로드할 파일을 찾을 수 없습니다.', 'error')
-                return redirect(url_for('index'))
-
-            return send_file(str(file_path.absolute()), as_attachment=True)
-
-        except Exception as e:
-            flash(f'파일 다운로드 오류: {str(e)}', 'error')
-            return redirect(url_for('index'))
+    # [2025-12-30] 아래 라우트들은 main_routes.py Blueprint로 이동됨
+    # - /search (검색 페이지)
+    # - /settings (설정 페이지)
+    # - /download/<path:filename> (파일 다운로드)
 
     @app.route('/evidence_management')
     def evidence_management():
