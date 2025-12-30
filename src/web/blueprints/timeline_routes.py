@@ -7,8 +7,8 @@ import zipfile
 from datetime import datetime
 from pathlib import Path
 
-from flask import (Blueprint, flash, redirect, render_template, send_file,
-                   url_for, current_app)
+from flask import (Blueprint, current_app, flash, redirect, render_template,
+                   send_file, url_for)
 
 timeline_bp = Blueprint('timeline', __name__)
 
