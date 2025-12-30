@@ -51,6 +51,13 @@ except ImportError as e:
 def register_routes(app):
     """웹 라우트 등록"""
 
+    # 서비스 인스턴스 초기화
+    from src.services.evidence_service import EvidenceService
+    from src.services.timeline_service import TimelineService
+
+    evidence_service = EvidenceService()
+    timeline_service = TimelineService()
+
     # Avoid duplicating routes when multiple app factories or blueprints
     # attempt to register the same handlers. If an endpoint named 'index'
     # already exists, skip registering the legacy routes to prevent
@@ -1018,7 +1025,7 @@ def register_routes(app):
 
         except Exception as e:
             flash(f'증거 목록 로드 오류: {str(e)}', 'error')
-            return render_template('error.html', error=str(e))
+            return redirect(url_for('index'))
 
     @app.route('/evidence/<folder_name>')
     def evidence_detail(folder_name):
@@ -1049,7 +1056,7 @@ def register_routes(app):
 
             if not timeline_result['success']:
                 flash(timeline_result['message'], 'error')
-                return render_template('error.html', error=timeline_result['message'])
+                return redirect(url_for('index'))
 
             # 웹용 타임라인 데이터 생성
             timeline_data = timeline_result['timeline']
@@ -1062,7 +1069,7 @@ def register_routes(app):
 
         except Exception as e:
             flash(f'타임라인 로드 오류: {str(e)}', 'error')
-            return render_template('error.html', error=str(e))
+            return redirect(url_for('index'))
 
     @app.route('/search')
     def search_page():
@@ -1087,7 +1094,7 @@ def register_routes(app):
 
         except Exception as e:
             flash(f'설정 로드 오류: {str(e)}', 'error')
-            return render_template('error.html', error=str(e))
+            return redirect(url_for('index'))
 
     @app.route('/download/<path:filename>')
     def download_file(filename):
