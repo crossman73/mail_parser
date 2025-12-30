@@ -546,9 +546,7 @@ endblock %} {% block extra_css %}
           <i class="fas fa-file-alt log-file-icon"></i>
           <div class="log-file-details">
             <h4>${file.name}</h4>
-            <p>${file.size_mb} MB • ${new Date(file.modified).toLocaleString(
-          "ko-KR"
-        )}</p>
+            <p>${file.size_mb} MB • ${formatDateTimeFull(file.modified)}</p>
           </div>
         </div>
         <div class="log-file-actions">
