@@ -1,5 +1,12 @@
-{% extends "base.html" %} {% block title %}시스템 테스트 - {{ super() }}{%
-endblock %} {% block content %}
+{% extends "base.html" %} 
+{% block title %}시스템 테스트 - {{ super() }}{% endblock %} 
+
+{% block extra_head %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
 <div class="container-fluid py-4">
   <h1 class="h3 mb-4"><i class="fas fa-flask"></i> 시스템 테스트</h1>
 
@@ -226,7 +233,8 @@ endblock %} {% block content %}
       <div class="modal-body">
         <!-- 필터 옵션 -->
         <div class="row mb-3">
-          <div class="col-md-4">
+          <div class="col-md-3">
+            <label class="form-label small">상태 필터</label>
             <select
               class="form-select form-select-sm"
               id="historyStatusFilter"
@@ -238,7 +246,28 @@ endblock %} {% block content %}
               <option value="error">오류만</option>
             </select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
+            <label class="form-label small">카테고리 필터</label>
+            <select
+              class="form-select form-select-sm"
+              id="historyCategoryFilter"
+              onchange="filterHistory()"
+            >
+              <option value="all">전체 카테고리</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">테스트명 검색</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              id="historySearchInput"
+              placeholder="테스트명 입력..."
+              onkeyup="filterHistory()"
+            />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">표시 개수</label>
             <select
               class="form-select form-select-sm"
               id="historyLimitSelect"
@@ -250,19 +279,59 @@ endblock %} {% block content %}
               <option value="500">최근 500개</option>
             </select>
           </div>
-          <div class="col-md-4 text-end">
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label small">시작 날짜</label>
+            <input
+              type="date"
+              class="form-control form-control-sm"
+              id="historyStartDate"
+              onchange="filterHistory()"
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small">종료 날짜</label>
+            <input
+              type="date"
+              class="form-control form-control-sm"
+              id="historyEndDate"
+              onchange="filterHistory()"
+            />
+          </div>
+          <div class="col-md-4 d-flex align-items-end gap-2">
+            <button class="btn btn-sm btn-outline-secondary" onclick="resetHistoryFilters()">
+              <i class="fas fa-redo"></i> 필터 초기화
+            </button>
             <button class="btn btn-sm btn-secondary" onclick="exportHistory()">
-              <i class="fas fa-download"></i> 내보내기
+              <i class="fas fa-download"></i> CSV 내보내기
             </button>
           </div>
         </div>
 
-        <!-- 통계 요약 -->
+        <!-- 통계 요약 및 차트 -->
         <div class="row mb-3">
-          <div class="col-md-12">
-            <div class="alert alert-info" id="historyStats">
+          <div class="col-md-8">
+            <div class="alert alert-info mb-0" id="historyStats">
               <strong>통계:</strong>
               <span id="historyStatsText">로딩 중...</span>
+            </div>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleHistoryChart()">
+              <i class="fas fa-chart-bar"></i> <span id="chartToggleText">차트 보기</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 차트 영역 (초기에는 숨김) -->
+        <div class="row mb-3" id="historyChartContainer" style="display: none;">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <canvas id="historyChart" height="80"></canvas>
+              </div>
             </div>
           </div>
         </div>
@@ -288,6 +357,19 @@ endblock %} {% block content %}
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="row">
+          <div class="col-md-12">
+            <nav aria-label="이력 페이지네이션">
+              <ul class="pagination pagination-sm justify-content-center" id="historyPagination">
+              </ul>
+            </nav>
+            <div class="text-center text-muted small">
+              <span id="historyPageInfo"></span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -736,6 +818,8 @@ endblock %} {% block content %}
 
   // 전역 변수: 필터링된 이력 데이터
   let allHistory = [];
+  let filteredHistory = [];
+  let historyChart = null;
 
   // 실행 이력 보기
   async function showHistory(testKey = null) {
@@ -749,6 +833,7 @@ endblock %} {% block content %}
 
       if (data.success) {
         allHistory = data.history;
+        filteredHistory = [...allHistory];
 
         // 모달 타이틀 설정
         const title = testKey
@@ -756,17 +841,31 @@ endblock %} {% block content %}
           : "전체 실행 이력";
         document.getElementById("historyModalTitle").textContent = title;
 
+        // 카테고리 필터 옵션 설정
+        populateCategoryFilter();
+
         // 통계 계산
-        updateHistoryStats(allHistory);
+        updateHistoryStats(filteredHistory);
 
         // 이력 렌더링
-        renderHistory(allHistory);
+        renderHistory(filteredHistory);
 
         new bootstrap.Modal(document.getElementById("historyModal")).show();
       }
     } catch (error) {
       showError("이력 조회 오류: " + error.message);
     }
+  }
+
+  // 카테고리 필터 옵션 채우기
+  function populateCategoryFilter() {
+    const categoryFilter = document.getElementById("historyCategoryFilter");
+    const categories = [...new Set(allHistory.map(h => h.test_category).filter(c => c))];
+    
+    categoryFilter.innerHTML = '<option value="all">전체 카테고리</option>';
+    categories.forEach(cat => {
+      categoryFilter.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
   }
 
   // 통계 업데이트
@@ -787,24 +886,34 @@ endblock %} {% block content %}
     document.getElementById("historyStatsText").textContent = statsText;
   }
 
-  // 이력 렌더링
+  // 이력 렌더링 (페이지네이션 추가)
+  let currentPage = 1;
+  const itemsPerPage = 20;
+
   function renderHistory(history) {
     const tbody = document.getElementById("historyTableBody");
 
     if (history.length === 0) {
       tbody.innerHTML =
         '<tr><td colspan="8" class="text-center text-muted">이력이 없습니다.</td></tr>';
+      document.getElementById("historyPagination").innerHTML = "";
+      document.getElementById("historyPageInfo").textContent = "";
       return;
     }
 
-    tbody.innerHTML = history
+    // 페이지네이션 계산
+    const totalPages = Math.ceil(history.length / itemsPerPage);
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const pageData = history.slice(startIdx, endIdx);
+
+    // 테이블 렌더링
+    tbody.innerHTML = pageData
       .map((h) => {
         let badgeClass = "secondary";
         if (h.status === "success") badgeClass = "success";
         else if (h.status === "failed") badgeClass = "danger";
         else if (h.status === "error") badgeClass = "warning";
-
-        const hasError = h.error_detail && h.error_detail.trim() !== "";
 
         return `
         <tr>
@@ -828,19 +937,207 @@ endblock %} {% block content %}
       `;
       })
       .join("");
+
+    // 페이지네이션 UI 렌더링
+    renderPagination(totalPages);
+
+    // 페이지 정보 표시
+    document.getElementById("historyPageInfo").textContent = 
+      `전체 ${history.length}건 중 ${startIdx + 1}-${Math.min(endIdx, history.length)}건 표시 (${currentPage}/${totalPages} 페이지)`;
   }
 
-  // 이력 필터링
-  function filterHistory() {
-    const statusFilter = document.getElementById("historyStatusFilter").value;
-
-    let filtered = allHistory;
-    if (statusFilter !== "all") {
-      filtered = allHistory.filter((h) => h.status === statusFilter);
+  function renderPagination(totalPages) {
+    const pagination = document.getElementById("historyPagination");
+    
+    if (totalPages <= 1) {
+      pagination.innerHTML = "";
+      return;
     }
 
-    updateHistoryStats(filtered);
-    renderHistory(filtered);
+    let html = "";
+
+    // 이전 버튼
+    html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+      <a class="page-link" href="#" onclick="goToHistoryPage(${currentPage - 1}); return false;">이전</a>
+    </li>`;
+
+    // 페이지 번호
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage < maxButtons - 1) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    if (startPage > 1) {
+      html += `<li class="page-item"><a class="page-link" href="#" onclick="goToHistoryPage(1); return false;">1</a></li>`;
+      if (startPage > 2) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+        <a class="page-link" href="#" onclick="goToHistoryPage(${i}); return false;">${i}</a>
+      </li>`;
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+      html += `<li class="page-item"><a class="page-link" href="#" onclick="goToHistoryPage(${totalPages}); return false;">${totalPages}</a></li>`;
+    }
+
+    // 다음 버튼
+    html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+      <a class="page-link" href="#" onclick="goToHistoryPage(${currentPage + 1}); return false;">다음</a>
+    </li>`;
+
+    pagination.innerHTML = html;
+  }
+
+  function goToHistoryPage(page) {
+    const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
+    if (page < 1 || page > totalPages) return;
+    
+    currentPage = page;
+    renderHistory(filteredHistory);
+  }
+
+  // 이력 필터링 (개선된 버전)
+  function filterHistory() {
+    const statusFilter = document.getElementById("historyStatusFilter").value;
+    const categoryFilter = document.getElementById("historyCategoryFilter").value;
+    const searchInput = document.getElementById("historySearchInput").value.toLowerCase();
+    const startDate = document.getElementById("historyStartDate").value;
+    const endDate = document.getElementById("historyEndDate").value;
+
+    filteredHistory = allHistory.filter((h) => {
+      // 상태 필터
+      if (statusFilter !== "all" && h.status !== statusFilter) return false;
+
+      // 카테고리 필터
+      if (categoryFilter !== "all" && h.test_category !== categoryFilter) return false;
+
+      // 검색어 필터
+      if (searchInput && !h.test_name.toLowerCase().includes(searchInput)) return false;
+
+      // 날짜 범위 필터
+      if (startDate || endDate) {
+        const execDate = new Date(h.execution_time).toISOString().split('T')[0];
+        if (startDate && execDate < startDate) return false;
+        if (endDate && execDate > endDate) return false;
+      }
+
+      return true;
+    });
+
+    currentPage = 1; // 필터링 시 첫 페이지로 리셋
+    updateHistoryStats(filteredHistory);
+    renderHistory(filteredHistory);
+  }
+
+  // 필터 초기화
+  function resetHistoryFilters() {
+    document.getElementById("historyStatusFilter").value = "all";
+    document.getElementById("historyCategoryFilter").value = "all";
+    document.getElementById("historySearchInput").value = "";
+    document.getElementById("historyStartDate").value = "";
+    document.getElementById("historyEndDate").value = "";
+    
+    filteredHistory = [...allHistory];
+    currentPage = 1;
+    updateHistoryStats(filteredHistory);
+    renderHistory(filteredHistory);
+  }
+
+  // 차트 토글
+  let chartVisible = false;
+  function toggleHistoryChart() {
+    chartVisible = !chartVisible;
+    const container = document.getElementById("historyChartContainer");
+    const toggleText = document.getElementById("chartToggleText");
+    
+    if (chartVisible) {
+      container.style.display = "block";
+      toggleText.textContent = "차트 숨기기";
+      renderHistoryChart();
+    } else {
+      container.style.display = "none";
+      toggleText.textContent = "차트 보기";
+    }
+  }
+
+  // 차트 렌더링
+  function renderHistoryChart() {
+    const canvas = document.getElementById("historyChart");
+    const ctx = canvas.getContext("2d");
+
+    // 기존 차트 파괴
+    if (historyChart) {
+      historyChart.destroy();
+    }
+
+    // 날짜별 통계 계산
+    const dateStats = {};
+    filteredHistory.forEach(h => {
+      const date = new Date(h.execution_time).toISOString().split('T')[0];
+      if (!dateStats[date]) {
+        dateStats[date] = { success: 0, failed: 0, error: 0 };
+      }
+      if (h.status === 'success') dateStats[date].success++;
+      else if (h.status === 'failed') dateStats[date].failed++;
+      else if (h.status === 'error') dateStats[date].error++;
+    });
+
+    const dates = Object.keys(dateStats).sort();
+    const successData = dates.map(d => dateStats[d].success);
+    const failedData = dates.map(d => dateStats[d].failed);
+    const errorData = dates.map(d => dateStats[d].error);
+
+    // Chart.js 사용 (CDN 필요)
+    historyChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: dates,
+        datasets: [
+          {
+            label: '성공',
+            data: successData,
+            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+            borderColor: 'rgba(40, 167, 69, 1)',
+            borderWidth: 1
+          },
+          {
+            label: '실패',
+            data: failedData,
+            backgroundColor: 'rgba(220, 53, 69, 0.7)',
+            borderColor: 'rgba(220, 53, 69, 1)',
+            borderWidth: 1
+          },
+          {
+            label: '오류',
+            data: errorData,
+            backgroundColor: 'rgba(255, 193, 7, 0.7)',
+            borderColor: 'rgba(255, 193, 7, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          x: { stacked: true },
+          y: { stacked: true, beginAtZero: true }
+        },
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: '날짜별 테스트 실행 결과'
+          }
+        }
+      }
+    });
   }
 
   // 제한 수 변경
