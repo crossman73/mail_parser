@@ -1,5 +1,5 @@
-{% extends "base.html" %} 
-{% block title %}시스템 테스트 - {{ super() }}{% endblock %} 
+{% extends "base.html" %}
+{% block title %}시스템 테스트 - {{ super() }}{% endblock %}
 
 {% block extra_head %}
 <!-- Chart.js CDN -->
@@ -257,14 +257,14 @@
             </select>
           </div>
           <div class="col-md-3">
-            <label class="form-label small">테스트명 검색</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="historySearchInput"
-              placeholder="테스트명 입력..."
-              onkeyup="filterHistory()"
-            />
+            <label class="form-label small">테스트 항목</label>
+            <select
+              class="form-select form-select-sm"
+              id="historyTestNameFilter"
+              onchange="filterHistory()"
+            >
+              <option value="all">전체 테스트</option>
+            </select>
           </div>
           <div class="col-md-3">
             <label class="form-label small">표시 개수</label>
@@ -844,6 +844,9 @@
         // 카테고리 필터 옵션 설정
         populateCategoryFilter();
 
+        // 테스트명 필터 옵션 설정
+        populateTestNameFilter();
+
         // 통계 계산
         updateHistoryStats(filteredHistory);
 
@@ -861,10 +864,21 @@
   function populateCategoryFilter() {
     const categoryFilter = document.getElementById("historyCategoryFilter");
     const categories = [...new Set(allHistory.map(h => h.test_category).filter(c => c))];
-    
+
     categoryFilter.innerHTML = '<option value="all">전체 카테고리</option>';
     categories.forEach(cat => {
       categoryFilter.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+  }
+
+  // 테스트명 필터 옵션 채우기
+  function populateTestNameFilter() {
+    const testNameFilter = document.getElementById("historyTestNameFilter");
+    const testNames = [...new Set(allHistory.map(h => h.test_name).filter(n => n))];
+
+    testNameFilter.innerHTML = '<option value="all">전체 테스트</option>';
+    testNames.forEach(name => {
+      testNameFilter.innerHTML += `<option value="${name}">${name}</option>`;
     });
   }
 
@@ -942,13 +956,13 @@
     renderPagination(totalPages);
 
     // 페이지 정보 표시
-    document.getElementById("historyPageInfo").textContent = 
+    document.getElementById("historyPageInfo").textContent =
       `전체 ${history.length}건 중 ${startIdx + 1}-${Math.min(endIdx, history.length)}건 표시 (${currentPage}/${totalPages} 페이지)`;
   }
 
   function renderPagination(totalPages) {
     const pagination = document.getElementById("historyPagination");
-    
+
     if (totalPages <= 1) {
       pagination.innerHTML = "";
       return;
@@ -997,7 +1011,7 @@
   function goToHistoryPage(page) {
     const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
     if (page < 1 || page > totalPages) return;
-    
+
     currentPage = page;
     renderHistory(filteredHistory);
   }
@@ -1006,7 +1020,7 @@
   function filterHistory() {
     const statusFilter = document.getElementById("historyStatusFilter").value;
     const categoryFilter = document.getElementById("historyCategoryFilter").value;
-    const searchInput = document.getElementById("historySearchInput").value.toLowerCase();
+    const testNameFilter = document.getElementById("historyTestNameFilter").value;
     const startDate = document.getElementById("historyStartDate").value;
     const endDate = document.getElementById("historyEndDate").value;
 
@@ -1017,8 +1031,8 @@
       // 카테고리 필터
       if (categoryFilter !== "all" && h.test_category !== categoryFilter) return false;
 
-      // 검색어 필터
-      if (searchInput && !h.test_name.toLowerCase().includes(searchInput)) return false;
+      // 테스트명 필터
+      if (testNameFilter !== "all" && h.test_name !== testNameFilter) return false;
 
       // 날짜 범위 필터
       if (startDate || endDate) {
@@ -1039,10 +1053,10 @@
   function resetHistoryFilters() {
     document.getElementById("historyStatusFilter").value = "all";
     document.getElementById("historyCategoryFilter").value = "all";
-    document.getElementById("historySearchInput").value = "";
+    document.getElementById("historyTestNameFilter").value = "all";
     document.getElementById("historyStartDate").value = "";
     document.getElementById("historyEndDate").value = "";
-    
+
     filteredHistory = [...allHistory];
     currentPage = 1;
     updateHistoryStats(filteredHistory);
@@ -1055,7 +1069,7 @@
     chartVisible = !chartVisible;
     const container = document.getElementById("historyChartContainer");
     const toggleText = document.getElementById("chartToggleText");
-    
+
     if (chartVisible) {
       container.style.display = "block";
       toggleText.textContent = "차트 숨기기";
