@@ -84,6 +84,9 @@ def create_app(config_path: str = None):
     except Exception as e:
         app.logger.warning(f'⚠️ Email blueprint 등록 실패 (계속 진행): {e}')
 
+    # Evidence Blueprint는 routes.py의 register_routes 내부에서 등록됨
+    # (evidence_service가 필요하므로)
+
     # API 라우트 등록
     from .api import register_api_routes
     register_api_routes(app)
