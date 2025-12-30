@@ -10,6 +10,7 @@ endblock %} {% block content %}
         <div class="card-body">
           <h5 class="card-title">전체 테스트</h5>
           <h2 id="totalTests">0</h2>
+          <small id="lastExecutionTime">마지막 실행: -</small>
         </div>
       </div>
     </div>
@@ -18,6 +19,7 @@ endblock %} {% block content %}
         <div class="card-body">
           <h5 class="card-title">성공</h5>
           <h2 id="successTests">0</h2>
+          <small id="successRate">성공률: -</small>
         </div>
       </div>
     </div>
@@ -26,6 +28,7 @@ endblock %} {% block content %}
         <div class="card-body">
           <h5 class="card-title">실패</h5>
           <h2 id="failedTests">0</h2>
+          <small id="failRate">실패율: -</small>
         </div>
       </div>
     </div>
@@ -34,6 +37,7 @@ endblock %} {% block content %}
         <div class="card-body">
           <h5 class="card-title">오류</h5>
           <h2 id="errorTests">0</h2>
+          <small id="errorRate">오류율: -</small>
         </div>
       </div>
     </div>
@@ -212,7 +216,7 @@ endblock %} {% block content %}
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">실행 이력</h5>
+        <h5 class="modal-title" id="historyModalTitle">전체 실행 이력</h5>
         <button
           type="button"
           class="btn-close"
@@ -220,20 +224,127 @@ endblock %} {% block content %}
         ></button>
       </div>
       <div class="modal-body">
+        <!-- 필터 옵션 -->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <select
+              class="form-select form-select-sm"
+              id="historyStatusFilter"
+              onchange="filterHistory()"
+            >
+              <option value="all">전체 상태</option>
+              <option value="success">성공만</option>
+              <option value="failed">실패만</option>
+              <option value="error">오류만</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <select
+              class="form-select form-select-sm"
+              id="historyLimitSelect"
+              onchange="loadHistoryWithLimit()"
+            >
+              <option value="50">최근 50개</option>
+              <option value="100" selected>최근 100개</option>
+              <option value="200">최근 200개</option>
+              <option value="500">최근 500개</option>
+            </select>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-sm btn-secondary" onclick="exportHistory()">
+              <i class="fas fa-download"></i> 내보내기
+            </button>
+          </div>
+        </div>
+
+        <!-- 통계 요약 -->
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="alert alert-info" id="historyStats">
+              <strong>통계:</strong>
+              <span id="historyStatsText">로딩 중...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 이력 테이블 -->
         <div class="table-responsive">
-          <table class="table table-sm">
-            <thead>
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
               <tr>
-                <th>실행 시간</th>
-                <th>테스트</th>
-                <th>상태</th>
-                <th>소요 시간</th>
-                <th>결과 메시지</th>
+                <th style="width: 15%">실행 시간</th>
+                <th style="width: 20%">테스트</th>
+                <th style="width: 10%">카테고리</th>
+                <th style="width: 8%">상태</th>
+                <th style="width: 10%">소요 시간</th>
+                <th style="width: 12%">실행자</th>
+                <th style="width: 20%">결과 메시지</th>
+                <th style="width: 5%">상세</th>
               </tr>
             </thead>
-            <tbody id="historyTableBody"></tbody>
+            <tbody id="historyTableBody">
+              <tr>
+                <td colspan="8" class="text-center text-muted">로딩 중...</td>
+              </tr>
+            </tbody>
           </table>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 이력 상세 모달 -->
+<div class="modal fade" id="historyDetailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">실행 상세 정보</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <dl class="row">
+          <dt class="col-sm-3">테스트명</dt>
+          <dd class="col-sm-9" id="detailTestName"></dd>
+
+          <dt class="col-sm-3">실행 시간</dt>
+          <dd class="col-sm-9" id="detailExecutionTime"></dd>
+
+          <dt class="col-sm-3">상태</dt>
+          <dd class="col-sm-9" id="detailStatus"></dd>
+
+          <dt class="col-sm-3">소요 시간</dt>
+          <dd class="col-sm-9" id="detailDuration"></dd>
+
+          <dt class="col-sm-3">실행자</dt>
+          <dd class="col-sm-9" id="detailExecutedBy"></dd>
+
+          <dt class="col-sm-3">결과 메시지</dt>
+          <dd class="col-sm-9" id="detailMessage"></dd>
+
+          <dt class="col-sm-3">오류 상세</dt>
+          <dd class="col-sm-9">
+            <pre
+              id="detailError"
+              class="bg-light p-2"
+              style="max-height: 300px; overflow-y: auto; font-size: 0.85rem"
+            ></pre>
+          </dd>
+        </dl>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
       </div>
     </div>
   </div>
@@ -302,6 +413,11 @@ endblock %} {% block content %}
         }')" title="실행">
           <i class="fas fa-play"></i>
         </button>
+        <button class="btn btn-sm btn-secondary" onclick="showHistory('${
+          test.test_key
+        }')" title="이력">
+          <i class="fas fa-history"></i>
+        </button>
         <button class="btn btn-sm btn-info" onclick="editTest('${
           test.test_key
         }')" title="수정">
@@ -312,6 +428,7 @@ endblock %} {% block content %}
         }')" title="삭제">
           <i class="fas fa-trash"></i>
         </button>
+      </td>
       </td>
     </tr>
   `
@@ -360,9 +477,62 @@ endblock %} {% block content %}
   }
 
   // 통계 업데이트
-  function updateStatistics() {
+  async function updateStatistics() {
+    // 전체 테스트 수
     document.getElementById("totalTests").textContent = tests.length;
-    // 실제 통계는 실행 이력에서 가져와야 함
+
+    // 최근 실행 이력 가져오기 (최근 100개)
+    try {
+      const response = await fetch("/api/admin/tests/history?limit=100");
+      const data = await response.json();
+
+      if (data.success && data.history.length > 0) {
+        const history = data.history;
+
+        // 최근 실행 시간
+        const lastExecution = new Date(history[0].execution_time);
+        document.getElementById(
+          "lastExecutionTime"
+        ).textContent = `마지막 실행: ${lastExecution.toLocaleString("ko-KR")}`;
+
+        // 상태별 카운트
+        const successCount = history.filter(
+          (h) => h.status === "success"
+        ).length;
+        const failedCount = history.filter((h) => h.status === "failed").length;
+        const errorCount = history.filter((h) => h.status === "error").length;
+        const total = history.length;
+
+        // 통계 카드 업데이트
+        document.getElementById("successTests").textContent = successCount;
+        document.getElementById("failedTests").textContent = failedCount;
+        document.getElementById("errorTests").textContent = errorCount;
+
+        // 비율 계산
+        const successRate = ((successCount / total) * 100).toFixed(1);
+        const failRate = ((failedCount / total) * 100).toFixed(1);
+        const errorRate = ((errorCount / total) * 100).toFixed(1);
+
+        document.getElementById(
+          "successRate"
+        ).textContent = `성공률: ${successRate}%`;
+        document.getElementById(
+          "failRate"
+        ).textContent = `실패율: ${failRate}%`;
+        document.getElementById(
+          "errorRate"
+        ).textContent = `오류율: ${errorRate}%`;
+      } else {
+        // 이력이 없는 경우
+        document.getElementById("lastExecutionTime").textContent =
+          "마지막 실행: 없음";
+        document.getElementById("successRate").textContent = "성공률: -";
+        document.getElementById("failRate").textContent = "실패율: -";
+        document.getElementById("errorRate").textContent = "오류율: -";
+      }
+    } catch (error) {
+      console.error("통계 업데이트 오류:", error);
+    }
   }
 
   // 탭 업데이트
@@ -414,6 +584,7 @@ endblock %} {% block content %}
           } 성공 (${data.success_rate.toFixed(1)}%)`
         );
         loadTests(); // 새로고침
+        updateStatistics(); // 통계 업데이트
       } else {
         showError("테스트 실행 실패: " + data.error);
       }
@@ -441,6 +612,7 @@ endblock %} {% block content %}
       if (data.success) {
         showSuccess(`${data.test_name}: ${data.message}`);
         loadLastExecution(testKey);
+        updateStatistics(); // 통계 업데이트
       } else {
         showError("테스트 실행 실패: " + data.error);
       }
@@ -562,40 +734,225 @@ endblock %} {% block content %}
     }
   }
 
+  // 전역 변수: 필터링된 이력 데이터
+  let allHistory = [];
+
   // 실행 이력 보기
-  async function showHistory() {
+  async function showHistory(testKey = null) {
     try {
-      const response = await fetch("/api/admin/tests/history?limit=100");
+      let url = testKey
+        ? `/api/admin/tests/${testKey}/history?limit=100`
+        : "/api/admin/tests/history?limit=100";
+
+      const response = await fetch(url);
       const data = await response.json();
 
       if (data.success) {
-        const tbody = document.getElementById("historyTableBody");
-        tbody.innerHTML = data.history
-          .map((h) => {
-            let badgeClass = "secondary";
-            if (h.status === "success") badgeClass = "success";
-            else if (h.status === "failed") badgeClass = "danger";
-            else if (h.status === "error") badgeClass = "warning";
+        allHistory = data.history;
 
-            const execTime = new Date(h.execution_time);
+        // 모달 타이틀 설정
+        const title = testKey
+          ? `${data.history[0]?.test_name || "테스트"} 실행 이력`
+          : "전체 실행 이력";
+        document.getElementById("historyModalTitle").textContent = title;
 
-            return `
-          <tr>
-            <td><small>${execTime.toLocaleString("ko-KR")}</small></td>
-            <td><strong>${h.test_name}</strong></td>
-            <td><span class="badge bg-${badgeClass}">${h.status}</span></td>
-            <td><small>${h.duration_ms}ms</small></td>
-            <td><small>${h.result_message}</small></td>
-          </tr>
-        `;
-          })
-          .join("");
+        // 통계 계산
+        updateHistoryStats(allHistory);
+
+        // 이력 렌더링
+        renderHistory(allHistory);
 
         new bootstrap.Modal(document.getElementById("historyModal")).show();
       }
     } catch (error) {
       showError("이력 조회 오류: " + error.message);
     }
+  }
+
+  // 통계 업데이트
+  function updateHistoryStats(history) {
+    if (history.length === 0) {
+      document.getElementById("historyStatsText").textContent =
+        "실행 이력이 없습니다.";
+      return;
+    }
+
+    const total = history.length;
+    const success = history.filter((h) => h.status === "success").length;
+    const failed = history.filter((h) => h.status === "failed").length;
+    const error = history.filter((h) => h.status === "error").length;
+    const successRate = ((success / total) * 100).toFixed(1);
+
+    const statsText = `총 ${total}건 | 성공: ${success}건 (${successRate}%) | 실패: ${failed}건 | 오류: ${error}건`;
+    document.getElementById("historyStatsText").textContent = statsText;
+  }
+
+  // 이력 렌더링
+  function renderHistory(history) {
+    const tbody = document.getElementById("historyTableBody");
+
+    if (history.length === 0) {
+      tbody.innerHTML =
+        '<tr><td colspan="8" class="text-center text-muted">이력이 없습니다.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = history
+      .map((h) => {
+        let badgeClass = "secondary";
+        if (h.status === "success") badgeClass = "success";
+        else if (h.status === "failed") badgeClass = "danger";
+        else if (h.status === "error") badgeClass = "warning";
+
+        const execTime = new Date(h.execution_time);
+        const hasError = h.error_detail && h.error_detail.trim() !== "";
+
+        return `
+        <tr>
+          <td><small>${execTime.toLocaleString("ko-KR")}</small></td>
+          <td><strong>${h.test_name}</strong></td>
+          <td><span class="badge bg-secondary">${
+            h.test_category || "-"
+          }</span></td>
+          <td><span class="badge bg-${badgeClass}">${h.status}</span></td>
+          <td><small>${h.duration_ms}ms</small></td>
+          <td><small>${h.executed_by || "system"}</small></td>
+          <td><small>${h.result_message || "-"}</small></td>
+          <td>
+            <button class="btn btn-sm btn-outline-info" onclick='showHistoryDetail(${JSON.stringify(
+              h
+            ).replace(/'/g, "&#39;")})' title="상세 보기">
+              <i class="fas fa-info-circle"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+      })
+      .join("");
+  }
+
+  // 이력 필터링
+  function filterHistory() {
+    const statusFilter = document.getElementById("historyStatusFilter").value;
+
+    let filtered = allHistory;
+    if (statusFilter !== "all") {
+      filtered = allHistory.filter((h) => h.status === statusFilter);
+    }
+
+    updateHistoryStats(filtered);
+    renderHistory(filtered);
+  }
+
+  // 제한 수 변경
+  async function loadHistoryWithLimit() {
+    const limit = document.getElementById("historyLimitSelect").value;
+    const currentTitle =
+      document.getElementById("historyModalTitle").textContent;
+    const isSpecificTest = currentTitle !== "전체 실행 이력";
+
+    if (isSpecificTest) {
+      // 특정 테스트의 이력을 다시 로드해야 하는 경우
+      // 여기서는 모달을 닫고 다시 호출하도록 함
+      bootstrap.Modal.getInstance(
+        document.getElementById("historyModal")
+      ).hide();
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/tests/history?limit=${limit}`);
+      const data = await response.json();
+
+      if (data.success) {
+        allHistory = data.history;
+        updateHistoryStats(allHistory);
+        renderHistory(allHistory);
+      }
+    } catch (error) {
+      showError("이력 로딩 오류: " + error.message);
+    }
+  }
+
+  // 이력 상세 보기
+  function showHistoryDetail(historyItem) {
+    document.getElementById("detailTestName").textContent =
+      historyItem.test_name;
+    document.getElementById("detailExecutionTime").textContent = new Date(
+      historyItem.execution_time
+    ).toLocaleString("ko-KR");
+
+    let statusBadge = "secondary";
+    if (historyItem.status === "success") statusBadge = "success";
+    else if (historyItem.status === "failed") statusBadge = "danger";
+    else if (historyItem.status === "error") statusBadge = "warning";
+    document.getElementById(
+      "detailStatus"
+    ).innerHTML = `<span class="badge bg-${statusBadge}">${historyItem.status}</span>`;
+
+    document.getElementById(
+      "detailDuration"
+    ).textContent = `${historyItem.duration_ms}ms`;
+    document.getElementById("detailExecutedBy").textContent =
+      historyItem.executed_by || "system";
+    document.getElementById("detailMessage").textContent =
+      historyItem.result_message || "-";
+
+    const errorPre = document.getElementById("detailError");
+    if (historyItem.error_detail && historyItem.error_detail.trim() !== "") {
+      errorPre.textContent = historyItem.error_detail;
+      errorPre.classList.remove("text-muted");
+    } else {
+      errorPre.textContent = "오류 정보 없음";
+      errorPre.classList.add("text-muted");
+    }
+
+    new bootstrap.Modal(document.getElementById("historyDetailModal")).show();
+  }
+
+  // 이력 내보내기
+  function exportHistory() {
+    if (allHistory.length === 0) {
+      showError("내보낼 이력이 없습니다.");
+      return;
+    }
+
+    const csv = convertToCSV(allHistory);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `test_history_${new Date().toISOString().split("T")[0]}.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function convertToCSV(data) {
+    const headers = [
+      "실행시간",
+      "테스트명",
+      "카테고리",
+      "상태",
+      "소요시간(ms)",
+      "실행자",
+      "결과메시지",
+    ];
+    const rows = data.map((h) => [
+      new Date(h.execution_time).toLocaleString("ko-KR"),
+      h.test_name,
+      h.test_category || "-",
+      h.status,
+      h.duration_ms,
+      h.executed_by || "system",
+      (h.result_message || "").replace(/,/g, ";"),
+    ]);
+
+    return [headers, ...rows].map((row) => row.join(",")).join("\n");
   }
 
   // 전체 선택/해제
