@@ -109,6 +109,7 @@ class EmailDatabase:
                     description TEXT,
                     category TEXT DEFAULT 'general',
                     is_sensitive INTEGER DEFAULT 0,
+                    created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL,
                     updated_by TEXT DEFAULT 'system'
                 )
@@ -546,11 +547,12 @@ class EmailDatabase:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.cursor()
 
-                # 기존 값 조회 (히스토리용)
+                # 기존 값 조회 (히스토리용 및 created_at 유지)
                 cursor.execute(
-                    "SELECT value FROM system_settings WHERE key = ?", (key,))
+                    "SELECT value, created_at FROM system_settings WHERE key = ?", (key,))
                 old_row = cursor.fetchone()
                 old_value = old_row[0] if old_row else None
+                created_at = old_row[1] if old_row else datetime.now().isoformat()
 
                 # 타입 결정
                 if isinstance(value, bool):
@@ -569,13 +571,13 @@ class EmailDatabase:
                     value_type = 'string'
                     value_str = str(value)
 
-                # 설정 저장
+                # 설정 저장 (created_at 유지, updated_at 갱신)
                 cursor.execute("""
                     INSERT OR REPLACE INTO system_settings
-                    (key, value, type, description, category, is_sensitive, updated_at, updated_by)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    (key, value, type, description, category, is_sensitive, created_at, updated_at, updated_by)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (key, value_str, value_type, description, category,
-                      1 if is_sensitive else 0, datetime.now().isoformat(), changed_by))
+                      1 if is_sensitive else 0, created_at, datetime.now().isoformat(), changed_by))
 
                 # 히스토리 저장
                 if old_value != value_str:
