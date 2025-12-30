@@ -452,7 +452,7 @@ endblock %} {% block extra_css %}
       .map(
         (log) => `
       <div class="log-entry">
-        <div class="log-timestamp">${formatDateTimeFull(log.timestamp)}</div>
+        <div class="log-timestamp">${formatDateTime(log.timestamp)}</div>
         <div class="log-level ${log.level}">${log.level}</div>
         <div>
           <div class="log-message">${escapeHtml(log.message)}</div>
