@@ -107,7 +107,7 @@ def admin_settings():
 
         # 전체 설정 조회 (카테고리별)
         categories = ['general', 'database',
-                      'email', 'security', 'performance']
+                      'email', 'security', 'performance', 'route']
         settings_by_category = {}
 
         for category in categories:
@@ -214,6 +214,14 @@ def api_init_settings():
                 'category': 'performance', 'description': '캐시 활성화'},
             {'key': 'max_concurrent_tasks', 'value': 5, 'type': 'int',
                 'category': 'performance', 'description': '최대 동시 처리 작업 수'},
+            
+            # Route 설정
+            {'key': 'route_prefix', 'value': '/api', 'type': 'string',
+                'category': 'route', 'description': 'API 라우트 접두사'},
+            {'key': 'enable_cors', 'value': True, 'type': 'bool',
+                'category': 'route', 'description': 'CORS 활성화'},
+            {'key': 'allowed_origins', 'value': '*', 'type': 'string',
+                'category': 'route', 'description': '허용된 원본 (쉼표로 구분)'},
         ]
 
         added = 0
