@@ -323,7 +323,7 @@ def api_settings():
                 value = json.loads(value) if isinstance(value, str) else value
 
             from src.database.email_db import db
-            db.set_setting(
+            success = db.set_setting(
                 key=key,
                 value=value,
                 description=description,
@@ -332,10 +332,27 @@ def api_settings():
                 changed_by=changed_by,
                 reason='새 설정 추가'
             )
+            
+            if success:
+                # 설정을 SettingsManager에도 반영
+                try:
+                    from src.core.settings_manager import get_settings_manager
+                    settings_manager = get_settings_manager()
+                    settings_manager.set(
+                        key=key,
+                        value=value,
+                        description=description,
+                        category=category,
+                        is_sensitive=is_sensitive,
+                        changed_by=changed_by,
+                        reason='새 설정 추가'
+                    )
+                except Exception as cache_error:
+                    current_app.logger.warning(f'설정 캐시 갱신 실패: {cache_error}')
 
             return jsonify({
                 'success': True,
-                'message': f'설정 "{key}"이(가) 추가되었습니다.'
+                'message': f'설정 "{key}"이(가) 추가되었습니다.\n설정이 시스템에 즉시 반영되었습니다.'
             })
         except Exception as e:
             current_app.logger.exception(f'api_add_setting error: {e}')
@@ -359,7 +376,7 @@ def api_update_setting(key: str):
         reason = data.get('reason', '관리자 수정')
 
         from src.database.email_db import db
-        db.set_setting(
+        success = db.set_setting(
             key=key,
             value=value,
             description=description,
@@ -368,10 +385,28 @@ def api_update_setting(key: str):
             changed_by=changed_by,
             reason=reason
         )
+        
+        if success:
+            # 설정을 SettingsManager에도 반영 (캐시 갱신)
+            try:
+                from src.core.settings_manager import get_settings_manager
+                settings_manager = get_settings_manager()
+                settings_manager.set(
+                    key=key,
+                    value=value,
+                    description=description,
+                    category=category,
+                    is_sensitive=is_sensitive,
+                    changed_by=changed_by,
+                    reason=reason
+                )
+                current_app.logger.info(f'설정 "{key}" 업데이트 및 캐시 갱신 완료')
+            except Exception as cache_error:
+                current_app.logger.warning(f'설정 캐시 갱신 실패: {cache_error}')
 
         return jsonify({
             'success': True,
-            'message': f'설정 "{key}"이(가) 업데이트되었습니다.'
+            'message': f'설정 "{key}"이(가) 업데이트되었습니다.\n설정이 시스템에 즉시 반영되었습니다.'
         })
     except Exception as e:
         current_app.logger.exception(f'api_update_setting error: {e}')
@@ -399,6 +434,37 @@ def api_delete_setting(key: str):
         })
     except Exception as e:
         current_app.logger.exception(f'api_delete_setting error: {e}')
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@admin.route('/api/admin/settings/test/<key>', methods=['GET'])
+def api_test_setting(key: str):
+    """설정 값 테스트 API - 실제로 로드된 값 확인"""
+    from flask import jsonify
+    try:
+        from src.core.settings_manager import get_settings_manager
+        settings_manager = get_settings_manager()
+        
+        # 실제 설정 값 로드
+        value = settings_manager.get(key, default=None)
+        
+        # DB에서 직접 조회
+        from src.database.email_db import db
+        db_value = db.get_setting(key, default=None)
+        
+        return jsonify({
+            'success': True,
+            'key': key,
+            'current_value': value,
+            'db_value': db_value,
+            'is_same': value == db_value,
+            'message': f'설정 "{key}"의 현재 값이 정상적으로 로드되었습니다.'
+        })
+    except Exception as e:
+        current_app.logger.exception(f'api_test_setting error: {e}')
         return jsonify({
             'success': False,
             'error': str(e)
@@ -452,38 +518,39 @@ def api_get_setting_history(key: str):
 @admin.route('/api/admin/restart', methods=['POST'])
 def api_restart_service():
     """웹서비스 재시작 API"""
-    from flask import jsonify
     import os
-    import sys
     import signal
-    
+    import sys
+
+    from flask import jsonify
+
     try:
         current_app.logger.info('웹서비스 재시작 요청 받음')
-        
+
         # 재시작 스크립트 실행 (비동기)
         def restart_server():
             import time
             time.sleep(2)  # 응답 전송 대기
             current_app.logger.info('서버 재시작 중...')
-            
+
             # Windows에서는 프로세스 재시작
             if sys.platform == 'win32':
                 os.execv(sys.executable, ['python'] + sys.argv)
             else:
                 # Unix/Linux에서는 SIGHUP 시그널 사용
                 os.kill(os.getpid(), signal.SIGHUP)
-        
+
         # 백그라운드 스레드로 재시작 실행
         import threading
         restart_thread = threading.Thread(target=restart_server)
         restart_thread.daemon = True
         restart_thread.start()
-        
+
         return jsonify({
             'success': True,
             'message': '웹서비스 재시작이 시작되었습니다.'
         })
-        
+
     except Exception as e:
         current_app.logger.exception(f'웹서비스 재시작 오류: {e}')
         return jsonify({
