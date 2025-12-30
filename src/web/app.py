@@ -76,6 +76,14 @@ def create_app(config_path: str = None):
     except Exception as e:
         app.logger.warning(f'⚠️ Main blueprint 등록 실패 (계속 진행): {e}')
 
+    # Email Blueprint 등록
+    try:
+        from .blueprints.email_routes import email_bp
+        app.register_blueprint(email_bp)
+        app.logger.info('✅ Email blueprint registered (/emails, /email, /generate_evidence, /process_selected)')
+    except Exception as e:
+        app.logger.warning(f'⚠️ Email blueprint 등록 실패 (계속 진행): {e}')
+
     # API 라우트 등록
     from .api import register_api_routes
     register_api_routes(app)

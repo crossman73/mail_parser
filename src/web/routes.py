@@ -701,24 +701,12 @@ def register_routes(app):
         except Exception:
             return render_template('admin.html')
 
-    @app.route('/emails/<file_id>')
-    def email_list(file_id):
-        """이메일 목록 페이지 - 선택적 증거 생성 기능 포함"""
-        if file_id not in processed_emails:
-            flash('파일을 찾을 수 없습니다.', 'error')
-            return redirect(url_for('index'))
-
-        data = processed_emails[file_id]
-        file_info = uploaded_files.get(file_id, {})
-
-        return render_template('email_list.html',
-                               emails=data['emails'],
-                               filename=data['filename'],
-                               file_id=file_id,
-                               file_info=file_info,
-                               evidence_generated=data.get(
-                                   'evidence_generated', False),
-                               generated_evidence=data.get('generated_evidence', []))
+    # [2025-12-30] 아래 라우트들은 email_routes.py Blueprint로 이동됨
+    # - /emails/<file_id> (이메일 목록)
+    # - /email/<file_id>/<int:email_index> (이메일 상세)
+    # - /generate_evidence/<file_id> (증거 생성)
+    # - /api/evidence_progress/<task_id> (진행 상황)
+    # - /process_selected (선택 이메일 처리)
 
     @app.route('/generate_evidence/<file_id>', methods=['POST'])
     def generate_evidence(file_id):
@@ -758,113 +746,8 @@ def register_routes(app):
             app.logger.error(f"증거 생성 요청 실패: {str(e)}")
             return jsonify({'error': '증거 생성 요청 처리 중 오류가 발생했습니다.'}), 500
 
-    @app.route('/api/evidence_progress/<task_id>')
-    def get_evidence_progress(task_id):
-        """증거 생성 진행 상황 API"""
-        progress_data = progress_tracker.get_progress(task_id)
-        if not progress_data:
-            return jsonify({'error': 'Task not found'}), 404
-
-        return jsonify(progress_data)
-
-    @app.route('/email/<file_id>/<int:email_index>')
-    def email_detail(file_id, email_index):
-        """이메일 상세 페이지"""
-        if file_id not in processed_emails:
-            flash('파일을 찾을 수 없습니다.', 'error')
-            return redirect(url_for('index'))
-
-        emails = processed_emails[file_id]['emails']
-        if email_index >= len(emails):
-            flash('존재하지 않는 이메일입니다.', 'error')
-            return redirect(url_for('email_list', file_id=file_id))
-
-        email = emails[email_index]
-        processor = email_processors.get(file_id)
-
-        # 상세 이메일 내용 가져오기
-        if processor:
-            try:
-                # 메시지 ID로 전체 메시지 내용 가져오기
-                message_content = processor.get_message_content(email['id'])
-                email['full_content'] = message_content
-            except Exception as e:
-                app.logger.error(f"이메일 내용 로드 실패: {str(e)}")
-                email['full_content'] = None
-
-        return render_template('email_detail.html', email=email, file_id=file_id, email_index=email_index)
-
-    @app.route('/process_selected', methods=['POST'])
-    def process_selected_emails():
-        """선택된 이메일들을 HTML/PDF로 처리"""
-        try:
-            data = request.get_json()
-            file_id = data.get('file_id')
-            selected_indices = data.get('selected_emails', [])
-            party = data.get('party', '갑')  # 갑 또는 을
-            convert_to_pdf = data.get('convert_to_pdf', False)
-
-            if file_id not in email_processors:
-                return jsonify({'error': '프로세서를 찾을 수 없습니다.'}), 400
-
-            processor = email_processors[file_id]
-            emails = processed_emails[file_id]['emails']
-
-            # 선택된 메일 ID 목록
-            selected_msg_ids = [emails[idx]['id']
-                                for idx in selected_indices if idx < len(emails)]
-
-            if not selected_msg_ids:
-                return jsonify({'error': '선택된 이메일이 없습니다.'}), 400
-
-            # 출력 디렉토리 생성
-            output_dir = 'processed_emails'
-            os.makedirs(output_dir, exist_ok=True)
-
-            processed_files = []
-
-            # HTML 파일 생성
-            for i, msg_id in enumerate(selected_msg_ids):
-                try:
-                    html_filepath = processor.process_single_message(
-                        msg_id, output_dir)
-                    if html_filepath:
-                        processed_files.append(html_filepath)
-                except Exception as e:
-                    app.logger.error(f"메시지 처리 실패 (ID: {msg_id}): {str(e)}")
-
-            result = {
-                'processed_count': len(processed_files),
-                'html_files': processed_files
-            }
-
-            # PDF 변환 요청 시
-            if convert_to_pdf and processed_files:
-                try:
-                    evidence_number_counter = {party: 0}
-                    pdf_files = []
-
-                    for html_file in processed_files:
-                        success = processor.convert_html_to_pdf(
-                            html_file, party, evidence_number_counter)
-                        if success:
-                            # PDF 파일 경로 추정 (실제 파일명은 processor 내부 로직에 따라 다름)
-                            pdf_path = html_file.replace('.html', '.pdf')
-                            if os.path.exists(pdf_path):
-                                pdf_files.append(pdf_path)
-
-                    result['pdf_files'] = pdf_files
-                    result['pdf_count'] = len(pdf_files)
-
-                except Exception as e:
-                    app.logger.error(f"PDF 변환 실패: {str(e)}")
-                    result['pdf_error'] = str(e)
-
-            return jsonify(result)
-
-        except Exception as e:
-            app.logger.error(f"이메일 처리 실패: {str(e)}")
-            return jsonify({'error': str(e)}), 500
+    # [2025-12-30] generate_evidence는 백그라운드 함수로 유지 (Blueprint에서 호출)
+    # generate_evidence_background 함수는 여기 유지
 
     @app.route('/api/docs')
     def api_docs():
