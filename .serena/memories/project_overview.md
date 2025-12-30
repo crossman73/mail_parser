@@ -16,13 +16,22 @@
 ## 기술 스택
 - **Backend**: Python 3.13.9, Flask 3.1.2
 - **Database**: SQLite (email_parser.db)
-- **Frontend**: Bootstrap 5.1.3, Font Awesome 6.0.0, Google Fonts (Inter)
-- **라이브러리**: 
+- **Frontend**: Bootstrap 5.1.3, Font Awesome 6.0.0 ✅ (통일 완료), Google Fonts (Inter)
+- **Custom Assets**:
+  - modern-ui.css (CSS 변수, 다크모드, 반응형)
+  - common.js (다크모드 토글, 유틸리티)
+- **라이브러리**:
   - reportlab (PDF 생성)
   - openpyxl (Excel 생성)
   - beautifulsoup4 (HTML 파싱)
   - psutil (시스템 모니터링)
   - watchdog (파일 변경 감지)
+- **MCP Servers**:
+  - Serena (심볼릭 코드 분석)
+  - GitHub (코드 검색, 이슈 관리)
+  - Desktop Commander (파일 시스템 작업)
+  - Brave Search (웹 검색)
+  - Codacy (코드 품질 분석)
 
 ## 프로젝트 구조
 ```

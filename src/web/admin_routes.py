@@ -7,6 +7,9 @@ from flask import (Blueprint, abort, current_app, render_template, request,
 
 from src.core import evidence_store
 
+# [2025-12-30] Admin Blueprint
+# url_prefix='': 주요 경로 ('/admin', '/admin/settings' 등)
+# Phase 2에서 url_prefix='/admin'으로 변경 예정
 # Blueprint name must match template expectations (templates call url_for('admin.evidence_detail'))
 admin = Blueprint('admin', __name__, url_prefix='')
 

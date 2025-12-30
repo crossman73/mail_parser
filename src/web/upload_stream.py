@@ -4,8 +4,11 @@ import uuid
 from pathlib import Path
 
 from flask import Blueprint, current_app, jsonify, request
+
 from src.core import job_store
 
+# [2025-12-30] Upload Blueprint
+# url_prefix='/api': API 업로드 엔드포인트 ('/api/upload/stream', '/api/upload/job/<job_id>')
 upload_bp = Blueprint('upload', __name__, url_prefix='/api')
 
 # ---------------------------------------------------------------------------

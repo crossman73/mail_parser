@@ -864,16 +864,6 @@ def register_routes(app):
         """API 문서 페이지"""
         return render_template('api.html')
 
-    # @app.route('/evidence')  # 중복 라우트 - 아래에 더 완전한 구현 있음
-    # def evidence():
-    #     """증거 생성 페이지"""
-    #     return render_template('evidence.html')
-
-    # @app.route('/timeline')  # 중복 라우트 - 아래에 더 완전한 구현 있음
-    # def timeline():
-    #     """타임라인 페이지"""
-    #     return render_template('timeline.html')
-
     @app.route('/integrity')
     def integrity():
         """무결성 검증 페이지"""
@@ -979,25 +969,6 @@ def register_routes(app):
 
     # 중복 라우트 제거됨 - upload_file 함수는 위에 정의되어 있음
     # 중복된 구현은 완전히 제거됨 (2025-01-15)
-
-    # @app.route('/emails')  # 중복된 라우트 주석 처리
-    # def email_list():
-    #     """이메일 목록 페이지"""
-    #     filename = request.args.get('filename')
-    #     if not filename:
-    #         flash('mbox 파일이 지정되지 않았습니다.', 'error')
-    #         return redirect(url_for('upload_page'))
-    #
-    #     try:
-    #         upload_path = Path(app.config['UPLOAD_FOLDER']) / filename
-    #         if not upload_path.exists():
-    #             flash('mbox 파일을 찾을 수 없습니다.', 'error')
-    #             return redirect(url_for('upload_page'))
-    #
-    #         # 이메일 로드
-    #         result = email_service.load_mbox(str(upload_path))
-    #         if not result['success']:
-    #             flash(f'mbox 로드 실패: {result["message"]}', 'error')
     #             return redirect(url_for('upload_page'))
     #
     #         # 통계 정보
@@ -1744,109 +1715,7 @@ def register_routes(app):
             'app_version': '2.0.0'
         }
 
-    # @app.route('/integrated_timeline')  # 중복 라우트 - 위에 이미 정의됨
-    # def integrated_timeline():
-    #     """통합 타임라인 보기"""
-    #     try:
-    #         timeline_generator = IntegratedTimelineGenerator(
-    #             base_dir=os.path.join(os.getcwd(), 'processed_emails')
-    #         )
-    #
-    #         # 통합 타임라인 생성
-    #         timeline_result = timeline_generator.generate_integrated_timeline()
-    #
-    #         return render_template('integrated_timeline.html',
-    #                              timeline_result=timeline_result,
-    #                              app_name="Email Evidence Processor")
-    #
-    #     except Exception as e:
-    #         flash(f'타임라인 생성 실패: {str(e)}', 'error')
-    #         return render_template('integrated_timeline.html',
-    #                              timeline_result=None,
-    #                              app_name="Email Evidence Processor")
-
-    # @app.route('/generate_timeline_package')  # 중복 라우트 - 위에 이미 정의됨
-    # def generate_timeline_package():
-    #     """법원 제출용 통합 타임라인 패키지 생성 및 다운로드"""
-    #     try:
-    #         timeline_generator = IntegratedTimelineGenerator(
-    #             base_dir=os.path.join(os.getcwd(), 'processed_emails')
-    #         )
-    #
-    #         # 법원 제출용 패키지 생성
-    #         timeline_result = timeline_generator.generate_integrated_timeline()
-    #         package_path = timeline_generator._create_court_submission_package(timeline_result)
-    #
-    #         return send_file(
-    #             package_path,
-    #             as_attachment=True,
-    #             download_name=f'법원제출용_통합타임라인_{datetime.now().strftime("%Y%m%d_%H%M%S")}.zip',
-    #             mimetype='application/zip'
-    #         )
-    #
-    #     except Exception as e:
-    #         flash(f'법원 제출용 패키지 생성 실패: {str(e)}', 'error')
-    #         return redirect(url_for('integrated_timeline'))
-
-    # @app.route('/download_timeline_excel')  # 중복 라우트 - 위에 이미 정의됨
-    # def download_timeline_excel():
-    #     """통합 타임라인 Excel 파일 다운로드"""
-    #     try:
-    #         import openpyxl
-    #
-    #         timeline_generator = IntegratedTimelineGenerator(
-    #             base_dir=os.path.join(os.getcwd(), 'processed_emails')
-    #         )
-    #
-    #         # 통합 타임라인 생성
-    #         timeline_result = timeline_generator.generate_integrated_timeline()
-    #
-    #         # Excel 파일 생성
-    #         excel_filename = f'통합타임라인_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
-    #         excel_path = os.path.join(tempfile.gettempdir(), excel_filename)
-    #
-    #         workbook = openpyxl.Workbook()
-    #         ws = workbook.active
-    #         ws.title = "통합 타임라인"
-    #
-    #         # 헤더 작성
-    #         headers = ['순번', '날짜', '시간', '구분', '제목', '중요도', '설명', '관련자', '첨부파일', '증거번호']
-    #         for col, header in enumerate(headers, 1):
-    #             ws.cell(row=1, column=col, value=header)
-    #
-    #         # 데이터 작성
-    #         for idx, item in enumerate(timeline_result.timeline_items, 2):
-    #             ws.cell(row=idx, column=1, value=idx-1)
-    #             ws.cell(row=idx, column=2, value=item.event_date.strftime('%Y-%m-%d') if hasattr(item.event_date, 'strftime') else str(item.event_date))
-    #             ws.cell(row=idx, column=3, value=item.event_time)
-    #             ws.cell(row=idx, column=4, value='이메일' if item.type == 'EMAIL' else f'추가증거-{item.category}')
-    #             ws.cell(row=idx, column=5, value=item.title)
-    #             ws.cell(row=idx, column=6, value=item.importance)
-    #             ws.cell(row=idx, column=7, value=item.description or '')
-    #
-    #             if item.type == 'EMAIL':
-    #                 participants = f"발신: {item.participants.get('from', '')} / 수신: {item.participants.get('to', '')}"
-    #                 ws.cell(row=idx, column=8, value=participants)
-    #                 attachments = ', '.join([att.get('name', '') for att in item.attachments or []])
-    #                 ws.cell(row=idx, column=9, value=attachments)
-    #                 ws.cell(row=idx, column=10, value='')
-    #             else:
-    #                 ws.cell(row=idx, column=8, value='')
-    #                 ws.cell(row=idx, column=9, value=item.file_info.get('name', ''))
-    #                 ws.cell(row=idx, column=10, value=item.evidence_number or '')
-    #
-    #         workbook.save(excel_path)
-    #
-    #         return send_file(
-    #             excel_path,
-    #             as_attachment=True,
-    #             download_name=excel_filename,
-    #             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    #         )
-    #
-    #     except Exception as e:
-    #         flash(f'Excel 다운로드 실패: {str(e)}', 'error')
-    #         return redirect(url_for('integrated_timeline'))
+    # [2025-12-30] 중복 라우트 제거: integrated_timeline, generate_timeline_package, download_timeline_excel
 
     # ========================================================================
     # 로그 뷰어 라우트 (DB 기반)

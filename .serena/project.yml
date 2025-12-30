@@ -37,7 +37,7 @@ read_only: false
 
 # list of tool names to exclude. We recommend not excluding any tools, see the readme for more details.
 # Below is the complete list of tools for convenience.
-# To make sure you have the latest list of tools, and to view their descriptions, 
+# To make sure you have the latest list of tools, and to view their descriptions,
 # execute `uv run scripts/print_tool_overview.py`.
 #
 #  * `activate_project`: Activates a project by name.
@@ -78,7 +78,18 @@ excluded_tools: []
 
 # initial prompt for the project. It will always be given to the LLM upon activating the project
 # (contrary to the memories, which are loaded on demand).
-initial_prompt: ""
+initial_prompt: |
+  이 프로젝트는 법원 증거 관리 시스템(mail_parser)입니다.
+  - Python 3.13.9 + Flask 3.1.2 웹 애플리케이션
+  - Bootstrap Icons → Font Awesome으로 완전 통일 완료 (151개)
+  - modern-ui.css, common.js 기반 다크모드 지원
+  - MCP 도구(Serena, GitHub, Desktop Commander) 적극 활용
+  - Git 커밋 메시지 형식: "YYYY-MM-DD HH:mm:ss_메시지"
+
+  핵심 원칙:
+  1. 심볼 단위 분석 (전체 파일 읽기 최소화)
+  2. 메모리 우선 참조 (프로젝트 지식 활용)
+  3. MCP 도구 최대 활용 (grep_search, find_symbol 등)
 
 project_name: "python-email"
 included_optional_tools: []
