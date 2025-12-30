@@ -128,6 +128,39 @@ class EmailDatabase:
                 )
             """)
 
+            # 시스템 테스트 정의 테이블
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS system_tests (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    test_key TEXT UNIQUE NOT NULL,
+                    test_name TEXT NOT NULL,
+                    test_category TEXT NOT NULL,
+                    test_description TEXT,
+                    test_module TEXT NOT NULL,
+                    test_function TEXT NOT NULL,
+                    is_enabled INTEGER DEFAULT 1,
+                    timeout_seconds INTEGER DEFAULT 30,
+                    display_order INTEGER DEFAULT 0,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL
+                )
+            """)
+
+            # 테스트 실행 이력 테이블
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS test_executions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    test_id INTEGER NOT NULL,
+                    execution_time TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    result_message TEXT,
+                    error_detail TEXT,
+                    duration_ms INTEGER,
+                    executed_by TEXT DEFAULT 'system',
+                    FOREIGN KEY (test_id) REFERENCES system_tests (id)
+                )
+            """)
+
             conn.commit()
 
     def get_connection(self):
@@ -759,5 +792,188 @@ class _LazyEmailDB:
         return getattr(inst, name)
 
 
+class SystemTestManager:
+    """시스템 테스트 관리"""
+
+    def __init__(self, db_path: str = "data/db/email_parser.db"):
+        self.db_path = db_path
+
+    def add_test(self, test_key: str, test_name: str, test_category: str,
+                 test_module: str, test_function: str, test_description: str = "",
+                 is_enabled: bool = True, timeout_seconds: int = 30,
+                 display_order: int = 0) -> bool:
+        """테스트 추가"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                now = datetime.now().isoformat()
+
+                cursor.execute("""
+                    INSERT OR REPLACE INTO system_tests
+                    (test_key, test_name, test_category, test_description, test_module,
+                     test_function, is_enabled, timeout_seconds, display_order, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (test_key, test_name, test_category, test_description, test_module,
+                      test_function, 1 if is_enabled else 0, timeout_seconds, display_order, now, now))
+
+                conn.commit()
+                return True
+        except Exception as e:
+            print(f"테스트 추가 오류: {e}")
+            return False
+
+    def get_all_tests(self, category: Optional[str] = None, enabled_only: bool = False) -> List[Dict]:
+        """모든 테스트 조회"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+
+                query = "SELECT * FROM system_tests WHERE 1=1"
+                params = []
+
+                if category:
+                    query += " AND test_category = ?"
+                    params.append(category)
+
+                if enabled_only:
+                    query += " AND is_enabled = 1"
+
+                query += " ORDER BY display_order, test_name"
+
+                cursor.execute(query, params)
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            print(f"테스트 조회 오류: {e}")
+            return []
+
+    def get_test_by_key(self, test_key: str) -> Optional[Dict]:
+        """특정 테스트 조회"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+
+                cursor.execute("SELECT * FROM system_tests WHERE test_key = ?", (test_key,))
+                row = cursor.fetchone()
+                return dict(row) if row else None
+        except Exception as e:
+            print(f"테스트 조회 오류: {e}")
+            return None
+
+    def update_test(self, test_key: str, **kwargs) -> bool:
+        """테스트 업데이트"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+
+                # 허용된 필드만 업데이트
+                allowed_fields = ['test_name', 'test_category', 'test_description',
+                                'test_module', 'test_function', 'is_enabled',
+                                'timeout_seconds', 'display_order']
+
+                updates = []
+                params = []
+
+                for field, value in kwargs.items():
+                    if field in allowed_fields:
+                        updates.append(f"{field} = ?")
+                        params.append(value)
+
+                if not updates:
+                    return False
+
+                updates.append("updated_at = ?")
+                params.append(datetime.now().isoformat())
+                params.append(test_key)
+
+                query = f"UPDATE system_tests SET {', '.join(updates)} WHERE test_key = ?"
+                cursor.execute(query, params)
+                conn.commit()
+                return True
+        except Exception as e:
+            print(f"테스트 업데이트 오류: {e}")
+            return False
+
+    def delete_test(self, test_key: str) -> bool:
+        """테스트 삭제"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM system_tests WHERE test_key = ?", (test_key,))
+                conn.commit()
+                return True
+        except Exception as e:
+            print(f"테스트 삭제 오류: {e}")
+            return False
+
+    def save_execution(self, test_id: int, status: str, result_message: str = "",
+                      error_detail: str = "", duration_ms: int = 0,
+                      executed_by: str = "system") -> bool:
+        """테스트 실행 결과 저장"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+
+                cursor.execute("""
+                    INSERT INTO test_executions
+                    (test_id, execution_time, status, result_message, error_detail,
+                     duration_ms, executed_by)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (test_id, datetime.now().isoformat(), status, result_message,
+                      error_detail, duration_ms, executed_by))
+
+                conn.commit()
+                return True
+        except Exception as e:
+            print(f"실행 결과 저장 오류: {e}")
+            return False
+
+    def get_execution_history(self, test_key: str = None, limit: int = 50) -> List[Dict]:
+        """실행 이력 조회"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+
+                if test_key:
+                    query = """
+                        SELECT e.*, t.test_key, t.test_name
+                        FROM test_executions e
+                        JOIN system_tests t ON e.test_id = t.id
+                        WHERE t.test_key = ?
+                        ORDER BY e.execution_time DESC
+                        LIMIT ?
+                    """
+                    cursor.execute(query, (test_key, limit))
+                else:
+                    query = """
+                        SELECT e.*, t.test_key, t.test_name
+                        FROM test_executions e
+                        JOIN system_tests t ON e.test_id = t.id
+                        ORDER BY e.execution_time DESC
+                        LIMIT ?
+                    """
+                    cursor.execute(query, (limit,))
+
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            print(f"실행 이력 조회 오류: {e}")
+            return []
+
+    def get_test_categories(self) -> List[str]:
+        """테스트 카테고리 목록"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT DISTINCT test_category FROM system_tests ORDER BY test_category")
+                return [row[0] for row in cursor.fetchall()]
+        except Exception as e:
+            print(f"카테고리 조회 오류: {e}")
+            return []
+
+
 # Lazily-initialized proxy kept for backward compatibility with imports
 db = _LazyEmailDB()
+test_manager = SystemTestManager()
+

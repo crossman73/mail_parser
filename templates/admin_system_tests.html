@@ -1,0 +1,617 @@
+{% extends "base.html" %} {% block title %}시스템 테스트 - {{ super() }}{%
+endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <h1 class="h3 mb-4"><i class="fas fa-flask"></i> 시스템 테스트</h1>
+
+  <!-- 통계 카드 -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">전체 테스트</h5>
+          <h2 id="totalTests">0</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">성공</h5>
+          <h2 id="successTests">0</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-danger">
+        <div class="card-body">
+          <h5 class="card-title">실패</h5>
+          <h2 id="failedTests">0</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body">
+          <h5 class="card-title">오류</h5>
+          <h2 id="errorTests">0</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 액션 버튼 -->
+  <div class="mb-3">
+    <button class="btn btn-primary" onclick="executeAllTests()">
+      <i class="fas fa-play-circle"></i> 전체 실행
+    </button>
+    <button class="btn btn-success" onclick="showAddTestModal()">
+      <i class="fas fa-plus"></i> 테스트 추가
+    </button>
+    <button class="btn btn-info" onclick="loadTests()">
+      <i class="fas fa-sync"></i> 새로고침
+    </button>
+    <button class="btn btn-secondary" onclick="showHistory()">
+      <i class="fas fa-history"></i> 실행 이력
+    </button>
+  </div>
+
+  <!-- 테스트 목록 탭 -->
+  <ul class="nav nav-tabs" id="testTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link active"
+        id="all-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#all"
+        type="button"
+      >
+        전체
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3" id="testTabContent">
+    <!-- 전체 탭 -->
+    <div class="tab-pane fade show active" id="all" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-hover" id="testsTable">
+          <thead>
+            <tr>
+              <th style="width: 5%">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  onchange="toggleSelectAll()"
+                />
+              </th>
+              <th style="width: 10%">카테고리</th>
+              <th style="width: 20%">테스트명</th>
+              <th style="width: 25%">설명</th>
+              <th style="width: 10%">상태</th>
+              <th style="width: 10%">마지막 실행</th>
+              <th style="width: 10%">결과</th>
+              <th style="width: 10%">작업</th>
+            </tr>
+          </thead>
+          <tbody id="testsTableBody">
+            <tr>
+              <td colspan="8" class="text-center text-muted">로딩 중...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 테스트 추가/수정 모달 -->
+<div class="modal fade" id="testModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="testModalTitle">테스트 추가</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="testForm">
+          <div class="mb-3">
+            <label class="form-label">테스트 키 *</label>
+            <input type="text" class="form-control" id="testKey" required />
+            <small class="text-muted">고유 식별자 (예: test_web_app)</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">테스트명 *</label>
+            <input type="text" class="form-control" id="testName" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">카테고리 *</label>
+            <select class="form-select" id="testCategory" required>
+              <option value="web">웹 애플리케이션</option>
+              <option value="database">데이터베이스</option>
+              <option value="email">이메일 처리</option>
+              <option value="forensic">포렌식</option>
+              <option value="api">API</option>
+              <option value="system">시스템</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">설명</label>
+            <textarea
+              class="form-control"
+              id="testDescription"
+              rows="2"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">모듈 경로 *</label>
+            <input type="text" class="form-control" id="testModule" required />
+            <small class="text-muted">예: src.system_tests.core_tests</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">함수명 *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="testFunction"
+              required
+            />
+            <small class="text-muted">예: test_web_application</small>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">타임아웃 (초)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="timeoutSeconds"
+                value="30"
+                min="1"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">표시 순서</label>
+              <input
+                type="number"
+                class="form-control"
+                id="displayOrder"
+                value="0"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="isEnabled"
+                checked
+              />
+              <label class="form-check-label" for="isEnabled"> 활성화 </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          취소
+        </button>
+        <button type="button" class="btn btn-primary" onclick="saveTest()">
+          저장
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 실행 이력 모달 -->
+<div class="modal fade" id="historyModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">실행 이력</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>실행 시간</th>
+                <th>테스트</th>
+                <th>상태</th>
+                <th>소요 시간</th>
+                <th>결과 메시지</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentEditKey = null;
+  let tests = [];
+
+  // 페이지 로드 시 테스트 목록 로딩
+  document.addEventListener("DOMContentLoaded", function () {
+    loadTests();
+  });
+
+  // 테스트 목록 로딩
+  async function loadTests() {
+    try {
+      const response = await fetch("/api/admin/tests");
+      const data = await response.json();
+
+      if (data.success) {
+        tests = data.tests;
+        renderTests(tests);
+        updateStatistics();
+        updateTabs(data.categories);
+      } else {
+        showError("테스트 목록 로딩 실패: " + data.error);
+      }
+    } catch (error) {
+      showError("테스트 목록 로딩 오류: " + error.message);
+    }
+  }
+
+  // 테스트 목록 렌더링
+  function renderTests(testsToRender) {
+    const tbody = document.getElementById("testsTableBody");
+
+    if (testsToRender.length === 0) {
+      tbody.innerHTML =
+        '<tr><td colspan="8" class="text-center text-muted">테스트가 없습니다</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = testsToRender
+      .map(
+        (test) => `
+    <tr>
+      <td>
+        <input type="checkbox" class="test-checkbox" value="${test.test_key}">
+      </td>
+      <td><span class="badge bg-info">${test.test_category}</span></td>
+      <td><strong>${test.test_name}</strong></td>
+      <td><small>${test.test_description || "-"}</small></td>
+      <td>
+        ${
+          test.is_enabled
+            ? '<span class="badge bg-success">활성</span>'
+            : '<span class="badge bg-secondary">비활성</span>'
+        }
+      </td>
+      <td><small id="lastRun_${test.test_key}">-</small></td>
+      <td id="result_${test.test_key}">-</td>
+      <td class="text-nowrap">
+        <button class="btn btn-sm btn-primary" onclick="executeTest('${
+          test.test_key
+        }')" title="실행">
+          <i class="fas fa-play"></i>
+        </button>
+        <button class="btn btn-sm btn-info" onclick="editTest('${
+          test.test_key
+        }')" title="수정">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn btn-sm btn-danger" onclick="deleteTest('${
+          test.test_key
+        }')" title="삭제">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  `
+      )
+      .join("");
+
+    // 마지막 실행 결과 로딩
+    testsToRender.forEach((test) => {
+      loadLastExecution(test.test_key);
+    });
+  }
+
+  // 마지막 실행 결과 로딩
+  async function loadLastExecution(testKey) {
+    try {
+      const response = await fetch(
+        `/api/admin/tests/${testKey}/history?limit=1`
+      );
+      const data = await response.json();
+
+      if (data.success && data.history.length > 0) {
+        const last = data.history[0];
+        const resultCell = document.getElementById(`result_${testKey}`);
+        const lastRunCell = document.getElementById(`lastRun_${testKey}`);
+
+        if (resultCell) {
+          let badgeClass = "secondary";
+          if (last.status === "success") badgeClass = "success";
+          else if (last.status === "failed") badgeClass = "danger";
+          else if (last.status === "error") badgeClass = "warning";
+
+          resultCell.innerHTML = `
+          <span class="badge bg-${badgeClass}">${last.status}</span>
+          <small class="d-block">${last.duration_ms}ms</small>
+        `;
+        }
+
+        if (lastRunCell) {
+          const execTime = new Date(last.execution_time);
+          lastRunCell.textContent = execTime.toLocaleString("ko-KR");
+        }
+      }
+    } catch (error) {
+      console.error("마지막 실행 결과 로딩 오류:", error);
+    }
+  }
+
+  // 통계 업데이트
+  function updateStatistics() {
+    document.getElementById("totalTests").textContent = tests.length;
+    // 실제 통계는 실행 이력에서 가져와야 함
+  }
+
+  // 탭 업데이트
+  function updateTabs(categories) {
+    const tabsContainer = document.getElementById("testTabs");
+    const existingTabs = tabsContainer.querySelectorAll("li:not(:first-child)");
+    existingTabs.forEach((tab) => tab.remove());
+
+    categories.forEach((category) => {
+      const li = document.createElement("li");
+      li.className = "nav-item";
+      li.role = "presentation";
+      li.innerHTML = `
+      <button class="nav-link" id="${category}-tab" data-bs-toggle="tab"
+              data-bs-target="#${category}" type="button" onclick="filterByCategory('${category}')">
+        ${category}
+      </button>
+    `;
+      tabsContainer.appendChild(li);
+    });
+  }
+
+  // 카테고리별 필터
+  function filterByCategory(category) {
+    const filtered = tests.filter((t) => t.test_category === category);
+    renderTests(filtered);
+  }
+
+  // 전체 테스트 실행
+  async function executeAllTests() {
+    if (!confirm("전체 테스트를 실행하시겠습니까?")) return;
+
+    const btn = event.target.closest("button");
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 실행 중...';
+
+    try {
+      const response = await fetch("/api/admin/tests/execute-all", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showSuccess(
+          `전체 테스트 완료: ${data.success}/${
+            data.total
+          } 성공 (${data.success_rate.toFixed(1)}%)`
+        );
+        loadTests(); // 새로고침
+      } else {
+        showError("테스트 실행 실패: " + data.error);
+      }
+    } catch (error) {
+      showError("테스트 실행 오류: " + error.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-play-circle"></i> 전체 실행';
+    }
+  }
+
+  // 단일 테스트 실행
+  async function executeTest(testKey) {
+    const btn = event.target.closest("button");
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    try {
+      const response = await fetch(`/api/admin/tests/${testKey}/execute`, {
+        method: "POST",
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showSuccess(`${data.test_name}: ${data.message}`);
+        loadLastExecution(testKey);
+      } else {
+        showError("테스트 실행 실패: " + data.error);
+      }
+    } catch (error) {
+      showError("테스트 실행 오류: " + error.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+  }
+
+  // 테스트 추가 모달 표시
+  function showAddTestModal() {
+    currentEditKey = null;
+    document.getElementById("testModalTitle").textContent = "테스트 추가";
+    document.getElementById("testForm").reset();
+    document.getElementById("testKey").readOnly = false;
+    new bootstrap.Modal(document.getElementById("testModal")).show();
+  }
+
+  // 테스트 수정
+  async function editTest(testKey) {
+    try {
+      const response = await fetch(`/api/admin/tests/${testKey}`);
+      const data = await response.json();
+
+      if (data.success) {
+        currentEditKey = testKey;
+        const test = data.test;
+
+        document.getElementById("testModalTitle").textContent = "테스트 수정";
+        document.getElementById("testKey").value = test.test_key;
+        document.getElementById("testKey").readOnly = true;
+        document.getElementById("testName").value = test.test_name;
+        document.getElementById("testCategory").value = test.test_category;
+        document.getElementById("testDescription").value =
+          test.test_description || "";
+        document.getElementById("testModule").value = test.test_module;
+        document.getElementById("testFunction").value = test.test_function;
+        document.getElementById("timeoutSeconds").value = test.timeout_seconds;
+        document.getElementById("displayOrder").value = test.display_order;
+        document.getElementById("isEnabled").checked = test.is_enabled === 1;
+
+        new bootstrap.Modal(document.getElementById("testModal")).show();
+      }
+    } catch (error) {
+      showError("테스트 조회 오류: " + error.message);
+    }
+  }
+
+  // 테스트 저장
+  async function saveTest() {
+    const testKey = document.getElementById("testKey").value;
+    const testData = {
+      test_key: testKey,
+      test_name: document.getElementById("testName").value,
+      test_category: document.getElementById("testCategory").value,
+      test_description: document.getElementById("testDescription").value,
+      test_module: document.getElementById("testModule").value,
+      test_function: document.getElementById("testFunction").value,
+      timeout_seconds: parseInt(
+        document.getElementById("timeoutSeconds").value
+      ),
+      display_order: parseInt(document.getElementById("displayOrder").value),
+      is_enabled: document.getElementById("isEnabled").checked,
+    };
+
+    try {
+      let url, method;
+      if (currentEditKey) {
+        url = `/api/admin/tests/${currentEditKey}`;
+        method = "PUT";
+      } else {
+        url = "/api/admin/tests";
+        method = "POST";
+      }
+
+      const response = await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(testData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showSuccess(data.message);
+        bootstrap.Modal.getInstance(
+          document.getElementById("testModal")
+        ).hide();
+        loadTests();
+      } else {
+        showError("저장 실패: " + data.error);
+      }
+    } catch (error) {
+      showError("저장 오류: " + error.message);
+    }
+  }
+
+  // 테스트 삭제
+  async function deleteTest(testKey) {
+    if (!confirm("이 테스트를 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/tests/${testKey}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showSuccess(data.message);
+        loadTests();
+      } else {
+        showError("삭제 실패: " + data.error);
+      }
+    } catch (error) {
+      showError("삭제 오류: " + error.message);
+    }
+  }
+
+  // 실행 이력 보기
+  async function showHistory() {
+    try {
+      const response = await fetch("/api/admin/tests/history?limit=100");
+      const data = await response.json();
+
+      if (data.success) {
+        const tbody = document.getElementById("historyTableBody");
+        tbody.innerHTML = data.history
+          .map((h) => {
+            let badgeClass = "secondary";
+            if (h.status === "success") badgeClass = "success";
+            else if (h.status === "failed") badgeClass = "danger";
+            else if (h.status === "error") badgeClass = "warning";
+
+            const execTime = new Date(h.execution_time);
+
+            return `
+          <tr>
+            <td><small>${execTime.toLocaleString("ko-KR")}</small></td>
+            <td><strong>${h.test_name}</strong></td>
+            <td><span class="badge bg-${badgeClass}">${h.status}</span></td>
+            <td><small>${h.duration_ms}ms</small></td>
+            <td><small>${h.result_message}</small></td>
+          </tr>
+        `;
+          })
+          .join("");
+
+        new bootstrap.Modal(document.getElementById("historyModal")).show();
+      }
+    } catch (error) {
+      showError("이력 조회 오류: " + error.message);
+    }
+  }
+
+  // 전체 선택/해제
+  function toggleSelectAll() {
+    const selectAll = document.getElementById("selectAll");
+    const checkboxes = document.querySelectorAll(".test-checkbox");
+    checkboxes.forEach((cb) => (cb.checked = selectAll.checked));
+  }
+
+  // 알림 함수
+  function showSuccess(message) {
+    alert("✅ " + message);
+  }
+
+  function showError(message) {
+    alert("❌ " + message);
+  }
+</script>
+{% endblock %}

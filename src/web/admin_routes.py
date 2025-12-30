@@ -137,6 +137,22 @@ def admin_settings():
                                error=str(e))
 
 
+@admin.route('/admin/system-tests')
+def admin_system_tests():
+    """시스템 테스트 관리 페이지"""
+    try:
+        # CSRF 토큰 생성
+        if 'admin_csrf' not in session:
+            session['admin_csrf'] = secrets.token_urlsafe(24)
+        
+        return render_template('admin_system_tests.html',
+                             admin_csrf=session['admin_csrf'])
+    except Exception as e:
+        current_app.logger.exception(f'admin_system_tests error: {e}')
+        return render_template('admin_system_tests.html',
+                             error=str(e))
+
+
 @admin.route('/admin/logs')
 def admin_logs():
     try:
@@ -332,7 +348,7 @@ def api_settings():
                 changed_by=changed_by,
                 reason='새 설정 추가'
             )
-            
+
             if success:
                 # 설정을 SettingsManager에도 반영
                 try:
@@ -385,7 +401,7 @@ def api_update_setting(key: str):
             changed_by=changed_by,
             reason=reason
         )
-        
+
         if success:
             # 설정을 SettingsManager에도 반영 (캐시 갱신)
             try:
@@ -447,14 +463,14 @@ def api_test_setting(key: str):
     try:
         from src.core.settings_manager import get_settings_manager
         settings_manager = get_settings_manager()
-        
+
         # 실제 설정 값 로드
         value = settings_manager.get(key, default=None)
-        
+
         # DB에서 직접 조회
         from src.database.email_db import db
         db_value = db.get_setting(key, default=None)
-        
+
         return jsonify({
             'success': True,
             'key': key,
@@ -721,3 +737,244 @@ def remove_task(task_id: str):
     except Exception as e:
         current_app.logger.exception(f'작업 제거 오류: {e}')
         return {'error': str(e)}, 500
+
+
+# ===== 시스템 테스트 관리 API =====
+
+@admin.route('/api/admin/tests', methods=['GET'])
+def api_get_tests():
+    """전체 테스트 목록 조회"""
+    try:
+        from src.database.email_db import test_manager
+
+        category = request.args.get('category')
+        enabled_only = request.args.get('enabled_only', 'false').lower() == 'true'
+
+        tests = test_manager.get_all_tests(category=category, enabled_only=enabled_only)
+        categories = test_manager.get_test_categories()
+
+        return {
+            'success': True,
+            'tests': tests,
+            'categories': categories,
+            'total': len(tests)
+        }, 200
+    except Exception as e:
+        current_app.logger.exception(f'테스트 목록 조회 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests/<test_key>', methods=['GET'])
+def api_get_test(test_key: str):
+    """특정 테스트 조회"""
+    try:
+        from src.database.email_db import test_manager
+
+        test = test_manager.get_test_by_key(test_key)
+
+        if not test:
+            return {'success': False, 'error': '테스트를 찾을 수 없습니다'}, 404
+
+        return {'success': True, 'test': test}, 200
+    except Exception as e:
+        current_app.logger.exception(f'테스트 조회 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests', methods=['POST'])
+def api_add_test():
+    """테스트 추가"""
+    try:
+        from src.database.email_db import test_manager
+
+        data = request.get_json()
+
+        required_fields = ['test_key', 'test_name', 'test_category', 'test_module', 'test_function']
+        for field in required_fields:
+            if field not in data:
+                return {'success': False, 'error': f'필수 필드 누락: {field}'}, 400
+
+        success = test_manager.add_test(
+            test_key=data['test_key'],
+            test_name=data['test_name'],
+            test_category=data['test_category'],
+            test_module=data['test_module'],
+            test_function=data['test_function'],
+            test_description=data.get('test_description', ''),
+            is_enabled=data.get('is_enabled', True),
+            timeout_seconds=data.get('timeout_seconds', 30),
+            display_order=data.get('display_order', 0)
+        )
+
+        if success:
+            return {'success': True, 'message': '테스트가 추가되었습니다'}, 201
+        else:
+            return {'success': False, 'error': '테스트 추가 실패'}, 500
+    except Exception as e:
+        current_app.logger.exception(f'테스트 추가 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests/<test_key>', methods=['PUT'])
+def api_update_test(test_key: str):
+    """테스트 수정"""
+    try:
+        from src.database.email_db import test_manager
+
+        data = request.get_json()
+
+        # test_key는 수정 불가
+        if 'test_key' in data:
+            del data['test_key']
+
+        success = test_manager.update_test(test_key, **data)
+
+        if success:
+            return {'success': True, 'message': '테스트가 수정되었습니다'}, 200
+        else:
+            return {'success': False, 'error': '테스트 수정 실패'}, 500
+    except Exception as e:
+        current_app.logger.exception(f'테스트 수정 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests/<test_key>', methods=['DELETE'])
+def api_delete_test(test_key: str):
+    """테스트 삭제"""
+    try:
+        from src.database.email_db import test_manager
+
+        success = test_manager.delete_test(test_key)
+
+        if success:
+            return {'success': True, 'message': '테스트가 삭제되었습니다'}, 200
+        else:
+            return {'success': False, 'error': '테스트 삭제 실패'}, 500
+    except Exception as e:
+        current_app.logger.exception(f'테스트 삭제 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests/<test_key>/execute', methods=['POST'])
+def api_execute_test(test_key: str):
+    """단일 테스트 실행"""
+    try:
+        from src.database.email_db import test_manager
+        from src.system_tests.executor import test_executor
+
+        # 테스트 정보 조회
+        test = test_manager.get_test_by_key(test_key)
+
+        if not test:
+            return {'success': False, 'error': '테스트를 찾을 수 없습니다'}, 404
+
+        if not test['is_enabled']:
+            return {'success': False, 'error': '비활성화된 테스트입니다'}, 400
+
+        # 테스트 실행
+        result = test_executor.execute_test(
+            test['test_module'],
+            test['test_function'],
+            test['timeout_seconds']
+        )
+
+        # 실행 결과 저장
+        test_manager.save_execution(
+            test_id=test['id'],
+            status=result['status'],
+            result_message=result['message'],
+            error_detail=result.get('error_detail', ''),
+            duration_ms=result['duration_ms'],
+            executed_by=request.remote_addr or 'unknown'
+        )
+
+        return {
+            'success': True,
+            'test_key': test_key,
+            'test_name': test['test_name'],
+            **result
+        }, 200
+    except Exception as e:
+        current_app.logger.exception(f'테스트 실행 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests/execute-all', methods=['POST'])
+def api_execute_all_tests():
+    """전체 테스트 실행"""
+    try:
+        from src.database.email_db import test_manager
+        from src.system_tests.executor import test_executor
+
+        data = request.get_json() or {}
+        category = data.get('category')
+
+        # 활성화된 테스트만 조회
+        tests = test_manager.get_all_tests(category=category, enabled_only=True)
+
+        if not tests:
+            return {'success': False, 'error': '실행할 테스트가 없습니다'}, 400
+
+        # 테스트 실행
+        execution_result = test_executor.execute_multiple_tests(tests)
+
+        # 각 결과 저장
+        for result in execution_result['results']:
+            test = next((t for t in tests if t['test_key'] == result['test_key']), None)
+            if test:
+                test_manager.save_execution(
+                    test_id=test['id'],
+                    status=result['status'],
+                    result_message=result['message'],
+                    error_detail=result.get('error_detail', ''),
+                    duration_ms=result['duration_ms'],
+                    executed_by=request.remote_addr or 'unknown'
+                )
+
+        return {
+            'success': True,
+            **execution_result
+        }, 200
+    except Exception as e:
+        current_app.logger.exception(f'전체 테스트 실행 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests/<test_key>/history', methods=['GET'])
+def api_get_test_history(test_key: str):
+    """테스트 실행 이력 조회"""
+    try:
+        from src.database.email_db import test_manager
+
+        limit = int(request.args.get('limit', 50))
+        history = test_manager.get_execution_history(test_key=test_key, limit=limit)
+
+        return {
+            'success': True,
+            'test_key': test_key,
+            'history': history,
+            'total': len(history)
+        }, 200
+    except Exception as e:
+        current_app.logger.exception(f'실행 이력 조회 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
+
+@admin.route('/api/admin/tests/history', methods=['GET'])
+def api_get_all_history():
+    """전체 실행 이력 조회"""
+    try:
+        from src.database.email_db import test_manager
+
+        limit = int(request.args.get('limit', 100))
+        history = test_manager.get_execution_history(limit=limit)
+
+        return {
+            'success': True,
+            'history': history,
+            'total': len(history)
+        }, 200
+    except Exception as e:
+        current_app.logger.exception(f'실행 이력 조회 오류: {e}')
+        return {'success': False, 'error': str(e)}, 500
+
