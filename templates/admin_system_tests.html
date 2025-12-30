@@ -467,8 +467,7 @@ endblock %} {% block content %}
         }
 
         if (lastRunCell) {
-          const execTime = new Date(last.execution_time);
-          lastRunCell.textContent = execTime.toLocaleString("ko-KR");
+          lastRunCell.textContent = formatDateTime(last.execution_time);
         }
       }
     } catch (error) {
@@ -490,10 +489,11 @@ endblock %} {% block content %}
         const history = data.history;
 
         // 최근 실행 시간
-        const lastExecution = new Date(history[0].execution_time);
         document.getElementById(
           "lastExecutionTime"
-        ).textContent = `마지막 실행: ${lastExecution.toLocaleString("ko-KR")}`;
+        ).textContent = `마지막 실행: ${formatDateTime(
+          history[0].execution_time
+        )}`;
 
         // 상태별 카운트
         const successCount = history.filter(
@@ -804,12 +804,11 @@ endblock %} {% block content %}
         else if (h.status === "failed") badgeClass = "danger";
         else if (h.status === "error") badgeClass = "warning";
 
-        const execTime = new Date(h.execution_time);
         const hasError = h.error_detail && h.error_detail.trim() !== "";
 
         return `
         <tr>
-          <td><small>${execTime.toLocaleString("ko-KR")}</small></td>
+          <td><small>${formatDateTimeFull(h.execution_time)}</small></td>
           <td><strong>${h.test_name}</strong></td>
           <td><span class="badge bg-secondary">${
             h.test_category || "-"
@@ -878,9 +877,8 @@ endblock %} {% block content %}
   function showHistoryDetail(historyItem) {
     document.getElementById("detailTestName").textContent =
       historyItem.test_name;
-    document.getElementById("detailExecutionTime").textContent = new Date(
-      historyItem.execution_time
-    ).toLocaleString("ko-KR");
+    document.getElementById("detailExecutionTime").textContent =
+      formatDateTimeFull(historyItem.execution_time);
 
     let statusBadge = "secondary";
     if (historyItem.status === "success") statusBadge = "success";
@@ -943,7 +941,7 @@ endblock %} {% block content %}
       "결과메시지",
     ];
     const rows = data.map((h) => [
-      new Date(h.execution_time).toLocaleString("ko-KR"),
+      formatDateTimeFull(h.execution_time),
       h.test_name,
       h.test_category || "-",
       h.status,

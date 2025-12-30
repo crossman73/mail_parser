@@ -902,7 +902,7 @@
             // 로그 추가
             if (data.current_message && progressLog) {
               const logEntry = document.createElement('div');
-              logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${data.current_message}`;
+              logEntry.textContent = `[${formatDateTime(new Date())}] ${data.current_message}`;
               progressLog.appendChild(logEntry);
               progressLog.scrollTop = progressLog.scrollHeight;
             }
@@ -952,7 +952,7 @@
                   <strong>발신자:</strong> ${email.sender || 'N/A'}
                 </div>
                 <div class="col-md-6 text-end">
-                  <strong>날짜:</strong> ${email.date ? new Date(email.date).toLocaleString() : 'N/A'}
+                  <strong>날짜:</strong> ${email.date ? formatDateTimeFull(email.date) : 'N/A'}
                 </div>
               </div>
               <div class="row mt-2">

@@ -548,9 +548,7 @@
       const row = document.createElement("tr");
       row.innerHTML = `
             <td>${fileInfo.filename}</td>
-            <td>${new Date(
-              fileInfo.uploaded_at || Date.now()
-            ).toLocaleString()}</td>
+            <td>${formatDateTimeFull(fileInfo.uploaded_at || Date.now())}</td>
             <td>${fileInfo.total_emails || 0}</td>
             <td>
                 <span class="badge bg-${

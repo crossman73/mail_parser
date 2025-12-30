@@ -230,8 +230,8 @@
                 }%">${Math.round(task.progress)}%</div>
               </div>
             </td>
-            <td>${new Date(task.started_at).toLocaleString()}</td>
-            <td>${new Date(task.updated_at).toLocaleString()}</td>
+            <td>${formatDateTimeFull(task.started_at)}</td>
+            <td>${formatDateTimeFull(task.updated_at)}</td>
             <td>
               <button class="btn btn-sm btn-outline-danger" onclick="removeTask('${taskId}')">
                 <i class="fas fa-trash"></i>

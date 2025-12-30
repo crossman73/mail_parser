@@ -177,7 +177,7 @@
 
         // 시간 포맷팅
         if (data.updated_at) {
-          const updateTime = new Date(data.updated_at).toLocaleString("ko-KR");
+          const updateTime = formatDateTimeFull(data.updated_at);
           updatedTime.textContent = updateTime;
         }
 

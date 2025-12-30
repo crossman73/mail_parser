@@ -53,6 +53,63 @@ function $id(id) {
   return document.getElementById(id);
 }
 
+/**
+ * 날짜/시간 포맷 함수 (프로젝트 표준)
+ * - 오늘이면 시간만 표시 (HH:mm:ss)
+ * - 다른 날이면 날짜만 표시 (YYYY-MM-DD)
+ * @param {string|Date} dateStr - 날짜 문자열 또는 Date 객체
+ * @returns {string} 포맷된 날짜/시간 문자열
+ */
+function formatDateTime(dateStr) {
+  if (!dateStr) return '-';
+
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '-';
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+  // 오늘이면 시간만 표시
+  if (dateOnly.getTime() === today.getTime()) {
+    return date.toLocaleTimeString('ko-KR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+  } else {
+    // 다른 날이면 날짜만 표시
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).replace(/\. /g, '-').replace('.', '');
+  }
+}
+
+/**
+ * 전체 날짜/시간 포맷 함수
+ * - 날짜와 시간을 모두 표시 (YYYY-MM-DD HH:mm:ss)
+ * @param {string|Date} dateStr - 날짜 문자열 또는 Date 객체
+ * @returns {string} 포맷된 날짜/시간 문자열
+ */
+function formatDateTimeFull(dateStr) {
+  if (!dateStr) return '-';
+
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '-';
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+  const second = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+}
+
 // Dark mode and mobile menu initialization
 document.addEventListener("DOMContentLoaded", function () {
   // Mobile menu toggle
