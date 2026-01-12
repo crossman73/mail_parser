@@ -2,59 +2,6 @@
 }}{% endblock %} {% block extra_head %}
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<style>
-  /* 카테고리별 색상 정의 */
-  .category-database {
-    background-color: #0d6efd;
-    color: white;
-  }
-  .category-api {
-    background-color: #6610f2;
-    color: white;
-  }
-  .category-auth {
-    background-color: #6f42c1;
-    color: white;
-  }
-  .category-file {
-    background-color: #d63384;
-    color: white;
-  }
-  .category-email {
-    background-color: #dc3545;
-    color: white;
-  }
-  .category-schedule {
-    background-color: #fd7e14;
-    color: white;
-  }
-  .category-system {
-    background-color: #ffc107;
-    color: #000;
-  }
-  .category-integration {
-    background-color: #198754;
-    color: white;
-  }
-  .category-performance {
-    background-color: #20c997;
-    color: white;
-  }
-  .category-security {
-    background-color: #0dcaf0;
-    color: #000;
-  }
-  .category-default {
-    background-color: #6c757d;
-    color: white;
-  }
-
-  .badge.category-badge {
-    font-size: 0.85rem;
-    padding: 0.35em 0.65em;
-    font-weight: 600;
-  }
-</style>
 {% endblock %} {% block content %}
 <div class="container-fluid py-4">
   <!-- 헤더 -->
@@ -65,40 +12,52 @@
     </a>
   </div>
 
-  <!-- 통계 카드 -->
+  <!-- 통계 카드 (필터 버튼) -->
   <div class="row mb-4">
     <div class="col-md-3">
-      <div class="card border-primary">
+      <div class="card text-white bg-primary filter-btn card-selectable-sm"
+           data-filter-type="history-status"
+           data-filter-value="all"
+           onclick="filterByStatus('all')">
         <div class="card-body">
-          <h6 class="card-subtitle mb-2 text-muted">총 실행 횟수</h6>
-          <h2 class="mb-0" id="totalCount">0</h2>
+          <h5 class="card-title"><i class="fas fa-list"></i> 총 실행 횟수</h5>
+          <h2 id="totalCount">0</h2>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card border-success">
+      <div class="card text-white bg-success filter-btn card-selectable-sm"
+           data-filter-type="history-status"
+           data-filter-value="success"
+           onclick="filterByStatus('success')">
         <div class="card-body">
-          <h6 class="card-subtitle mb-2 text-muted">성공</h6>
-          <h2 class="mb-0 text-success" id="successCount">0</h2>
-          <small class="text-muted" id="successRate">0%</small>
+          <h5 class="card-title"><i class="fas fa-check-circle"></i> 성공</h5>
+          <h2 id="successCount">0</h2>
+          <small id="successRate">0%</small>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card border-danger">
+      <div class="card text-white bg-danger filter-btn card-selectable-sm"
+           data-filter-type="history-status"
+           data-filter-value="failed"
+           onclick="filterByStatus('failed')">
         <div class="card-body">
-          <h6 class="card-subtitle mb-2 text-muted">실패</h6>
-          <h2 class="mb-0 text-danger" id="failedCount">0</h2>
-          <small class="text-muted" id="failRate">0%</small>
+          <h5 class="card-title"><i class="fas fa-times-circle"></i> 실패</h5>
+          <h2 id="failedCount">0</h2>
+          <small id="failRate">0%</small>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card border-warning">
+      <div class="card text-white bg-warning filter-btn card-selectable-sm"
+           data-filter-type="history-status"
+           data-filter-value="error"
+           onclick="filterByStatus('error')">
         <div class="card-body">
-          <h6 class="card-subtitle mb-2 text-muted">오류</h6>
-          <h2 class="mb-0 text-warning" id="errorCount">0</h2>
-          <small class="text-muted" id="errorRate">0%</small>
+          <h5 class="card-title"><i class="fas fa-exclamation-triangle"></i> 오류</h5>
+          <h2 id="errorCount">0</h2>
+          <small id="errorRate">0%</small>
         </div>
       </div>
     </div>
@@ -110,80 +69,52 @@
       <div class="row g-3">
         <div class="col-md-2">
           <label class="form-label small">상태 필터</label>
-          <select
-            class="form-select form-select-sm"
-            id="statusFilter"
-            onchange="applyFilters()"
-          >
+          <select class="form-select form-select-sm" id="statusFilter" onchange="applyFilters()">
             <option value="all">전체 상태</option>
             <option value="success">성공만</option>
             <option value="failed">실패만</option>
             <option value="error">오류만</option>
           </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           <label class="form-label small">카테고리 필터</label>
-          <select
-            class="form-select form-select-sm"
-            id="categoryFilter"
-            onchange="applyFilters()"
-          >
+          <select class="form-select form-select-sm" id="categoryFilter" onchange="applyFilters()">
             <option value="all">전체 카테고리</option>
           </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           <label class="form-label small">테스트 항목</label>
-          <select
-            class="form-select form-select-sm"
-            id="testNameFilter"
-            onchange="applyFilters()"
-          >
+          <select class="form-select form-select-sm" id="testNameFilter" onchange="applyFilters()">
             <option value="all">전체 테스트</option>
           </select>
         </div>
         <div class="col-md-2">
           <label class="form-label small">시작 날짜</label>
-          <input
-            type="date"
-            class="form-control form-control-sm"
-            id="startDate"
-            onchange="applyFilters()"
-          />
+          <input type="date" class="form-control form-control-sm" id="startDate" onchange="applyFilters()" />
         </div>
         <div class="col-md-2">
           <label class="form-label small">종료 날짜</label>
-          <input
-            type="date"
-            class="form-control form-control-sm"
-            id="endDate"
-            onchange="applyFilters()"
-          />
+          <input type="date" class="form-control form-control-sm" id="endDate" onchange="applyFilters()" />
         </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <button
-            class="btn btn-sm btn-outline-secondary"
-            onclick="resetFilters()"
-          >
-            <i class="fas fa-redo"></i> 필터 초기화
-          </button>
-          <button
-            class="btn btn-sm btn-outline-primary"
-            onclick="toggleChart()"
-          >
-            <i class="fas fa-chart-bar"></i> 차트 보기
-          </button>
-          <select
-            class="form-select form-select-sm d-inline-block w-auto ms-2"
-            id="limitSelect"
-            onchange="loadHistory()"
-          >
+        <div class="col-md-2">
+          <label class="form-label small">표시 개수</label>
+          <select class="form-select form-select-sm" id="limitSelect" onchange="loadHistory()">
             <option value="100" selected>최근 100개</option>
             <option value="200">최근 200개</option>
             <option value="500">최근 500개</option>
             <option value="1000">최근 1000개</option>
           </select>
+        </div>
+        <div class="col-md-12">
+          <button class="btn btn-sm btn-outline-secondary" onclick="resetFilters()">
+            <i class="fas fa-redo"></i> 필터 초기화
+          </button>
+          <button class="btn btn-sm btn-outline-primary filter-btn"
+                  id="toggleChartBtn"
+                  data-filter-type="chart-toggle"
+                  onclick="toggleChart()">
+            <i class="fas fa-chart-bar"></i> 차트 보기
+          </button>
         </div>
       </div>
     </div>
@@ -191,17 +122,17 @@
 
   <!-- 차트 영역 (토글) -->
   <div class="card mb-4" id="chartContainer" style="display: none">
-    <div class="card-header">
+    <div class="card-header bg-light">
       <h5 class="mb-0"><i class="fas fa-chart-line"></i> 실행 통계 차트</h5>
     </div>
     <div class="card-body">
-      <canvas id="historyChart" style="max-height: 300px"></canvas>
+      <canvas id="historyChart" class="max-h-300"></canvas>
     </div>
   </div>
 
   <!-- 이력 테이블 -->
   <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
       <h5 class="mb-0"><i class="fas fa-list"></i> 실행 이력</h5>
       <span id="statsText" class="text-muted small"></span>
     </div>
@@ -210,14 +141,14 @@
         <table class="table table-hover mb-0">
           <thead class="table-light">
             <tr>
-              <th style="width: 150px">실행 시간</th>
-              <th>테스트명</th>
-              <th style="width: 150px">카테고리</th>
-              <th style="width: 100px">상태</th>
-              <th style="width: 100px">소요시간</th>
-              <th style="width: 120px">실행자</th>
+              <th class="w-150px">실행 시간</th>
+              <th>테스트</th>
+              <th class="w-150px">카테고리</th>
+              <th class="w-100px">상태</th>
+              <th class="w-100px">소요시간</th>
+              <th class="w-120px">실행자</th>
               <th>결과 메시지</th>
-              <th style="width: 80px">상세</th>
+              <th class="w-80px">상세</th>
             </tr>
           </thead>
           <tbody id="historyTableBody">
@@ -228,7 +159,7 @@
         </table>
       </div>
     </div>
-    <div class="card-footer">
+    <div class="card-footer bg-light">
       <div class="d-flex justify-content-between align-items-center">
         <span id="pageInfo" class="text-muted small"></span>
         <nav>
@@ -272,27 +203,22 @@
   const itemsPerPage = 20;
   let historyChart = null;
 
-  // 카테고리별 색상 매핑 (소문자 키로 통일)
+  // 카테고리별 색상 매핑 (Bootstrap 클래스)
   const categoryColors = {
-    'database': 'category-database',
-    'api': 'category-api',
-    'auth': 'category-auth',
-    'file': 'category-file',
-    'email': 'category-email',
-    'schedule': 'category-schedule',
-    'system': 'category-system',
-    'integration': 'category-integration',
-    'performance': 'category-performance',
-    'security': 'category-security',
-    'web': 'category-system',
-    'forensic': 'category-security'
+    'web': 'bg-primary',        // 파란색
+    'database': 'bg-success',   // 초록색
+    'email': 'bg-info',         // 하늘색
+    'forensic': 'bg-warning',   // 노란색
+    'api': 'bg-danger',         // 빨간색
+    'system': 'bg-secondary'    // 회색
   };
 
-  function getCategoryClass(category) {
-    if (!category) return 'category-default';
-    const key = category.toLowerCase();
-    return categoryColors[key] || 'category-default';
+  function getCategoryBadgeClass(category) {
+    return categoryColors[category] || 'bg-info';
   }
+
+  // 상태 필터 변수
+  let currentStatusFilter = null;
 
   // 페이지 로드 시 이력 가져오기
   document.addEventListener("DOMContentLoaded", () => {
@@ -308,6 +234,17 @@
       if (data.success) {
         allHistory = data.history;
         populateFilters();
+
+        // 초기 필터 상태 설정 (전체 활성화)
+        if (!currentStatusFilter) {
+          currentStatusFilter = "all";
+          const allBtn = document.querySelector('[data-filter-value="all"]');
+          if (allBtn) {
+            allBtn.classList.add("filter-btn-active");
+            allBtn.classList.add("card-selected");
+          }
+        }
+
         applyFilters();
       } else {
         showError("이력 로드 실패: " + (data.error || "알 수 없는 오류"));
@@ -339,6 +276,45 @@
     });
   }
 
+  // 상태 필터 버튼 클릭 핸들러
+  function filterByStatus(status) {
+    // 모든 상태 필터 버튼에서 활성 상태 제거
+    document
+      .querySelectorAll('[data-filter-type="history-status"]')
+      .forEach((btn) => {
+        btn.classList.remove("filter-btn-active");
+        btn.classList.remove("card-selected");
+      });
+
+    if (currentStatusFilter === status) {
+      // 같은 필터 재클릭 시 필터 해제 (전체로 복원)
+      currentStatusFilter = "all";
+      document.getElementById("statusFilter").value = "all";
+
+      // "전체" 버튼 활성화
+      const allBtn = document.querySelector('[data-filter-value="all"]');
+      if (allBtn) {
+        allBtn.classList.add("filter-btn-active");
+        allBtn.classList.add("card-selected");
+      }
+    } else {
+      // 새 필터 적용
+      currentStatusFilter = status;
+      document.getElementById("statusFilter").value = status;
+
+      // 클릭된 버튼 활성화
+      const activeBtn = document.querySelector(
+        `[data-filter-value="${status}"]`
+      );
+      if (activeBtn) {
+        activeBtn.classList.add("filter-btn-active");
+        activeBtn.classList.add("card-selected");
+      }
+    }
+
+    applyFilters();
+  }
+
   function applyFilters() {
     const statusFilter = document.getElementById("statusFilter").value;
     const categoryFilter = document.getElementById("categoryFilter").value;
@@ -368,11 +344,28 @@
   }
 
   function resetFilters() {
+    // 드롭다운 필터 초기화
     document.getElementById("statusFilter").value = "all";
     document.getElementById("categoryFilter").value = "all";
     document.getElementById("testNameFilter").value = "all";
     document.getElementById("startDate").value = "";
     document.getElementById("endDate").value = "";
+
+    // 필터 버튼 상태 초기화 (전체만 활성화)
+    document
+      .querySelectorAll('[data-filter-type="history-status"]')
+      .forEach((btn) => {
+        btn.classList.remove("filter-btn-active");
+        btn.classList.remove("card-selected");
+      });
+
+    currentStatusFilter = "all";
+    const allBtn = document.querySelector('[data-filter-value="all"]');
+    if (allBtn) {
+      allBtn.classList.add("filter-btn-active");
+      allBtn.classList.add("card-selected");
+    }
+
     applyFilters();
   }
 
@@ -439,13 +432,13 @@
         else if (h.status === "failed") statusBadge = "danger";
         else if (h.status === "error") statusBadge = "warning";
 
-        const categoryClass = getCategoryClass(h.test_category);
+        const categoryClass = getCategoryBadgeClass(h.test_category);
 
         return `
         <tr>
           <td><small>${formatDateTimeFull(h.execution_time)}</small></td>
           <td><strong>${h.test_name}</strong></td>
-          <td><span class="badge category-badge ${categoryClass}">${
+          <td><span class="badge ${categoryClass}">${
           h.test_category || "-"
         }</span></td>
           <td><span class="badge bg-${statusBadge}">${h.status}</span></td>
@@ -579,10 +572,18 @@
   function toggleChart() {
     chartVisible = !chartVisible;
     const container = document.getElementById("chartContainer");
+    const toggleBtn = document.getElementById("toggleChartBtn");
+
     container.style.display = chartVisible ? "block" : "none";
 
+    // 버튼 활성 상태 토글
     if (chartVisible) {
+      toggleBtn.classList.add('filter-btn-active');
+      toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i> 차트 숨기기';
       renderChart();
+    } else {
+      toggleBtn.classList.remove('filter-btn-active');
+      toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i> 차트 보기';
     }
   }
 
@@ -662,4 +663,5 @@
     alert(message);
   }
 </script>
+</div>
 {% endblock %}

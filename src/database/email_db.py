@@ -938,7 +938,7 @@ class SystemTestManager:
 
                 if test_key:
                     query = """
-                        SELECT e.*, t.test_key, t.test_name
+                        SELECT e.*, t.test_key, t.test_name, t.test_category
                         FROM test_executions e
                         JOIN system_tests t ON e.test_id = t.id
                         WHERE t.test_key = ?
@@ -948,7 +948,7 @@ class SystemTestManager:
                     cursor.execute(query, (test_key, limit))
                 else:
                     query = """
-                        SELECT e.*, t.test_key, t.test_name
+                        SELECT e.*, t.test_key, t.test_name, t.test_category
                         FROM test_executions e
                         JOIN system_tests t ON e.test_id = t.id
                         ORDER BY e.execution_time DESC

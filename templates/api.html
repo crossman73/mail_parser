@@ -12,34 +12,22 @@
 <div class="row">
   <div class="col-md-3">
     <div class="list-group" id="api-nav">
+      {% if categories %} {% for category, count in categories %}
       <a
-        class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center"
-        href="#emails-api"
+        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if loop.first %}active{% endif %}"
+        href="#{{ category|replace(' ', '-')|lower }}-api"
       >
-        <span><i class="fas fa-envelope me-2"></i>이메일 API</span>
-        <span class="badge bg-primary rounded-pill">2</span>
+        <span>
+          <i
+            class="fas fa-{% if category == '이메일' %}envelope{% elif category == '증거' %}gavel{% elif category == '타임라인' %}timeline{% elif category == '파일' %}file{% elif category == '로그' %}list{% elif category == 'API 문서' %}book{% else %}cog{% endif %} me-2"
+          ></i>
+          {{ category }} API
+        </span>
+        <span class="badge bg-primary rounded-pill">{{ count }}</span>
       </a>
-      <a
-        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-        href="#evidence-api"
-      >
-        <span><i class="fas fa-gavel me-2"></i>증거 API</span>
-        <span class="badge bg-primary rounded-pill">3</span>
-      </a>
-      <a
-        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-        href="#timeline-api"
-      >
-        <span><i class="fas fa-timeline me-2"></i>타임라인 API</span>
-        <span class="badge bg-primary rounded-pill">1</span>
-      </a>
-      <a
-        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-        href="#system-api"
-      >
-        <span><i class="fas fa-cog me-2"></i>시스템 API</span>
-        <span class="badge bg-primary rounded-pill">2</span>
-      </a>
+      {% endfor %} {% else %}
+      <div class="alert alert-warning">카테고리 없음</div>
+      {% endif %}
     </div>
   </div>
 
@@ -74,306 +62,74 @@
             </div>
           </div>
         </div>
-        <div class="border-top pt-3 mt-2">
-          <strong class="d-block mb-2">테스트 도구</strong>
-          <div class="btn-group" role="group">
-            <button
-              class="btn btn-primary btn-sm"
-              onclick="testAPI('/api/emails/statistics')"
+      </div>
+    </div>
+
+    <!-- 동적 API 섹션 -->
+    {% if endpoints %} {% for category, group in endpoints|groupby('category')
+    %}
+    <div
+      id="{{ category|replace(' ', '-')|lower }}-api"
+      class="api-section"
+      {%
+      if
+      not
+      loop.first
+      %}style="display:none;"
+      {%
+      endif
+      %}
+    >
+      <h3>
+        <i
+          class="fas fa-{% if category == '이메일' %}envelope{% elif category == '증거' %}gavel{% elif category == '타임라인' %}timeline{% elif category == '파일' %}file{% elif category == '로그' %}list{% elif category == 'API 문서' %}book{% else %}cog{% endif %} me-2"
+        ></i>
+        {{ category }} API
+      </h3>
+
+      {% for ep in group %}
+      <div class="card mb-3">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <span
+              class="badge {% if ep.method == 'GET' %}bg-success{% elif ep.method == 'POST' %}bg-primary{% elif ep.method == 'PUT' %}bg-warning{% elif ep.method == 'DELETE' %}bg-danger{% else %}bg-secondary{% endif %} me-2"
             >
-              <i class="fas fa-play me-1"></i>이메일 통계
-            </button>
-            <button
-              class="btn btn-success btn-sm"
-              onclick="testAPI('/api/system/disk-usage')"
+              {{ ep.method }}
+            </span>
+            <code class="text-dark">{{ ep.path }}</code>
+            {% if ep.auth_required %}
+            <span class="badge bg-warning ms-2"
+              ><i class="fas fa-lock me-1"></i>인증 필요</span
             >
-              <i class="fas fa-play me-1"></i>디스크 사용량
-            </button>
+            {% endif %}
           </div>
         </div>
+        <div class="card-body">
+          <h6 class="card-title">{{ ep.summary }}</h6>
+          {% if ep.description %}
+          <p class="card-text text-muted">{{ ep.description }}</p>
+          {% endif %}
+          <button
+            class="btn btn-sm btn-outline-primary"
+            onclick="testAPI('{{ ep.path }}', '{{ ep.method }}')"
+          >
+            <i class="fas fa-play me-1"></i>테스트
+          </button>
+        </div>
       </div>
+      {% endfor %}
     </div>
-    <!-- 이메일 API -->
-    <div id="emails-api" class="api-section">
-      <h3><i class="fas fa-envelope me-2"></i>이메일 API</h3>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-success me-2">POST</span>
-          <code>/api/emails/load</code>
-        </div>
-        <div class="card-body">
-          <h6>이메일 파일 로드</h6>
-          <p>mbox 파일을 로드하여 이메일 데이터를 처리합니다.</p>
-
-          <h6>요청 예시:</h6>
-          <pre><code>{
-  "filename": "emails.mbox"
-}</code></pre>
-
-          <h6>응답 예시:</h6>
-          <pre><code>{
-  "success": true,
-  "message": "이메일 로드 완료",
-  "total_emails": 150,
-  "filtered_emails": 120
-}</code></pre>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-primary me-2">GET</span>
-          <code>/api/emails/search</code>
-        </div>
-        <div class="card-body">
-          <h6>이메일 검색</h6>
-          <p>키워드로 이메일을 검색합니다.</p>
-
-          <h6>파라미터:</h6>
-          <ul>
-            <li><code>query</code> - 검색 키워드</li>
-            <li><code>sender</code> - 발신자 필터</li>
-            <li><code>date_from</code> - 시작 날짜 (YYYY-MM-DD)</li>
-            <li><code>date_to</code> - 종료 날짜 (YYYY-MM-DD)</li>
-          </ul>
-
-          <h6>응답 예시:</h6>
-          <pre><code>{
-  "success": true,
-  "results": [
-    {
-      "id": "email_001",
-      "subject": "계약서 관련",
-      "sender": "example@company.com",
-      "date": "2024-01-15",
-      "has_attachments": true
-    }
-  ],
-  "total": 1
-}</code></pre>
-        </div>
-      </div>
+    {% endfor %} {% else %}
+    <div class="alert alert-info">
+      <i class="fas fa-info-circle me-2"></i>
+      등록된 API 문서가 없습니다.
     </div>
-
-    <!-- 증거 API -->
-    <div id="evidence-api" class="api-section" style="display: none">
-      <h3><i class="fas fa-gavel me-2"></i>증거 API</h3>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-primary me-2">GET</span>
-          <code>/api/evidence</code>
-        </div>
-        <div class="card-body">
-          <h6>증거 목록 조회</h6>
-          <p>생성된 증거 문서 목록을 조회합니다.</p>
-
-          <h6>응답 예시:</h6>
-          <pre><code>{
-  "success": true,
-  "evidence_list": [
-    {
-      "id": "evidence_001",
-      "evidence_number": "갑 제1호증",
-      "title": "이메일 증거",
-      "created_date": "2024-01-15",
-      "file_path": "/evidence/갑제1호증.pdf"
-    }
-  ]
-}</code></pre>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-success me-2">POST</span>
-          <code>/api/evidence/generate</code>
-        </div>
-        <div class="card-body">
-          <h6>증거 생성</h6>
-          <p>선택된 이메일들로 법정 증거 문서를 생성합니다.</p>
-
-          <h6>요청 예시:</h6>
-          <pre><code>{
-  "email_ids": ["email_001", "email_002"],
-  "evidence_type": "email_batch",
-  "party": "갑"
-}</code></pre>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-danger me-2">DELETE</span>
-          <code>/api/evidence/{id}</code>
-        </div>
-        <div class="card-body">
-          <h6>증거 삭제</h6>
-          <p>생성된 증거 문서를 삭제합니다.</p>
-
-          <h6>파라미터:</h6>
-          <ul>
-            <li><code>id</code> - 증거 문서 ID</li>
-          </ul>
-
-          <h6>응답 예시:</h6>
-          <pre><code>{
-  "success": true,
-  "message": "증거가 삭제되었습니다."
-}</code></pre>
-        </div>
-      </div>
-    </div>
-
-    <!-- 타임라인 API -->
-    <div id="timeline-api" class="api-section" style="display: none">
-      <h3><i class="fas fa-timeline me-2"></i>타임라인 API</h3>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-primary me-2">GET</span>
-          <code>/api/timeline</code>
-        </div>
-        <div class="card-body">
-          <h6>타임라인 생성</h6>
-          <p>이메일 송수신 타임라인을 생성합니다.</p>
-
-          <h6>파라미터:</h6>
-          <ul>
-            <li><code>format</code> - 출력 형식 (json, html, csv)</li>
-            <li><code>date_from</code> - 시작 날짜</li>
-            <li><code>date_to</code> - 종료 날짜</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- 시스템 API -->
-    <div id="system-api" class="api-section" style="display: none">
-      <h3><i class="fas fa-cog me-2"></i>시스템 API</h3>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-primary me-2">GET</span>
-          <code>/api/system/disk-usage</code>
-        </div>
-        <div class="card-body">
-          <h6>디스크 사용량 조회</h6>
-          <p>시스템의 디스크 사용량을 확인합니다.</p>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <span class="badge bg-warning me-2">POST</span>
-          <code>/api/system/cleanup</code>
-        </div>
-        <div class="card-body">
-          <h6>시스템 정리</h6>
-          <p>임시 파일 및 캐시를 정리합니다.</p>
-        </div>
-      </div>
-    </div>
+    {% endif %}
   </div>
 </div>
-
-<!-- 관리자 링크 섹션 -->
-<div class="row mt-4">
-  <div class="col-12 text-center">
-    <a href="/admin" class="btn btn-warning">
-      <i class="fas fa-cog me-1"></i>시스템 관리
-    </a>
-    <a href="/" class="btn btn-secondary ms-2">
-      <i class="fas fa-home me-1"></i>홈으로
-    </a>
-  </div>
-</div>
-{% endblock %} {% block styles %}
-<style>
-  /* 다크 모드 대응 */
-  [data-theme="dark"] .card.bg-light {
-    background-color: var(--bg-tertiary) !important;
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] .card-body strong {
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] .text-muted {
-    color: var(--text-secondary) !important;
-  }
-
-  [data-theme="dark"] code {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-  }
-
-  [data-theme="dark"] .border-top {
-    border-color: var(--border-color) !important;
-  }
-
-  [data-theme="dark"] .card-header {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    border-bottom-color: var(--border-color);
-  }
-
-  [data-theme="dark"] .card {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border-color: var(--border-color);
-  }
-
-  [data-theme="dark"] pre {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-  }
-
-  [data-theme="dark"] .list-group-item {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border-color: var(--border-color);
-  }
-
-  [data-theme="dark"] .list-group-item:hover {
-    background-color: var(--bg-secondary);
-  }
-
-  [data-theme="dark"] .list-group-item.active {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-  }
-
-  [data-theme="dark"] h1,
-  [data-theme="dark"] h3,
-  [data-theme="dark"] h5,
-  [data-theme="dark"] h6 {
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] .lead {
-    color: var(--text-secondary);
-  }
-
-  [data-theme="dark"] ul li {
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] .badge {
-    border: 1px solid var(--border-color);
-  }
-
-  [data-theme="dark"] p {
-    color: var(--text-primary);
-  }
-</style>
-{% endblock %} {% block scripts %}
+{% endblock %} {% block styles %} {% endblock %} {% block scripts %}
 <script>
   // API 네비게이션
   document.querySelectorAll("#api-nav a").forEach((link) => {
@@ -392,23 +148,172 @@
 
       // 선택된 섹션 보이기
       const targetId = this.getAttribute("href").substring(1);
-      document.getElementById(targetId).style.display = "block";
+      const targetSection = document.getElementById(targetId);
+      if (targetSection) {
+        targetSection.style.display = "block";
+      }
 
       // 선택된 링크에 active 추가
       this.classList.add("active");
     });
   });
 
-  // API 테스트 함수
-  function testAPI(endpoint) {
-    fetch(endpoint)
-      .then((response) => response.json())
-      .then((data) => {
-        alert(`API 테스트 결과:\n${JSON.stringify(data, null, 2)}`);
+  // API 테스트 함수 (개선 + 결과 DB 저장)
+  function testAPI(endpoint, method = "GET") {
+    // URL 파라미터 처리 (<...> 패턴 확인)
+    if (endpoint.includes("<") && endpoint.includes(">")) {
+      // 파라미터가 필요한 엔드포인트
+      const paramPattern = endpoint.match(/<([^>]+)>/g);
+      if (paramPattern) {
+        alert(
+          `⚠️ 이 엔드포인트는 파라미터가 필요합니다:\n${paramPattern.join(
+            ", "
+          )}\n\n브라우저 콘솔에서 테스트하세요:\nfetch('${endpoint.replace(
+            /<[^>]+>/g,
+            "{value}"
+          )}')`
+        );
+        return;
+      }
+    }
+
+    // 메서드별 처리
+    const fetchOptions = {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    // POST/PUT 요청인 경우 기본 body 추가 (필요시)
+    if (method === "POST" || method === "PUT") {
+      // 엔드포인트별 샘플 데이터 (필요시 확장)
+      const sampleData = {};
+      if (Object.keys(sampleData).length > 0) {
+        fetchOptions.body = JSON.stringify(sampleData);
+      }
+    }
+
+    // 로딩 표시
+    const loadingMsg = `🔄 테스트 중... ${method} ${endpoint}`;
+    console.log(loadingMsg);
+
+    // 성능 측정 시작
+    const startTime = performance.now();
+
+    fetch(endpoint, fetchOptions)
+      .then(async (response) => {
+        const endTime = performance.now();
+        const responseTime = Math.round(endTime - startTime);
+
+        const contentType = response.headers.get("content-type");
+        let data;
+
+        // Content-Type에 따라 처리
+        if (contentType && contentType.includes("application/json")) {
+          data = await response.json();
+        } else if (contentType && contentType.includes("text/html")) {
+          data = await response.text();
+          data = `HTML Response (${data.length} bytes):\n${data.substring(
+            0,
+            500
+          )}...`;
+        } else {
+          data = await response.text();
+        }
+
+        // 결과 서버로 전송
+        saveTestResult({
+          endpoint: endpoint,
+          method: method,
+          status_code: response.status,
+          response_time_ms: responseTime,
+          success: response.ok,
+          error_message: response.ok ? null : `HTTP ${response.status}`,
+          request_data: JSON.stringify(fetchOptions.body || {}),
+          response_data:
+            typeof data === "object"
+              ? JSON.stringify(data).substring(0, 1000)
+              : String(data).substring(0, 1000),
+        });
+
+        // 결과 표시
+        if (response.ok) {
+          console.log(`✅ 성공 (${response.status}, ${responseTime}ms):`, data);
+
+          // JSON 데이터는 포맷팅해서 표시
+          if (typeof data === "object") {
+            alert(
+              `✅ API 테스트 성공 (${
+                response.status
+              })\n응답 시간: ${responseTime}ms\n\n${JSON.stringify(
+                data,
+                null,
+                2
+              )}`
+            );
+          } else {
+            alert(
+              `✅ API 테스트 성공 (${response.status})\n응답 시간: ${responseTime}ms\n\n${data}`
+            );
+          }
+        } else {
+          console.error(
+            `❌ 실패 (${response.status}, ${responseTime}ms):`,
+            data
+          );
+          alert(
+            `❌ API 테스트 실패 (${
+              response.status
+            })\n응답 시간: ${responseTime}ms\n\n${
+              typeof data === "object" ? JSON.stringify(data, null, 2) : data
+            }`
+          );
+        }
       })
       .catch((error) => {
-        alert(`API 테스트 오류: ${error.message}`);
+        const endTime = performance.now();
+        const responseTime = Math.round(endTime - startTime);
+
+        // 에러도 저장
+        saveTestResult({
+          endpoint: endpoint,
+          method: method,
+          status_code: null,
+          response_time_ms: responseTime,
+          success: false,
+          error_message: error.message,
+          request_data: JSON.stringify(fetchOptions.body || {}),
+          response_data: null,
+        });
+
+        console.error("❌ 테스트 오류:", error);
+        alert(
+          `❌ API 테스트 오류\n\n${error.message}\n\n자세한 내용은 브라우저 콘솔을 확인하세요.`
+        );
       });
+  }
+
+  // 테스트 결과 서버 전송
+  function saveTestResult(result) {
+    fetch("/api/test-result", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(result),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("💾 테스트 결과 저장 완료");
+        } else {
+          console.warn("⚠️ 테스트 결과 저장 실패:", response.status);
+        }
+      })
+      .catch((err) => console.error("❌ 테스트 결과 저장 오류:", err));
+  }
+
+  // 메서드별 테스트 함수
+  function testAPIWithMethod(endpoint, method) {
+    testAPI(endpoint, method);
   }
 </script>
 {% endblock %}

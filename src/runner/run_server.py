@@ -66,6 +66,11 @@ def _find_processes_using_port(port: int):
 def _terminate_process(pid: int, timeout: float = 5.0):
     if psutil is None:
         return False
+
+    # PID 0은 시스템 프로세스이므로 건너뜀
+    if pid == 0:
+        return False
+
     try:
         p = psutil.Process(pid)
         print(f'⚠️ 종료 시도: PID={pid}, name={p.name()}')
@@ -86,6 +91,29 @@ def _terminate_process(pid: int, timeout: float = 5.0):
 
 def main(port: int = 5000, auto_kill: bool = False, start_server: bool = True):
     print('🚀 Flask 웹 서버 시작 중...')
+
+    # 데이터베이스 초기화
+    print('💾 데이터베이스 초기화 중...')
+    try:
+        from src.database.connection import db_connection
+        from src.database.migrations import MigrationManager
+
+        # DB 초기화
+        db_path = project_root / 'data' / 'db' / 'email_parser.db'
+        if db_connection.initialize(str(db_path)):
+            print(f'✅ DB 초기화 완료: {db_path}')
+
+            # 마이그레이션 실행
+            migrator = MigrationManager(db_connection)
+            if migrator.run_migrations():
+                current_version = migrator.get_current_version()
+                print(f'✅ DB 마이그레이션 완료 (버전: {current_version})')
+            else:
+                print('⚠️ 마이그레이션 실패 (기존 스키마 유지)')
+        else:
+            print('⚠️ DB 초기화 실패 (계속 진행)')
+    except Exception as e:
+        print(f'⚠️ DB 초기화 오류: {e} (계속 진행)')
 
     # 포트 사용 중인 프로세스 확인
     procs = _find_processes_using_port(port)

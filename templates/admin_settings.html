@@ -1,36 +1,21 @@
 {% extends "base.html" %} {% block title %}시스템 설정 관리{% endblock %} {%
 block content %}
-<div class="container">
+<div class="container-fluid py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>시스템 설정 관리</h1>
-    <div class="d-flex gap-3 align-items-center">
-      <!-- 일반 작업 버튼 그룹 -->
-      <div class="btn-group">
-        <a href="/admin" class="btn btn-secondary">
-          <i class="fas fa-arrow-left"></i> 관리자 대시보드
-        </a>
-        <button class="btn btn-warning" onclick="initDefaultSettings()">
-          <i class="fas fa-download"></i> 기본 설정 초기화
-        </button>
-        <button class="btn btn-success" onclick="showAddSettingModal()">
-          <i class="fas fa-plus-circle"></i> 설정 추가
-        </button>
-      </div>
-
-      <!-- 구분선 -->
-      <div style="border-left: 2px solid #dee2e6; height: 38px;"></div>
-
-      <!-- 위험 작업 버튼 (분리) -->
-      <div>
-        <button
-          class="btn btn-danger btn-sm"
-          onclick="restartWebService()"
-          style="font-weight: 600; padding: 0.375rem 0.5rem; font-size: 0.875rem;"
-          title="웹서비스를 재시작합니다. 서비스가 일시적으로 중단됩니다."
-        >
-          <i class="fas fa-power-off"></i> 재시작
-        </button>
-      </div>
+    <h2><i class="fas fa-cog text-primary"></i> 시스템 설정 관리</h2>
+    <div>
+      <a href="/admin" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-arrow-left"></i> 관리자 대시보드
+      </a>
+      <button class="btn btn-outline-warning btn-sm ms-2" onclick="initDefaultSettings()">
+        <i class="fas fa-download"></i> 기본 설정 초기화
+      </button>
+      <button class="btn btn-outline-success btn-sm ms-2" onclick="showAddSettingModal()">
+        <i class="fas fa-plus-circle"></i> 설정 추가
+      </button>
+      <button class="btn btn-outline-danger btn-sm ms-3" onclick="restartWebService()" title="웹서비스를 재시작합니다. 서비스가 일시적으로 중단됩니다.">
+        <i class="fas fa-power-off"></i> 재시작
+      </button>
     </div>
   </div>
 

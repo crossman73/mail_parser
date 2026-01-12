@@ -1,30 +1,133 @@
-{% extends 'base.html' %} {% block title %}Logs - Admin{% endblock %} {% block
-content %}
-<h1>System Logs</h1>
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Level</th>
-      <th>Message</th>
-      <th>Extra</th>
-      <th>Created</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for l in logs %}
-    <tr>
-      <td>{{ l.id }}</td>
-      <td>{{ l.level }}</td>
-      <td>{{ l.message }}</td>
-      <td>{{ l.extra }}</td>
-      <td>{{ l.created_at }}</td>
-    </tr>
-    {% else %}
-    <tr>
-      <td colspan="5">No logs</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% extends 'base.html' %} {% block extra_css %}
+<!-- 인라인 CSS → modern-ui.css로 이동됨 (.log-row, .log-level-*) -->
+{% endblock %} {% block title %}Logs - Admin{% endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-list-alt text-primary"></i> System Logs</h1>
+    <a href="/logs" class="btn btn-primary">
+      <i class="fas fa-eye"></i> 상세 로그 뷰어
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Level</th>
+              <th>Message</th>
+              <th>Extra</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for l in logs %}
+            <tr
+              class="log-row list-item-selectable"
+              data-log-id="{{ l.id }}"
+              onclick="showLogDetail({{ l.id }}, '{{ l.level }}', '{{ l.message|e }}', '{{ l.extra|e }}', '{{ l.created_at }}')"
+              title="클릭하여 상세 정보 보기"
+            >
+              <td>{{ l.id }}</td>
+              <td>
+                <span class="log-level-{{ l.level }}">{{ l.level }}</span>
+              </td>
+              <td>{{ l.message }}</td>
+              <td>
+                <small class="text-muted"
+                  >{{ l.extra if l.extra else '-' }}</small
+                >
+              </td>
+              <td><small>{{ l.created_at }}</small></td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5" class="text-center text-muted">No logs</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 로그 상세 모달 -->
+<div class="modal fade" id="logDetailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-info-circle"></i> 로그 상세 정보
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tr>
+            <th width="120">ID</th>
+            <td id="logId"></td>
+          </tr>
+          <tr>
+            <th>Level</th>
+            <td id="logLevel"></td>
+          </tr>
+          <tr>
+            <th>Message</th>
+            <td id="logMessage"></td>
+          </tr>
+          <tr>
+            <th>Extra</th>
+            <td id="logExtra"></td>
+          </tr>
+          <tr>
+            <th>Created At</th>
+            <td id="logCreated"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedLogRow = null;
+
+  function showLogDetail(id, level, message, extra, created) {
+    // 모든 로그 행에서 선택 상태 제거
+    document.querySelectorAll(".list-item-selectable").forEach((row) => {
+      row.classList.remove("selected");
+    });
+
+    // 클릭된 행 선택 상태 추가
+    const clickedRow = event.currentTarget;
+    clickedRow.classList.add("selected");
+    selectedLogRow = clickedRow;
+
+    // 모달에 데이터 표시
+    document.getElementById("logId").textContent = id;
+    document.getElementById(
+      "logLevel"
+    ).innerHTML = `<span class="log-level-${level}">${level}</span>`;
+    document.getElementById("logMessage").textContent = message;
+    document.getElementById("logExtra").textContent = extra || "-";
+    document.getElementById("logCreated").textContent = created;
+
+    const modal = new bootstrap.Modal(
+      document.getElementById("logDetailModal")
+    );
+    modal.show();
+  }
+</script>
 {% endblock %}

@@ -161,7 +161,26 @@ def create_app(config_path: str = None):
         cleanup_thread.start()
         app.logger.info("✅ 임시 파일 자동 정리 스케줄러 시작 (6시간 간격)")
 
-    # 템플릿 헬퍼 함수 등록
+        # API 문서 자동 수집
+        try:
+            print("🔍 API 문서 수집 시작...")
+            from src.api.api_collector import collect_api_docs
+            from src.database.connection import db_connection
+
+            # DB가 초기화되었는지 확인
+            print(f"  - DB 경로: {db_connection.db_path}")
+            if db_connection.db_path:
+                count = collect_api_docs(app, db_connection)
+                print(f"✅ API 문서 자동 수집 완료: {count}개 엔드포인트")
+                app.logger.info(f"✅ API 문서 자동 수집 완료: {count}개 엔드포인트")
+            else:
+                print("⚠️ DB 미초기화로 API 문서 수집 스킵")
+                app.logger.warning("⚠️ DB 미초기화로 API 문서 수집 스킵")
+        except Exception as e:
+            print(f"⚠️ API 문서 수집 실패: {e}")
+            app.logger.warning(f"⚠️ API 문서 수집 실패 (계속 진행): {e}")
+            import traceback
+            traceback.print_exc()    # 템플릿 헬퍼 함수 등록
     @app.context_processor
     def inject_template_helpers():
         """템플릿 헬퍼 함수 등록: 엔드포인트 확인 및 안전한 URL 생성"""
@@ -385,6 +404,36 @@ def create_app(config_path: str = None):
                 'info': f'{route_count}개 라우트 등록됨',
                 'healthy': True
             })
+
+            # 데이터베이스 헬스체크
+            try:
+                from src.database.connection import db_connection
+                db_health = db_connection.health_check()
+                db_info = db_connection.get_database_info()
+
+                services_status.append({
+                    'name': 'Database',
+                    'status': db_health['status'],
+                    'info': f"{db_health.get('table_count', 0)}개 테이블, "
+                           f"{db_health.get('size_mb', 0):.1f}MB, "
+                           f"{db_info.get('total_records', 0):,}건 레코드",
+                    'healthy': db_health['status'] == 'healthy',
+                    'details': {
+                        'path': db_health.get('db_path'),
+                        'response_time_ms': db_health.get('response_time_ms', 0),
+                        'writable': db_health.get('writable', False),
+                        'sqlite_version': db_info.get('sqlite_version'),
+                        'tables': db_info.get('tables', []),
+                        'table_counts': db_info.get('table_counts', {})
+                    }
+                })
+            except Exception as db_error:
+                services_status.append({
+                    'name': 'Database',
+                    'status': 'error',
+                    'info': f'연결 실패: {str(db_error)}',
+                    'healthy': False
+                })
 
             return {
                 'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),

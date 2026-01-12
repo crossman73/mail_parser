@@ -22,7 +22,7 @@
           <code>{{ evidence.integrity_hash }}</code>
         </p>
 
-        <div style="margin-top: 12px">
+        <div class="mt-12px">
           <a
             class="btn"
             href="{{ url_for('admin.evidence_download', evidence_id=evidence.id, kind='html') }}"
@@ -35,8 +35,8 @@
           >
         </div>
 
-        <h3 style="margin-top: 18px">미리보기</h3>
-        <div class="upload" style="padding: 8px">
+        <h3 class="mt-18px">미리보기</h3>
+        <div class="upload p-8px">
           {% if evidence.html_file %}
           <iframe
             id="evidencePreview"
@@ -55,7 +55,7 @@
           {% endif %}
         </div>
 
-        <h3 style="margin-top: 16px">체인 항목</h3>
+        <h3 class="mt-16px">체인 항목</h3>
         {% if chain %}
         <table class="evidence-table">
           <thead>

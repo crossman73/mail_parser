@@ -12,7 +12,7 @@ from src.database.email_db import test_manager
 
 def initialize_default_tests():
     """기본 테스트 추가"""
-    
+
     default_tests = [
         {
             'test_key': 'test_web_app',
@@ -125,11 +125,11 @@ def initialize_default_tests():
             'display_order': 23
         }
     ]
-    
+
     print("="*60)
     print("시스템 테스트 초기 데이터 설정")
     print("="*60)
-    
+
     success_count = 0
     for test in default_tests:
         try:
@@ -141,11 +141,11 @@ def initialize_default_tests():
                 print(f"⚠️  {test['test_name']} - 이미 존재하거나 추가 실패")
         except Exception as e:
             print(f"❌ {test['test_name']} - 오류: {e}")
-    
+
     print("="*60)
     print(f"완료: {success_count}/{len(default_tests)}개 테스트 추가됨")
     print("="*60)
-    
+
     return success_count
 
 

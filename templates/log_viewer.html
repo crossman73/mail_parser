@@ -1,391 +1,136 @@
 {% extends "base.html" %} {% block title %}로그 뷰어 - 이메일 타임라인 시스템{%
-endblock %} {% block extra_css %}
-<style>
-  .log-viewer-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  .log-header {
-    margin-bottom: 2rem;
-  }
-
-  .log-header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-  }
-
-  .log-controls {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
-  }
-
-  .control-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .control-group label {
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
-
-  .control-group select,
-  .control-group input {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background: var(--input-bg);
-    color: var(--text-primary);
-  }
-
-  .btn-refresh,
-  .btn-clear,
-  .btn-download {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .btn-refresh {
-    background: var(--primary-color);
-    color: white;
-  }
-
-  .btn-refresh:hover {
-    background: var(--primary-hover);
-  }
-
-  .btn-clear {
-    background: var(--warning-color);
-    color: white;
-  }
-
-  .btn-clear:hover {
-    opacity: 0.9;
-  }
-
-  .btn-download {
-    background: var(--success-color);
-    color: white;
-  }
-
-  .btn-download:hover {
-    opacity: 0.9;
-  }
-
-  .log-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .stat-card {
-    padding: 1.5rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .stat-card i {
-    font-size: 2rem;
-  }
-
-  .stat-card.debug i {
-    color: var(--info-color);
-  }
-
-  .stat-card.info i {
-    color: var(--success-color);
-  }
-
-  .stat-card.warning i {
-    color: var(--warning-color);
-  }
-
-  .stat-card.error i {
-    color: var(--danger-color);
-  }
-
-  .stat-content h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
-  .stat-content p {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-
-  .log-container {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  .log-entries {
-    max-height: 600px;
-    overflow-y: auto;
-    font-family: "Consolas", "Monaco", monospace;
-    font-size: 0.875rem;
-  }
-
-  .log-entry {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--border-color);
-    display: grid;
-    grid-template-columns: 180px 80px auto;
-    gap: 1rem;
-    align-items: start;
-  }
-
-  .log-entry:hover {
-    background: var(--hover-bg);
-  }
-
-  .log-timestamp {
-    color: var(--text-tertiary);
-    font-size: 0.8rem;
-  }
-
-  .log-level {
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-align: center;
-  }
-
-  .log-level.DEBUG {
-    background: rgba(6, 182, 212, 0.1);
-    color: var(--info-color);
-  }
-
-  .log-level.INFO {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success-color);
-  }
-
-  .log-level.WARNING {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--warning-color);
-  }
-
-  .log-level.ERROR,
-  .log-level.CRITICAL {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger-color);
-  }
-
-  .log-message {
-    color: var(--text-primary);
-    word-break: break-word;
-  }
-
-  .log-details {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    margin-top: 0.25rem;
-  }
-
-  .no-logs {
-    padding: 3rem;
-    text-align: center;
-    color: var(--text-secondary);
-  }
-
-  .log-files-section {
-    margin-top: 2rem;
-  }
-
-  .log-files-list {
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .log-file-item {
-    padding: 1rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all var(--transition-fast);
-  }
-
-  .log-file-item:hover {
-    border-color: var(--primary-color);
-    background: var(--hover-bg);
-  }
-
-  .log-file-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .log-file-icon {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-  }
-
-  .log-file-details h4 {
-    margin: 0;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-  }
-
-  .log-file-details p {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-
-  .log-file-actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .btn-view,
-  .btn-download-file {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .btn-view {
-    background: var(--primary-color);
-    color: white;
-  }
-
-  .btn-view:hover {
-    background: var(--primary-hover);
-  }
-
-  .btn-download-file {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-  }
-
-  .btn-download-file:hover {
-    background: var(--hover-bg);
-  }
-</style>
-{% endblock %} {% block content %}
-<div class="log-viewer-container">
-  <div class="log-header">
-    <h1><i class="fas fa-file-alt me-2"></i>로그 뷰어</h1>
-    <p>실시간 애플리케이션 로그 모니터링</p>
+endblock %} {% block extra_css %} {% endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2><i class="fas fa-file-alt text-primary"></i> 로그 뷰어</h2>
+      <p class="text-muted mb-0">
+        <small>실시간 애플리케이션 로그 모니터링</small>
+      </p>
+    </div>
   </div>
 
   <!-- 통계 -->
-  <div class="log-stats">
-    <div class="stat-card debug">
-      <i class="fas fa-bug"></i>
-      <div class="stat-content">
-        <h3 id="debugCount">0</h3>
-        <p>DEBUG</p>
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div
+        class="card text-white bg-info card-selectable-sm filter-btn"
+        data-card-type="log-level"
+        data-filter-type="log-level"
+        data-level="DEBUG"
+        onclick="filterByLevel('DEBUG')"
+      >
+        <div class="card-body text-center">
+          <h5 class="card-title"><i class="fas fa-bug"></i> DEBUG</h5>
+          <h2 id="debugCount">0</h2>
+        </div>
       </div>
     </div>
-    <div class="stat-card info">
-      <i class="fas fa-info-circle"></i>
-      <div class="stat-content">
-        <h3 id="infoCount">0</h3>
-        <p>INFO</p>
+    <div class="col-md-3">
+      <div
+        class="card text-white bg-primary card-selectable-sm filter-btn"
+        data-card-type="log-level"
+        data-filter-type="log-level"
+        data-level="INFO"
+        onclick="filterByLevel('INFO')"
+      >
+        <div class="card-body text-center">
+          <h5 class="card-title"><i class="fas fa-info-circle"></i> INFO</h5>
+          <h2 id="infoCount">0</h2>
+        </div>
       </div>
     </div>
-    <div class="stat-card warning">
-      <i class="fas fa-exclamation-triangle"></i>
-      <div class="stat-content">
-        <h3 id="warningCount">0</h3>
-        <p>WARNING</p>
+    <div class="col-md-3">
+      <div
+        class="card text-white bg-warning card-selectable-sm filter-btn"
+        data-card-type="log-level"
+        data-filter-type="log-level"
+        data-level="WARNING"
+        onclick="filterByLevel('WARNING')"
+      >
+        <div class="card-body text-center">
+          <h5 class="card-title">
+            <i class="fas fa-exclamation-triangle"></i> WARNING
+          </h5>
+          <h2 id="warningCount">0</h2>
+        </div>
       </div>
     </div>
-    <div class="stat-card error">
-      <i class="fas fa-times-circle"></i>
-      <div class="stat-content">
-        <h3 id="errorCount">0</h3>
-        <p>ERROR</p>
+    <div class="col-md-3">
+      <div
+        class="card text-white bg-danger card-selectable-sm filter-btn"
+        data-card-type="log-level"
+        data-filter-type="log-level"
+        data-level="ERROR"
+        onclick="filterByLevel('ERROR')"
+      >
+        <div class="card-body text-center">
+          <h5 class="card-title"><i class="fas fa-times-circle"></i> ERROR</h5>
+          <h2 id="errorCount">0</h2>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- 컨트롤 -->
-  <div class="log-controls">
-    <div class="control-group">
-      <label for="levelFilter">레벨:</label>
-      <select id="levelFilter" onchange="loadLogs()">
-        <option value="">전체</option>
-        <option value="DEBUG">DEBUG</option>
-        <option value="INFO">INFO</option>
-        <option value="WARNING">WARNING</option>
-        <option value="ERROR">ERROR</option>
-        <option value="CRITICAL">CRITICAL</option>
-      </select>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-2">
+          <label for="levelFilter" class="form-label small mb-1">레벨</label>
+          <select id="levelFilter" class="form-select" onchange="loadLogs()">
+            <option value="">전체</option>
+            <option value="DEBUG">DEBUG</option>
+            <option value="INFO">INFO</option>
+            <option value="WARNING">WARNING</option>
+            <option value="ERROR">ERROR</option>
+            <option value="CRITICAL">CRITICAL</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="limitInput" class="form-label small mb-1"
+            >표시 개수</label
+          >
+          <input
+            type="number"
+            id="limitInput"
+            class="form-control"
+            value="100"
+            min="10"
+            max="1000"
+            step="10"
+            onchange="loadLogs()"
+          />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small mb-1">자동 갱신</label>
+          <div class="form-check pt-0375rem">
+            <input
+              type="checkbox"
+              id="autoRefresh"
+              class="form-check-input"
+              onchange="toggleAutoRefresh()"
+            />
+            <label for="autoRefresh" class="form-check-label">5초마다</label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary w-100" onclick="loadLogs()">
+            <i class="fas fa-sync-alt"></i> 새로고침
+          </button>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-warning w-100" onclick="clearLogs()">
+            <i class="fas fa-trash"></i> 초기화
+          </button>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-success w-100" onclick="downloadLogs()">
+            <i class="fas fa-download"></i> 다운로드
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="control-group">
-      <label for="limitInput">표시 개수:</label>
-      <input
-        type="number"
-        id="limitInput"
-        value="100"
-        min="10"
-        max="1000"
-        step="10"
-        onchange="loadLogs()"
-      />
-    </div>
-    <div class="control-group">
-      <label>
-        <input
-          type="checkbox"
-          id="autoRefresh"
-          checked
-          onchange="toggleAutoRefresh()"
-        />
-        자동 갱신 (5초)
-      </label>
-    </div>
-    <button class="btn-refresh" onclick="loadLogs()">
-      <i class="fas fa-sync-alt"></i>
-      새로고침
-    </button>
-    <button class="btn-clear" onclick="clearLogs()">
-      <i class="fas fa-trash"></i>
-      로그 초기화
-    </button>
-    <button class="btn-download" onclick="downloadLogs()">
-      <i class="fas fa-download"></i>
-      다운로드
-    </button>
   </div>
 
   <!-- 로그 엔트리 -->
@@ -409,6 +154,37 @@ endblock %} {% block extra_css %}
 {% endblock %} {% block scripts %}
 <script>
   let autoRefreshInterval = null;
+  let selectedLevelCard = null;
+
+  function filterByLevel(level) {
+    const levelFilter = document.getElementById("levelFilter");
+
+    // 모든 레벨 카드에서 선택 상태 제거
+    document
+      .querySelectorAll('[data-card-type="log-level"]')
+      .forEach((card) => {
+        card.classList.remove("card-selected");
+        card.classList.remove("filter-btn-active");
+      });
+
+    if (levelFilter.value === level) {
+      // 같은 레벨 재클릭 시 필터 해제
+      levelFilter.value = "";
+      selectedLevelCard = null;
+    } else {
+      // 새로운 레벨 선택
+      levelFilter.value = level;
+
+      // 클릭된 카드 선택 상태 추가
+      const clickedCard = document.querySelector(`[data-level="${level}"]`);
+      if (clickedCard) {
+        clickedCard.classList.add("card-selected");
+        clickedCard.classList.add("filter-btn-active");
+        selectedLevelCard = clickedCard;
+      }
+    }
+    loadLogs();
+  }
 
   function loadLogs() {
     const level = document.getElementById("levelFilter").value;
@@ -583,7 +359,7 @@ endblock %} {% block extra_css %}
   document.addEventListener("DOMContentLoaded", () => {
     loadLogs();
     loadLogFiles();
-    toggleAutoRefresh();
+    // 자동 갱신은 기본적으로 꺼져있음 (체크박스 unchecked)
   });
 </script>
 {% endblock %}

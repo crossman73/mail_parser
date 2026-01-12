@@ -1,412 +1,161 @@
 {% extends "base.html" %} {% block title %}증거 관리 - 이메일 타임라인 시스템{%
-endblock %} {% block extra_css %}
-<style>
-  .evidence-header {
-    margin-bottom: 2rem;
-  }
-
-  .evidence-header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-  }
-
-  .evidence-header p {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-  }
-
-  .stats-bar {
-    display: flex;
-    gap: 2rem;
-    padding: 1.5rem;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
-    margin-bottom: 2rem;
-  }
-
-  .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .stat-item i {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-  }
-
-  .stat-content h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
-  .stat-content p {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-
-  .search-box {
-    margin-bottom: 1.5rem;
-  }
-
-  .search-box input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    background: var(--input-bg);
-    color: var(--text-primary);
-  }
-
-  .search-box input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-  }
-
-  .evidence-grid {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .evidence-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    transition: all var(--transition-base);
-    cursor: pointer;
-  }
-
-  .evidence-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-color);
-  }
-
-  .evidence-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 1rem;
-  }
-
-  .evidence-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: var(--primary-color);
-    color: white;
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .evidence-badge.processed {
-    background: var(--success-color);
-  }
-
-  .evidence-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .evidence-title i {
-    color: var(--primary-color);
-  }
-
-  .evidence-meta {
-    display: flex;
-    gap: 1.5rem;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .evidence-meta span {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .evidence-meta i {
-    color: var(--primary-color);
-  }
-
-  .no-evidence {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
-    border: 2px dashed var(--border-color);
-    margin-top: 2rem;
-  }
-
-  .no-evidence i {
-    font-size: 4rem;
-    color: var(--text-tertiary);
-    margin-bottom: 1.5rem;
-    display: block;
-  }
-
-  .no-evidence h3 {
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-  }
-
-  .no-evidence p {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-  }
-
-  .btn-primary {
-    display: inline-block;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: var(--radius-md);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all var(--transition-base);
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-  }
-
-  .btn-primary:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-    color: white;
-    text-decoration: none;
-  }
-
-  .btn-primary:active {
-    transform: translateY(0);
-  }
-
-  .evidence-card.deleted {
-    opacity: 0.6;
-    background: var(--bg-tertiary);
-  }
-
-  .evidence-badge.deleted {
-    background: var(--danger-color, #dc3545);
-  }
-
-  .checkbox-column {
-    display: flex;
-    align-items: center;
-    margin-right: 1rem;
-  }
-
-  .checkbox-column input[type="checkbox"] {
-    width: 1.2rem;
-    height: 1.2rem;
-    cursor: pointer;
-  }
-
-  .evidence-card-clickable {
-    display: flex;
-    flex: 1;
-  }
-
-  .toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-  }
-
-  .toolbar-left {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-  }
-
-  .btn-delete {
-    background: var(--danger-color, #dc3545);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-base);
-  }
-
-  .btn-delete:hover {
-    background: #c82333;
-  }
-
-  .btn-delete:disabled {
-    background: #6c757d;
-    cursor: not-allowed;
-  }
-
-  .toggle-deleted {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    font-size: 0.875rem;
-  }
-
-  .toggle-deleted input[type="checkbox"] {
-    cursor: pointer;
-  }
-</style>
-{% endblock %} {% block content %}
-<div class="container">
-  <div class="evidence-header">
-    <h1><i class="fas fa-folder-open me-2"></i>증거 관리</h1>
-    <p>업로드된 파일 목록</p>
+endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <!-- 헤더 -->
+  <div class="text-center mb-4">
+    <h1 class="display-5 fw-bold">
+      <i class="fas fa-folder-open text-primary me-2"></i>증거 관리
+    </h1>
+    <p class="text-muted lead">업로드된 파일 목록</p>
   </div>
 
   {% if upload_files and upload_files|length > 0 %}
-  <!-- 툴바 -->
-  <div class="toolbar">
-    <div class="toolbar-left">
-      <label class="checkbox-column">
-        <input
-          type="checkbox"
-          id="selectAll"
-          onchange="toggleSelectAll(this)"
-        />
-        <span style="margin-left: 0.5rem">전체 선택</span>
-      </label>
-      <button
-        class="btn-delete"
-        id="deleteBtn"
-        onclick="deleteSelected()"
-        disabled
-      >
-        <i class="fas fa-trash-alt me-1"></i>선택 항목 삭제
-      </button>
+  <!-- 통계 -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <i class="fas fa-file-alt fa-2x text-primary mb-3"></i>
+          <h3 class="fw-bold">{{ upload_files|length }}</h3>
+          <p class="text-muted mb-0">전체 파일</p>
+        </div>
+      </div>
     </div>
-    <label class="toggle-deleted">
-      <input
-        type="checkbox"
-        id="showDeleted"
-        onchange="toggleShowDeleted()"
-        {%
-        if
-        show_deleted
-        %}checked{%
-        endif
-        %}
-      />
-      <span>삭제된 항목 표시</span>
-    </label>
+    <div class="col-md-4">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <i class="fas fa-check-circle fa-2x text-success mb-3"></i>
+          <h3 class="fw-bold">{{ processed_count|default(0) }}</h3>
+          <p class="text-muted mb-0">처리 완료</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <i class="fas fa-envelope fa-2x text-info mb-3"></i>
+          <h3 class="fw-bold">{{ total_emails|default(0) }}</h3>
+          <p class="text-muted mb-0">총 이메일</p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- 통계 바 -->
-  <div class="stats-bar">
-    <div class="stat-item">
-      <i class="fas fa-file-upload"></i>
-      <div class="stat-content">
-        <h3>{{ total_count }}</h3>
-        <p>업로드된 파일</p>
-      </div>
-    </div>
-    <div class="stat-item">
-      <i class="fas fa-envelope"></i>
-      <div class="stat-content">
-        <h3>{{ upload_files|map(attribute='processed_count')|sum }}</h3>
-        <p>처리된 이메일</p>
-      </div>
-    </div>
-    <div class="stat-item">
-      <i class="fas fa-database"></i>
-      <div class="stat-content">
-        <h3>
-          {{
-          "%.2f"|format(upload_files|map(attribute='size_mb')|map('float')|sum)
-          }} MB
-        </h3>
-        <p>총 용량</p>
+  <!-- 툴바 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row align-items-center g-3">
+        <div class="col-md-4">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="selectAll"
+              onchange="toggleSelectAll(this)"
+            />
+            <label class="form-check-label" for="selectAll">전체 선택</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="showDeleted"
+              onchange="toggleShowDeleted()"
+              {%
+              if
+              show_deleted
+              %}checked{%
+              endif
+              %}
+            />
+            <label class="form-check-label" for="showDeleted"
+              >삭제된 항목 표시</label
+            >
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <button
+            class="btn btn-danger"
+            id="deleteBtn"
+            onclick="deleteSelected()"
+            disabled
+          >
+            <i class="fas fa-trash-alt me-2"></i>선택 항목 삭제
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- 검색 -->
-  <div class="search-box">
+  <div class="mb-4">
     <input
       type="text"
+      class="form-control form-control-lg"
       id="searchInput"
-      placeholder="파일명으로 검색..."
+      placeholder="🔍 파일명으로 검색..."
       onkeyup="filterEvidence()"
     />
   </div>
 
   <!-- 업로드 파일 목록 -->
-  <div class="evidence-grid" id="evidenceGrid">
+  <div class="row g-4" id="evidenceGrid">
     {% for file in upload_files %}
-    <div
-      class="evidence-card {% if file.deleted %}deleted{% endif %}"
-      data-file-id="{{ file.file_id }}"
-    >
-      <label class="checkbox-column" onclick="event.stopPropagation()">
-        <input
-          type="checkbox"
-          class="file-select"
-          data-file-id="{{ file.file_id }}"
-          onchange="updateDeleteButton()"
-          {%
-          if
-          file.deleted
-          %}disabled{%
-          endif
-          %}
-        />
-      </label>
+    <div class="col-12" data-file-id="{{ file.file_id }}">
       <div
-        class="evidence-card-clickable"
-        onclick="viewEvidence('{{ file.file_id }}')"
+        class="card h-100 card-selectable {% if file.deleted %}opacity-50{% endif %}"
+        data-file-id="{{ file.file_id }}"
+        onclick="handleEvidenceCardClick(event, '{{ file.file_id }}')"
       >
-        <div style="flex: 1">
-          <div class="evidence-header-row">
-            <span
-              class="evidence-badge {% if file.deleted %}deleted{% elif file.processed_count > 0 %}processed{% endif %}"
-            >
-              {% if file.deleted %} 삭제됨 {% elif file.processed_count > 0 %}
-              처리됨 ({{ file.processed_count }}건) {% else %} 미처리 {% endif
-              %}
-            </span>
-          </div>
-          <div class="evidence-title">
-            <i class="fas fa-file-archive"></i>
-            {{ file.filename }} {% if file.deleted and file.deleted_at %}
-            <small style="color: var(--text-tertiary)"
-              >({{ file.deleted_at }})</small
-            >
-            {% endif %}
-          </div>
-          <div class="evidence-meta">
-            <span>
-              <i class="fas fa-clock"></i>
-              {{ file.upload_time }}
-            </span>
-            <span>
-              <i class="fas fa-hdd"></i>
-              {{ file.size_mb }} MB
-            </span>
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-auto">
+              <input
+                type="checkbox"
+                class="form-check-input file-select checkbox-large"
+                data-file-id="{{ file.file_id }}"
+                onchange="updateDeleteButton()"
+                onclick="event.stopPropagation()"
+                {%
+                if
+                file.deleted
+                %}disabled{%
+                endif
+                %}
+              />
+            </div>
+            <div class="col">
+              <div
+                class="d-flex justify-content-between align-items-start mb-2"
+              >
+                <h5 class="card-title mb-0">
+                  <i class="fas fa-file-archive text-primary me-2"></i>
+                  {{ file.filename }}
+                </h5>
+                <span
+                  class="badge {% if file.deleted %}bg-danger{% elif file.processed_count > 0 %}bg-success{% else %}bg-secondary{% endif %}"
+                >
+                  {% if file.deleted %} 삭제됨 {% elif file.processed_count > 0
+                  %} 처리됨 ({{ file.processed_count }}건) {% else %} 미처리 {%
+                  endif %}
+                </span>
+              </div>
+              <div class="d-flex gap-4 text-muted">
+                <span>
+                  <i class="fas fa-clock me-1"></i>{{ file.upload_time }}
+                </span>
+                <span>
+                  <i class="fas fa-hdd me-1"></i>{{ file.size_mb }} MB
+                </span>
+                {% if file.deleted and file.deleted_at %}
+                <span class="text-danger">
+                  <i class="fas fa-trash me-1"></i>{{ file.deleted_at }}
+                </span>
+                {% endif %}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -416,27 +165,62 @@ endblock %} {% block extra_css %}
 
   {% else %}
   <!-- 업로드 파일 없음 -->
-  <div class="no-evidence">
-    <i class="fas fa-inbox"></i>
-    <h3>업로드된 파일이 없습니다</h3>
-    <p>먼저 .mbox 파일을 업로드해주세요</p>
-    <a href="/upload" class="btn-primary">
-      <i class="fas fa-upload me-2"></i>파일 업로드
-    </a>
+  <div class="text-center py-5">
+    <div class="card bg-light border-2 border-dashed">
+      <div class="card-body py-5">
+        <i class="fas fa-inbox fa-5x text-muted mb-4"></i>
+        <h3 class="fw-bold mb-3">업로드된 파일이 없습니다</h3>
+        <p class="text-muted lead mb-4">먼저 .mbox 파일을 업로드해주세요</p>
+        <a href="/upload" class="btn btn-primary btn-lg">
+          <i class="fas fa-upload me-2"></i>파일 업로드
+        </a>
+      </div>
+    </div>
   </div>
   {% endif %}
 </div>
 {% endblock %} {% block scripts %}
 <script>
+  let selectedEvidenceCard = null;
+
+  // 카드 클릭 핸들러 (체크박스와 연동)
+  function handleEvidenceCardClick(event, fileId) {
+    // 체크박스 클릭은 제외
+    if (event.target.type === "checkbox") {
+      return;
+    }
+
+    const clickedCard = event.currentTarget;
+    const checkbox = clickedCard.querySelector(".file-select");
+
+    // 모든 카드에서 선택 상태 제거
+    document.querySelectorAll(".card-selectable").forEach((card) => {
+      card.classList.remove("card-selected");
+    });
+
+    // 클릭된 카드 선택 상태 추가
+    clickedCard.classList.add("card-selected");
+    selectedEvidenceCard = clickedCard;
+
+    // 체크박스 토글 (활성화된 경우만)
+    if (checkbox && !checkbox.disabled) {
+      checkbox.checked = !checkbox.checked;
+      updateDeleteButton();
+    }
+
+    // 상세 정보 보기
+    setTimeout(() => {
+      viewEvidence(fileId);
+    }, 200);
+  }
+
   function filterEvidence() {
     const searchInput = document.getElementById("searchInput");
     const filter = searchInput.value.toLowerCase();
-    const cards = document.querySelectorAll(".evidence-card");
+    const cards = document.querySelectorAll("#evidenceGrid > div");
 
     cards.forEach((card) => {
-      const title = card
-        .querySelector(".evidence-title")
-        .textContent.toLowerCase();
+      const title = card.querySelector(".card-title").textContent.toLowerCase();
 
       if (title.includes(filter)) {
         card.style.display = "";
@@ -447,7 +231,6 @@ endblock %} {% block extra_css %}
   }
 
   function viewEvidence(fileId) {
-    // 해당 파일의 처리된 이메일 상세 페이지로 이동
     window.location.href = `/evidence_file/${fileId}`;
   }
 

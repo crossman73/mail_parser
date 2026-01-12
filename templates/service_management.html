@@ -1,0 +1,793 @@
+{% extends "base.html" %} {% block title %}서비스 관리 - 이메일 타임라인
+시스템{% endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <!-- 헤더 -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2>
+        <i class="fas fa-server text-warning"></i>
+        서비스 관리
+      </h2>
+      <p class="text-muted mb-0">
+        <small>시스템 서비스 상태를 모니터링하고 제어합니다</small>
+      </p>
+    </div>
+    <div>
+      <button
+        class="btn btn-outline-success btn-sm"
+        onclick="startAllServices()"
+        disabled
+        id="startAllBtn"
+      >
+        <i class="fas fa-play"></i> 전체 시작
+      </button>
+      <button
+        class="btn btn-outline-danger btn-sm ms-2"
+        onclick="stopAllServices()"
+        disabled
+        id="stopAllBtn"
+      >
+        <i class="fas fa-stop"></i> 전체 중지
+      </button>
+      <a
+        href="/admin/system-status"
+        class="btn btn-outline-secondary btn-sm ms-2"
+      >
+        <i class="fas fa-chart-line"></i> 시스템 상태
+      </a>
+      <a href="/admin" class="btn btn-outline-primary btn-sm ms-2">
+        <i class="fas fa-cog"></i> 관리자
+      </a>
+    </div>
+  </div>
+
+  <!-- 통계 카드 -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-success">
+        <div class="card-body text-center">
+          <h6 class="card-title">
+            <i class="fas fa-check-circle"></i> 실행 중
+          </h6>
+          <h3 id="running-count">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body text-center">
+          <h6 class="card-title">
+            <i class="fas fa-pause-circle"></i> 대기 중
+          </h6>
+          <h3 id="idle-count">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-secondary">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-stop-circle"></i> 중지됨</h6>
+          <h3 id="stopped-count">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-danger">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-times-circle"></i> 오류</h6>
+          <h3 id="error-count">0</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 필터 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+          <label for="statusFilter" class="form-label small mb-1">상태</label>
+          <select
+            id="statusFilter"
+            class="form-select"
+            onchange="filterServices()"
+          >
+            <option value="">전체</option>
+            <option value="running">실행 중</option>
+            <option value="idle">대기 중</option>
+            <option value="stopped">중지됨</option>
+            <option value="error">오류</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="categoryFilter" class="form-label small mb-1"
+            >카테고리</label
+          >
+          <select
+            id="categoryFilter"
+            class="form-select"
+            onchange="filterServices()"
+          >
+            <option value="">전체</option>
+            <option value="core">핵심 서비스</option>
+            <option value="background">백그라운드 작업</option>
+            <option value="monitoring">모니터링</option>
+            <option value="database">데이터베이스</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="searchInput" class="form-label small mb-1"
+            >서비스명 검색</label
+          >
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control"
+            placeholder="서비스명 입력..."
+            onkeyup="filterServices()"
+          />
+        </div>
+        <div class="col-md-3 text-end">
+          <button
+            class="btn btn-outline-secondary btn-sm"
+            onclick="loadServices()"
+          >
+            <i class="fas fa-sync-alt"></i> 새로고침
+          </button>
+          <button
+            class="btn btn-outline-info btn-sm ms-2"
+            onclick="restartAllServices()"
+          >
+            <i class="fas fa-redo"></i> 전체 재시작
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 서비스 목록 -->
+  <div class="row" id="servicesContainer">
+    <!-- 서비스 카드들이 여기에 동적으로 추가됩니다 -->
+    <div class="col-12 text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">로딩 중...</span>
+      </div>
+      <p class="text-muted mt-2">서비스 정보를 불러오는 중...</p>
+    </div>
+  </div>
+</div>
+
+<!-- 서비스 상세 정보 모달 -->
+<div class="modal fade" id="serviceDetailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-info-circle"></i> 서비스 상세 정보
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body" id="serviceDetailBody">
+        <!-- 동적 콘텐츠 -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 서비스 로그 모달 -->
+<div class="modal fade" id="serviceLogModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-file-alt"></i> 서비스 로그</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body" id="serviceLogBody">
+        <!-- 동적 콘텐츠 -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let servicesData = [];
+  let filteredServices = [];
+  let refreshInterval = null;
+
+  // 페이지 로드 시 초기화
+  document.addEventListener("DOMContentLoaded", function () {
+    loadServices();
+    // 자동 갱신 (10초마다)
+    refreshInterval = setInterval(loadServices, 10000);
+  });
+
+  // 서비스 목록 불러오기
+  async function loadServices() {
+    try {
+      const response = await fetch("/api/admin/services");
+      const data = await response.json();
+
+      if (data.success) {
+        servicesData = data.services || [];
+        filteredServices = [...servicesData];
+
+        // 통계 업데이트
+        updateStatistics();
+
+        // 서비스 카드 렌더링
+        renderServicesCards();
+
+        // 버튼 활성화 상태 업데이트
+        updateControlButtons();
+      } else {
+        throw new Error(data.message || "서비스 목록을 불러올 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("Error loading services:", error);
+      document.getElementById("servicesContainer").innerHTML = `
+        <div class="col-12 text-center text-danger py-5">
+          <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+          <p>서비스 정보를 불러오는 중 오류가 발생했습니다.</p>
+          <small>${error.message}</small>
+        </div>
+      `;
+      showToast("서비스 정보를 불러올 수 없습니다.", "error");
+    }
+  }
+
+  // 통계 업데이트
+  function updateStatistics() {
+    const running = servicesData.filter((s) => s.status === "running").length;
+    const idle = servicesData.filter((s) => s.status === "idle").length;
+    const stopped = servicesData.filter((s) => s.status === "stopped").length;
+    const error = servicesData.filter((s) => s.status === "error").length;
+
+    document.getElementById("running-count").textContent = running;
+    document.getElementById("idle-count").textContent = idle;
+    document.getElementById("stopped-count").textContent = stopped;
+    document.getElementById("error-count").textContent = error;
+  }
+
+  // 서비스 카드 렌더링
+  function renderServicesCards() {
+    const container = document.getElementById("servicesContainer");
+
+    if (filteredServices.length === 0) {
+      container.innerHTML = `
+        <div class="col-12 text-center text-muted py-5">
+          <i class="fas fa-server fa-2x mb-2"></i>
+          <p>서비스가 없습니다.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filteredServices
+      .map(
+        (service) => `
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 ${
+          service.status === "error"
+            ? "border-danger"
+            : service.status === "running"
+            ? "border-success"
+            : ""
+        }">
+          <div class="card-header bg-${getStatusColor(
+            service.status
+          )} text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">
+                <i class="fas fa-${getServiceIcon(service.category)}"></i>
+                ${service.name}
+              </h6>
+              <span class="badge bg-white text-${getStatusColor(
+                service.status
+              )}">
+                ${getStatusText(service.status)}
+              </span>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="text-muted small mb-2">${
+              service.description || "서비스 설명 없음"
+            }</p>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <small class="text-muted">카테고리</small>
+              <span class="badge bg-secondary">${getCategoryText(
+                service.category
+              )}</span>
+            </div>
+            ${
+              service.info
+                ? `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <small class="text-muted">추가 정보</small>
+              <small class="text-end">${service.info}</small>
+            </div>
+            `
+                : ""
+            }
+            ${
+              service.uptime
+                ? `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <small class="text-muted">실행 시간</small>
+              <small>${service.uptime}</small>
+            </div>
+            `
+                : ""
+            }
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <div class="btn-group btn-group-sm w-100" role="group">
+              <button class="btn btn-outline-success" onclick="startService('${
+                service.id
+              }')"
+                      ${
+                        service.status === "running" ? "disabled" : ""
+                      } title="시작">
+                <i class="fas fa-play"></i>
+              </button>
+              <button class="btn btn-outline-danger" onclick="stopService('${
+                service.id
+              }')"
+                      ${
+                        service.status === "stopped" ||
+                        service.status === "idle"
+                          ? "disabled"
+                          : ""
+                      } title="중지">
+                <i class="fas fa-stop"></i>
+              </button>
+              <button class="btn btn-outline-warning" onclick="restartService('${
+                service.id
+              }')"
+                      ${
+                        service.status === "stopped" ? "disabled" : ""
+                      } title="재시작">
+                <i class="fas fa-redo"></i>
+              </button>
+              <button class="btn btn-outline-info" onclick="showServiceDetail('${
+                service.id
+              }')" title="상세 정보">
+                <i class="fas fa-info-circle"></i>
+              </button>
+              <button class="btn btn-outline-secondary" onclick="showServiceLog('${
+                service.id
+              }')" title="로그">
+                <i class="fas fa-file-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+      )
+      .join("");
+  }
+
+  // 서비스 필터링
+  function filterServices() {
+    const statusFilter = document.getElementById("statusFilter").value;
+    const categoryFilter = document.getElementById("categoryFilter").value;
+    const searchText = document
+      .getElementById("searchInput")
+      .value.toLowerCase();
+
+    filteredServices = servicesData.filter((service) => {
+      if (statusFilter && service.status !== statusFilter) return false;
+      if (categoryFilter && service.category !== categoryFilter) return false;
+      if (searchText && !service.name.toLowerCase().includes(searchText))
+        return false;
+      return true;
+    });
+
+    renderServicesCards();
+  }
+
+  // 서비스 시작
+  async function startService(serviceId) {
+    try {
+      const response = await fetch(`/api/admin/services/${serviceId}/start`, {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast("서비스가 시작되었습니다.", "success");
+        loadServices();
+      } else {
+        throw new Error(data.message || "서비스 시작에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error starting service:", error);
+      showToast("서비스 시작 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 서비스 중지
+  async function stopService(serviceId) {
+    if (!confirm("정말로 이 서비스를 중지하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/services/${serviceId}/stop`, {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast("서비스가 중지되었습니다.", "success");
+        loadServices();
+      } else {
+        throw new Error(data.message || "서비스 중지에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error stopping service:", error);
+      showToast("서비스 중지 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 서비스 재시작
+  async function restartService(serviceId) {
+    if (!confirm("정말로 이 서비스를 재시작하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/services/${serviceId}/restart`, {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast("서비스가 재시작되었습니다.", "success");
+        loadServices();
+      } else {
+        throw new Error(data.message || "서비스 재시작에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error restarting service:", error);
+      showToast("서비스 재시작 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 서비스 상세 정보 표시
+  function showServiceDetail(serviceId) {
+    const service = servicesData.find((s) => s.id === serviceId);
+    if (!service) return;
+
+    const modal = new bootstrap.Modal(
+      document.getElementById("serviceDetailModal")
+    );
+    const body = document.getElementById("serviceDetailBody");
+
+    body.innerHTML = `
+      <div class="card mb-3">
+        <div class="card-header bg-${getStatusColor(
+          service.status
+        )} text-white">
+          <h6 class="mb-0"><i class="fas fa-server"></i> 서비스 정보</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>서비스명</span>
+                <strong>${service.name}</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>상태</span>
+                <strong class="text-${getStatusColor(service.status)}">
+                  ${getStatusText(service.status)}
+                </strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>카테고리</span>
+                <strong>${getCategoryText(service.category)}</strong>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>실행 시간</span>
+                <strong>${service.uptime || "N/A"}</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>재시작 횟수</span>
+                <strong>${service.restart_count || 0}회</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>마지막 업데이트</span>
+                <strong>${service.last_update || "N/A"}</strong>
+              </div>
+            </div>
+          </div>
+          ${
+            service.description
+              ? `
+          <div class="mt-3 pt-3 border-top">
+            <p class="text-muted mb-0"><strong>설명:</strong> ${service.description}</p>
+          </div>
+          `
+              : ""
+          }
+        </div>
+      </div>
+      ${
+        service.metadata
+          ? `
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0"><i class="fas fa-info-circle"></i> 메타데이터</h6>
+        </div>
+        <div class="card-body">
+          <pre class="bg-light p-3 rounded mb-0"><code>${JSON.stringify(
+            service.metadata,
+            null,
+            2
+          )}</code></pre>
+        </div>
+      </div>
+      `
+          : ""
+      }
+    `;
+
+    modal.show();
+  }
+
+  // 서비스 로그 표시
+  async function showServiceLog(serviceId) {
+    const service = servicesData.find((s) => s.id === serviceId);
+    if (!service) return;
+
+    const modal = new bootstrap.Modal(
+      document.getElementById("serviceLogModal")
+    );
+    const body = document.getElementById("serviceLogBody");
+
+    body.innerHTML = `
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">로딩 중...</span>
+        </div>
+        <p class="text-muted mt-2">로그를 불러오는 중...</p>
+      </div>
+    `;
+
+    modal.show();
+
+    try {
+      const response = await fetch(`/api/admin/services/${serviceId}/logs`);
+      const data = await response.json();
+
+      if (data.success && data.logs) {
+        body.innerHTML = `
+          <div class="card">
+            <div class="card-header bg-dark text-white">
+              <h6 class="mb-0">
+                <i class="fas fa-terminal"></i> ${service.name} - 로그
+                <small class="float-end">${data.log_count}개 항목</small>
+              </h6>
+            </div>
+            <div class="card-body bg-dark text-white p-0">
+              <pre class="mb-0 p-3" style="max-height: 500px; overflow-y: auto;"><code>${data.logs}</code></pre>
+            </div>
+          </div>
+        `;
+      } else {
+        body.innerHTML = `
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            로그를 불러올 수 없습니다.
+          </div>
+        `;
+      }
+    } catch (error) {
+      console.error("Error loading service logs:", error);
+      body.innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle"></i>
+          로그를 불러오는 중 오류가 발생했습니다.
+        </div>
+      `;
+    }
+  }
+
+  // 전체 서비스 시작
+  async function startAllServices() {
+    if (!confirm("모든 중지된 서비스를 시작하시겠습니까?")) return;
+
+    try {
+      const response = await fetch("/api/admin/services/start-all", {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast(
+          `${data.started_count}개의 서비스가 시작되었습니다.`,
+          "success"
+        );
+        loadServices();
+      } else {
+        throw new Error(data.message || "서비스 시작에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error starting all services:", error);
+      showToast("서비스 시작 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 전체 서비스 중지
+  async function stopAllServices() {
+    if (
+      !confirm(
+        "정말로 모든 서비스를 중지하시겠습니까? 시스템이 정상적으로 작동하지 않을 수 있습니다."
+      )
+    )
+      return;
+
+    try {
+      const response = await fetch("/api/admin/services/stop-all", {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast(
+          `${data.stopped_count}개의 서비스가 중지되었습니다.`,
+          "success"
+        );
+        loadServices();
+      } else {
+        throw new Error(data.message || "서비스 중지에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error stopping all services:", error);
+      showToast("서비스 중지 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 전체 서비스 재시작
+  async function restartAllServices() {
+    if (!confirm("모든 서비스를 재시작하시겠습니까?")) return;
+
+    try {
+      const response = await fetch("/api/admin/services/restart-all", {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast(
+          `${data.restarted_count}개의 서비스가 재시작되었습니다.`,
+          "success"
+        );
+        loadServices();
+      } else {
+        throw new Error(data.message || "서비스 재시작에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error restarting all services:", error);
+      showToast("서비스 재시작 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 제어 버튼 활성화 상태 업데이트
+  function updateControlButtons() {
+    const stoppedCount = servicesData.filter(
+      (s) => s.status === "stopped"
+    ).length;
+    const runningCount = servicesData.filter(
+      (s) => s.status === "running"
+    ).length;
+
+    document.getElementById("startAllBtn").disabled = stoppedCount === 0;
+    document.getElementById("stopAllBtn").disabled = runningCount === 0;
+  }
+
+  // 유틸리티 함수들
+  function getStatusColor(status) {
+    const colors = {
+      running: "success",
+      idle: "warning",
+      stopped: "secondary",
+      error: "danger",
+    };
+    return colors[status] || "secondary";
+  }
+
+  function getStatusText(status) {
+    const texts = {
+      running: "실행 중",
+      idle: "대기 중",
+      stopped: "중지됨",
+      error: "오류",
+    };
+    return texts[status] || status;
+  }
+
+  function getCategoryText(category) {
+    const texts = {
+      core: "핵심 서비스",
+      background: "백그라운드",
+      monitoring: "모니터링",
+      database: "데이터베이스",
+    };
+    return texts[category] || category;
+  }
+
+  function getServiceIcon(category) {
+    const icons = {
+      core: "cogs",
+      background: "tasks",
+      monitoring: "chart-line",
+      database: "database",
+    };
+    return icons[category] || "server";
+  }
+
+  function showToast(message, type = "info") {
+    const existingToast = document.querySelector(".toast");
+    if (existingToast) {
+      existingToast.remove();
+    }
+
+    const toast = document.createElement("div");
+    toast.className = `toast align-items-center text-white bg-${
+      type === "error" ? "danger" : type
+    } border-0`;
+    toast.setAttribute("role", "alert");
+    toast.style.position = "fixed";
+    toast.style.top = "20px";
+    toast.style.right = "20px";
+    toast.style.zIndex = "9999";
+
+    toast.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">
+          <i class="fas fa-${
+            type === "success"
+              ? "check-circle"
+              : type === "error"
+              ? "exclamation-circle"
+              : "info-circle"
+          } me-2"></i>
+          ${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    `;
+
+    document.body.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+
+    setTimeout(() => {
+      toast.remove();
+    }, 5000);
+  }
+
+  // 페이지 종료 시 인터벌 클리어
+  window.addEventListener("beforeunload", function () {
+    if (refreshInterval) clearInterval(refreshInterval);
+  });
+</script>
+{% endblock %}

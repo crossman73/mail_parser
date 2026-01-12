@@ -1,0 +1,62 @@
+# ============================================================
+# Agent Ignore File - 토큰 절약을 위한 컨텍스트 제외 목록
+# ============================================================
+
+# 의존성 및 빌드
+node_modules/
+dist/
+build/
+coverage/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# 데이터 및 로그
+data/db/
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+# 대용량 파일
+*.lock
+*.sum
+package-lock.json
+yarn.lock
+poetry.lock
+Pipfile.lock
+
+# 이메일 및 처리된 데이터
+email_files/
+processed_emails/
+archives/
+uploads/
+
+# 환경 설정
+.env
+.env.*
+*.local
+
+# Git 및 IDE
+.git/
+.vscode/extensions/
+*.vsix
+
+# 테스트 및 임시 파일
+temp/
+tmp/
+*.tmp
+*.bak
+*.backup*
+
+# 생성된 문서
+docs/api_docs.html
+docs/openapi.json
+
+# 진단 및 백업
+diagnostics/
+workspace_backups/
+vscode_diagnostics*/
+repo_cleanup_backups/

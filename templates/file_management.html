@@ -1,0 +1,633 @@
+{% extends "base.html" %} {% block title %}파일 관리 - 이메일 타임라인 시스템{%
+endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <!-- 헤더 -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2>
+        <i class="fas fa-folder-open text-info"></i>
+        업로드 파일 관리
+      </h2>
+      <p class="text-muted mb-0">
+        <small>시스템에 업로드된 모든 파일을 확인하고 관리합니다</small>
+      </p>
+    </div>
+    <div>
+      <a href="/admin/system-status" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-chart-line"></i> 시스템 상태
+      </a>
+      <a href="/admin" class="btn btn-outline-primary btn-sm ms-2">
+        <i class="fas fa-cog"></i> 관리자
+      </a>
+    </div>
+  </div>
+
+  <!-- 통계 카드 -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-info">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-file"></i> 총 파일 수</h6>
+          <h3 id="total-files">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-primary">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-hdd"></i> 총 용량</h6>
+          <h3 id="total-size">0 MB</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-success">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-upload"></i> 오늘 업로드</h6>
+          <h3 id="today-uploads">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body text-center">
+          <h6 class="card-title"><i class="fas fa-chart-bar"></i> 평균 크기</h6>
+          <h3 id="avg-size">0 MB</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 필터 및 검색 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+          <label for="searchInput" class="form-label small mb-1"
+            >파일명 검색</label
+          >
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control"
+            placeholder="파일명 입력..."
+            onkeyup="filterFiles()"
+          />
+        </div>
+        <div class="col-md-2">
+          <label for="typeFilter" class="form-label small mb-1"
+            >파일 유형</label
+          >
+          <select id="typeFilter" class="form-select" onchange="filterFiles()">
+            <option value="">전체</option>
+            <option value=".mbox">.mbox</option>
+            <option value=".eml">.eml</option>
+            <option value=".zip">.zip</option>
+            <option value=".txt">.txt</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="sortBy" class="form-label small mb-1">정렬</label>
+          <select id="sortBy" class="form-select" onchange="sortFiles()">
+            <option value="date-desc">최신순</option>
+            <option value="date-asc">오래된순</option>
+            <option value="name-asc">이름순</option>
+            <option value="size-desc">크기 큰순</option>
+            <option value="size-asc">크기 작은순</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="dateFilter" class="form-label small mb-1"
+            >업로드 날짜</label
+          >
+          <select id="dateFilter" class="form-select" onchange="filterFiles()">
+            <option value="">전체</option>
+            <option value="today">오늘</option>
+            <option value="week">이번 주</option>
+            <option value="month">이번 달</option>
+          </select>
+        </div>
+        <div class="col-md-3 text-end">
+          <button
+            class="btn btn-outline-secondary btn-sm"
+            onclick="loadFiles()"
+          >
+            <i class="fas fa-sync-alt"></i> 새로고침
+          </button>
+          <button
+            class="btn btn-danger btn-sm ms-2"
+            onclick="cleanupOldFiles()"
+            disabled
+            id="cleanupBtn"
+          >
+            <i class="fas fa-trash"></i> 오래된 파일 정리
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 파일 목록 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">
+          <i class="fas fa-list"></i> 파일 목록 (<span id="file-count">0</span
+          >개)
+        </h6>
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="autoRefresh"
+            onchange="toggleAutoRefresh()"
+          />
+          <label class="form-check-label small" for="autoRefresh">
+            자동 갱신 (<span id="refreshCountdown">30</span>초)
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0" id="filesTable">
+          <thead class="table-light">
+            <tr>
+              <th width="5%">#</th>
+              <th width="35%"><i class="fas fa-file"></i> 파일명</th>
+              <th width="15%"><i class="fas fa-hdd"></i> 크기</th>
+              <th width="15%"><i class="fas fa-clock"></i> 업로드 날짜</th>
+              <th width="15%"><i class="fas fa-folder"></i> 경로</th>
+              <th width="15%" class="text-center">
+                <i class="fas fa-cogs"></i> 작업
+              </th>
+            </tr>
+          </thead>
+          <tbody id="filesTableBody">
+            <tr>
+              <td colspan="6" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">로딩 중...</span>
+                </div>
+                <p class="text-muted mt-2">파일 목록을 불러오는 중...</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 파일 상세 정보 모달 -->
+<div class="modal fade" id="fileDetailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-info-circle"></i> 파일 상세 정보
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body" id="fileDetailBody">
+        <!-- 동적 콘텐츠 -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let filesData = [];
+  let filteredFiles = [];
+  let refreshInterval = null;
+  let countdownInterval = null;
+  let countdown = 30;
+
+  // 페이지 로드 시 초기화
+  document.addEventListener("DOMContentLoaded", function () {
+    loadFiles();
+  });
+
+  // 파일 목록 불러오기
+  async function loadFiles() {
+    try {
+      const response = await fetch("/api/admin/files");
+      const data = await response.json();
+
+      if (data.success) {
+        filesData = data.files || [];
+        filteredFiles = [...filesData];
+
+        // 통계 업데이트
+        updateStatistics(data.statistics);
+
+        // 테이블 렌더링
+        renderFilesTable();
+
+        showToast("파일 목록을 불러왔습니다.", "success");
+      } else {
+        throw new Error(data.message || "파일 목록을 불러올 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("Error loading files:", error);
+      document.getElementById("filesTableBody").innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-danger py-5">
+            <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+            <p>파일 목록을 불러오는 중 오류가 발생했습니다.</p>
+            <small>${error.message}</small>
+          </td>
+        </tr>
+      `;
+      showToast("파일 목록을 불러올 수 없습니다.", "error");
+    }
+  }
+
+  // 통계 업데이트
+  function updateStatistics(stats) {
+    document.getElementById("total-files").textContent = stats.total_files || 0;
+    document.getElementById("total-size").textContent = formatSize(
+      stats.total_size_mb || 0
+    );
+    document.getElementById("today-uploads").textContent =
+      stats.today_uploads || 0;
+    document.getElementById("avg-size").textContent = formatSize(
+      stats.avg_file_size_mb || 0
+    );
+
+    // 정리 버튼 활성화 (오래된 파일이 있으면)
+    if (stats.old_files_count > 0) {
+      document.getElementById("cleanupBtn").disabled = false;
+    }
+  }
+
+  // 파일 테이블 렌더링
+  function renderFilesTable() {
+    const tbody = document.getElementById("filesTableBody");
+    document.getElementById("file-count").textContent = filteredFiles.length;
+
+    if (filteredFiles.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-muted py-5">
+            <i class="fas fa-inbox fa-2x mb-2"></i>
+            <p>파일이 없습니다.</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filteredFiles
+      .map(
+        (file, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>
+          <i class="fas fa-file${getFileIcon(file.extension)} me-2"></i>
+          <strong>${file.name}</strong>
+        </td>
+        <td>${formatSize(file.size_mb)}</td>
+        <td>
+          <small>${formatDate(file.upload_date)}</small>
+        </td>
+        <td>
+          <small class="text-muted">${file.path || "/uploads"}</small>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-sm btn-outline-info" onclick="showFileDetail('${
+            file.id
+          }')" title="상세 정보">
+            <i class="fas fa-info-circle"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-primary" onclick="downloadFile('${
+            file.id
+          }')" title="다운로드">
+            <i class="fas fa-download"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" onclick="deleteFile('${
+            file.id
+          }')" title="삭제">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `
+      )
+      .join("");
+  }
+
+  // 파일 필터링
+  function filterFiles() {
+    const searchText = document
+      .getElementById("searchInput")
+      .value.toLowerCase();
+    const typeFilter = document.getElementById("typeFilter").value;
+    const dateFilter = document.getElementById("dateFilter").value;
+
+    filteredFiles = filesData.filter((file) => {
+      // 검색어 필터
+      if (searchText && !file.name.toLowerCase().includes(searchText)) {
+        return false;
+      }
+
+      // 유형 필터
+      if (typeFilter && !file.name.endsWith(typeFilter)) {
+        return false;
+      }
+
+      // 날짜 필터
+      if (dateFilter) {
+        const uploadDate = new Date(file.upload_date);
+        const now = new Date();
+
+        if (dateFilter === "today") {
+          if (uploadDate.toDateString() !== now.toDateString()) return false;
+        } else if (dateFilter === "week") {
+          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          if (uploadDate < weekAgo) return false;
+        } else if (dateFilter === "month") {
+          const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          if (uploadDate < monthAgo) return false;
+        }
+      }
+
+      return true;
+    });
+
+    sortFiles();
+  }
+
+  // 파일 정렬
+  function sortFiles() {
+    const sortBy = document.getElementById("sortBy").value;
+
+    filteredFiles.sort((a, b) => {
+      switch (sortBy) {
+        case "date-desc":
+          return new Date(b.upload_date) - new Date(a.upload_date);
+        case "date-asc":
+          return new Date(a.upload_date) - new Date(b.upload_date);
+        case "name-asc":
+          return a.name.localeCompare(b.name);
+        case "size-desc":
+          return b.size_mb - a.size_mb;
+        case "size-asc":
+          return a.size_mb - b.size_mb;
+        default:
+          return 0;
+      }
+    });
+
+    renderFilesTable();
+  }
+
+  // 파일 상세 정보 표시
+  function showFileDetail(fileId) {
+    const file = filesData.find((f) => f.id === fileId);
+    if (!file) return;
+
+    const modal = new bootstrap.Modal(
+      document.getElementById("fileDetailModal")
+    );
+    const body = document.getElementById("fileDetailBody");
+
+    body.innerHTML = `
+      <div class="card mb-3">
+        <div class="card-header bg-info text-white">
+          <h6 class="mb-0"><i class="fas fa-file"></i> 파일 정보</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>파일명</span>
+                <strong>${file.name}</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>크기</span>
+                <strong>${formatSize(file.size_mb)}</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>유형</span>
+                <strong>${file.extension}</strong>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>업로드 날짜</span>
+                <strong>${formatDate(file.upload_date)}</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>경로</span>
+                <strong>${file.path || "/uploads"}</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>처리 상태</span>
+                <strong class="text-${file.processed ? "success" : "warning"}">
+                  ${file.processed ? "처리 완료" : "대기 중"}
+                </strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ${
+        file.metadata
+          ? `
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0"><i class="fas fa-info-circle"></i> 추가 정보</h6>
+        </div>
+        <div class="card-body">
+          <pre class="bg-light p-3 rounded"><code>${JSON.stringify(
+            file.metadata,
+            null,
+            2
+          )}</code></pre>
+        </div>
+      </div>
+      `
+          : ""
+      }
+    `;
+
+    modal.show();
+  }
+
+  // 파일 다운로드
+  function downloadFile(fileId) {
+    window.location.href = `/api/admin/files/${fileId}/download`;
+    showToast("파일 다운로드를 시작합니다.", "info");
+  }
+
+  // 파일 삭제
+  async function deleteFile(fileId) {
+    if (!confirm("정말로 이 파일을 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/files/${fileId}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast("파일이 삭제되었습니다.", "success");
+        loadFiles();
+      } else {
+        throw new Error(data.message || "파일 삭제에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      showToast("파일 삭제 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 오래된 파일 정리
+  async function cleanupOldFiles() {
+    if (!confirm("30일 이상 된 파일을 모두 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await fetch("/api/admin/files/cleanup", {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showToast(
+          `${data.deleted_count}개의 파일이 삭제되었습니다.`,
+          "success"
+        );
+        loadFiles();
+      } else {
+        throw new Error(data.message || "파일 정리에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error cleaning up files:", error);
+      showToast("파일 정리 중 오류가 발생했습니다.", "error");
+    }
+  }
+
+  // 자동 갱신 토글
+  function toggleAutoRefresh() {
+    const enabled = document.getElementById("autoRefresh").checked;
+
+    if (enabled) {
+      countdown = 30;
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 1000);
+      refreshInterval = setInterval(loadFiles, 30000);
+      showToast("자동 갱신이 활성화되었습니다.", "info");
+    } else {
+      clearInterval(refreshInterval);
+      clearInterval(countdownInterval);
+      refreshInterval = null;
+      countdownInterval = null;
+      document.getElementById("refreshCountdown").textContent = "30";
+      showToast("자동 갱신이 비활성화되었습니다.", "info");
+    }
+  }
+
+  // 카운트다운 업데이트
+  function updateCountdown() {
+    countdown--;
+    document.getElementById("refreshCountdown").textContent = countdown;
+
+    if (countdown <= 0) {
+      countdown = 30;
+    }
+  }
+
+  // 유틸리티 함수들
+  function formatSize(sizeMb) {
+    if (sizeMb < 1) {
+      return `${(sizeMb * 1024).toFixed(2)} KB`;
+    }
+    return `${sizeMb.toFixed(2)} MB`;
+  }
+
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  function getFileIcon(extension) {
+    const icons = {
+      ".mbox": "-archive",
+      ".eml": "-alt",
+      ".zip": "-archive",
+      ".txt": "-alt",
+      ".pdf": "-pdf",
+      ".doc": "-word",
+      ".docx": "-word",
+      ".xls": "-excel",
+      ".xlsx": "-excel",
+    };
+    return icons[extension] || "";
+  }
+
+  function showToast(message, type = "info") {
+    // 기존 토스트 제거
+    const existingToast = document.querySelector(".toast");
+    if (existingToast) {
+      existingToast.remove();
+    }
+
+    // 새 토스트 생성
+    const toast = document.createElement("div");
+    toast.className = `toast align-items-center text-white bg-${
+      type === "error" ? "danger" : type
+    } border-0`;
+    toast.setAttribute("role", "alert");
+    toast.style.position = "fixed";
+    toast.style.top = "20px";
+    toast.style.right = "20px";
+    toast.style.zIndex = "9999";
+
+    toast.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">
+          <i class="fas fa-${
+            type === "success"
+              ? "check-circle"
+              : type === "error"
+              ? "exclamation-circle"
+              : "info-circle"
+          } me-2"></i>
+          ${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    `;
+
+    document.body.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+
+    setTimeout(() => {
+      toast.remove();
+    }, 5000);
+  }
+
+  // 페이지 종료 시 인터벌 클리어
+  window.addEventListener("beforeunload", function () {
+    if (refreshInterval) clearInterval(refreshInterval);
+    if (countdownInterval) clearInterval(countdownInterval);
+  });
+</script>
+{% endblock %}

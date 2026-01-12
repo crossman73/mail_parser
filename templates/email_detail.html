@@ -1,100 +1,44 @@
 {% extends "base.html" %}
 {% block title %}이메일 상세 - {{ email.subject }}{% endblock %}
 {% block content %}
-<style>
-  .mail-view-body {
-    font-family: 'NanumGothic', 'Segoe UI', Arial, sans-serif;
-    font-size: 1.05rem;
-    background: #fff;
-    color: #222;
-  }
-  .mail-view-body blockquote {
-    border-left: 3px solid #b0b0b0;
-    margin: 0 0 0 1rem;
-    padding-left: 1rem;
-    color: #555;
-    background: #f8f9fa;
-  }
-  .mail-view-body hr {
-    border: none;
-    border-top: 1px solid #e0e0e0;
-    margin: 1.5rem 0;
-  }
-  .mail-attachment-list .mail-attachment-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: 6px;
-    background: #f7f7fa;
-    border: 1px solid #e9ecef;
-  }
-  .mail-attachment-list .mail-attachment-item i {
-    font-size: 1.3em;
-    margin-right: 0.5em;
-    color: #007bff;
-  }
-  .mail-attachment-list .mail-attachment-item .btn-download {
-    margin-left: auto;
-  }
-  .mail-header-table th {
-    width: 110px;
-    color: #666;
-    font-weight: 500;
-  }
-  .mail-header-table td {
-    font-weight: 600;
-  }
-</style>
-<div class="container-fluid mt-4">
+<div class="container-fluid py-4">
   <!-- 네비게이션 -->
-  <div class="row mb-3">
-    <div class="col-12">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="{{ url_for('index') }}">홈</a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="{{ url_for('email_list', file_id=file_id) }}"
-              >이메일 목록</a
-            >
-          </li>
-          <li class="breadcrumb-item active">이메일 상세</li>
-        </ol>
-      </nav>
-    </div>
+  <div class="mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> 홈</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{{ url_for('email_list', file_id=file_id) }}">이메일 목록</a>
+        </li>
+        <li class="breadcrumb-item active">이메일 상세</li>
+      </ol>
+    </nav>
   </div>
 
   <!-- 이메일 헤더 정보 -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card">
-        <div
-          class="card-header d-flex justify-content-between align-items-center"
-        >
-          <h4 class="mb-0">
-            <i class="fas fa-envelope-open"></i>
-            이메일 상세 정보
-          </h4>
-          <div>
-            <a
-              href="{{ url_for('email_list', file_id=file_id) }}"
-              class="btn btn-secondary btn-sm"
-            >
-              <i class="fas fa-arrow-left"></i> 목록으로
-            </a>
-            <button class="btn btn-primary btn-sm" onclick="processThisEmail()">
-              <i class="fas fa-file-alt"></i> HTML 생성
-            </button>
-            <button class="btn btn-danger btn-sm" onclick="processThisEmailToPdf()">
-              <i class="fas fa-file-pdf"></i> PDF 생성
-            </button>
-            <button class="btn btn-outline-secondary btn-sm" onclick="downloadScreenshot()">
-              <i class="fas fa-camera"></i> 이미지 저장
-            </button>
-          </div>
-        </div>
+  <div class="card mb-4">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="fas fa-envelope-open text-primary"></i>
+        이메일 상세 정보
+      </h5>
+      <div>
+        <a href="{{ url_for('email_list', file_id=file_id) }}" class="btn btn-outline-secondary btn-sm">
+          <i class="fas fa-arrow-left"></i> 목록으로
+        </a>
+        <button class="btn btn-outline-primary btn-sm ms-2" onclick="processThisEmail()">
+          <i class="fas fa-file-alt"></i> HTML 생성
+        </button>
+        <button class="btn btn-outline-danger btn-sm ms-2" onclick="processThisEmailToPdf()">
+          <i class="fas fa-file-pdf"></i> PDF 생성
+        </button>
+        <button class="btn btn-outline-info btn-sm ms-2" onclick="downloadScreenshot()">
+          <i class="fas fa-camera"></i> 이미지 저장
+        </button>
+      </div>
+    </div>
         <div class="card-body">
           <div class="row">
             <div class="col-md-6">
@@ -206,14 +150,14 @@
           {% if email.full_content %}
             {% if email.full_content.html %}
               <div class="mb-3">
-                <div class="border rounded p-3" style="max-height: 600px; overflow-y: auto; background: #fcfcfc;">
+                <div class="border rounded p-3 max-h-600 overflow-y-auto bg-fcfcfc">
                   {{ email.full_content.html | safe }}
                 </div>
               </div>
             {% endif %}
             {% if email.full_content.text %}
               <div class="mb-3">
-                <pre class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap">{{ email.full_content.text }}</pre>
+                <pre class="bg-light p-3 rounded max-h-400 overflow-y-auto text-pre-wrap">{{ email.full_content.text }}</pre>
               </div>
             {% endif %}
           {% else %}

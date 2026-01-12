@@ -6,39 +6,61 @@ endblock %} {% block extra_head %}
 <div class="container-fluid py-4">
   <h1 class="h3 mb-4"><i class="fas fa-flask"></i> 시스템 테스트</h1>
 
-  <!-- 통계 카드 -->
+  <!-- 통계 카드 (필터 버튼) -->
   <div class="row mb-4">
     <div class="col-md-3">
-      <div class="card text-white bg-primary">
+      <div
+        class="card text-white bg-primary filter-btn card-selectable-sm"
+        data-filter-type="test-status"
+        data-filter-value="all"
+        onclick="filterByStatus('all')"
+      >
         <div class="card-body">
-          <h5 class="card-title">전체 테스트</h5>
+          <h5 class="card-title"><i class="fas fa-list"></i> 전체 테스트</h5>
           <h2 id="totalTests">0</h2>
           <small id="lastExecutionTime">마지막 실행: -</small>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card text-white bg-success">
+      <div
+        class="card text-white bg-success filter-btn card-selectable-sm"
+        data-filter-type="test-status"
+        data-filter-value="success"
+        onclick="filterByStatus('success')"
+      >
         <div class="card-body">
-          <h5 class="card-title">성공</h5>
+          <h5 class="card-title"><i class="fas fa-check-circle"></i> 성공</h5>
           <h2 id="successTests">0</h2>
           <small id="successRate">성공률: -</small>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card text-white bg-danger">
+      <div
+        class="card text-white bg-danger filter-btn card-selectable-sm"
+        data-filter-type="test-status"
+        data-filter-value="failed"
+        onclick="filterByStatus('failed')"
+      >
         <div class="card-body">
-          <h5 class="card-title">실패</h5>
+          <h5 class="card-title"><i class="fas fa-times-circle"></i> 실패</h5>
           <h2 id="failedTests">0</h2>
           <small id="failRate">실패율: -</small>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card text-white bg-warning">
+      <div
+        class="card text-white bg-warning filter-btn card-selectable-sm"
+        data-filter-type="test-status"
+        data-filter-value="error"
+        onclick="filterByStatus('error')"
+      >
         <div class="card-body">
-          <h5 class="card-title">오류</h5>
+          <h5 class="card-title">
+            <i class="fas fa-exclamation-triangle"></i> 오류
+          </h5>
           <h2 id="errorTests">0</h2>
           <small id="errorRate">오류율: -</small>
         </div>
@@ -85,20 +107,20 @@ endblock %} {% block extra_head %}
         <table class="table table-hover" id="testsTable">
           <thead>
             <tr>
-              <th style="width: 5%">
+              <th class="w-5">
                 <input
                   type="checkbox"
                   id="selectAll"
                   onchange="toggleSelectAll()"
                 />
               </th>
-              <th style="width: 10%">카테고리</th>
-              <th style="width: 20%">테스트명</th>
-              <th style="width: 25%">설명</th>
-              <th style="width: 10%">상태</th>
-              <th style="width: 10%">마지막 실행</th>
-              <th style="width: 10%">결과</th>
-              <th style="width: 10%">작업</th>
+              <th class="w-10">카테고리</th>
+              <th class="w-20">테스트명</th>
+              <th class="w-25">설명</th>
+              <th class="w-10">상태</th>
+              <th class="w-10">마지막 실행</th>
+              <th class="w-10">결과</th>
+              <th class="w-10">작업</th>
             </tr>
           </thead>
           <tbody id="testsTableBody">
@@ -320,7 +342,9 @@ endblock %} {% block extra_head %}
           </div>
           <div class="col-md-4 text-end">
             <button
-              class="btn btn-sm btn-outline-primary"
+              class="btn btn-sm btn-outline-primary filter-btn"
+              id="historyChartToggleBtn"
+              data-filter-type="chart-toggle"
               onclick="toggleHistoryChart()"
             >
               <i class="fas fa-chart-bar"></i>
@@ -345,14 +369,14 @@ endblock %} {% block extra_head %}
           <table class="table table-sm table-hover">
             <thead class="table-light">
               <tr>
-                <th style="width: 15%">실행 시간</th>
-                <th style="width: 20%">테스트</th>
-                <th style="width: 10%">카테고리</th>
-                <th style="width: 8%">상태</th>
-                <th style="width: 10%">소요 시간</th>
-                <th style="width: 12%">실행자</th>
-                <th style="width: 20%">결과 메시지</th>
-                <th style="width: 5%">상세</th>
+                <th class="w-15">실행 시간</th>
+                <th class="w-20">테스트</th>
+                <th class="w-10">카테고리</th>
+                <th class="w-8">상태</th>
+                <th class="w-10">소요 시간</th>
+                <th class="w-12">실행자</th>
+                <th class="w-20">결과 메시지</th>
+                <th class="w-5">상세</th>
               </tr>
             </thead>
             <tbody id="historyTableBody">
@@ -423,8 +447,7 @@ endblock %} {% block extra_head %}
           <dd class="col-sm-9">
             <pre
               id="detailError"
-              class="bg-light p-2"
-              style="max-height: 300px; overflow-y: auto; font-size: 0.85rem"
+              class="bg-light p-2 max-h-300 overflow-y-auto fs-085rem"
             ></pre>
           </dd>
         </dl>
@@ -441,6 +464,115 @@ endblock %} {% block extra_head %}
 <script>
   let currentEditKey = null;
   let tests = [];
+  let currentStatusFilter = null; // 상태 필터 (null, 'all', 'success', 'failed', 'error')
+  let filteredTests = []; // 필터링된 테스트 목록
+
+  // 카테고리별 색상 매핑
+  const categoryColors = {
+    web: "bg-primary", // 파란색
+    database: "bg-success", // 초록색
+    email: "bg-info", // 하늘색
+    forensic: "bg-warning", // 노란색
+    api: "bg-danger", // 빨간색
+    system: "bg-secondary", // 회색
+  };
+
+  // 카테고리 배지 클래스 가져오기
+  function getCategoryBadgeClass(category) {
+    return categoryColors[category] || "bg-info";
+  }
+
+  // 상태별 필터링
+  function filterByStatus(status) {
+    // 모든 상태 필터 버튼에서 활성 상태 제거
+    document
+      .querySelectorAll('[data-filter-type="test-status"]')
+      .forEach((btn) => {
+        btn.classList.remove("filter-btn-active");
+        btn.classList.remove("card-selected");
+      });
+
+    if (currentStatusFilter === status) {
+      // 같은 필터 재클릭 시 필터 해제 (전체로 복원)
+      currentStatusFilter = "all";
+      filteredTests = tests;
+
+      // "전체" 버튼 활성화
+      const allBtn = document.querySelector('[data-filter-value="all"]');
+      if (allBtn) {
+        allBtn.classList.add("filter-btn-active");
+        allBtn.classList.add("card-selected");
+      }
+    } else {
+      // 새 필터 적용
+      currentStatusFilter = status;
+
+      // 클릭된 버튼 활성화
+      const activeBtn = document.querySelector(
+        `[data-filter-value="${status}"]`
+      );
+      if (activeBtn) {
+        activeBtn.classList.add("filter-btn-active");
+        activeBtn.classList.add("card-selected");
+      }
+
+      // 필터링
+      if (status === "all") {
+        filteredTests = tests;
+      } else {
+        // 마지막 실행 결과로 필터링
+        filteredTests = tests.filter((test) => {
+          // 이 부분은 loadLastExecution에서 저장된 데이터를 사용
+          return test.lastStatus === status;
+        });
+      }
+    }
+
+    renderTests(filteredTests);
+    updateFilteredStatistics();
+  }
+
+  // 필터링된 데이터 기반 통계 업데이트
+  function updateFilteredStatistics() {
+    // 전체 테스트 수 (필터링 적용)
+    document.getElementById("totalTests").textContent = filteredTests.length;
+
+    // 상태별 카운트
+    const successCount = filteredTests.filter(
+      (t) => t.lastStatus === "success"
+    ).length;
+    const failedCount = filteredTests.filter(
+      (t) => t.lastStatus === "failed"
+    ).length;
+    const errorCount = filteredTests.filter(
+      (t) => t.lastStatus === "error"
+    ).length;
+    const total = filteredTests.length;
+
+    // 통계 카드 업데이트
+    document.getElementById("successTests").textContent = successCount;
+    document.getElementById("failedTests").textContent = failedCount;
+    document.getElementById("errorTests").textContent = errorCount;
+
+    // 비율 계산
+    if (total > 0) {
+      const successRate = ((successCount / total) * 100).toFixed(1);
+      const failRate = ((failedCount / total) * 100).toFixed(1);
+      const errorRate = ((errorCount / total) * 100).toFixed(1);
+
+      document.getElementById(
+        "successRate"
+      ).textContent = `성공률: ${successRate}%`;
+      document.getElementById("failRate").textContent = `실패율: ${failRate}%`;
+      document.getElementById(
+        "errorRate"
+      ).textContent = `오류율: ${errorRate}%`;
+    } else {
+      document.getElementById("successRate").textContent = "성공률: 0%";
+      document.getElementById("failRate").textContent = "실패율: 0%";
+      document.getElementById("errorRate").textContent = "오류율: 0%";
+    }
+  }
 
   // 페이지 로드 시 테스트 목록 로딩
   document.addEventListener("DOMContentLoaded", function () {
@@ -455,9 +587,20 @@ endblock %} {% block extra_head %}
 
       if (data.success) {
         tests = data.tests;
-        renderTests(tests);
+        filteredTests = tests; // 초기에는 전체 표시
+        renderTests(filteredTests);
         updateStatistics();
         updateTabs(data.categories);
+
+        // 전체 필터 버튼 활성화
+        if (!currentStatusFilter) {
+          const allBtn = document.querySelector('[data-filter-value="all"]');
+          if (allBtn) {
+            allBtn.classList.add("filter-btn-active");
+            allBtn.classList.add("card-selected");
+          }
+          currentStatusFilter = "all";
+        }
       } else {
         showError("테스트 목록 로딩 실패: " + data.error);
       }
@@ -483,7 +626,9 @@ endblock %} {% block extra_head %}
       <td>
         <input type="checkbox" class="test-checkbox" value="${test.test_key}">
       </td>
-      <td><span class="badge bg-info">${test.test_category}</span></td>
+      <td><span class="badge ${getCategoryBadgeClass(test.test_category)}">${
+          test.test_category
+        }</span></td>
       <td><strong>${test.test_name}</strong></td>
       <td><small>${test.test_description || "-"}</small></td>
       <td>
@@ -523,9 +668,14 @@ endblock %} {% block extra_head %}
       )
       .join("");
 
-    // 마지막 실행 결과 로딩
-    testsToRender.forEach((test) => {
-      loadLastExecution(test.test_key);
+    // 마지막 실행 결과 로딩 (모든 비동기 작업 완료 후 통계 업데이트)
+    const loadPromises = testsToRender.map((test) =>
+      loadLastExecution(test.test_key)
+    );
+
+    Promise.all(loadPromises).then(() => {
+      // 모든 lastStatus가 로드된 후 통계 업데이트
+      updateFilteredStatistics();
     });
   }
 
@@ -541,6 +691,12 @@ endblock %} {% block extra_head %}
         const last = data.history[0];
         const resultCell = document.getElementById(`result_${testKey}`);
         const lastRunCell = document.getElementById(`lastRun_${testKey}`);
+
+        // 테스트 객체에 마지막 상태 저장 (필터링용)
+        const testObj = tests.find((t) => t.test_key === testKey);
+        if (testObj) {
+          testObj.lastStatus = last.status;
+        }
 
         if (resultCell) {
           let badgeClass = "secondary";
@@ -634,8 +790,11 @@ endblock %} {% block extra_head %}
       li.className = "nav-item";
       li.role = "presentation";
       li.innerHTML = `
-      <button class="nav-link" id="${category}-tab" data-bs-toggle="tab"
-              data-bs-target="#${category}" type="button" onclick="filterByCategory('${category}')">
+      <button class="nav-link filter-btn" id="${category}-tab" data-bs-toggle="tab"
+              data-bs-target="#${category}" type="button"
+              data-filter-type="test-category"
+              data-filter-value="${category}"
+              onclick="filterByCategory('${category}')">
         ${category}
       </button>
     `;
@@ -645,6 +804,17 @@ endblock %} {% block extra_head %}
 
   // 카테고리별 필터
   function filterByCategory(category) {
+    // 모든 탭 버튼에서 filter-btn-active 클래스 제거
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach((btn) => {
+      btn.classList.remove("filter-btn-active");
+    });
+
+    // 클릭된 탭 버튼에 filter-btn-active 추가
+    const activeTab = document.getElementById(`${category}-tab`);
+    if (activeTab) {
+      activeTab.classList.add("filter-btn-active");
+    }
+
     const filtered = tests.filter((t) => t.test_category === category);
     renderTests(filtered);
   }
@@ -1097,14 +1267,17 @@ endblock %} {% block extra_head %}
     chartVisible = !chartVisible;
     const container = document.getElementById("historyChartContainer");
     const toggleText = document.getElementById("chartToggleText");
+    const toggleBtn = document.getElementById("historyChartToggleBtn");
 
     if (chartVisible) {
       container.style.display = "block";
       toggleText.textContent = "차트 숨기기";
+      toggleBtn.classList.add("filter-btn-active");
       renderHistoryChart();
     } else {
       container.style.display = "none";
       toggleText.textContent = "차트 보기";
+      toggleBtn.classList.remove("filter-btn-active");
     }
   }
 

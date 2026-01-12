@@ -484,12 +484,12 @@ def register_routes(app):
         try:
             if 'mbox_file' not in request.files:
                 flash('파일이 선택되지 않았습니다.', 'error')
-                return redirect(request.url)
+                return redirect(url_for('upload_file'))
 
             file = request.files['mbox_file']
             if file.filename == '':
                 flash('파일이 선택되지 않았습니다.', 'error')
-                return redirect(request.url)
+                return redirect(url_for('upload_file'))
 
             if file and allowed_file(file.filename):
                 # 안전한 파일명 생성
@@ -547,12 +547,12 @@ def register_routes(app):
 
             else:
                 flash('허용되지 않는 파일 형식입니다. .mbox, .eml, .msg 파일만 업로드할 수 있습니다.', 'error')
-                return redirect(request.url)
+                return redirect(url_for('upload_file'))
 
         except Exception as e:
             app.logger.error(f"업로드 처리 실패: {str(e)}")
             flash('파일 업로드 중 오류가 발생했습니다.', 'error')
-            return redirect(request.url)
+            return redirect(url_for('upload_file'))
 
     @app.route('/processing/<task_id>')
     def processing_status(task_id):
@@ -759,8 +759,182 @@ def register_routes(app):
 
     @app.route('/api/docs')
     def api_docs():
-        """API 문서 페이지"""
-        return render_template('api.html')
+        """API 문서 페이지 (DB 기반 동적 생성)"""
+        from src.database.connection import db_connection
+
+        try:
+            with db_connection.get_connection() as conn:
+                cursor = conn.cursor()
+
+                # 카테고리별 통계 조회
+                cursor.execute('''
+                    SELECT category, COUNT(*) as count
+                    FROM api_endpoints
+                    WHERE deprecated = 0
+                    GROUP BY category
+                    ORDER BY category
+                ''')
+                categories = cursor.fetchall()
+
+                # 전체 엔드포인트 조회
+                cursor.execute('''
+                    SELECT id, path, method, summary, description, category, auth_required
+                    FROM api_endpoints
+                    WHERE deprecated = 0
+                    ORDER BY category, path, method
+                ''')
+                endpoints_raw = cursor.fetchall()
+
+                # 엔드포인트를 딕셔너리 리스트로 변환
+                endpoints = []
+                for ep in endpoints_raw:
+                    endpoint_id, path, method, summary, description, category, auth_required = ep
+                    endpoints.append({
+                        'id': endpoint_id,
+                        'path': path,
+                        'method': method,
+                        'summary': summary or f"{path} {method}",
+                        'description': description or '',
+                        'category': category,
+                        'auth_required': bool(auth_required)
+                    })
+
+                return render_template('api.html',
+                                     categories=categories,
+                                     endpoints=endpoints)
+        except Exception as e:
+            app.logger.error(f"API 문서 조회 오류: {e}")
+            # 폴백: 정적 템플릿 렌더링
+            return render_template('api.html', categories=[], endpoints=[])
+
+    @app.route('/api/test-result', methods=['POST'])
+    def api_test_result():
+        """API 테스트 결과 저장"""
+        from src.database.connection import db_connection
+
+        try:
+            data = request.get_json()
+            if not data:
+                return jsonify({'error': 'No data provided'}), 400
+
+            # endpoint_id 조회
+            endpoint_path = data.get('endpoint')
+            method = data.get('method')
+
+            if not endpoint_path or not method:
+                return jsonify({'error': 'endpoint and method are required'}), 400
+
+            with db_connection.get_connection() as conn:
+                cursor = conn.cursor()
+
+                # endpoint_id 찾기
+                cursor.execute(
+                    "SELECT id FROM api_endpoints WHERE path = ? AND method = ?",
+                    (endpoint_path, method)
+                )
+                result = cursor.fetchone()
+
+                if not result:
+                    return jsonify({'error': 'Endpoint not found'}), 404
+
+                endpoint_id = result[0]
+
+                # 테스트 결과 저장
+                cursor.execute("""
+                    INSERT INTO api_test_executions
+                    (endpoint_id, method, status_code, response_time_ms, success,
+                     error_message, request_data, response_data, user_agent)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    endpoint_id,
+                    method,
+                    data.get('status_code'),
+                    data.get('response_time_ms'),
+                    1 if data.get('success') else 0,
+                    data.get('error_message'),
+                    data.get('request_data'),
+                    data.get('response_data', '')[:1000],  # 1KB로 제한
+                    request.headers.get('User-Agent')
+                ))
+
+                conn.commit()
+
+                return jsonify({
+                    'success': True,
+                    'message': 'Test result saved',
+                    'id': cursor.lastrowid
+                }), 201
+
+        except Exception as e:
+            app.logger.error(f"API 테스트 결과 저장 오류: {e}")
+            return jsonify({'error': str(e)}), 500
+
+    @app.route('/api/docs/history')
+    def api_docs_history():
+        """API 테스트 이력 조회"""
+        from src.database.connection import db_connection
+
+        try:
+            with db_connection.get_connection() as conn:
+                cursor = conn.cursor()
+
+                # 최근 100개 테스트 이력
+                cursor.execute("""
+                    SELECT
+                        e.path, e.method, e.category,
+                        t.status_code, t.response_time_ms, t.success,
+                        t.executed_at, t.error_message, t.id
+                    FROM api_test_executions t
+                    JOIN api_endpoints e ON t.endpoint_id = e.id
+                    ORDER BY t.executed_at DESC
+                    LIMIT 100
+                """)
+                history_raw = cursor.fetchall()
+
+                # 통계
+                cursor.execute("""
+                    SELECT
+                        COUNT(*) as total,
+                        SUM(CASE WHEN success = 1 THEN 1 ELSE 0 END) as success_count,
+                        AVG(response_time_ms) as avg_response_time
+                    FROM api_test_executions
+                    WHERE executed_at >= datetime('now', '-7 days')
+                """)
+                stats = cursor.fetchone()
+
+                # 이력 데이터 변환
+                history = []
+                for h in history_raw:
+                    path, method, category, status_code, response_time_ms, success, executed_at, error_message, test_id = h
+                    history.append({
+                        'id': test_id,
+                        'path': path,
+                        'method': method,
+                        'category': category,
+                        'status_code': status_code if status_code else 'Error',
+                        'response_time_ms': response_time_ms if response_time_ms else 0,
+                        'success': bool(success),
+                        'executed_at': executed_at,
+                        'error_message': error_message
+                    })
+
+                return render_template('api_test_history.html',
+                                     history=history,
+                                     total=stats[0] if stats else 0,
+                                     success_count=stats[1] if stats else 0,
+                                     avg_response_time=round(stats[2]) if stats and stats[2] else 0)
+        except Exception as e:
+            app.logger.error(f"API 테스트 이력 조회 오류: {e}")
+            return render_template('api_test_history.html',
+                                 history=[],
+                                 total=0,
+                                 success_count=0,
+                                 avg_response_time=0)
+
+    @app.route('/test-api-tracking')
+    def test_api_tracking():
+        """API 테스트 결과 저장 검증 페이지"""
+        return render_template('test_api_tracking.html')
 
     # [2025-12-30] Integrity 관련 라우트들은 blueprints/integrity_routes.py로 이동됨
     # /integrity, /verify_integrity, /api/verify_integrity,

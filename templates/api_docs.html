@@ -270,9 +270,7 @@ endblock %} {% block extra_css %}
   </div>
 
   <div id="api-tab" class="tab-content active">
-    <h2 style="margin-bottom: 20px">
-      API 엔드포인트 ({{ api_routes|length }}개)
-    </h2>
+    <h2 class="mb-3">API 엔드포인트 ({{ api_routes|length }}개)</h2>
     <div class="endpoint-list" id="api-list">
       {% for route in api_routes %}
       <div
@@ -298,7 +296,7 @@ endblock %} {% block extra_css %}
   </div>
 
   <div id="web-tab" class="tab-content">
-    <h2 style="margin-bottom: 20px">웹 페이지 ({{ web_routes|length }}개)</h2>
+    <h2 class="mb-3">웹 페이지 ({{ web_routes|length }}개)</h2>
     <div class="endpoint-list" id="web-list">
       {% for route in web_routes %}
       <div
@@ -324,7 +322,7 @@ endblock %} {% block extra_css %}
   </div>
 
   <div id="all-tab" class="tab-content">
-    <h2 style="margin-bottom: 20px">전체 엔드포인트 ({{ total_routes }}개)</h2>
+    <h2 class="mb-3">전체 엔드포인트 ({{ total_routes }}개)</h2>
     <div class="endpoint-list" id="all-list">
       {% for route in (api_routes + web_routes) %}
       <div

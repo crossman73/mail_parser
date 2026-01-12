@@ -1,297 +1,313 @@
-{% extends "base.html" %} {% block content %}
-<style>
-  .skeleton {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-    border-radius: 4px;
-  }
-
-  @keyframes loading {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
-  }
-
-  .metric-card {
-    transition: all 0.3s ease;
-  }
-
-  .metric-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .status-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.875rem;
-  }
-
-  .status-running {
-    background: #d4edda;
-    color: #155724;
-  }
-  .status-online {
-    background: #d1ecf1;
-    color: #0c5460;
-  }
-  .status-ok {
-    background: #d4edda;
-    color: #155724;
-  }
-  .status-idle {
-    background: #fff3cd;
-    color: #856404;
-  }
-  .status-offline {
-    background: #f8d7da;
-    color: #721c24;
-  }
-
-  .progress-ring {
-    transform: rotate(-90deg);
-  }
-
-  .service-item {
-    border-left: 4px solid transparent;
-    transition: all 0.2s ease;
-  }
-
-  .service-item.healthy {
-    border-left-color: #28a745;
-  }
-
-  .service-item:hover {
-    background-color: #f8f9fa;
-  }
-
-  .recent-activity-item {
-    padding: 0.5rem;
-    border-left: 3px solid #007bff;
-    margin-bottom: 0.5rem;
-    background: #f8f9fa;
-    border-radius: 4px;
-  }
-
-  /* 다크 모드 대응 */
-  [data-theme="dark"] .skeleton {
-    background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
-  }
-
-  [data-theme="dark"] .service-item {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border-color: var(--border-color);
-  }
-
-  [data-theme="dark"] .service-item:hover {
-    background-color: var(--bg-secondary);
-  }
-
-  [data-theme="dark"] .service-item strong {
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] .text-muted {
-    color: var(--text-secondary) !important;
-  }
-
-  [data-theme="dark"] .status-running {
-    background: #1e4620;
-    color: #86efac;
-  }
-
-  [data-theme="dark"] .status-online {
-    background: #164e63;
-    color: #67e8f9;
-  }
-
-  [data-theme="dark"] .status-ok {
-    background: #1e4620;
-    color: #86efac;
-  }
-
-  [data-theme="dark"] .status-idle {
-    background: #78350f;
-    color: #fcd34d;
-  }
-
-  [data-theme="dark"] .status-offline {
-    background: #7f1d1d;
-    color: #fca5a5;
-  }
-
-  [data-theme="dark"] .card {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border-color: var(--border-color);
-  }
-
-  [data-theme="dark"] .card-header {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    border-bottom-color: var(--border-color);
-  }
-
-  [data-theme="dark"] .recent-activity-item {
-    background: var(--bg-secondary);
-    border-left-color: var(--primary-color);
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] .recent-activity-item small {
-    color: var(--text-primary) !important;
-  }
-
-  [data-theme="dark"] .card-title {
-    color: var(--text-secondary);
-  }
-
-  [data-theme="dark"] .card-body {
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] #recent-emails,
-  [data-theme="dark"] #recent-uploads,
-  [data-theme="dark"] #recent-logs {
-    color: var(--text-primary);
-  }
-
-  [data-theme="dark"] h6 {
-    color: var(--text-primary) !important;
-  }
-</style>
-
-<div class="container-fluid mt-4">
-  <!-- 헤더 -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h2>
-            <i class="fas fa-server text-primary"></i>
-            시스템 상태 모니터
-          </h2>
-          <p class="text-muted mb-0">
-            <small>
-              <i class="fas fa-clock"></i>
-              <span id="timestamp">{{ status.timestamp }}</span>
-              <span class="ms-2">|</span>
-              <span class="ms-2">v{{ status.version }}</span>
-              <span class="ms-2">|</span>
-              <span class="ms-2 status-badge status-running" id="overall-status"
-                >로딩중...</span
-              >
-              <span class="ms-2">|</span>
-              <span class="ms-2 text-info" id="next-refresh-info">
-                <i class="fas fa-sync-alt"></i> 다음 갱신:
-                <span id="next-refresh-time">10</span>초 후
-              </span>
-            </small>
-          </p>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <div class="input-group input-group-sm" style="width: 200px">
-            <span class="input-group-text">
-              <i class="fas fa-clock"></i>
-            </span>
-            <input
-              type="number"
-              id="refresh-interval"
-              class="form-control"
-              min="1"
-              max="3600"
-              value="10"
-              title="갱신 주기 (초, 1-3600)"
-              onchange="updateRefreshInterval()"
-            />
-            <span class="input-group-text">초</span>
-          </div>
-          <button
-            class="btn btn-outline-primary btn-sm"
-            onclick="refreshStatus()"
+{% extends "base.html" %} {% block extra_css %}
+<!-- 인라인 CSS → modern-ui.css로 이동됨 (.clickable, .recent-activity-item) -->
+{% endblock %} {% block title %}시스템 상태 - 이메일 타임라인 시스템{% endblock
+%} {% block content %}
+<div class="container-fluid py-4">
+  <!-- 헤더 섹션 -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2>
+        <i class="fas fa-server text-primary"></i>
+        시스템 상태 모니터
+      </h2>
+      <p class="text-muted mb-0">
+        <small>
+          <i class="fas fa-clock me-2"></i>
+          <span id="timestamp">{{ status.timestamp }}</span>
+          <span class="mx-2">|</span>
+          <span>v{{ status.version }}</span>
+          <span class="mx-2">|</span>
+          <span class="status-badge status-running" id="overall-status"
+            >로딩중...</span
           >
-            <i class="fas fa-sync-alt"></i> 새로고침
-          </button>
-          <a href="/system/test" class="btn btn-outline-success btn-sm">
-            <i class="fas fa-flask"></i> 시스템 테스트
-          </a>
-          <a href="/admin/settings" class="btn btn-outline-info btn-sm">
-            <i class="fas fa-cog"></i> 시스템 설정
-          </a>
-          <a href="/" class="btn btn-outline-secondary btn-sm">
-            <i class="fas fa-home"></i> 홈
-          </a>
+        </small>
+      </p>
+    </div>
+    <div class="d-flex align-items-center">
+      <div class="input-group input-group-sm me-3" style="width: 150px">
+        <span class="input-group-text">
+          <i class="fas fa-clock"></i>
+        </span>
+        <input
+          type="number"
+          id="refresh-interval"
+          class="form-control"
+          min="1"
+          max="3600"
+          value="10"
+          title="갱신 주기 (초)"
+          onchange="updateRefreshInterval()"
+        />
+        <span class="input-group-text">초</span>
+      </div>
+      <small class="text-muted me-3">
+        <i class="fas fa-sync-alt me-1"></i>
+        <span id="next-refresh-time">10</span>초 후
+      </small>
+      <button class="btn btn-outline-primary btn-sm" onclick="refreshStatus()">
+        <i class="fas fa-sync-alt"></i> 새로고침
+      </button>
+      <a href="/system/test" class="btn btn-outline-success btn-sm ms-2">
+        <i class="fas fa-flask"></i> 테스트
+      </a>
+      <a href="/admin/settings" class="btn btn-outline-info btn-sm ms-2">
+        <i class="fas fa-cog"></i> 설정
+      </a>
+      <a href="/" class="btn btn-outline-secondary btn-sm ms-2">
+        <i class="fas fa-home"></i> 홈
+      </a>
+    </div>
+  </div>
+
+  <!-- 핵심 지표 (KPI) -->
+  <div class="row mb-4">
+    <div class="col-md">
+      <div
+        class="card text-center bg-primary text-white card-selectable-sm"
+        data-card-type="kpi"
+        data-card-id="emails"
+        onclick="showKpiDetail('emails')"
+      >
+        <div class="card-body py-3">
+          <h6 class="card-title mb-2">
+            <i class="fas fa-envelope"></i> 처리 이메일
+            <i class="fas fa-info-circle ms-1 small"></i>
+          </h6>
+          <h3 class="mb-0" id="kpi-emails">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div
+        class="card text-center bg-info text-white card-selectable-sm"
+        data-card-type="kpi"
+        data-card-id="files"
+        onclick="showKpiDetail('files')"
+      >
+        <div class="card-body py-3">
+          <h6 class="card-title mb-2">
+            <i class="fas fa-file"></i> 업로드 파일
+            <i class="fas fa-info-circle ms-1 small"></i>
+          </h6>
+          <h3 class="mb-0" id="kpi-files">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div
+        class="card text-center bg-success text-white card-selectable-sm"
+        data-card-type="kpi"
+        data-card-id="routes"
+        onclick="showKpiDetail('routes')"
+      >
+        <div class="card-body py-3">
+          <h6 class="card-title mb-2">
+            <i class="fas fa-route"></i> 등록 라우트
+            <i class="fas fa-info-circle ms-1 small"></i>
+          </h6>
+          <h3 class="mb-0" id="kpi-routes">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div
+        class="card text-center bg-warning text-white card-selectable-sm"
+        data-card-type="kpi"
+        data-card-id="services"
+        onclick="showKpiDetail('services')"
+      >
+        <div class="card-body py-3">
+          <h6 class="card-title mb-2">
+            <i class="fas fa-server"></i> 활성 서비스
+            <i class="fas fa-info-circle ms-1 small"></i>
+          </h6>
+          <h3 class="mb-0" id="kpi-services">0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div
+        class="card text-center text-white card-selectable-sm"
+        data-card-type="kpi"
+        data-card-id="database"
+        id="kpi-database-card"
+        onclick="showDatabaseDetail()"
+      >
+        <div class="card-body py-3">
+          <h6 class="card-title mb-2">
+            <i class="fas fa-database"></i> Database
+            <i class="fas fa-info-circle ms-1 small"></i>
+          </h6>
+          <h3 class="mb-0" id="kpi-database">
+            <i class="fas fa-circle-notch fa-spin"></i>
+          </h3>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 시스템 리소스 -->
+  <!-- 시스템 리소스 & 프로세스 정보 -->
   <div class="row mb-4">
-    <div class="col-md-4">
-      <div class="card metric-card">
+    <div class="col-md-3">
+      <div
+        class="card metric-card h-100 card-selectable-sm"
+        data-card-type="resource"
+        data-card-id="cpu"
+        onclick="showResourceDetail('cpu')"
+      >
         <div class="card-body">
-          <h6 class="card-title text-muted mb-3">
-            <i class="fas fa-microchip"></i> CPU 사용률
+          <h6 class="card-title text-muted mb-2">
+            <i class="fas fa-microchip"></i> CPU
+            <i class="fas fa-info-circle ms-1 small"></i>
           </h6>
-          <div id="cpu-metric" class="skeleton" style="height: 60px"></div>
+          <div id="cpu-metric" class="skeleton skeleton-h-60"></div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card metric-card">
+    <div class="col-md-3">
+      <div
+        class="card metric-card h-100 card-selectable-sm"
+        data-card-type="resource"
+        data-card-id="memory"
+        onclick="showResourceDetail('memory')"
+      >
         <div class="card-body">
-          <h6 class="card-title text-muted mb-3">
-            <i class="fas fa-memory"></i> 메모리 사용률
+          <h6 class="card-title text-muted mb-2">
+            <i class="fas fa-memory"></i> 메모리
+            <i class="fas fa-info-circle ms-1 small"></i>
           </h6>
-          <div id="memory-metric" class="skeleton" style="height: 60px"></div>
+          <div id="memory-metric" class="skeleton skeleton-h-60"></div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card metric-card">
+    <div class="col-md-3">
+      <div
+        class="card metric-card h-100 card-selectable-sm"
+        data-card-type="resource"
+        data-card-id="disk"
+        onclick="showResourceDetail('disk')"
+      >
         <div class="card-body">
-          <h6 class="card-title text-muted mb-3">
-            <i class="fas fa-hdd"></i> 디스크 사용률
+          <h6 class="card-title text-muted mb-2">
+            <i class="fas fa-hdd"></i> 디스크
+            <i class="fas fa-info-circle ms-1 small"></i>
           </h6>
-          <div id="disk-metric" class="skeleton" style="height: 60px"></div>
+          <div id="disk-metric" class="skeleton skeleton-h-60"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div
+        class="card h-100"
+        style="cursor: pointer"
+        onclick="showResourceDetail('process')"
+      >
+        <div class="card-body">
+          <h6 class="card-title text-muted mb-2">
+            <i class="fas fa-info-circle"></i> 프로세스
+            <i class="fas fa-info-circle ms-1 small"></i>
+          </h6>
+          <div id="process-info" class="small">
+            <div class="skeleton skeleton-h-60"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 서비스 상태 -->
+  <!-- 서비스 상태 & 통계 -->
   <div class="row mb-4">
+    <!-- 서비스 목록 -->
     <div class="col-md-8">
-      <div class="card">
-        <div class="card-header bg-white">
+      <div class="card h-100">
+        <div class="card-header">
           <h5 class="mb-0"><i class="fas fa-cogs"></i> 서비스 상태</h5>
         </div>
         <div class="card-body">
-          <div id="services-list">
-            <div class="skeleton mb-2" style="height: 60px"></div>
-            <div class="skeleton mb-2" style="height: 60px"></div>
-            <div class="skeleton mb-2" style="height: 60px"></div>
+          <!-- 상태 필터 버튼 -->
+          <div class="row g-2 mb-3">
+            <div class="col-3">
+              <div
+                class="card text-white bg-success filter-btn"
+                data-filter-type="service-status"
+                data-filter-value="running"
+                onclick="filterServices('running')"
+              >
+                <div class="card-body text-center py-2">
+                  <div class="small">
+                    <i class="fas fa-check-circle"></i> RUNNING
+                  </div>
+                  <h4 class="mb-0" id="runningCount">0</h4>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div
+                class="card text-white bg-warning filter-btn"
+                data-filter-type="service-status"
+                data-filter-value="idle"
+                onclick="filterServices('idle')"
+              >
+                <div class="card-body text-center py-2">
+                  <div class="small">
+                    <i class="fas fa-pause-circle"></i> IDLE
+                  </div>
+                  <h4 class="mb-0" id="idleCount">0</h4>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div
+                class="card text-white bg-secondary filter-btn"
+                data-filter-type="service-status"
+                data-filter-value="stopped"
+                onclick="filterServices('stopped')"
+              >
+                <div class="card-body text-center py-2">
+                  <div class="small">
+                    <i class="fas fa-stop-circle"></i> STOPPED
+                  </div>
+                  <h4 class="mb-0" id="stoppedCount">0</h4>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div
+                class="card text-white bg-danger filter-btn"
+                data-filter-type="service-status"
+                data-filter-value="error"
+                onclick="filterServices('error')"
+              >
+                <div class="card-body text-center py-2">
+                  <div class="small">
+                    <i class="fas fa-times-circle"></i> ERROR
+                  </div>
+                  <h4 class="mb-0" id="errorCount">0</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 서비스 목록 -->
+          <div id="services-list" style="max-height: 400px; overflow-y: auto">
+            <div class="skeleton mb-2 skeleton-h-60"></div>
+            <div class="skeleton mb-2 skeleton-h-60"></div>
+            <div class="skeleton mb-2 skeleton-h-60"></div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- 통계 -->
     <div class="col-md-4">
-      <div class="card">
-        <div class="card-header bg-white">
-          <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 통계</h5>
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 시스템 통계</h5>
         </div>
         <div class="card-body">
           <div id="statistics-list">
-            <div class="skeleton mb-2" style="height: 40px"></div>
-            <div class="skeleton mb-2" style="height: 40px"></div>
-            <div class="skeleton mb-2" style="height: 40px"></div>
+            <div class="skeleton mb-2 skeleton-h-40"></div>
+            <div class="skeleton mb-2 skeleton-h-40"></div>
+            <div class="skeleton mb-2 skeleton-h-40"></div>
           </div>
         </div>
       </div>
@@ -302,54 +318,68 @@
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card">
-        <div class="card-header bg-white">
+        <div class="card-header">
           <h6 class="mb-0"><i class="fas fa-envelope"></i> 최근 처리 이메일</h6>
         </div>
         <div class="card-body">
           <div id="recent-emails">
-            <div class="skeleton mb-2" style="height: 30px"></div>
+            <div class="skeleton mb-2 skeleton-h-30"></div>
           </div>
         </div>
       </div>
     </div>
     <div class="col-md-4">
       <div class="card">
-        <div class="card-header bg-white">
+        <div class="card-header">
           <h6 class="mb-0"><i class="fas fa-upload"></i> 최근 업로드</h6>
         </div>
         <div class="card-body">
           <div id="recent-uploads">
-            <div class="skeleton mb-2" style="height: 30px"></div>
+            <div class="skeleton mb-2 skeleton-h-30"></div>
           </div>
         </div>
       </div>
     </div>
     <div class="col-md-4">
       <div class="card">
-        <div class="card-header bg-white">
+        <div class="card-header">
           <h6 class="mb-0"><i class="fas fa-file-alt"></i> 최근 로그</h6>
         </div>
         <div class="card-body">
           <div id="recent-logs">
-            <div class="skeleton mb-2" style="height: 30px"></div>
+            <div class="skeleton mb-2 skeleton-h-30"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 프로세스 정보 -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header bg-white">
-          <h6 class="mb-0"><i class="fas fa-info-circle"></i> 프로세스 정보</h6>
-        </div>
-        <div class="card-body">
-          <div id="process-info">
-            <div class="skeleton" style="height: 40px"></div>
+<!-- 상세 정보 모달 -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalTitle">
+          <i class="fas fa-info-circle"></i> 상세 정보
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body" id="detailModalBody">
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">로딩중...</span>
           </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          닫기
+        </button>
       </div>
     </div>
   </div>
@@ -358,11 +388,36 @@
 <script>
   let refreshInterval = null;
   let countdownInterval = null;
-  let nextRefreshSeconds = 10;
+  let nextRefreshSeconds = 0;
   let currentIntervalSeconds = 10;
+  let currentServiceFilter = null; // 현재 필터 상태 (null, 'running', 'idle', 'stopped', 'error')
+  let allServices = []; // 전체 서비스 목록
+  let systemData = null; // 전체 시스템 데이터 저장
+  let selectedCard = null; // 현재 선택된 카드 요소
+
+  // 카드 선택 상태 관리
+  function handleCardClick(event) {
+    const clickedCard = event.currentTarget;
+
+    // 모든 카드에서 선택 상태 제거
+    document.querySelectorAll(".card-selectable-sm").forEach((card) => {
+      card.classList.remove("card-selected");
+    });
+
+    // 클릭된 카드 선택 상태 추가
+    clickedCard.classList.add("card-selected");
+    selectedCard = clickedCard;
+  }
 
   // 초기 로드
   document.addEventListener("DOMContentLoaded", function () {
+    // 모든 선택 가능한 카드에 클릭 이벤트 추가
+    document.querySelectorAll(".card-selectable-sm").forEach((card) => {
+      const originalOnclick = card.getAttribute("onclick");
+      card.addEventListener("click", function (e) {
+        handleCardClick(e);
+      });
+    });
     // 저장된 갱신 주기 불러오기
     const savedInterval = localStorage.getItem("systemStatusRefreshInterval");
     if (savedInterval) {
@@ -493,6 +548,9 @@
 
   // UI 업데이트
   function updateUI(data) {
+    // 전체 시스템 데이터 저장 (상세 정보 표시용)
+    systemData = data;
+
     // 타임스탬프
     document.getElementById("timestamp").textContent = data.timestamp;
 
@@ -525,7 +583,20 @@
     );
 
     // 서비스 목록
-    updateServices(data.services);
+    updateServices(data.services, currentServiceFilter);
+
+    // KPI 업데이트
+    document.getElementById("kpi-emails").textContent =
+      data.statistics.processed_emails || 0;
+    document.getElementById("kpi-files").textContent =
+      data.statistics.upload_files || 0;
+    document.getElementById("kpi-routes").textContent =
+      data.statistics.registered_routes || 0;
+    document.getElementById("kpi-services").textContent =
+      data.services.filter((s) => s.status === "running").length || 0;
+
+    // Database KPI 카드 업데이트
+    updateDatabaseKpi(data.services);
 
     // 통계
     updateStatistics(data.statistics);
@@ -548,7 +619,7 @@
         <h2 class="mb-0 text-${color}">${percent.toFixed(1)}%</h2>
         <small class="text-muted">${detail}</small>
       </div>
-      <div class="progress" style="width: 60px; height: 60px; border-radius: 50%; position: relative;">
+      <div class="progress progress-ring">
         <svg width="60" height="60">
           <circle cx="30" cy="30" r="25" fill="none" stroke="#e9ecef" stroke-width="5"/>
           <circle class="progress-ring" cx="30" cy="30" r="25" fill="none"
@@ -560,20 +631,67 @@
   `;
   }
 
-  function updateServices(services) {
+  function updateServices(services, filter = null) {
+    // 항상 원본 서비스 목록 저장 (필터 여부 관계없이)
+    allServices = services;
+
+    // 서비스 데이터를 이름으로 빠르게 조회하기 위한 맵 생성
+    window.servicesMap = {};
+    services.forEach((s) => {
+      window.servicesMap[s.name] = s;
+    });
+
+    // 상태별 카운트 업데이트 (항상 전체 데이터 기준)
+    const statusCounts = {
+      running: 0,
+      idle: 0,
+      stopped: 0,
+      error: 0,
+    };
+
+    services.forEach((s) => {
+      if (statusCounts.hasOwnProperty(s.status)) {
+        statusCounts[s.status]++;
+      }
+    });
+
+    document.getElementById("runningCount").textContent = statusCounts.running;
+    document.getElementById("idleCount").textContent = statusCounts.idle;
+    document.getElementById("stoppedCount").textContent = statusCounts.stopped;
+    document.getElementById("errorCount").textContent = statusCounts.error;
+
+    // 필터링 적용
+    const filteredServices = filter
+      ? services.filter((s) => s.status === filter)
+      : services;
+
     const container = document.getElementById("services-list");
-    container.innerHTML = services
+
+    // 필터링 결과가 없을 때
+    if (filteredServices.length === 0) {
+      container.innerHTML =
+        '<div class="text-muted text-center py-3">해당 상태의 서비스가 없습니다.</div>';
+      return;
+    }
+
+    container.innerHTML = filteredServices
       .map(
         (s) => `
-    <div class="service-item ${
-      s.healthy ? "healthy" : ""
-    } p-3 mb-2 border rounded">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
+    <div class="service-item ${s.healthy ? "healthy" : ""} mb-2 ${
+          s.details ? "clickable" : ""
+        }"
+         ${s.details ? `onclick="showServiceDetail('${s.name}')"` : ""}>
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <div class="flex-grow-1">
           <strong>${s.name}</strong>
+          ${
+            s.details
+              ? '<i class="fas fa-info-circle text-primary ms-2 small"></i>'
+              : ""
+          }
           <div class="text-muted small">${s.info || ""}</div>
         </div>
-        <span class="status-badge status-${s.status}">${s.status}</span>
+        <span class="status-badge status-${s.status} ms-3">${s.status}</span>
       </div>
     </div>
   `
@@ -585,22 +703,116 @@
     const container = document.getElementById("statistics-list");
     container.innerHTML = `
     <div class="d-flex justify-content-between py-2 border-bottom">
-      <span><i class="fas fa-envelope text-primary"></i> 처리된 이메일</span>
-      <strong>${stats.processed_emails}개</strong>
-    </div>
-    <div class="d-flex justify-content-between py-2 border-bottom">
-      <span><i class="fas fa-file text-info"></i> 업로드 파일</span>
-      <strong>${stats.upload_files}개</strong>
-    </div>
-    <div class="d-flex justify-content-between py-2 border-bottom">
       <span><i class="fas fa-file-alt text-secondary"></i> 로그 크기</span>
       <strong>${stats.log_size_mb} MB</strong>
     </div>
+    <div class="d-flex justify-content-between py-2 border-bottom">
+      <span><i class="fas fa-clock text-info"></i> 시스템 가동 시간</span>
+      <strong>${stats.uptime || "-"}</strong>
+    </div>
+    <div class="d-flex justify-content-between py-2 border-bottom">
+      <span><i class="fas fa-network-wired text-primary"></i> 네트워크</span>
+      <strong>${stats.network_status || "정상"}</strong>
+    </div>
     <div class="d-flex justify-content-between py-2">
-      <span><i class="fas fa-route text-success"></i> 등록된 라우트</span>
-      <strong>${stats.registered_routes}개</strong>
+      <span><i class="fas fa-tachometer-alt text-warning"></i> 시스템 부하</span>
+      <strong>${stats.load_average || "-"}</strong>
     </div>
   `;
+  }
+
+  // Database KPI 카드 업데이트
+  function updateDatabaseKpi(services) {
+    const dbService = services.find((s) => s.name === "Database");
+    const card = document.getElementById("kpi-database-card");
+    const statusElem = document.getElementById("kpi-database");
+
+    if (!dbService) {
+      // Database 서비스를 찾을 수 없는 경우
+      card.className =
+        "card text-center text-white card-selectable-sm bg-secondary";
+      statusElem.innerHTML = "<small>N/A</small>";
+      return;
+    }
+
+    // 헬스 상태에 따라 카드 색상 변경
+    let bgClass = "bg-secondary";
+    let icon = "fa-circle-notch fa-spin";
+    let text = "확인중";
+
+    if (
+      dbService.healthy &&
+      (dbService.status === "running" || dbService.status === "healthy")
+    ) {
+      bgClass = "bg-success";
+      icon = "fa-check-circle";
+      text = "정상";
+    } else if (dbService.status === "idle" || dbService.status === "degraded") {
+      bgClass = "bg-warning";
+      icon = "fa-exclamation-triangle";
+      text = "주의";
+    } else if (!dbService.healthy || dbService.status === "error") {
+      bgClass = "bg-danger";
+      icon = "fa-times-circle";
+      text = "오류";
+    }
+
+    card.className = `card text-center text-white card-selectable-sm ${bgClass}`;
+    statusElem.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+  }
+
+  // Database 상세 정보 표시
+  function showDatabaseDetail() {
+    if (!window.servicesMap || !window.servicesMap["Database"]) {
+      showToast("Database 서비스 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    showServiceDetail("Database");
+  }
+
+  // 서비스 필터링 함수
+  function filterServices(status) {
+    // 모든 서비스 필터 버튼에서 활성 상태 제거
+    document
+      .querySelectorAll('[data-filter-type="service-status"]')
+      .forEach((btn) => {
+        btn.classList.remove("filter-btn-active");
+      });
+
+    if (currentServiceFilter === status) {
+      // 이미 선택된 필터를 다시 클릭하면 필터 해제
+      currentServiceFilter = null;
+      updateServices(allServices, null);
+    } else {
+      // 새로운 필터 적용
+      currentServiceFilter = status;
+      updateServices(allServices, status);
+
+      // 클릭된 필터 버튼에 활성 상태 추가
+      const activeBtn = document.querySelector(
+        `[data-filter-value="${status}"]`
+      );
+      if (activeBtn) {
+        activeBtn.classList.add("filter-btn-active");
+      }
+    }
+
+    // 선택 상태 시각적 표시 (기존 로직 유지)
+    updateFilterHighlight();
+  }
+
+  // 필터 하이라이트 업데이트
+  function updateFilterHighlight() {
+    const cards = document.querySelectorAll(".status-filter-card");
+    cards.forEach((card) => {
+      const status = card.dataset.status;
+      if (status === currentServiceFilter) {
+        card.classList.add("selected");
+      } else {
+        card.classList.remove("selected");
+      }
+    });
   }
 
   function updateRecentActivity(activity) {
@@ -609,7 +821,11 @@
     if (activity.emails && activity.emails.length > 0) {
       emailsElem.innerHTML = activity.emails
         .map(
-          (e) => `<div class="recent-activity-item"><small>${e}</small></div>`
+          (
+            e
+          ) => `<div class="recent-activity-item clickable" onclick="viewEmailDetail('${e}')" style="cursor: pointer;" title="클릭하여 이메일 상세 보기">
+            <small><i class="fas fa-envelope text-primary me-1"></i>${e}</small>
+          </div>`
         )
         .join("");
     } else {
@@ -622,8 +838,8 @@
       uploadsElem.innerHTML = activity.uploads
         .map(
           (u) =>
-            `<div class="recent-activity-item">
-        <small><strong>${u.name}</strong><br>${u.size} - ${u.time}</small>
+            `<div class="recent-activity-item clickable" onclick="viewUploadDetail('${u.name}')" style="cursor: pointer;" title="클릭하여 파일 상세 보기">
+        <small><i class="fas fa-file text-info me-1"></i><strong>${u.name}</strong><br>${u.size} - ${u.time}</small>
       </div>`
         )
         .join("");
@@ -636,7 +852,11 @@
     if (activity.logs && activity.logs.length > 0) {
       logsElem.innerHTML = activity.logs
         .map(
-          (l) => `<div class="recent-activity-item"><small>${l}</small></div>`
+          (
+            l
+          ) => `<div class="recent-activity-item clickable" onclick="viewLogFile('${l}')" style="cursor: pointer;" title="클릭하여 로그 파일 보기">
+            <small><i class="fas fa-file-alt text-secondary me-1"></i>${l}</small>
+          </div>`
         )
         .join("");
     } else {
@@ -647,22 +867,22 @@
   function updateProcessInfo(process) {
     const elem = document.getElementById("process-info");
     elem.innerHTML = `
-    <div class="row text-center">
-      <div class="col-md-3">
-        <strong>PID</strong>
-        <div class="text-primary">${process.pid}</div>
+    <div class="d-flex flex-column gap-1">
+      <div class="d-flex justify-content-between">
+        <span class="text-muted">PID</span>
+        <strong>${process.pid}</strong>
       </div>
-      <div class="col-md-3">
-        <strong>메모리</strong>
-        <div class="text-info">${process.memory_mb} MB</div>
+      <div class="d-flex justify-content-between">
+        <span class="text-muted">메모리</span>
+        <strong>${process.memory_mb} MB</strong>
       </div>
-      <div class="col-md-3">
-        <strong>스레드</strong>
-        <div class="text-success">${process.threads}개</div>
+      <div class="d-flex justify-content-between">
+        <span class="text-muted">스레드</span>
+        <strong>${process.threads}개</strong>
       </div>
-      <div class="col-md-3">
-        <strong>CPU</strong>
-        <div class="text-warning">${process.cpu_percent}%</div>
+      <div class="d-flex justify-content-between">
+        <span class="text-muted">CPU</span>
+        <strong>${process.cpu_percent}%</strong>
       </div>
     </div>
   `;
@@ -675,10 +895,872 @@
     console.error("System status error:", message);
   }
 
+  // KPI 상세 정보 표시
+  function showKpiDetail(type) {
+    if (!systemData) {
+      showToast("시스템 데이터를 불러오는 중입니다...");
+      return;
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById("detailModal"));
+    const titleElem = document.getElementById("detailModalTitle");
+    const bodyElem = document.getElementById("detailModalBody");
+
+    let title = "";
+    let content = "";
+
+    switch (type) {
+      case "emails":
+        title = '<i class="fas fa-envelope text-primary"></i> 처리 이메일 상세';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+              <h6 class="mb-0">처리 이메일 통계</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>총 처리 건수</span>
+                    <strong>${systemData.statistics.processed_emails}개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>오늘 처리</span>
+                    <strong>${
+                      systemData.statistics.today_emails || 0
+                    }개</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>이번 주</span>
+                    <strong>${systemData.statistics.week_emails || 0}개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>이번 달</span>
+                    <strong>${
+                      systemData.statistics.month_emails || 0
+                    }개</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">최근 처리 내역</h6>
+            </div>
+            <div class="card-body">
+              ${
+                systemData.recent_activity.emails &&
+                systemData.recent_activity.emails.length > 0
+                  ? systemData.recent_activity.emails
+                      .map(
+                        (e) =>
+                          `<div class="border-bottom py-2"><small>${e}</small></div>`
+                      )
+                      .join("")
+                  : '<div class="text-muted">최근 처리 내역이 없습니다.</div>'
+              }
+            </div>
+          </div>
+        `;
+        // 모달 푸터에 링크 버튼 추가 (emails용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> 대시보드로 돌아가기
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+
+      case "files":
+        title = '<i class="fas fa-file text-info"></i> 업로드 파일 상세';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-info text-white">
+              <h6 class="mb-0">업로드 파일 통계</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>총 파일 수</span>
+                    <strong>${systemData.statistics.upload_files}개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>총 용량</span>
+                    <strong>${
+                      systemData.statistics.total_file_size_mb || 0
+                    } MB</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>오늘 업로드</span>
+                    <strong>${
+                      systemData.statistics.today_uploads || 0
+                    }개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>평균 파일 크기</span>
+                    <strong>${
+                      systemData.statistics.avg_file_size_mb || 0
+                    } MB</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">최근 업로드</h6>
+            </div>
+            <div class="card-body">
+              ${
+                systemData.recent_activity.uploads &&
+                systemData.recent_activity.uploads.length > 0
+                  ? systemData.recent_activity.uploads
+                      .map(
+                        (u) => `
+                    <div class="border-bottom py-2">
+                      <div><strong>${u.name}</strong></div>
+                      <small class="text-muted">${u.size} - ${u.time}</small>
+                    </div>
+                  `
+                      )
+                      .join("")
+                  : '<div class="text-muted">최근 업로드 내역이 없습니다.</div>'
+              }
+            </div>
+          </div>
+        `;
+        // 모달 푸터에 링크 버튼 추가 (files용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/admin/files" class="btn btn-primary">
+            <i class="fas fa-folder-open"></i> 파일 관리 페이지
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+
+      case "routes":
+        title = '<i class="fas fa-route text-success"></i> 등록 라우트 상세';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-success text-white">
+              <h6 class="mb-0">라우트 통계</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>총 라우트</span>
+                    <strong>${
+                      systemData.statistics.registered_routes
+                    }개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>API 라우트</span>
+                    <strong>${systemData.statistics.api_routes || 0}개</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>웹 라우트</span>
+                    <strong>${systemData.statistics.web_routes || 0}개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>관리자 라우트</span>
+                    <strong>${
+                      systemData.statistics.admin_routes || 0
+                    }개</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>참고:</strong> 라우트 관리는 시스템 대시보드에서 확인할 수 있습니다.
+          </div>
+        `;
+        // 모달 푸터에 링크 버튼 추가 (routes용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> 대시보드로 돌아가기
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+
+      case "services":
+        const runningServices = systemData.services.filter(
+          (s) => s.status === "running"
+        );
+        const otherServices = systemData.services.filter(
+          (s) => s.status !== "running"
+        );
+        title = '<i class="fas fa-server text-warning"></i> 활성 서비스 상세';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-warning text-white">
+              <h6 class="mb-0">서비스 통계</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span><i class="fas fa-check-circle text-success"></i> 실행 중</span>
+                    <strong>${
+                      systemData.services.filter((s) => s.status === "running")
+                        .length
+                    }개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span><i class="fas fa-pause-circle text-warning"></i> 대기 중</span>
+                    <strong>${
+                      systemData.services.filter((s) => s.status === "idle")
+                        .length
+                    }개</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span><i class="fas fa-stop-circle text-secondary"></i> 중지됨</span>
+                    <strong>${
+                      systemData.services.filter((s) => s.status === "stopped")
+                        .length
+                    }개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span><i class="fas fa-times-circle text-danger"></i> 오류</span>
+                    <strong>${
+                      systemData.services.filter((s) => s.status === "error")
+                        .length
+                    }개</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3">
+            <div class="card-header">
+              <h6 class="mb-0">실행 중인 서비스 (${
+                runningServices.length
+              }개)</h6>
+            </div>
+            <div class="card-body">
+              ${
+                runningServices.length > 0
+                  ? runningServices
+                      .map(
+                        (s) => `
+                    <div class="border-bottom py-2">
+                      <div class="d-flex justify-content-between">
+                        <strong>${s.name}</strong>
+                        <span class="badge bg-success">RUNNING</span>
+                      </div>
+                      ${
+                        s.info
+                          ? `<small class="text-muted">${s.info}</small>`
+                          : ""
+                      }
+                    </div>
+                  `
+                      )
+                      .join("")
+                  : '<div class="text-muted">실행 중인 서비스가 없습니다.</div>'
+              }
+            </div>
+          </div>
+          ${
+            otherServices.length > 0
+              ? `
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">기타 서비스 (${otherServices.length}개)</h6>
+            </div>
+            <div class="card-body">
+              ${otherServices
+                .map(
+                  (s) => `
+                <div class="border-bottom py-2">
+                  <div class="d-flex justify-content-between">
+                    <strong>${s.name}</strong>
+                    <span class="badge bg-${
+                      s.status === "idle"
+                        ? "warning"
+                        : s.status === "stopped"
+                        ? "secondary"
+                        : "danger"
+                    }">${s.status.toUpperCase()}</span>
+                  </div>
+                  ${s.info ? `<small class="text-muted">${s.info}</small>` : ""}
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+          `
+              : ""
+          }
+        `;
+        // 모달 푸터에 링크 버튼 추가 (services용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/admin/services" class="btn btn-primary">
+            <i class="fas fa-server"></i> 서비스 관리 페이지
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+    }
+
+    titleElem.innerHTML = title;
+    bodyElem.innerHTML = content;
+    modal.show();
+  }
+
+  // 서비스 상세 정보 표시
+  function showServiceDetail(serviceName) {
+    // 전역 맵에서 서비스 데이터 조회
+    const serviceData = window.servicesMap
+      ? window.servicesMap[serviceName]
+      : null;
+
+    if (!serviceData) {
+      showToast("서비스 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById("detailModal"));
+    const titleElem = document.getElementById("detailModalTitle");
+    const bodyElem = document.getElementById("detailModalBody");
+
+    titleElem.innerHTML = `<i class="fas fa-server"></i> ${serviceName} 상세 정보`;
+
+    let content = `
+      <div class="card mb-3">
+        <div class="card-header ${
+          serviceData.healthy ? "bg-success" : "bg-danger"
+        } text-white">
+          <h6 class="mb-0">기본 정보</h6>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>상태</span>
+            <span class="status-badge status-${serviceData.status}">${
+      serviceData.status
+    }</span>
+          </div>
+          <div class="d-flex justify-content-between py-2 border-bottom">
+            <span>정상 여부</span>
+            <strong>${
+              serviceData.healthy
+                ? '<span class="text-success">정상</span>'
+                : '<span class="text-danger">비정상</span>'
+            }</strong>
+          </div>
+          <div class="d-flex justify-content-between py-2">
+            <span>정보</span>
+            <strong>${serviceData.info || "-"}</strong>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Database 서비스인 경우 상세 정보 추가
+    if (serviceName === "Database" && serviceData.details) {
+      const details = serviceData.details;
+      content += `
+        <div class="card mb-3">
+          <div class="card-header bg-primary text-white">
+            <h6 class="mb-0"><i class="fas fa-database"></i> 데이터베이스 상세</h6>
+          </div>
+          <div class="card-body">
+            <!-- 경로 정보 (전체 너비) -->
+            <div class="mb-3">
+              <div class="py-2 border-bottom">
+                <div class="text-muted mb-1">경로</div>
+                <small class="text-break">${details.path || "-"}</small>
+              </div>
+            </div>
+
+            <!-- 기타 정보 (2열) -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span>응답 시간</span>
+                  <strong>${
+                    details.response_time_ms
+                      ? details.response_time_ms.toFixed(2)
+                      : 0
+                  }ms</strong>
+                </div>
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span>SQLite 버전</span>
+                  <strong>${details.sqlite_version || "-"}</strong>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span>쓰기 가능</span>
+                  <strong>${
+                    details.writable
+                      ? '<span class="text-success">예</span>'
+                      : '<span class="text-danger">아니오</span>'
+                  }</strong>
+                </div>
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                  <span>테이블 수</span>
+                  <strong>${
+                    details.tables ? details.tables.length : 0
+                  }개</strong>
+                </div>
+              </div>
+            </div>
+      `;
+
+      // 테이블별 레코드 수
+      if (details.tables && details.tables.length > 0) {
+        content += `
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">테이블 정보</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover">
+                    <thead>
+                      <tr>
+                        <th>테이블명</th>
+                        <th class="text-end">레코드 수</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+        `;
+
+        details.tables.forEach((table) => {
+          const count =
+            details.table_counts && details.table_counts[table] !== undefined
+              ? details.table_counts[table].toLocaleString()
+              : "-";
+          content += `
+                      <tr>
+                        <td><code>${table}</code></td>
+                        <td class="text-end"><strong>${count}</strong></td>
+                      </tr>
+          `;
+        });
+
+        content += `
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+        `;
+      }
+
+      content += `
+          </div>
+        </div>
+      `;
+    }
+
+    bodyElem.innerHTML = content;
+
+    // 모달 푸터
+    document.querySelector("#detailModal .modal-footer").innerHTML = `
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+    `;
+
+    modal.show();
+  }
+
+  // 시스템 리소스 상세 정보 표시
+  function showResourceDetail(type) {
+    if (!systemData) {
+      showToast("시스템 데이터를 불러오는 중입니다...");
+      return;
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById("detailModal"));
+    const titleElem = document.getElementById("detailModalTitle");
+    const bodyElem = document.getElementById("detailModalBody");
+
+    let title = "";
+    let content = "";
+
+    switch (type) {
+      case "cpu":
+        const cpu = systemData.system.cpu;
+        title = '<i class="fas fa-microchip text-primary"></i> CPU 상세 정보';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+              <h6 class="mb-0">CPU 사용률</h6>
+            </div>
+            <div class="card-body">
+              <div class="text-center mb-3">
+                <h1 class="display-4 text-primary">${cpu.percent.toFixed(
+                  1
+                )}%</h1>
+                <p class="text-muted">현재 CPU 사용률</p>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>물리 코어</span>
+                    <strong>${cpu.count}개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>논리 코어</span>
+                    <strong>${cpu.logical_count || cpu.count}개</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>상태</span>
+                    <strong class="text-${
+                      cpu.percent < 70
+                        ? "success"
+                        : cpu.percent < 90
+                        ? "warning"
+                        : "danger"
+                    }">
+                      ${
+                        cpu.percent < 70
+                          ? "정상"
+                          : cpu.percent < 90
+                          ? "주의"
+                          : "위험"
+                      }
+                    </strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>권장 최대</span>
+                    <strong>80%</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>해석:</strong> CPU 사용률이 70% 미만이면 정상, 70-90%는 주의, 90% 이상은 부하가 높은 상태입니다.
+          </div>
+        `;
+        // 모달 푸터에 링크 버튼 추가 (cpu용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> 대시보드로 돌아가기
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+
+      case "memory":
+        const mem = systemData.system.memory;
+        title = '<i class="fas fa-memory text-info"></i> 메모리 상세 정보';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-info text-white">
+              <h6 class="mb-0">메모리 사용률</h6>
+            </div>
+            <div class="card-body">
+              <div class="text-center mb-3">
+                <h1 class="display-4 text-info">${mem.percent.toFixed(1)}%</h1>
+                <p class="text-muted">현재 메모리 사용률</p>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>전체 용량</span>
+                    <strong>${mem.total_gb} GB</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>사용 중</span>
+                    <strong>${mem.used_gb} GB</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>사용 가능</span>
+                    <strong>${
+                      mem.available_gb ||
+                      (mem.total_gb - mem.used_gb).toFixed(2)
+                    } GB</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>상태</span>
+                    <strong class="text-${
+                      mem.percent < 70
+                        ? "success"
+                        : mem.percent < 90
+                        ? "warning"
+                        : "danger"
+                    }">
+                      ${
+                        mem.percent < 70
+                          ? "정상"
+                          : mem.percent < 90
+                          ? "주의"
+                          : "위험"
+                      }
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>해석:</strong> 메모리 사용률이 높으면 시스템 성능이 저하될 수 있습니다. 90% 이상일 경우 프로세스 종료를 고려하세요.
+          </div>
+        `;
+        // 모달 푸터에 링크 버튼 추가 (memory용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> 대시보드로 돌아가기
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+
+      case "disk":
+        const disk = systemData.system.disk;
+        title = '<i class="fas fa-hdd text-success"></i> 디스크 상세 정보';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-success text-white">
+              <h6 class="mb-0">디스크 사용률</h6>
+            </div>
+            <div class="card-body">
+              <div class="text-center mb-3">
+                <h1 class="display-4 text-success">${disk.percent.toFixed(
+                  1
+                )}%</h1>
+                <p class="text-muted">현재 디스크 사용률</p>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>전체 용량</span>
+                    <strong>${disk.total_gb} GB</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>사용 중</span>
+                    <strong>${disk.used_gb} GB</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>사용 가능</span>
+                    <strong>${
+                      disk.free_gb || (disk.total_gb - disk.used_gb).toFixed(2)
+                    } GB</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>상태</span>
+                    <strong class="text-${
+                      disk.percent < 70
+                        ? "success"
+                        : disk.percent < 90
+                        ? "warning"
+                        : "danger"
+                    }">
+                      ${
+                        disk.percent < 70
+                          ? "충분"
+                          : disk.percent < 90
+                          ? "주의"
+                          : "부족"
+                      }
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>해석:</strong> 디스크 사용률이 90% 이상일 경우 불필요한 파일을 정리하거나 용량을 확장하세요.
+          </div>
+        `;
+        // 모달 푸터에 링크 버튼 추가 (disk용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> 대시보드로 돌아가기
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+
+      case "process":
+        const proc = systemData.process;
+        title =
+          '<i class="fas fa-info-circle text-warning"></i> 프로세스 상세 정보';
+        content = `
+          <div class="card mb-3">
+            <div class="card-header bg-warning text-white">
+              <h6 class="mb-0">현재 프로세스 정보</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>프로세스 ID (PID)</span>
+                    <strong>${proc.pid}</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>메모리 사용량</span>
+                    <strong>${proc.memory_mb} MB</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>스레드 수</span>
+                    <strong>${proc.threads}개</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>CPU 사용률</span>
+                    <strong>${proc.cpu_percent}%</strong>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>실행 시간</span>
+                    <strong>${proc.uptime || "알 수 없음"}</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>상태</span>
+                    <strong class="text-success">실행 중</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>사용자</span>
+                    <strong>${proc.username || "system"}</strong>
+                  </div>
+                  <div class="d-flex justify-content-between py-2 border-bottom">
+                    <span>우선순위</span>
+                    <strong>${proc.priority || "normal"}</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>참고:</strong> 이 정보는 현재 실행 중인 Flask 애플리케이션 프로세스의 상태를 나타냅니다.
+          </div>
+        `;
+        // 모달 푸터에 링크 버튼 추가 (process용)
+        document.querySelector("#detailModal .modal-footer").innerHTML = `
+          <a href="/admin/logs" class="btn btn-primary">
+            <i class="fas fa-list-alt"></i> 관리자 로그 페이지
+          </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        break;
+    }
+
+    titleElem.innerHTML = title;
+    bodyElem.innerHTML = content;
+    modal.show();
+  }
+
   // 페이지 종료 시 인터벌 클리어
   window.addEventListener("beforeunload", function () {
     if (refreshInterval) clearInterval(refreshInterval);
     if (countdownInterval) clearInterval(countdownInterval);
   });
+
+  // ========== 클릭 이벤트 핸들러 ==========
+
+  /**
+   * 로그 파일 상세 보기
+   * @param {string} filename - 로그 파일명 (예: mail_parser_20251230_191126.log)
+   */
+  function viewLogFile(filename) {
+    const url = `/api/logs/file/${filename}`;
+    window.open(url, "_blank");
+    showToast(`로그 파일 열기: ${filename}`);
+  }
+
+  /**
+   * 이메일 상세 정보 표시
+   * @param {string} emailInfo - 이메일 정보 문자열 (예: "처리됨: email_subject.eml - 2025-01-02 10:30")
+   */
+  function viewEmailDetail(emailInfo) {
+    // 모달로 상세 정보 표시
+    const modal = new bootstrap.Modal(document.getElementById("detailModal"));
+    const titleElem = document.getElementById("detailModalTitle");
+    const bodyElem = document.getElementById("detailModalBody");
+
+    titleElem.innerHTML =
+      '<i class="fas fa-envelope text-primary"></i> 이메일 처리 내역 상세';
+    bodyElem.innerHTML = `
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">처리 정보</h6>
+          <p class="card-text">${emailInfo}</p>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle"></i>
+            <strong>참고:</strong> 전체 이메일 목록은 대시보드의 "이메일 처리" KPI를 클릭하여 확인할 수 있습니다.
+          </div>
+        </div>
+      </div>
+    `;
+
+    // 모달 푸터
+    document.querySelector("#detailModal .modal-footer").innerHTML = `
+      <a href="/" class="btn btn-primary">
+        <i class="fas fa-home"></i> 대시보드로 이동
+      </a>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+    `;
+
+    modal.show();
+    showToast("이메일 처리 내역 보기");
+  }
+
+  /**
+   * 업로드 파일 상세 정보 표시
+   * @param {string} filename - 업로드된 파일명
+   */
+  function viewUploadDetail(filename) {
+    // 모달로 파일 정보 표시
+    const modal = new bootstrap.Modal(document.getElementById("detailModal"));
+    const titleElem = document.getElementById("detailModalTitle");
+    const bodyElem = document.getElementById("detailModalBody");
+
+    titleElem.innerHTML =
+      '<i class="fas fa-file text-info"></i> 업로드 파일 정보';
+    bodyElem.innerHTML = `
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">파일 정보</h6>
+          <div class="mb-3">
+            <strong>파일명:</strong><br>
+            <code>${filename}</code>
+          </div>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>참고:</strong> 전체 업로드 파일 목록 및 관리는 "파일 관리" 페이지에서 확인할 수 있습니다.
+          </div>
+        </div>
+      </div>
+    `;
+
+    // 모달 푸터
+    document.querySelector("#detailModal .modal-footer").innerHTML = `
+      <a href="/admin/files" class="btn btn-primary">
+        <i class="fas fa-folder-open"></i> 파일 관리 페이지
+      </a>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+    `;
+
+    modal.show();
+    showToast("업로드 파일 정보 보기");
+  }
 </script>
 {% endblock %}

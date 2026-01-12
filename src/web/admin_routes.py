@@ -1,5 +1,6 @@
 import json
 import secrets
+from datetime import datetime
 from pathlib import Path
 
 from flask import (Blueprint, abort, current_app, render_template, request,
@@ -967,8 +968,8 @@ def test_history_page():
 
 
 @admin.route('/api/admin/tests/history', methods=['GET'])
-def api_get_all_history():
-    """전체 실행 이력 조회"""
+def api_get_test_execution_history():
+    """전체 테스트 실행 이력 조회"""
     try:
         from src.database.email_db import test_manager
 
@@ -981,6 +982,339 @@ def api_get_all_history():
             'total': len(history)
         }, 200
     except Exception as e:
-        current_app.logger.exception(f'실행 이력 조회 오류: {e}')
+        current_app.logger.exception(f'테스트 실행 이력 조회 오류: {e}')
         return {'success': False, 'error': str(e)}, 500
+
+
+# [2025-12-30] File Management Routes
+@admin.route('/admin/files')
+def file_management():
+    """업로드 파일 관리 페이지"""
+    return render_template('file_management.html')
+
+
+@admin.route('/api/admin/files', methods=['GET'])
+def api_get_files():
+    """파일 목록 조회"""
+    import os
+    from datetime import datetime
+
+    from flask import jsonify
+
+    try:
+        upload_dir = Path(current_app.config.get('UPLOAD_FOLDER', 'uploads'))
+        files_data = []
+
+        if upload_dir.exists():
+            for file_path in upload_dir.rglob('*'):
+                if file_path.is_file():
+                    stat = file_path.stat()
+                    files_data.append({
+                        'id': str(file_path.relative_to(upload_dir)),
+                        'name': file_path.name,
+                        'extension': file_path.suffix,
+                        'size_mb': round(stat.st_size / (1024 * 1024), 2),
+                        'upload_date': datetime.fromtimestamp(stat.st_ctime).isoformat(),
+                        'path': str(file_path.parent.relative_to(upload_dir)),
+                        'processed': True  # TODO: 실제 처리 상태 확인
+                    })
+
+        # 통계 계산
+        total_size_mb = sum(f['size_mb'] for f in files_data)
+        today = datetime.now().date()
+        today_uploads = sum(1 for f in files_data if datetime.fromisoformat(f['upload_date']).date() == today)
+        avg_file_size_mb = round(total_size_mb / len(files_data), 2) if files_data else 0
+
+        # 30일 이상 된 파일 카운트
+        thirty_days_ago = datetime.now().timestamp() - (30 * 24 * 60 * 60)
+        old_files_count = sum(1 for f in files_data if datetime.fromisoformat(f['upload_date']).timestamp() < thirty_days_ago)
+
+        return jsonify({
+            'success': True,
+            'files': files_data,
+            'statistics': {
+                'total_files': len(files_data),
+                'total_size_mb': round(total_size_mb, 2),
+                'today_uploads': today_uploads,
+                'avg_file_size_mb': avg_file_size_mb,
+                'old_files_count': old_files_count
+            }
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'파일 목록 조회 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/files/<path:file_id>/download', methods=['GET'])
+def api_download_file(file_id: str):
+    """파일 다운로드"""
+    try:
+        upload_dir = Path(current_app.config.get('UPLOAD_FOLDER', 'uploads'))
+        file_path = upload_dir / file_id
+
+        if not file_path.exists() or not file_path.is_file():
+            abort(404)
+
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        current_app.logger.exception(f'파일 다운로드 오류: {e}')
+        abort(500)
+
+
+@admin.route('/api/admin/files/<path:file_id>', methods=['DELETE'])
+def api_delete_file(file_id: str):
+    """파일 삭제"""
+    from flask import jsonify
+
+    try:
+        upload_dir = Path(current_app.config.get('UPLOAD_FOLDER', 'uploads'))
+        file_path = upload_dir / file_id
+
+        if not file_path.exists() or not file_path.is_file():
+            return jsonify({'success': False, 'message': '파일을 찾을 수 없습니다.'}), 404
+
+        file_path.unlink()
+        current_app.logger.info(f'파일 삭제됨: {file_id}')
+
+        return jsonify({'success': True, 'message': '파일이 삭제되었습니다.'}), 200
+    except Exception as e:
+        current_app.logger.exception(f'파일 삭제 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/files/cleanup', methods=['POST'])
+def api_cleanup_files():
+    """오래된 파일 정리 (30일 이상)"""
+    from datetime import datetime
+
+    from flask import jsonify
+
+    try:
+        upload_dir = Path(current_app.config.get('UPLOAD_FOLDER', 'uploads'))
+        thirty_days_ago = datetime.now().timestamp() - (30 * 24 * 60 * 60)
+        deleted_count = 0
+
+        if upload_dir.exists():
+            for file_path in upload_dir.rglob('*'):
+                if file_path.is_file():
+                    stat = file_path.stat()
+                    if stat.st_ctime < thirty_days_ago:
+                        file_path.unlink()
+                        deleted_count += 1
+
+        current_app.logger.info(f'{deleted_count}개의 오래된 파일 삭제됨')
+
+        return jsonify({
+            'success': True,
+            'deleted_count': deleted_count,
+            'message': f'{deleted_count}개의 파일이 삭제되었습니다.'
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'파일 정리 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# [2025-12-30] Service Management Routes
+@admin.route('/admin/services')
+def service_management():
+    """서비스 관리 페이지"""
+    return render_template('service_management.html')
+
+
+@admin.route('/api/admin/services', methods=['GET'])
+def api_get_services():
+    """서비스 목록 조회"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 서비스 모니터링 시스템과 연동
+        # 현재는 더미 데이터 반환
+        services = [
+            {
+                'id': 'flask-app',
+                'name': 'Flask Application',
+                'description': '메인 웹 애플리케이션 서버',
+                'status': 'running',
+                'category': 'core',
+                'uptime': '2h 15m',
+                'restart_count': 0,
+                'last_update': datetime.now().isoformat()
+            },
+            {
+                'id': 'email-processor',
+                'name': 'Email Processor',
+                'description': '이메일 파싱 및 처리 서비스',
+                'status': 'running',
+                'category': 'background',
+                'uptime': '2h 15m',
+                'restart_count': 1,
+                'last_update': datetime.now().isoformat()
+            },
+            {
+                'id': 'database',
+                'name': 'SQLite Database',
+                'description': '데이터베이스 서비스',
+                'status': 'running',
+                'category': 'database',
+                'uptime': '2h 15m',
+                'restart_count': 0,
+                'last_update': datetime.now().isoformat()
+            },
+            {
+                'id': 'log-monitor',
+                'name': 'Log Monitor',
+                'description': '로그 모니터링 서비스',
+                'status': 'idle',
+                'category': 'monitoring',
+                'uptime': '2h 15m',
+                'restart_count': 0,
+                'last_update': datetime.now().isoformat()
+            }
+        ]
+
+        return jsonify({
+            'success': True,
+            'services': services
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'서비스 목록 조회 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/services/<service_id>/start', methods=['POST'])
+def api_start_service(service_id: str):
+    """서비스 시작"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 서비스 제어 로직 구현
+        current_app.logger.info(f'서비스 시작 요청: {service_id}')
+
+        return jsonify({
+            'success': True,
+            'message': f'{service_id} 서비스가 시작되었습니다.'
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'서비스 시작 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/services/<service_id>/stop', methods=['POST'])
+def api_stop_service(service_id: str):
+    """서비스 중지"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 서비스 제어 로직 구현
+        current_app.logger.info(f'서비스 중지 요청: {service_id}')
+
+        return jsonify({
+            'success': True,
+            'message': f'{service_id} 서비스가 중지되었습니다.'
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'서비스 중지 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/services/<service_id>/restart', methods=['POST'])
+def api_restart_service(service_id: str):
+    """서비스 재시작"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 서비스 제어 로직 구현
+        current_app.logger.info(f'서비스 재시작 요청: {service_id}')
+
+        return jsonify({
+            'success': True,
+            'message': f'{service_id} 서비스가 재시작되었습니다.'
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'서비스 재시작 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/services/<service_id>/logs', methods=['GET'])
+def api_get_service_logs(service_id: str):
+    """서비스 로그 조회"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 로그 파일 읽기
+        # 현재는 더미 로그 반환
+        logs = f"""[2025-12-30 12:00:00] INFO: {service_id} service started
+[2025-12-30 12:05:15] INFO: Processing request
+[2025-12-30 12:10:30] INFO: Request completed successfully
+[2025-12-30 12:15:45] INFO: Health check passed"""
+
+        return jsonify({
+            'success': True,
+            'logs': logs,
+            'log_count': logs.count('\n') + 1
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'서비스 로그 조회 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/services/start-all', methods=['POST'])
+def api_start_all_services():
+    """전체 서비스 시작"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 서비스 제어 로직 구현
+        started_count = 0
+        current_app.logger.info('전체 서비스 시작 요청')
+
+        return jsonify({
+            'success': True,
+            'started_count': started_count,
+            'message': f'{started_count}개의 서비스가 시작되었습니다.'
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'전체 서비스 시작 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/services/stop-all', methods=['POST'])
+def api_stop_all_services():
+    """전체 서비스 중지"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 서비스 제어 로직 구현
+        stopped_count = 0
+        current_app.logger.info('전체 서비스 중지 요청')
+
+        return jsonify({
+            'success': True,
+            'stopped_count': stopped_count,
+            'message': f'{stopped_count}개의 서비스가 중지되었습니다.'
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'전체 서비스 중지 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@admin.route('/api/admin/services/restart-all', methods=['POST'])
+def api_restart_all_services():
+    """전체 서비스 재시작"""
+    from flask import jsonify
+
+    try:
+        # TODO: 실제 서비스 제어 로직 구현
+        restarted_count = 0
+        current_app.logger.info('전체 서비스 재시작 요청')
+
+        return jsonify({
+            'success': True,
+            'restarted_count': restarted_count,
+            'message': f'{restarted_count}개의 서비스가 재시작되었습니다.'
+        }), 200
+    except Exception as e:
+        current_app.logger.exception(f'전체 서비스 재시작 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 
