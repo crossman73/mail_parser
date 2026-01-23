@@ -1,0 +1,13 @@
+# Codacy configuration: exclude noisy or local-only paths from analysis
+# This file lists patterns to skip during local Codacy CLI analysis.
+exclude_patterns:
+  - scripts/vscode_diagnostics_*/**
+  - .serena/**
+  - archives/**
+  - workspace_backups/**
+  - processed_emails/**
+  - temp/**
+  - logs/**
+  - codacy_*.log
+  - '*.log'
+  - .venv/**
