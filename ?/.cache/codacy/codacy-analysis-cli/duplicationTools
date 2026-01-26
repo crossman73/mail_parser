@@ -1,0 +1,94 @@
+[
+  {
+    "dockerImage" : "codacy/codacy-duplication-pmdcpd:2.3.1",
+    "languages" : [
+      {
+        "name" : "PLSQL"
+      },
+      {
+        "name" : "CPP"
+      },
+      {
+        "name" : "Scala"
+      },
+      {
+        "name" : "JSP"
+      },
+      {
+        "name" : "Apex"
+      },
+      {
+        "name" : "Go"
+      },
+      {
+        "name" : "Python"
+      },
+      {
+        "name" : "Javascript"
+      },
+      {
+        "name" : "C"
+      },
+      {
+        "name" : "VisualForce"
+      },
+      {
+        "name" : "CSharp"
+      },
+      {
+        "name" : "Swift"
+      }
+    ]
+  },
+  {
+    "dockerImage" : "codacy/codacy-duplication-phpcpd:2.1.5",
+    "languages" : [
+      {
+        "name" : "PHP"
+      }
+    ]
+  },
+  {
+    "dockerImage" : "codacy/codacy-duplication-flay:2.1.8",
+    "languages" : [
+      {
+        "name" : "Ruby"
+      }
+    ]
+  },
+  {
+    "dockerImage" : "codacy/codacy-duplication-jscpd:0.1.24",
+    "languages" : [
+      {
+        "name" : "Dart"
+      },
+      {
+        "name" : "Groovy"
+      },
+      {
+        "name" : "TypeScript"
+      },
+      {
+        "name" : "Rust"
+      },
+      {
+        "name" : "CoffeeScript"
+      },
+      {
+        "name" : "Objective C"
+      },
+      {
+        "name" : "Elixir"
+      },
+      {
+        "name" : "VisualBasic"
+      },
+      {
+        "name" : "Kotlin"
+      },
+      {
+        "name" : "Java"
+      }
+    ]
+  }
+]

@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      이메일 증거 처리 시스템
+    </title>
+
+    <!-- Bootstrap 5.1.3 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome 6.0.0 -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Modern UI CSS -->
+    <link
+      href="/static/css/modern-ui.css"
+      rel="stylesheet"
+    />
+
+    
+
+    <style>
+      .navbar-brand {
+        font-weight: bold;
+      }
+      .feature-card {
+        transition: transform 0.2s;
+      }
+      .feature-card:hover {
+        transform: translateY(-2px);
+      }
+      .footer {
+        margin-top: 50px;
+        padding: 20px 0;
+        border-top: 1px solid #dee2e6;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="modern-navbar">
+  <div class="container">
+    <a class="brand" href="/">
+      <i class="fas fa-clock"></i>
+      <span>이메일 타임라인 시스템</span>
+    </a>
+
+    <button
+      class="mobile-menu-toggle"
+      id="mobileMenuToggle"
+      aria-label="메뉴 토글"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          href="/"
+        >
+          <i class="fas fa-home"></i>
+          <span>홈</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          href="/upload"
+        >
+          <i class="fas fa-upload"></i>
+          <span>업로드</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          href="/evidence_management"
+        >
+          <i class="fas fa-folder-open"></i>
+          <span>증거 관리</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          href="/api/docs"
+        >
+          <i class="fas fa-code"></i>
+          <span>API</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          href="/admin"
+        >
+          <i class="fas fa-user-shield"></i>
+          <span>관리자</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          href="/system/status"
+        >
+          <i class="fas fa-server"></i>
+          <span>시스템 상태</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          href="/logs"
+        >
+          <i class="fas fa-file-alt"></i>
+          <span>로그</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+          <i class="fas fa-moon"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="container my-4">
+         
+<div class="row">
+  <div class="col-12">
+    <h1 class="mb-4">
+      <i class="fas fa-code me-2"></i>
+      API 문서
+    </h1>
+    <p class="lead">이메일 증거 처리 시스템의 RESTful API 문서입니다.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="list-group" id="api-nav">
+      
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active"
+          href="#api-문서-api"
+        >
+          <span>
+            <i class="fas fa-book me-2"></i>
+            API 문서 API
+          </span>
+          <span class="badge bg-primary rounded-pill">1</span>
+        </a>
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center "
+          href="#기타-api"
+        >
+          <span>
+            <i class="fas fa-cog me-2"></i>
+            기타 API
+          </span>
+          <span class="badge bg-primary rounded-pill">25</span>
+        </a>
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center "
+          href="#로그-api"
+        >
+          <span>
+            <i class="fas fa-list me-2"></i>
+            로그 API
+          </span>
+          <span class="badge bg-primary rounded-pill">7</span>
+        </a>
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center "
+          href="#시스템-api"
+        >
+          <span>
+            <i class="fas fa-cog me-2"></i>
+            시스템 API
+          </span>
+          <span class="badge bg-primary rounded-pill">35</span>
+        </a>
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center "
+          href="#이메일-api"
+        >
+          <span>
+            <i class="fas fa-envelope me-2"></i>
+            이메일 API
+          </span>
+          <span class="badge bg-primary rounded-pill">7</span>
+        </a>
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center "
+          href="#증거-api"
+        >
+          <span>
+            <i class="fas fa-gavel me-2"></i>
+            증거 API
+          </span>
+          <span class="badge bg-primary rounded-pill">15</span>
+        </a>
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center "
+          href="#타임라인-api"
+        >
+          <span>
+            <i class="fas fa-timeline me-2"></i>
+            타임라인 API
+          </span>
+          <span class="badge bg-primary rounded-pill">4</span>
+        </a>
+        
+        <a
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center "
+          href="#파일-api"
+        >
+          <span>
+            <i class="fas fa-file me-2"></i>
+            파일 API
+          </span>
+          <span class="badge bg-primary rounded-pill">9</span>
+        </a>
+        
+      
+    </div>
+  </div>
+
+  <div class="col-md-9">
+    <!-- API 사용 안내 -->
+    <div class="card bg-light border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="mb-3">
+          <i class="fas fa-info-circle me-2"></i>API 사용 안내
+        </h5>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <strong>Base URL:</strong><br />
+              <code class="text-primary">http://localhost:5000/api</code>
+            </div>
+            <div class="mb-3">
+              <strong>Content-Type:</strong><br />
+              <code>application/json</code>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <strong>인증:</strong><br />
+              <span class="text-muted">현재 인증 없음 (개발 환경)</span>
+            </div>
+            <div class="mb-3">
+              <strong>오류 코드:</strong><br />
+              <span class="text-muted">HTTP 상태 코드 사용 (200, 400, 404, 500)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 동적 API 섹션 -->
+    
+      
+      <div id="api-문서-api" class="api-section" >
+        <h3>
+          <i class="fas fa-book me-2"></i>
+          API 문서 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/docs</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">API 문서 페이지 (DB 기반 동적 생성)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/docs')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="기타-api" class="api-section" style="display:none;">
+        <h3>
+          <i class="fas fa-cog me-2"></i>
+          기타 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">메인 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/add_evidence</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">추가 증거 파일 등록</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/add_evidence')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/add_evidence</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">추가 증거 파일 등록</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/add_evidence')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/additional_evidence</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">추가 증거 관리 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/additional_evidence')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/check_processed_emails</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">처리된 이메일 존재 여부 확인 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/check_processed_emails')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/delete_files</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 삭제 API (소프트 삭제 + 물리적 삭제)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/delete_files')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/files</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">API: 업로드된 파일 목록</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/files')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/files/info</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 정보 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/files/info')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/files/list</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 목록 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/files/list')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/progress/&lt;task_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">진행 상황 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/progress/&lt;task_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/verify_integrity</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">법원 제출용 무결성 검증 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/verify_integrity')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/delete_evidence/&lt;file_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">추가 증거 삭제</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/delete_evidence/&lt;file_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/edit_evidence/&lt;file_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">추가 증거 편집</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/edit_evidence/&lt;file_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/edit_evidence/&lt;file_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">추가 증거 편집</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/edit_evidence/&lt;file_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/export_additional_evidence</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">추가 증거 전체 패키지 다운로드</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/export_additional_evidence')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/generate_evidence/&lt;file_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">선택된 이메일들에 대해 증거 생성</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/generate_evidence/&lt;file_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/generate_timeline_package</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">법원 제출용 타임라인 패키지 생성</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/generate_timeline_package')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/integrated_timeline</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">통합 타임라인 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/integrated_timeline')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/integrity</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">무결성 검증 페이지 (verify_integrity로 redirect)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/integrity')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/process_selected</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">선택된 이메일들을 HTML/PDF로 처리</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/process_selected')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/processing/&lt;task_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">처리 진행 상황 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/processing/&lt;task_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/search</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">검색 페이지 (템플릿 미구현)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/search')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/settings</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">설정 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/settings')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/static/&lt;path:filename&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">static 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/static/&lt;path:filename&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/verify_integrity</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">법원 제출용 무결성 검증 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/verify_integrity')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="로그-api" class="api-section" style="display:none;">
+        <h3>
+          <i class="fas fa-list me-2"></i>
+          로그 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/logs</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">최근 로그 조회 API (DB 기반 - 실패 시 메모리 폴백)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/logs')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/logs/clear</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">DB 로그 초기화 API - DB 실패 시 안내</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/logs/clear')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/logs/download</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">로그 다운로드 (JSON) - DB 실패 시 빈 파일</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/logs/download')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/logs/file/&lt;filename&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">특정 로그 파일 내용 보기 (HTML)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/logs/file/&lt;filename&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/logs/file/&lt;filename&gt;/download</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">특정 로그 파일 다운로드</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/logs/file/&lt;filename&gt;/download')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/logs/files</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">로그 파일 목록 조회 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/logs/files')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/logs</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">로그 뷰어 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/logs')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="시스템-api" class="api-section" style="display:none;">
+        <h3>
+          <i class="fas fa-cog me-2"></i>
+          시스템 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/admin</code>
+              
+                <span class="badge bg-warning ms-2"><i class="fas fa-lock me-1"></i>인증 필요</span>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">admin 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/admin')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/admin/jobs</code>
+              
+                <span class="badge bg-warning ms-2"><i class="fas fa-lock me-1"></i>인증 필요</span>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">jobs 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/admin/jobs')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/admin/logs</code>
+              
+                <span class="badge bg-warning ms-2"><i class="fas fa-lock me-1"></i>인증 필요</span>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">logs 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/admin/logs')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/admin/reload</code>
+              
+                <span class="badge bg-warning ms-2"><i class="fas fa-lock me-1"></i>인증 필요</span>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">Dev-only endpoint to reload selected modules at runtime.</h6>
+            
+              <p class="card-text text-muted">Enable by setting app.config[&#39;ENABLE_DEV_RELOAD&#39;] = True and optionally
+app.config[&#39;DEV_RELOAD_MODULES&#39;] = [&#39;src.core.evidence_store&#39;, ...]</p>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/admin/reload')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/admin/settings</code>
+              
+                <span class="badge bg-warning ms-2"><i class="fas fa-lock me-1"></i>인증 필요</span>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">시스템 설정 관리 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/admin/settings')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/cleanup</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">비정상 종료된 작업들 정리</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/cleanup')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/cleanup-temp</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">임시 파일 수동 정리 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/cleanup-temp')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-danger me-2">
+                DELETE
+              </span>
+              <code class="text-dark">/api/admin/job/&lt;job_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">Job 삭제 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/job/&lt;job_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/logs</code>
+              
+                <span class="badge bg-warning ms-2"><i class="fas fa-lock me-1"></i>인증 필요</span>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">logs 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/logs')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/restart</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">웹서비스 재시작 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/restart')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/settings</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">설정 조회/추가 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/settings</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">설정 조회/추가 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-danger me-2">
+                DELETE
+              </span>
+              <code class="text-dark">/api/admin/settings/&lt;key&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">설정 삭제 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings/&lt;key&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-warning me-2">
+                PUT
+              </span>
+              <code class="text-dark">/api/admin/settings/&lt;key&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">설정 수정 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings/&lt;key&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/settings/&lt;key&gt;/history</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">특정 설정 변경 이력 조회 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings/&lt;key&gt;/history')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/settings/history</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">전체 설정 변경 이력 조회 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings/history')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/settings/init</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">기본 설정 초기화</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings/init')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/settings/test/&lt;key&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">설정 값 테스트 API - 실제로 로드된 값 확인</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/settings/test/&lt;key&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/system-info</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">시스템 정보 조회 (관리 페이지용)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/system-info')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-danger me-2">
+                DELETE
+              </span>
+              <code class="text-dark">/api/admin/task/&lt;task_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">개별 작업 제거 API 엔드포인트</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/task/&lt;task_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/tasks</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">모든 진행 중인 작업 확인 (관리용)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tasks')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/temp-sessions</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">임시 세션 목록 조회 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/temp-sessions')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/tests</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">전체 테스트 목록 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/tests</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">테스트 추가</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-danger me-2">
+                DELETE
+              </span>
+              <code class="text-dark">/api/admin/tests/&lt;test_key&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">테스트 삭제</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests/&lt;test_key&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/tests/&lt;test_key&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">특정 테스트 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests/&lt;test_key&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-warning me-2">
+                PUT
+              </span>
+              <code class="text-dark">/api/admin/tests/&lt;test_key&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">테스트 수정</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests/&lt;test_key&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/tests/&lt;test_key&gt;/execute</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">단일 테스트 실행</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests/&lt;test_key&gt;/execute')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/tests/&lt;test_key&gt;/history</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">테스트 실행 이력 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests/&lt;test_key&gt;/history')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/admin/tests/execute-all</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">전체 테스트 실행</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests/execute-all')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/admin/tests/history</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">전체 설정 변경 이력 조회 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/admin/tests/history')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/system/cleanup</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">시스템 정리 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/system/cleanup')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/system/disk-usage</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">디스크 사용량 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/system/disk-usage')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/system/test</code>
+              
+                <span class="badge bg-warning ms-2"><i class="fas fa-lock me-1"></i>인증 필요</span>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">시스템 테스트 관리 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/system/test')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/system/test/history</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">시스템 테스트 실행 이력 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/system/test/history')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="이메일-api" class="api-section" style="display:none;">
+        <h3>
+          <i class="fas fa-envelope me-2"></i>
+          이메일 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/emails/&lt;file_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">API: 이메일 목록 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/emails/&lt;file_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/emails/load</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">이메일 로드 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/emails/load')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/emails/process</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">이메일 처리 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/emails/process')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/emails/search</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">이메일 검색 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/emails/search')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/emails/statistics</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">이메일 통계 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/emails/statistics')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/email/&lt;file_id&gt;/&lt;int:email_index&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">이메일 상세 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/email/&lt;file_id&gt;/&lt;int:email_index&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/emails/&lt;file_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">이메일 목록 페이지 - 선택적 증거 생성 기능 포함</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/emails/&lt;file_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="증거-api" class="api-section" style="display:none;">
+        <h3>
+          <i class="fas fa-gavel me-2"></i>
+          증거 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/admin/evidence/&lt;int:evidence_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">evidence 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/admin/evidence/&lt;int:evidence_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 목록 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-danger me-2">
+                DELETE
+              </span>
+              <code class="text-dark">/api/evidence/&lt;folder_name&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 삭제 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence/&lt;folder_name&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence/&lt;folder_name&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 상세 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence/&lt;folder_name&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence/&lt;int:evidence_id&gt;/download/&lt;kind&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">download 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence/&lt;int:evidence_id&gt;/download/&lt;kind&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence/attachment/&lt;int:entry_id&gt;/download</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">download 조회</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence/attachment/&lt;int:entry_id&gt;/download')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence/check</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">API: processed_emails 디렉터리 존재 및 파일 수 체크</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence/check')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence/export</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 목록 내보내기 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence/export')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence/integrity</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 무결성 검증 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence/integrity')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence_categories</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 카테고리 정보 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence_categories')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/evidence_progress/&lt;task_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 생성 진행 상황 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/evidence_progress/&lt;task_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/evidence</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 목록 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/evidence')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/evidence/&lt;folder_name&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 상세 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/evidence/&lt;folder_name&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/evidence_file/&lt;file_id&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 파일 상세 뷰어</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/evidence_file/&lt;file_id&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/evidence_management</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 관리 - 업로드된 파일 목록</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/evidence_management')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="타임라인-api" class="api-section" style="display:none;">
+        <h3>
+          <i class="fas fa-timeline me-2"></i>
+          타임라인 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/timeline</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">타임라인 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/timeline')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/timeline/export</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">타임라인 내보내기 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/timeline/export')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/timeline/filter</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">타임라인 필터링 API</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/timeline/filter')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/timeline</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">타임라인 페이지</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/timeline')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="파일-api" class="api-section" style="display:none;">
+        <h3>
+          <i class="fas fa-file me-2"></i>
+          파일 API
+        </h3>
+
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/api/upload</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 업로드 (GET: 목록, POST: 업로드)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/upload')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/api/upload</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 업로드 (GET: 목록, POST: 업로드)</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/api/upload')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/download/&lt;path:filename&gt;</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 다운로드</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/download/&lt;path:filename&gt;')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/download_court_certificate</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">법원 제출용 무결성 증명서 다운로드</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/download_court_certificate')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/download_evidence_index</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">증거 목록 Excel 다운로드</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/download_evidence_index')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/download_timeline_excel</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">통합 타임라인 Excel 다운로드</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/download_timeline_excel')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/download_verification_report</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">무결성 검증 보고서 다운로드</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/download_verification_report')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-success me-2">
+                GET
+              </span>
+              <code class="text-dark">/upload</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 업로드 및 처리</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/upload')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">
+                POST
+              </span>
+              <code class="text-dark">/upload</code>
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">파일 업로드 및 처리</h6>
+            
+            <button class="btn btn-sm btn-outline-primary" onclick="testAPI('/upload')">
+              <i class="fas fa-play me-1"></i>테스트
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+    
+  </div>
+</div>
+
+    </main>
+
+    <footer class="footer bg-light">
+  <div class="container text-center">
+    <span class="text-muted">
+      <i class="fas fa-gavel me-2"></i>
+      이메일 증거 처리 시스템 v2.0 - 법정 증거 생성 및 관리
+    </span>
+  </div>
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    
+<script>
+  // API 네비게이션
+  document.querySelectorAll("#api-nav a").forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // 모든 섹션 숨기기
+      document.querySelectorAll(".api-section").forEach((section) => {
+        section.style.display = "none";
+      });
+
+      // 모든 링크에서 active 제거
+      document.querySelectorAll("#api-nav a").forEach((a) => {
+        a.classList.remove("active");
+      });
+
+      // 선택된 섹션 보이기
+      const targetId = this.getAttribute("href").substring(1);
+      const targetSection = document.getElementById(targetId);
+      if (targetSection) {
+        targetSection.style.display = "block";
+      }
+
+      // 선택된 링크에 active 추가
+      this.classList.add("active");
+    });
+  });
+
+  // API 테스트 함수
+  function testAPI(endpoint) {
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        alert(`API 테스트 결과:\n${JSON.stringify(data, null, 2)}`);
+      })
+      .catch((error) => {
+        alert(`API 테스트 오류: ${error.message}`);
+      });
+  }
+</script>
+
+  </body>
+</html>

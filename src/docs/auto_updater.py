@@ -76,10 +76,10 @@ class DocumentAutoUpdater:
         self.update_callbacks.append(callback)
 
     def _calculate_file_hash(self, file_path: Path) -> str:
-        """파일 해시 계산"""
+        """파일 해시 계산 (SHA-256 사용)"""
         try:
             with open(file_path, 'rb') as f:
-                return hashlib.md5(f.read()).hexdigest()
+                return hashlib.sha256(f.read()).hexdigest()
         except Exception:
             return ""
 

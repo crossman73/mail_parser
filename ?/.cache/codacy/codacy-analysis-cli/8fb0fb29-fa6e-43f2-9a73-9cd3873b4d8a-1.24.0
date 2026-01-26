@@ -1,0 +1,1037 @@
+[
+  {
+    "id" : "psalignassignmentstatement",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Alignment of Assignment Statements",
+    "description" : "Ensures that consecutive assignment statements, especially in hashtables or DSC configurations, have their assignment operators aligned for better readability.",
+    "explanation" : "---\ndescription: Align assignment statement\nms.date: 06/28/2023\nms.topic: reference\ntitle: AlignAssignmentStatement\n---\n# AlignAssignmentStatement\n\n**Severity Level: Warning**\n\n## Description\n\nConsecutive assignment statements are more readable if they are aligned. By aligned, we imply that\nthe `equal` sign for all the assignment statements should be in the same column.\n\nThe rule looks for key (property) value pairs in a hashtable (DSC configuration) to check if they\nare aligned or not. Consider the following example in which the key value pairs are not aligned.\n\n```powershell\n$hashtable = @{\n    property1 = 'value'\n    anotherProperty = 'another value'\n}\n```\n\nAlignment in this case would look like the following.\n\n```powershell\n$hashtable = @{\n    property1       = 'value'\n    anotherProperty = 'another value'\n}\n```\n\nThe rule ignores hashtables in which the assignment statements are on the same line. For example,\nthe rule ignores `$h = {a = 1; b = 2}`.\n\n## Configuration\n\n```powershell\nRules = @{\n    PSAlignAssignmentStatement = @{\n        Enable = $true\n        CheckHashtable = $true\n    }\n}\n```\n\n### Parameters\n\n#### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n#### CheckHashtable: bool (Default value is `$false`)\n\nEnforce alignment of assignment statements in a hashtable and in a DSC Configuration. There is only\none switch for hasthable and DSC configuration because the property value pairs in a DSC\nconfiguration are parsed as key-value pairs of a hashtable.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidassignmenttoautomaticvariable",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Assignment to Automatic Variables",
+    "description" : "Detects and prevents assignments to PowerShell automatic variables which are built-in and often read-only or reserved for special use.",
+    "explanation" : "---\ndescription: Changing automatic variables might have undesired side effects\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidAssignmentToAutomaticVariable\n---\n# AvoidAssignmentToAutomaticVariable\n\n**Severity Level: Warning**\n\n## Description\n\nPowerShell has built-in variables known as automatic variables. Many of them are read-only and\nPowerShell throws an error when trying to assign an value on those. Other automatic variables should\nonly be assigned in certain special cases to achieve a certain effect as a special technique.\n\nTo understand more about automatic variables, see `Get-Help about_Automatic_Variables`.\n\n<!-- TODO\nAbility to suppress was added in https://github.com/PowerShell/PSScriptAnalyzer/pull/1896\nNeed documentation for how to configure suppression of this rule.\n-->\n\n## How\n\nUse variable names in functions or their parameters that do not conflict with automatic variables.\n\n## Example\n\n### Wrong\n\nThe variable `$Error` is an automatic variables that exists in the global scope and should therefore\nnever be used as a variable or parameter name.\n\n```powershell\nfunction foo($Error){ }\n```\n\n```powershell\nfunction Get-CustomErrorMessage($ErrorMessage){ $Error = \"Error occurred: $ErrorMessage\" }\n```\n\n### Correct\n\n```powershell\nfunction Get-CustomErrorMessage($ErrorMessage){ $FinalErrorMessage = \"Error occurred: $ErrorMessage\" }\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoiddefaultvalueformandatoryparameter",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Default Value For Mandatory Parameter",
+    "description" : "Mandatory parameters in PowerShell functions should not have default values because the default will never be used.",
+    "explanation" : "---\ndescription: Avoid Default Value For Mandatory Parameter\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidDefaultValueForMandatoryParameter\n---\n# AvoidDefaultValueForMandatoryParameter\n\n**Severity Level: Warning**\n\n## Description\n\nMandatory parameters should not have a default values because there is no scenario where the default\ncan be used. PowerShell prompts for a value if the parameter value is not specified when calling the\nfunction.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test\n{\n\n    [CmdletBinding()]\n    Param\n    (\n        [Parameter(Mandatory=$true)]\n        $Parameter1 = 'default Value'\n    )\n}\n```\n\n### Correct\n\n```powershell\nfunction Test\n{\n    [CmdletBinding()]\n    Param\n    (\n        [Parameter(Mandatory=$true)]\n        $Parameter1\n    )\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoiddefaultvalueswitchparameter",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Default Value True for Switch Parameters",
+    "description" : "Switch parameters in PowerShell should not have a default value of true because it contradicts the expected behavior of switch parameters.",
+    "explanation" : "---\ndescription: Switch Parameters Should Not Default To True\nms.date: 12/05/2024\nms.topic: reference\ntitle: AvoidDefaultValueSwitchParameter\n---\n# AvoidDefaultValueSwitchParameter\n\n**Severity Level: Warning**\n\n## Description\n\nIf your parameter takes only `true` and `false`, define the parameter as type `[Switch]`. PowerShell\ntreats a switch parameter as `true` when it's used with a command. If the parameter isn't included\nwith the command, PowerShell considers the parameter to be false. Don't define `[Boolean]`\nparameters.\n\nYou shouldn't define a switch parameter with a default value of `$true` because this isn't the\nexpected behavior of a switch parameter.\n\n## How\n\nChange the default value of the switch parameter to be `$false` or don't provide a default value.\nWrite the logic of the script to assume that the switch parameter default value is `$false` or not\nprovided.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [String]\n        $Param1,\n\n        [switch]\n        $Switch=$True\n    )\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [String]\n        $Param1,\n\n        [switch]\n        $Switch\n    )\n\n    begin {\n        # Ensure that the $Switch is set to false if not provided\n        if (-not $PSBoundParameters.ContainsKey('Switch')) {\n            $Switch = $false\n        }\n    }\n    ...\n}\n```\n\n## More information\n\n- [Strongly Encouraged Development Guidelines][01]\n\n<!-- link references -->\n[01]: https://learn.microsoft.com/powershell/scripting/developer/cmdlet/strongly-encouraged-development-guidelines#parameters-that-take-true-and-false",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidexclaimoperator",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Exclaim Operator",
+    "description" : "This rule enforces avoiding the use of the negation operator '!' and recommends using '-not' instead for better readability.",
+    "explanation" : "---\ndescription: Avoid exclaim operator\nms.date: 03/26/2024\nms.topic: reference\ntitle: AvoidExclaimOperator\n---\n# AvoidExclaimOperator\n\n**Severity Level: Warning**\n\n## Description\n\nAvoid using the negation operator (`!`). Use `-not` for improved readability.\n\n> [!NOTE]\n> This rule is not enabled by default. The user needs to enable it through settings.\n\n## How to Fix\n\n## Example\n\n### Wrong\n\n```powershell\n$MyVar = !$true\n```\n\n### Correct\n\n```powershell\n$MyVar = -not $true\n```\n\n## Configuration\n\n```powershell\nRules = @{\n    PSAvoidExclaimOperator  = @{\n        Enable = $true\n    }\n}\n```\n\n### Parameters\n\n- `Enable`: **bool** (Default value is `$false`)\n\n  Enable or disable the rule during ScriptAnalyzer invocation.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidglobalaliases",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Global Aliases",
+    "description" : "This rule checks that global aliases are not used in PowerShell scripts to prevent overwriting existing aliases and causing name conflicts.",
+    "explanation" : "---\ndescription: Avoid global aliases.\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidGlobalAliases\n---\n# AvoidGlobalAliases\n\n**Severity Level: Warning**\n\n## Description\n\nGlobally scoped aliases override existing aliases within the sessions with matching names. This name\ncollision can cause difficult to debug issues for consumers of modules and scripts.\n\nTo understand more about scoping, see `Get-Help about_Scopes`.\n\n**NOTE** This rule is not available in PowerShell version 3 or 4 because it uses the\n`StaticParameterBinder.BindCommand` API.\n\n## How\n\nUse other scope modifiers for new aliases.\n\n## Example\n\n### Wrong\n\n```powershell\nNew-Alias -Name Name -Value Value -Scope Global\n```\n\n### Correct\n\n```powershell\nNew-Alias -Name Name1 -Value Value\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidglobalfunctions",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Global Functions in Modules",
+    "description" : "This rule checks that global functions and aliases are not used within modules to prevent name collisions.",
+    "explanation" : "---\ndescription: Avoid global functions and aliases\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidGlobalFunctions\n---\n# AvoidGlobalFunctions\n\n**Severity Level: Warning**\n\n## Description\n\nGlobally scoped functions override existing functions within the sessions with matching names. This\nname collision can cause difficult to debug issues for consumers of modules.\n\nTo understand more about scoping, see `Get-Help about_Scopes`.\n\n## How\n\nUse other scope modifiers for functions.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction global:functionName {}\n```\n\n### Correct\n\n```powershell\nfunction functionName {}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidglobalvars",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Global Variables",
+    "description" : "Checks that global variables are not used in PowerShell scripts to prevent errors caused by unintended interactions across different systems.",
+    "explanation" : "---\ndescription: No Global Variables\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidGlobalVars\n---\n# AvoidGlobalVars\n\n**Severity Level: Warning**\n\n## Description\n\nA variable is a unit of memory in which values are stored. PowerShell controls access to variables,\nfunctions, aliases, and drives through a mechanism known as scoping. Variables and functions that\nare present when PowerShell starts have been created in the global scope.\n\nGlobally scoped variables include:\n\n- Automatic variables\n- Preference variables\n- Variables, aliases, and functions that are in your PowerShell profiles\n\nTo understand more about scoping, see `Get-Help about_Scopes`.\n\n## How\n\nUse other scope modifiers for variables.\n\n## Example\n\n### Wrong\n\n```powershell\n$Global:var1 = $null\nfunction Test-NotGlobal ($var)\n{\n    $a = $var + $var1\n}\n```\n\n### Correct\n\n```powershell\n$var1 = $null\nfunction Test-NotGlobal ($var1, $var2)\n{\n    $a = $var1 + $var2\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidinvokingemptymembers",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Invoking Non-Constant Members",
+    "description" : "This rule detects invocations of non-constant members in PowerShell scripts which can cause potential bugs.",
+    "explanation" : "---\ndescription: Avoid Invoking Empty Members\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidInvokingEmptyMembers\n---\n# AvoidInvokingEmptyMembers\n\n**Severity Level: Warning**\n\n## Description\n\nInvoking non-constant members can cause potential bugs. Please double check the syntax to make sure\nthat invoked members are constants.\n\n## How\n\nProvide the requested members for a given type or class.\n\n## Example\n\n### Wrong\n\n```powershell\n$MyString = 'abc'\n$MyString.('len'+'gth')\n```\n\n### Correct\n\n```powershell\n$MyString = 'abc'\n$MyString.('length')\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidlonglines",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Long Lines",
+    "description" : "Ensures that line lengths do not exceed the configured maximum length, defaulting to 120 characters.",
+    "explanation" : "---\ndescription: Avoid long lines\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidLongLines\n---\n# AvoidLongLines\n\n**Severity Level: Warning**\n\n## Description\n\nLines should be no longer than a configured number of characters (default: 120), including leading\nwhitespace (indentation).\n\n**Note**: This rule is not enabled by default. The user needs to enable it through settings.\n\n## Configuration\n\n```powershell\nRules = @{\n    PSAvoidLongLines  = @{\n        Enable     = $true\n        MaximumLineLength = 120\n    }\n}\n```\n\n### Parameters\n\n#### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n#### MaximumLineLength: int (Default value is 120)\n\nOptional parameter to override the default maximum line length.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidmultipletypeattributes",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Multiple Type Specifiers on Parameters",
+    "description" : "Ensures that parameters in PowerShell functions have only one type specifier to prevent runtime errors.",
+    "explanation" : "---\ndescription: Avoid multiple type specifiers on parameters.\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidMultipleTypeAttributes\n---\n# AvoidMultipleTypeAttributes\n\n**Severity Level: Warning**\n\n## Description\n\nParameters should not have more than one type specifier. Multiple type specifiers on parameters\ncan cause runtime errors.\n\n## How\n\nEnsure each parameter has only 1 type specifier.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [switch]\n        [int]\n        $Switch\n    )\n}\n```\n\n### Correct\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [switch]\n        $Switch\n    )\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidnulloremptyhelpmessageattribute",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Null or Empty HelpMessage Attribute",
+    "description" : "Ensure the HelpMessage parameter attribute is set to a non-empty string in PowerShell functions to prevent interpreter errors.",
+    "explanation" : "---\ndescription: Avoid using null or empty HelpMessage parameter attribute.\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidNullOrEmptyHelpMessageAttribute\n---\n# AvoidNullOrEmptyHelpMessageAttribute\n\n**Severity Level: Warning**\n\n## Description\n\nThe value of the `HelpMessage` attribute should not be an empty string or a null value as this\ncauses PowerShell's interpreter to throw an error when executing the function or cmdlet.\n\n## How\n\nSpecify a value for the `HelpMessage` attribute.\n\n## Example\n\n### Wrong\n\n```powershell\nFunction BadFuncEmptyHelpMessageEmpty\n{\n    Param(\n        [Parameter(HelpMessage='')]\n        [String]\n        $Param\n    )\n\n    $Param\n}\n\nFunction BadFuncEmptyHelpMessageNull\n{\n    Param(\n        [Parameter(HelpMessage=$null)]\n        [String]\n        $Param\n    )\n\n    $Param\n}\n\nFunction BadFuncEmptyHelpMessageNoAssignment\n{\n    Param(\n        [Parameter(HelpMessage)]\n        [String]\n        $Param\n    )\n\n    $Param\n}\n```\n\n### Correct\n\n```powershell\nFunction GoodFuncHelpMessage\n{\n    Param(\n        [Parameter(HelpMessage='This is helpful')]\n        [String]\n        $Param\n    )\n\n    $Param\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidoverwritingbuiltincmdlets",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Overwriting Built-In Cmdlets",
+    "description" : "This rule detects when a script overwrites a cmdlet that is included with PowerShell by declaring a function with the same name.",
+    "explanation" : "---\ndescription: Avoid overwriting built in cmdlets\nms.date: 12/12/2024\nms.topic: reference\ntitle: AvoidOverwritingBuiltInCmdlets\n---\n# AvoidOverwritingBuiltInCmdlets\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule flags cmdlets that are available in a given edition/version of PowerShell on a given\noperating system which are overwritten by a function declaration. It works by comparing function\ndeclarations against a set of allowlists that ship with PSScriptAnalyzer. These allowlist files are\nused by other PSScriptAnalyzer rules. More information can be found in the documentation for the\n[UseCompatibleCmdlets][01] rule.\n\n## Configuration\n\nTo enable the rule to check if your script is compatible on PowerShell Core on Windows, put the\nfollowing your settings file.\n\n```powershell\n@{\n    'Rules' = @{\n        'PSAvoidOverwritingBuiltInCmdlets' = @{\n            'PowerShellVersion' = @('core-6.1.0-windows')\n        }\n    }\n}\n```\n\n### Parameters\n\n#### PowerShellVersion\n\nThe parameter `PowerShellVersion` is a list of allowlists that ship with PSScriptAnalyzer.\n\n> [!NOTE]\n> The default value for `PowerShellVersion` is `core-6.1.0-windows` if PowerShell 6 or\n> later is installed, and `desktop-5.1.14393.206-windows` if it's not.\n\nUsually, patched versions of PowerShell have the same cmdlet data, therefore only settings of major\nand minor versions of PowerShell are supplied. One can also create a custom settings file as well\nwith the [New-CommandDataFile.ps1][02] script and use it by placing the created `JSON` into the\n`Settings` folder of the `PSScriptAnalyzer` module installation folder, then the `PowerShellVersion`\nparameter is just its filename (that can also be changed if desired). Note that the `core-6.0.2-*`\nfiles were removed in PSScriptAnalyzer 1.18 since PowerShell 6.0 reached end of life.\n\n<!-- link references -->\n[01]: ./UseCompatibleCmdlets.md\n[02]: https://github.com/PowerShell/PSScriptAnalyzer/blob/main/Utils/New-CommandDataFile.ps1",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidsemicolonsaslineterminators",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Semicolons as Line Terminators",
+    "description" : "This rule enforces that lines should not end with a semicolon in PowerShell scripts.",
+    "explanation" : "---\ndescription: Avoid semicolons as line terminators\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidSemicolonsAsLineTerminators\n---\n# AvoidSemicolonsAsLineTerminators\n\n**Severity Level: Warning**\n\n## Description\n\nLines should not end with a semicolon.\n\n> [!NOTE]\n> This rule is not enabled by default. The user needs to enable it through settings.\n\n## Example\n\n### Wrong\n\n```powershell\nInstall-Module -Name PSScriptAnalyzer; $a = 1 + $b;\n```\n\n```powershell\nInstall-Module -Name PSScriptAnalyzer;\n$a = 1 + $b\n```\n\n### Correct\n\n```powershell\nInstall-Module -Name PSScriptAnalyzer; $a = 1 + $b\n```\n\n```powershell\nInstall-Module -Name PSScriptAnalyzer\n$a = 1 + $b\n```\n\n## Configuration\n\n```powershell\nRules = @{\n    PSAvoidSemicolonsAsLineTerminators  = @{\n        Enable     = $true\n    }\n}\n```\n\n### Parameters\n\n#### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidshouldcontinuewithoutforce",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using ShouldContinue Without Boolean Force Parameter",
+    "description" : "Functions that use ShouldContinue should include a boolean Force parameter to allow users to bypass the confirmation prompt.",
+    "explanation" : "---\ndescription: Avoid Using ShouldContinue Without Boolean Force Parameter\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidShouldContinueWithoutForce\n---\n# AvoidShouldContinueWithoutForce\n\n**Severity Level: Warning**\n\n## Description\n\nFunctions that use ShouldContinue should have a boolean force parameter to allow user to bypass it.\n\nYou can get more details by running `Get-Help about_Functions_CmdletBindingAttribute` and\n`Get-Help about_Functions_Advanced_Methods` command in PowerShell.\n\n## How\n\nCall the `ShouldContinue` method in advanced functions when `ShouldProcess` method returns `$true`.\n\n## Example\n\n### Wrong\n\n```powershell\nFunction Test-ShouldContinue\n{\n    [CmdletBinding(SupportsShouldProcess=$true)]\n    Param\n    (\n        $MyString = 'blah'\n    )\n\n    if ($PsCmdlet.ShouldContinue('ShouldContinue Query', 'ShouldContinue Caption'))\n    {\n        ...\n    }\n}\n```\n\n### Correct\n\n```powershell\nFunction Test-ShouldContinue\n{\n    [CmdletBinding(SupportsShouldProcess=$true)]\n    Param\n    (\n        $MyString = 'blah',\n        [Switch]$Force\n    )\n\n    if ($Force -or $PsCmdlet.ShouldContinue('ShouldContinue Query', 'ShouldContinue Caption'))\n    {\n        ...\n    }\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidtrailingwhitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Trailing Whitespace",
+    "description" : "Ensures that no line ends with trailing whitespace characters.",
+    "explanation" : "---\ndescription: Avoid trailing whitespace\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidTrailingWhitespace\n---\n# AvoidTrailingWhitespace\n\n**Severity Level: Information**\n\n## Description\n\nLines should not end with whitespace characters. This can cause problems with the line-continuation\nbacktick, and also clutters up future commits to source control.",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingallowunencryptedauthentication",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using AllowUnencryptedAuthentication Parameter",
+    "description" : "Avoid sending credentials and secrets over unencrypted connections by not using the AllowUnencryptedAuthentication parameter in PowerShell cmdlets.",
+    "explanation" : "---\ndescription: Avoid sending credentials and secrets over unencrypted connections\nms.date: 02/28/2024\nms.topic: reference\ntitle: AvoidUsingAllowUnencryptedAuthentication\n---\n# AvoidUsingAllowUnencryptedAuthentication\n\n**Severity Level: Warning**\n\n## Description\n\nAvoid using the **AllowUnencryptedAuthentication** parameter of `Invoke-WebRequest` and\n`Invoke-RestMethod`. When using this parameter, the cmdlets send credentials and secrets over\nunencrypted connections. This should be avoided except for compatibility with legacy systems.\n\nFor more details, see [Invoke-RestMethod](xref:Microsoft.PowerShell.Utility.Invoke-RestMethod).\n\n## How\n\nAvoid using the **AllowUnencryptedAuthentication** parameter.\n\n## Example 1\n\n### Wrong\n\n```powershell\nInvoke-WebRequest foo -AllowUnencryptedAuthentication\n```\n\n### Correct\n\n```powershell\nInvoke-WebRequest foo\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingbrokenhashalgorithms",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using Broken Hash Algorithms MD5 or SHA-1",
+    "description" : "This rule enforces avoiding the use of broken hash algorithms MD5 and SHA-1 due to their vulnerabilities.",
+    "explanation" : "---\ndescription: Avoid using broken hash algorithms\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingBrokenHashAlgorithms\n---\n# AvoidUsingBrokenHashAlgorithms\n\n**Severity Level: Warning**\n\n## Description\n\nAvoid using the broken algorithms MD5 or SHA-1.\n\n## How\n\nReplace broken algorithms with secure alternatives. MD5 and SHA-1 should be replaced with SHA256,\nSHA384, SHA512, or other safer algorithms when possible, with MD5 and SHA-1 only being utilized by\nnecessity for backwards compatibility.\n\n## Example 1\n\n### Wrong\n\n```powershell\nGet-FileHash foo.txt -Algorithm MD5\n```\n\n### Correct\n\n```powershell\nGet-FileHash foo.txt -Algorithm SHA256\n```\n\n## Example 2\n\n### Wrong\n\n```powershell\nGet-FileHash foo.txt -Algorithm SHA1\n```\n\n### Correct\n\n```powershell\nGet-FileHash foo.txt\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingcmdletaliases",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Cmdlet Aliases",
+    "description" : "This rule discourages the use of cmdlet aliases or omitting the 'Get-' prefix in PowerShell scripts to improve readability and maintainability.",
+    "explanation" : "---\ndescription: Avoid Using Cmdlet Aliases or omitting the 'Get-' prefix.\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingCmdletAliases\n---\n# AvoidUsingCmdletAliases\n\n**Severity Level: Warning**\n\n## Description\n\nAn alias is an alternate name or nickname for a cmdlet or for a command element, such as a function,\nscript, file, or executable file. You can use the alias instead of the command name in any\nPowerShell commands.\n\nThere are also implicit aliases. When PowerShell cannot find the cmdlet name, it will try to append\n`Get-` to the command as a last resort. Therefore using the command `verb` will execute `Get-Verb`.\n\nEvery PowerShell author learns the actual command names, but different authors learn and use\ndifferent aliases. Aliases can make code difficult to read, understand and impact availability.\n\nUsing the full command name makes it easier to maintain your scripts in the the future.\n\nUsing the full command names also allows for syntax highlighting in sites and applications like\nGitHub and Visual Studio Code.\n\n## How to Fix\n\nUse the full cmdlet name and not an alias.\n\n## Alias Allowlist\n\nTo prevent `PSScriptAnalyzer` from flagging your preferred aliases, create an allowlist of the\naliases in your settings file and point `PSScriptAnalyzer` to use the settings file. For example, to\ndisable `PSScriptAnalyzer` from flagging `cd`, which is an alias of `Set-Location`, set the settings\nfile content to the following.\n\n```powershell\n# PSScriptAnalyzerSettings.psd1\n\n@{\n    'Rules' = @{\n        'PSAvoidUsingCmdletAliases' = @{\n            'allowlist' = @('cd')\n        }\n    }\n}\n```\n\n## Example\n\n### Wrong\n\n```powershell\ngps | Where-Object {$_.WorkingSet -gt 20000000}\n```\n\n### Correct\n\n```powershell\nGet-Process | Where-Object {$_.WorkingSet -gt 20000000}\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingcomputernamehardcoded",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Avoid Hardcoding ComputerName Parameter",
+    "description" : "This rule checks that the ComputerName parameter of a cmdlet is not hardcoded to avoid exposing sensitive system information.",
+    "explanation" : "---\ndescription: Avoid Using ComputerName Hardcoded\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingComputerNameHardcoded\n---\n# AvoidUsingComputerNameHardcoded\n\n**Severity Level: Error**\n\n## Description\n\nThe names of computers should never be hard coded as this will expose sensitive information. The\n`ComputerName` parameter should never have a hard coded value.\n\n## How\n\nRemove hard coded computer names.\n\n## Example 1\n\n### Wrong\n\n```powershell\nFunction Invoke-MyRemoteCommand ()\n{\n    Invoke-Command -Port 343 -ComputerName hardcoderemotehostname\n}\n```\n\n### Correct\n\n```powershell\nFunction Invoke-MyCommand ($ComputerName)\n{\n    Invoke-Command -Port 343 -ComputerName $ComputerName\n}\n```\n\n## Example 2\n\n### Wrong\n\n```powershell\nFunction Invoke-MyLocalCommand ()\n{\n    Invoke-Command -Port 343 -ComputerName hardcodelocalhostname\n}\n```\n\n### Correct\n\n```powershell\nFunction Invoke-MyLocalCommand ()\n{\n    Invoke-Command -Port 343 -ComputerName $env:COMPUTERNAME\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingconverttosecurestringwithplaintext",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Avoid Using ConvertTo-SecureString with Plain Text",
+    "description" : "This rule detects usage of ConvertTo-SecureString with the AsPlainText parameter, which exposes secure information.",
+    "explanation" : "---\ndescription: Avoid Using SecureString With Plain Text\nms.date: 01/28/2025\nms.topic: reference\ntitle: AvoidUsingConvertToSecureStringWithPlainText\n---\n# AvoidUsingConvertToSecureStringWithPlainText\n\n**Severity Level: Error**\n\n## Description\n\nThe use of the `AsPlainText` parameter with the `ConvertTo-SecureString` command can expose secure\ninformation.\n\n## How\n\nUse a standard encrypted variable to perform any SecureString conversions.\n\n## Recommendations\n\nIf you do need an ability to retrieve the password from somewhere without prompting the user,\nconsider using the\n[SecretStore](https://www.powershellgallery.com/packages/Microsoft.PowerShell.SecretStore)\nmodule from the PowerShell Gallery.\n\n## Example\n\n### Wrong\n\n```powershell\n$UserInput = Read-Host 'Please enter your secure code'\n$EncryptedInput = ConvertTo-SecureString -String $UserInput -AsPlainText -Force\n```\n\n### Correct\n\n```powershell\n$SecureUserInput = Read-Host 'Please enter your secure code' -AsSecureString\n```",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingdeprecatedmanifestfields",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Avoid Using Deprecated Manifest Fields",
+    "description" : "This rule checks PowerShell module manifest files to ensure that deprecated fields like 'ModuleToProcess' are not used and replaced with the latest fields such as 'RootModule'.",
+    "explanation" : "---\ndescription: Avoid Using Deprecated Manifest Fields\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingDeprecatedManifestFields\n---\n# AvoidUsingDeprecatedManifestFields\n\n**Severity Level: Warning**\n\n## Description\n\nIn PowerShell 5.0, a number of fields in module manifest files (`.psd1`) have been changed.\n\nThe field `ModuleToProcess` has been replaced with the `RootModule` field.\n\n## How\n\nReplace `ModuleToProcess` with `RootModule` in the module manifest.\n\n## Example\n\n### Wrong\n\n```powershell\nModuleToProcess ='psscriptanalyzer'\n\nModuleVersion = '1.0'\n```\n\n### Correct\n\n```powershell\nRootModule ='psscriptanalyzer'\n\nModuleVersion = '1.0'\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingdoublequotesforconstantstring",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "AvoidUsingDoubleQuotesForConstantString",
+    "description" : "Enforce using single quotes for constant strings instead of double quotes.",
+    "explanation" : "---\ndescription: Avoid using double quotes if the string is constant.\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingDoubleQuotesForConstantString\n---\n# AvoidUsingDoubleQuotesForConstantString\n\n**Severity Level: Information**\n\n## Description\n\nSingle quotes should be used when the value of a string is constant. A constant string doesn't\ncontain variables or expressions intended to insert values into the string, such as\n`\"$PID-$(hostname)\"`).\n\nThis makes the intent clearer that the string is a constant and makes it easier to use some special\ncharacters such as `$` within that string expression without needing to escape them.\n\nThere are exceptions to that when double quoted strings are more readable. For example, when the\nstring value itself must contain a single quote or other special characters, such as newline\n(`` \"`n\" ``), are already being escaped. The rule does not warn in these cases.\n\n## Example\n\n### Wrong\n\n```powershell\n$constantValue = \"I Love PowerShell\"\n```\n\n### Correct\n\n```powershell\n$constantValue = 'I Love PowerShell'\n```",
+    "enabled" : false,
+    "timeToFix" : 1,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingemptycatchblock",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Empty Catch Block",
+    "description" : "This rule detects empty catch blocks that swallow errors without handling them.",
+    "explanation" : "---\ndescription: Avoid Using Empty Catch Block\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingEmptyCatchBlock\n---\n# AvoidUsingEmptyCatchBlock\n\n**Severity Level: Warning**\n\n## Description\n\nEmpty catch blocks are considered a poor design choice because any errors occurring in a\n`try` block cannot be handled.\n\n## How\n\nUse `Write-Error` or `throw` statements within the catch block.\n\n## Example\n\n### Wrong\n\n```powershell\ntry\n{\n    1/0\n}\ncatch [DivideByZeroException]\n{\n}\n```\n\n### Correct\n\n```powershell\ntry\n{\n    1/0\n}\ncatch [DivideByZeroException]\n{\n    Write-Error 'DivideByZeroException'\n}\n\ntry\n{\n    1/0\n}\ncatch [DivideByZeroException]\n{\n    throw 'DivideByZeroException'\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusinginvokeexpression",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Using Invoke-Expression",
+    "description" : "This rule checks for the use of the Invoke-Expression cmdlet which executes a string as a command, potentially leading to code injection vulnerabilities.",
+    "explanation" : "---\ndescription: Avoid Using Invoke-Expression\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingInvokeExpression\n---\n# AvoidUsingInvokeExpression\n\n**Severity Level: Warning**\n\n## Description\n\nCare must be taken when using the `Invoke-Expression` command. The `Invoke-Expression` executes the\nspecified string and returns the results.\n\nCode injection into your application or script can occur if the expression passed as a string\nincludes any data provided from the user.\n\n## How\n\nRemove the use of `Invoke-Expression`.\n\n## Example\n\n### Wrong\n\n```powershell\nInvoke-Expression 'Get-Process'\n```\n\n### Correct\n\n```powershell\nGet-Process\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingplaintextforpassword",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Avoid Using Plain Text for Password Parameters",
+    "description" : "Ensures that password parameters are not declared as plain text strings but use SecureString type to protect sensitive information.",
+    "explanation" : "---\ndescription: Avoid Using Plain Text For Password Parameter\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingPlainTextForPassword\n---\n# AvoidUsingPlainTextForPassword\n\n**Severity Level: Warning**\n\n## Description\n\nPassword parameters that take in plaintext will expose passwords and compromise the security of your\nsystem. Passwords should be stored in the **SecureString** type.\n\nThe following parameters are considered password parameters (this is not case sensitive):\n\n- Password\n- Pass\n- Passwords\n- Passphrase\n- Passphrases\n- PasswordParam\n\nIf a parameter is defined with a name in the above list, it should be declared with type\n**SecureString**.\n\n## How\n\nChange the type to **SecureString**.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [string]\n        $Password\n    )\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [SecureString]\n        $Password\n    )\n    ...\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingpositionalparameters",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Positional Parameters",
+    "description" : "This rule enforces using named parameters instead of positional parameters when calling commands with three or more parameters to improve readability and reduce errors.",
+    "explanation" : "---\ndescription: Avoid Using Positional Parameters\nms.date: 02/13/2024\nms.topic: reference\ntitle: AvoidUsingPositionalParameters\n---\n# AvoidUsingPositionalParameters\n\n** Severity Level: Information **\n\n## Description\n\nUsing positional parameters reduces the readability of code and can introduce errors. It is possible\nthat a future version of the cmdlet could change in a way that would break existing scripts if calls\nto the cmdlet rely on the position of the parameters.\n\nFor simple cmdlets with only a few positional parameters, the risk is much smaller. To prevent this\nrule from being too noisy, this rule gets only triggered when there are 3 or more parameters\nsupplied. A simple example where the risk of using positional parameters is negligible, is\n`Test-Path $Path`.\n\n## Configuration\n\n```powershell\nRules = @{\n    PSAvoidUsingPositionalParameters = @{\n        CommandAllowList = 'Join-Path', 'MyCmdletOrScript'\n        Enable           = $true\n    }\n}\n```\n\n### Parameters\n\n#### CommandAllowList: string[] (Default value is @()')\n\nCommands or scripts to be excluded from this rule.\n\n#### Enable: bool (Default value is `$true`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n## How\n\nUse full parameter names when calling commands.\n\n## Example\n\n### Wrong\n\n```powershell\nGet-Command ChildItem Microsoft.PowerShell.Management\n```\n\n### Correct\n\n```powershell\nGet-Command -Noun ChildItem -Module Microsoft.PowerShell.Management\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingusernameandpasswordparams",
+    "level" : "High",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Username and Password Parameters",
+    "description" : "Functions should accept credentials as a PSCredential object rather than separate username and password parameters.",
+    "explanation" : "---\ndescription: Avoid Using Username and Password Parameters\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingUsernameAndPasswordParams\n---\n# AvoidUsingUsernameAndPasswordParams\n\n**Severity Level: Error**\n\n## Description\n\nTo standardize command parameters, credentials should be accepted as objects of type\n**PSCredential**. Functions should not make use of username or password parameters.\n\n## How\n\nChange the parameter to type **PSCredential**.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [String]\n        $Username,\n        [SecureString]\n        $Password\n    )\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Test-Script\n{\n    [CmdletBinding()]\n    Param\n    (\n        [PSCredential]\n        $Credential\n    )\n    ...\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingwmicmdlet",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Avoid Using Deprecated WMI Cmdlets",
+    "description" : "This rule enforces avoiding the use of deprecated WMI cmdlets like Get-WmiObject and recommends using the newer CIM cmdlets instead.",
+    "explanation" : "---\ndescription: Avoid Using Get-WMIObject, Remove-WMIObject, Invoke-WmiMethod, Register-WmiEvent, Set-WmiInstance\nms.date: 06/28/2023\nms.topic: reference\ntitle: AvoidUsingWMICmdlet\n---\n# AvoidUsingWMICmdlet\n\n**Severity Level: Warning**\n\n## Description\n\nAs of PowerShell 3.0, the CIM cmdlets should be used over the WMI cmdlets.\n\nThe following cmdlets should not be used:\n\n- `Get-WmiObject`\n- `Remove-WmiObject`\n- `Invoke-WmiMethod`\n- `Register-WmiEvent`\n- `Set-WmiInstance`\n\nUse the following cmdlets instead:\n\n- `Get-CimInstance`\n- `Remove-CimInstance`\n- `Invoke-CimMethod`\n- `Register-CimIndicationEvent`\n- `Set-CimInstance`\n\nThe CIM cmdlets comply with WS-Management (WSMan) standards and with the Common Information Model\n(CIM) standard, allowing for the management of Windows and non-Windows operating systems.\n\n## How\n\nChange to the equivalent CIM based cmdlet.\n\n- `Get-WmiObject` -> `Get-CimInstance`\n- `Remove-WmiObject` -> `Remove-CimInstance`\n- `Invoke-WmiMethod` -> `Invoke-CimMethod`\n- `Register-WmiEvent` -> `Register-CimIndicationEvent`\n- `Set-WmiInstance` -> `Set-CimInstance`\n\n## Example\n\n### Wrong\n\n```powershell\nGet-WmiObject -Query 'Select * from Win32_Process where name LIKE \"myprocess%\"' | Remove-WmiObject\nInvoke-WmiMethod -Class Win32_Process -Name 'Create' -ArgumentList @{ CommandLine = 'notepad.exe' }\n```\n\n### Correct\n\n```powershell\nGet-CimInstance -Query 'Select * from Win32_Process where name LIKE \"myprocess%\"' | Remove-CIMInstance\nInvoke-CimMethod -ClassName Win32_Process -MethodName 'Create' -Arguments @{ CommandLine = 'notepad.exe' }\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psavoidusingwritehost",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Write-Host",
+    "description" : "This rule discourages the use of the Write-Host cmdlet in PowerShell scripts because it produces host-specific output that cannot be captured, suppressed, or redirected, unlike other output cmdlets.",
+    "explanation" : "---\ndescription: Avoid Using Write-Host\nms.date: 12/05/2024\nms.topic: reference\ntitle: AvoidUsingWriteHost\n---\n# AvoidUsingWriteHost\n\n**Severity Level: Warning**\n\n## Description\n\nThe primary purpose of the `Write-Host` cmdlet is to produce display-only output in the host. For\nexample: printing colored text or prompting the user for input when combined with `Read-Host`.\n`Write-Host` uses the `ToString()` method to write the output. The particular result depends on the\nprogram that's hosting PowerShell. The output from `Write-Host` isn't sent to the pipeline. To\noutput data to the pipeline, use `Write-Output` or implicit output.\n\nThe use of `Write-Host` in a function is discouraged unless the function uses the `Show` verb. The\n`Show` verb explicitly means _display information to the user_. This rule doesn't apply to functions\nwith the `Show` verb.\n\n## How\n\nReplace `Write-Host` with `Write-Output` or `Write-Verbose` depending on whether the intention is\nlogging or returning one or more objects.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Get-MeaningOfLife\n{\n    Write-Host 'Computing the answer to the ultimate question of life, the universe and everything'\n    Write-Host 42\n}\n```\n\n### Correct\n\nUse `Write-Verbose` for informational messages. The user can decide whether to see the message by\nproviding the **Verbose** parameter.\n\n```powershell\nfunction Get-MeaningOfLife\n{\n    [CmdletBinding()]Param() # makes it possible to support Verbose output\n\n    Write-Verbose 'Computing the answer to the ultimate question of life, the universe and everything'\n    Write-Output 42\n}\n\nfunction Show-Something\n{\n    Write-Host 'show something on screen'\n}\n```\n\n## More information\n\n[Write-Host](xref:Microsoft.PowerShell.Utility.Write-Host)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psdscdscexamplespresent",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Ensure DSC Examples Are Present",
+    "description" : "Checks that an Examples folder with sample configurations exists for each DSC resource module.",
+    "explanation" : "---\ndescription: DSC examples are present\nms.date: 06/28/2023\nms.topic: reference\ntitle: DSCDscExamplesPresent\n---\n# DscExamplesPresent\n\n**Severity Level: Information**\n\n## Description\n\nChecks that DSC examples for given resource are present.\n\n## How\n\nTo fix a violation of this rule, please make sure `Examples` directory is present:\n\n- For non-class based resources it should exist at the same folder level as `DSCResources` folder.\n- For class based resources it should be present at the same folder level as resource `.psm1` file.\n\nThe `Examples` folder should contain a sample configuration for given resource. The filename should\ncontain the resource's name.\n\n## Example\n\n### Non-class based resource\n\nLet's assume we have non-class based resource with a following file structure:\n\n- xAzure\n  - DSCResources\n    - MSFT_xAzureSubscription\n      - MSFT_xAzureSubscription.psm1\n      - MSFT_xAzureSubscription.schema.mof\n\nIn this case, to fix this warning, we should add examples in a following way:\n\n- xAzure\n  - DSCResources\n    - MSFT_xAzureSubscription\n      - MSFT_xAzureSubscription.psm1\n      - MSFT_xAzureSubscription.schema.mof\n  - Examples\n    - MSFT_xAzureSubscription_AddSubscriptionExample.ps1\n    - MSFT_xAzureSubscription_RemoveSubscriptionExample.ps1\n\n### Class based resource\n\nLet's assume we have class based resource with a following file structure:\n\n- MyDscResource\n  - MyDscResource.psm1\n  - MyDscResource.psd1\n\nIn this case, to fix this warning, we should add examples in a following way:\n\n- MyDscResource\n  - MyDscResource.psm1\n  - MyDscResource.psd1\n  - Examples\n    - MyDscResource_Example1.ps1\n    - MyDscResource_Example2.ps1",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psdscdsctestspresent",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Ensure DSC Tests Are Present for Resources",
+    "description" : "Checks that DSC resource modules contain a 'Tests' folder with test scripts named after each resource.",
+    "explanation" : "---\ndescription: Dsc tests are present\nms.date: 06/28/2023\nms.topic: reference\ntitle: DSCDscTestsPresent\n---\n# DscTestsPresent\n\n**Severity Level: Information**\n\n## Description\n\nChecks that DSC tests for given resource are present.\n\n## How\n\nTo fix a violation of this rule, please make sure `Tests` directory is present:\n\n- For non-class based resources it should exist at the same folder level as `DSCResources` folder.\n- For class based resources it should be present at the same folder level as resource `.psm1` file.\n\nThe `Tests` folder should contain test script for given resource. The filename should contain the\nresource's name.\n\n## Example\n\n### Non-class based resource\n\nLet's assume we have non-class based resource with a following file structure:\n\n- xAzure\n  - DSCResources\n    - MSFT_xAzureSubscription\n      - MSFT_xAzureSubscription.psm1\n      - MSFT_xAzureSubscription.schema.mof\n\nIn this case, to fix this warning, we should add tests in a following way:\n\n- xAzure\n  - DSCResources\n    - MSFT_xAzureSubscription\n      - MSFT_xAzureSubscription.psm1\n      - MSFT_xAzureSubscription.schema.mof\n  - Tests\n    - MSFT_xAzureSubscription_Tests.ps1\n\n### Class based resource\n\nLet's assume we have class based resource with a following file structure:\n\n- MyDscResource\n  - MyDscResource.psm1\n  - MyDscResource.psd1\n\nIn this case, to fix this warning, we should add tests in a following way:\n\n- MyDscResource\n  - MyDscResource.psm1\n  - MyDscResource.psd1\n  - Tests\n    - MyDscResource_Tests.ps1",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psdscreturncorrecttypesfordscfunctions",
+    "level" : "Info",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Correct Return Types For DSC Functions",
+    "description" : "Ensures that DSC resource functions return the correct type according to DSC specification.",
+    "explanation" : "---\ndescription: Return Correct Types For DSC Functions\nms.date: 06/28/2023\nms.topic: reference\ntitle: DSCReturnCorrectTypesForDSCFunctions\n---\n# ReturnCorrectTypesForDSCFunctions\n\n**Severity Level: Information**\n\n## Description\n\nThe functions in DSC resources have specific return objects.\n\nFor non-class based resources:\n\n- `Set-TargetResource` must not return any value.\n- `Test-TargetResource` must return a boolean.\n- `Get-TargetResource` must return a hash table.\n\nFor class based resources:\n\n- `Set` must not return any value.\n- `Test` must return a boolean.\n- `Get` must return an instance of the DSC class.\n\n## How\n\nEnsure that each function returns the correct type.\n\n## Example 1\n\n### Wrong\n\n```powershell\nfunction Get-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Set-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Test-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Get-TargetResource\n{\n    [OutputType([Hashtable])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Set-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Test-TargetResource\n{\n    [OutputType([System.Boolean])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n```\n\n## Example 2\n\n### Wrong\n\n```powershell\n[DscResource()]\nclass MyDSCResource\n{\n    [DscProperty(Key)]\n    [string] $Name\n\n    [String] Get()\n    {\n        ...\n    }\n\n    [String] Set()\n    {\n        ...\n    }\n\n    [bool] Test()\n    {\n        ...\n    }\n}\n```\n\n### Correct\n\n```powershell\n[DscResource()]\nclass MyDSCResource\n{\n    [DscProperty(Key)]\n    [string] $Name\n\n    [MyDSCResource] Get()\n    {\n        ...\n    }\n\n    [void] Set()\n    {\n        ...\n    }\n\n    [bool] Test()\n    {\n        ...\n    }\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psdscstandarddscfunctionsinresource",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Standard DSC Functions in Resource",
+    "description" : "Ensures that Desired State Configuration (DSC) resources implement the required standard functions for proper operation.",
+    "explanation" : "---\ndescription: Use Standard Get/Set/Test TargetResource functions in DSC Resource\nms.date: 06/28/2023\nms.topic: reference\ntitle: DSCStandardDSCFunctionsInResource\n---\n# StandardDSCFunctionsInResource\n\n**Severity Level: Error**\n\n## Description\n\nAll DSC resources are required to implement the correct functions.\n\nFor non-class based resources:\n\n- `Set-TargetResource`\n- `Test-TargetResource`\n- `Get-TargetResource`\n\nFor class based resources:\n\n- `Set`\n- `Test`\n- `Get`\n\n## How\n\nAdd the missing functions to the resource.\n\n## Example 1\n\n### Wrong\n\n```powershell\nfunction Get-TargetResource\n{\n    [OutputType([Hashtable])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Set-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Get-TargetResource\n{\n    [OutputType([Hashtable])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Set-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Test-TargetResource\n{\n    [OutputType([System.Boolean])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n```\n\n## Example 2\n\n### Wrong\n\n```powershell\n[DscResource()]\nclass MyDSCResource\n{\n    [DscProperty(Key)]\n    [string] $Name\n\n    [void] Set()\n    {\n        ...\n    }\n\n    [bool] Test()\n    {\n        ...\n    }\n}\n\n### Correct\n\n```powershell\n[DscResource()]\nclass MyDSCResource\n{\n    [DscProperty(Key)]\n    [string] $Name\n\n    [MyDSCResource] Get()\n    {\n        ...\n    }\n\n    [void] Set()\n    {\n        ...\n    }\n\n    [bool] Test()\n    {\n        ...\n    }\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psdscuseidenticalmandatoryparametersfordsc",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Identical Mandatory Parameters for DSC Get/Test/Set TargetResource Functions",
+    "description" : "Ensures that all mandatory parameters declared as Key or Required in the DSC mof file are consistently present in the Get-TargetResource, Set-TargetResource, and Test-TargetResource functions.",
+    "explanation" : "---\ndescription: Use identical mandatory parameters for DSC Get/Test/Set TargetResource functions\nms.date: 06/28/2023\nms.topic: reference\ntitle: DSCUseIdenticalMandatoryParametersForDSC\n---\n# UseIdenticalMandatoryParametersForDSC\n\n**Severity Level: Error**\n\n## Description\n\nFor script based DSC resources, if a property is declared with attributes `Key` of `Required` in a\nmof file, then is should be present as a mandatory parameter in the corresponding\n`Get-TargetResource`, `Set-TargetResource` and `Test-TargetResource` functions.\n\n## How\n\nMake sure all the properties with `Key` and `Required` attributes have equivalent mandatory\nparameters in the `Get/Set/Test` functions.\n\n## Example\n\nConsider the following `mof` file.\n\n```powershell\nclass WaitForAny : OMI_BaseResource\n{\n    [key, Description(\"Name of Resource on remote machine\")]\n    string Name;\n\n    [required, Description(\"List of remote machines\")]\n    string NodeName[];\n};\n```\n\n### Wrong\n\n```powershell\nfunction Get-TargetResource\n{\n    [CmdletBinding()]\n    param\n    (\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Message\n    )\n}\n\nfunction Set-TargetResource\n{\n    [CmdletBinding()]\n    param\n    (\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Message,\n\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Name\n    )\n}\n\nfunction Test-TargetResource\n{\n    [CmdletBinding()]\n    param\n    (\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Message,\n\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Name\n    )\n}\n```\n\n### Correct\n\n```powershell\nfunction Get-TargetResource\n{\n    [CmdletBinding()]\n    param\n    (\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Message,\n\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Name\n    )\n}\n\nfunction Set-TargetResource\n{\n    [CmdletBinding()]\n    param\n    (\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Message,\n\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Name\n    )\n}\n\nfunction Test-TargetResource\n{\n    [CmdletBinding()]\n    param\n    (\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Message,\n\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [String]\n        $Name\n    )\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psdscuseidenticalparametersfordsc",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Identical Parameters For DSC Test and Set Functions",
+    "description" : "Ensures that the Get-TargetResource, Test-TargetResource, and Set-TargetResource functions in a DSC Resource have the same parameters.",
+    "explanation" : "---\ndescription: Use Identical Parameters For DSC Test and Set Functions\nms.date: 06/28/2023\nms.topic: reference\ntitle: DSCUseIdenticalParametersForDSC\n---\n# UseIdenticalParametersForDSC\n\n**Severity Level: Error**\n\n## Description\n\nThe `Get-TargetResource`, `Test-TargetResource` and `Set-TargetResource` functions of DSC Resource\nmust have the same parameters.\n\n## How\n\nCorrect the parameters for the functions in DSC resource.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Get-TargetResource\n{\n    [OutputType([Hashtable])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name,\n\n        [String]\n        $TargetResource\n    )\n    ...\n}\n\nfunction Set-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n\nfunction Test-TargetResource\n{\n    [OutputType([System.Boolean])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name\n    )\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Get-TargetResource\n{\n    [OutputType([Hashtable])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name,\n\n        [String]\n        $TargetResource\n    )\n    ...\n}\n\nfunction Set-TargetResource\n{\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name,\n\n        [String]\n        $TargetResource\n    )\n    ...\n}\n\nfunction Test-TargetResource\n{\n    [OutputType([System.Boolean])]\n    param\n    (\n        [parameter(Mandatory = $true)]\n        [String]\n        $Name,\n\n        [String]\n        $TargetResource\n    )\n    ...\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psdscuseverbosemessageindscresource",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Use Verbose Message in DSC Resource",
+    "description" : "Ensures that DSC resource functions include Write-Verbose calls to emit informative verbose messages.",
+    "explanation" : "---\ndescription: Use verbose message in DSC resource\nms.date: 06/28/2023\nms.topic: reference\ntitle: DSCUseVerboseMessageInDSCResource\n---\n# UseVerboseMessageInDSCResource\n\n**Severity Level: Information**\n\n## Description\n\nBest practice recommends that additional user information is provided within commands, functions and\nscripts using `Write-Verbose`.\n\n## How\n\nMake use of the `Write-Verbose` command.\n\n## Example\n\n### Wrong\n\n```powershell\nFunction Test-Function\n{\n    [CmdletBinding()]\n    Param()\n    ...\n}\n```\n\n### Correct\n\n```powershell\nFunction Test-Function\n{\n    [CmdletBinding()]\n    Param()\n    Write-Verbose 'Verbose output'\n    ...\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psmisleadingbacktick",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Ending Lines with a Backtick Followed by Whitespace",
+    "description" : "Detects lines that end with a backtick character followed by whitespace, which is misleading as backticks are typically used for line continuation.",
+    "explanation" : "---\ndescription: Misleading Backtick\nms.date: 06/28/2023\nms.topic: reference\ntitle: MisleadingBacktick\n---\n# MisleadingBacktick\n\n**Severity Level: Warning**\n\n## Description\n\nChecks that lines don't end with a backtick followed by whitespace.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psmissingmodulemanifestfield",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Ensure Required Module Manifest Fields Are Present",
+    "description" : "Checks that essential fields like 'ModuleVersion' are included in a PowerShell module manifest to ensure validity.",
+    "explanation" : "---\ndescription: Module Manifest Fields\nms.date: 06/28/2023\nms.topic: reference\ntitle: MissingModuleManifestField\n---\n# MissingModuleManifestField\n\n**Severity Level: Warning**\n\n## Description\n\nA module manifest is a `.psd1` file that contains a hash table. The keys and values in the hash\ntable describe the contents and attributes of the module, define the prerequisites, and determine\nhow the components are processed.\n\nModule manifests must contain the following keys (and a corresponding value) to be considered valid:\n\n- `ModuleVersion`\n\nAll other keys are optional. The order of the entries is not important.\n\n## How\n\nPlease consider adding the missing fields to the manifest.\n\n## Example\n\n### Wrong\n\n```powershell\n@{\n    Author              = 'PowerShell Author'\n    NestedModules       = @('.\\mymodule.psm1')\n    FunctionsToExport   = '*'\n    CmdletsToExport     = '*'\n    VariablesToExport   = '*'\n}\n```\n\n### Correct\n\n```powershell\n@{\n    ModuleVersion       = '1.0'\n    Author              = 'PowerShell Author'\n    NestedModules       = @('.\\mymodule.psm1')\n    FunctionsToExport   = '*'\n    CmdletsToExport     = '*'\n    VariablesToExport   = '*'\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psplaceclosebrace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Close Brace Placement",
+    "description" : "Ensures that close braces are placed on a new line by themselves without an empty line before them and optionally followed by a new line.",
+    "explanation" : "---\ndescription: Place close braces\nms.date: 06/28/2023\nms.topic: reference\ntitle: PlaceCloseBrace\n---\n# PlaceCloseBrace\n\n**Severity Level: Warning**\n\n## Description\n\nClose brace placement should follow a consistent style. It should be on a new line by itself and\nshould not be followed by an empty line.\n\n**Note**: This rule is not enabled by default. The user needs to enable it through settings.\n\n## Configuration\n\n```powershell\nRules = @{\n    PSPlaceCloseBrace = @{\n        Enable = $true\n        NoEmptyLineBefore = $false\n        IgnoreOneLineBlock = $true\n        NewLineAfter = $true\n    }\n}\n```\n\n### Parameters\n\n#### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n#### NoEmptyLineBefore: bool (Default value is `$false`)\n\nCreate violation if there is an empty line before a close brace.\n\n#### IgnoreOneLineBlock: bool (Default value is `$true`)\n\nIndicates if closed brace pairs in a one line block should be ignored or not. For example,\n`$x = if ($true) { 'blah' } else { 'blah blah' }`, if the property is set to true then the rule\ndoesn't fire a violation.\n\n#### NewLineAfter: bool (Default value is `$true`)\n\nIndicates if a new line should follow a close brace. If set to true a close brace should be followed\nby a new line.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psplaceopenbrace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "EnforceConsistentOpenBracePlacement",
+    "description" : "Enforces consistent placement of open braces either on the same line as the preceding expression or on a new line.",
+    "explanation" : "---\ndescription: Place open braces consistently\nms.date: 06/28/2023\nms.topic: reference\ntitle: PlaceOpenBrace\n---\n# PlaceOpenBrace\n\n**Severity Level: Warning**\n\n## Description\n\nOpen brace placement should follow a consistent style. It can either follow K&R style (on same line)\nor the Allman style (not on same line).\n\n**Note**: This rule is not enabled by default. The user needs to enable it through settings.\n\n## Configuration\n\n```powershell\nRules = @{\n    PSPlaceOpenBrace = @{\n        Enable = $true\n        OnSameLine = $true\n        NewLineAfter = $true\n        IgnoreOneLineBlock = $true\n    }\n}\n```\n\n### Parameters\n\n#### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n#### OnSameLine: bool (Default value is `$true`)\n\nEnforce open brace to be on the same line as that of its preceding keyword.\n\n#### NewLineAfter: bool (Default value is `$true`)\n\nEnforce a new line character after an open brace. The default value is true.\n\n#### IgnoreOneLineBlock: bool (Default value is `$true`)\n\nIndicates if open braces in a one line block should be ignored or not. For example,\n`$x = if ($true) { 'blah' } else { 'blah blah' }`, if the property is set to true then the rule\ndoesn't fire a violation.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pspossibleincorrectcomparisonwithnull",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce $null on Left Side of Equality Comparisons",
+    "description" : "Ensures that in PowerShell equality comparisons, $null is always on the left side of the operator to guarantee correct comparison behavior.",
+    "explanation" : "---\ndescription: Null Comparison\nms.date: 12/03/2024\nms.topic: reference\ntitle: PossibleIncorrectComparisonWithNull\n---\n# PossibleIncorrectComparisonWithNull\n\n**Severity Level: Warning**\n\n## Description\n\nTo ensure that PowerShell performs comparisons correctly, the `$null` element should be on the left\nside of the operator.\n\nThere are multiple reasons why this occurs:\n\n- `$null` is a scalar value. When the value on the left side of an operator is a scalar, comparison\n  operators return a **Boolean** value. When the value is a collection, the comparison operators\n  return any matching values or an empty array if there are no matches in the collection.\n- PowerShell performs type casting on the right-hand operand, resulting in incorrect comparisons\n  when `$null` is cast to other scalar types.\n\nThe only way to reliably check if a value is `$null` is to place `$null` on the left side of the\noperator so that a scalar comparison is performed.\n\n## How\n\nMove `$null` to the left side of the comparison.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test-CompareWithNull\n{\n    if ($DebugPreference -eq $null)\n    {\n    }\n}\n```\n\n### Correct\n\n```powershell\nfunction Test-CompareWithNull\n{\n    if ($null -eq $DebugPreference)\n    {\n    }\n}\n```\n\n## Try it Yourself\n\n```powershell\n# This example returns 'false' because the comparison does not return any objects from the array\nif (@() -eq $null) { 'true' } else { 'false' }\n# This example returns 'true' because the array is empty\nif ($null -ne @()) { 'true' } else { 'false' }\n```\n\nThis is how the comparison operator works by-design. But, as demonstrated, this can lead\nto non-intuitive behavior, especially when the intent is simple test for null.\n\nThe following example demonstrates the designed behavior of the comparison operator when the\nleft-hand side is a collection. Each element in the collection is compared to the right-hand side\nvalue. When true, that element of the collection is returned.\n\n```powershell\nPS> 1,2,3,1,2 -eq $null\nPS> 1,2,3,1,2 -eq 1\n1\n1\nPS> (1,2,3,1,2 -eq $null).count\n0\nPS> (1,2,$null,3,$null,1,2 -eq $null).count\n2\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pspossibleincorrectusageofassignmentoperator",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Warn on Possible Incorrect Usage of Assignment Operator in Conditional Statements",
+    "description" : "Detects use of '=' or '==' operators inside if, elseif, while, and do-while statements in PowerShell where '-eq' should be used for comparison.",
+    "explanation" : "---\ndescription: Equal sign is not an assignment operator. Did you mean the equality operator \\'-eq\\'?\nms.date: 06/28/2023\nms.topic: reference\ntitle: PossibleIncorrectUsageOfAssignmentOperator\n---\n# PossibleIncorrectUsageOfAssignmentOperator\n\n**Severity Level: Information**\n\n## Description\n\nIn many programming languages, the equality operator is denoted as `==` or `=`, but `PowerShell`\nuses `-eq`. Therefore, it can easily happen that the wrong operator is used unintentionally. This\nrule catches a few special cases where the likelihood of that is quite high.\n\nThe rule looks for usages of `==` and `=` operators inside `if`, `else if`, `while` and `do-while`\nstatements but it does not warn if any kind of command or expression is used at the right hand side\nas this is probably by design.\n\n## Example\n\n### Wrong\n\n```powershell\nif ($a = $b)\n{\n    ...\n}\n```\n\n```powershell\nif ($a == $b)\n{\n\n}\n```\n\n### Correct\n\n```powershell\nif ($a -eq $b) # Compare $a with $b\n{\n    ...\n}\n```\n\n```powershell\nif ($a = Get-Something) # Only execute action if command returns something and assign result to variable\n{\n    Do-SomethingWith $a\n}\n```\n\n## Implicit suppression using Clang style\n\nThere are some rare cases where assignment of variable inside an `if` statement is by design.\nInstead of suppressing the rule, one can also signal that assignment was intentional by wrapping the\nexpression in extra parenthesis. An exception for this is when `$null` is used on the LHS because\nthere is no use case for this.\n\n```powershell\nif (($shortVariableName = $SuperLongVariableName['SpecialItem']['AnotherItem']))\n{\n    ...\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pspossibleincorrectusageofredirectionoperator",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Incorrect Usage of '>' or '>=' as Comparison Operators in PowerShell Conditionals",
+    "description" : "Warns when '>' or '>=' redirection operators are used inside if, elseif, while, or do-while statements instead of the correct PowerShell comparison operators '-gt' or '-ge'.",
+    "explanation" : "---\ndescription: \\'>\\' is not a comparison operator. Use \\'-gt\\' (greater than) or \\'-ge\\' (greater or equal).\nms.date: 06/28/2023\nms.topic: reference\ntitle: PossibleIncorrectUsageOfRedirectionOperator\n---\n# PossibleIncorrectUsageOfRedirectionOperator\n\n**Severity Level: Information**\n\n## Description\n\nIn many programming languages, the comparison operator for 'greater than' is `>` but `PowerShell`\nuses `-gt` for it and `-ge` (greater or equal) for `>=`. Therefore, it can easily happen that the\nwrong operator is used unintentionally. This rule catches a few special cases where the likelihood\nof that is quite high.\n\nThe rule looks for usages of `>` or `>=` operators inside `if`, `elseif`, `while` and `do-while`\nstatements because this is likely going to be unintentional usage.\n\n## Example\n\n### Wrong\n\n```powershell\nif ($a > $b)\n{\n    ...\n}\n```\n\n### Correct\n\n```powershell\nif ($a -gt $b)\n{\n    ...\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psprovidecommenthelp",
+    "level" : "Info",
+    "category" : "Documentation",
+    "subCategory" : null,
+    "title" : "EnforceProvideCommentHelpForCmdlets",
+    "description" : "Checks that all PowerShell cmdlets have comment-based help provided.",
+    "explanation" : "---\ndescription: Basic Comment Help\nms.date: 06/28/2023\nms.topic: reference\ntitle: ProvideCommentHelp\n---\n# ProvideCommentHelp\n\n**Severity Level: Info**\n\n## Description\n\nComment based help should be provided for all PowerShell commands. This test only checks for the\npresence of comment based help and not on the validity or format.\n\nFor assistance on comment based help, use the command `Get-Help about_comment_based_help` or the\nfollowing articles:\n\n- [Writing Comment-based Help][01]\n- [Writing Help for PowerShell Cmdlets][02]\n- [Create XML-based help using PlatyPS][03]\n\n## Configuration\n\n```powershell\nRules = @{\n    PSProvideCommentHelp = @{\n        Enable = $true\n        ExportedOnly = $false\n        BlockComment = $true\n        VSCodeSnippetCorrection = $false\n        Placement = 'before'\n    }\n}\n```\n\n### Parameters\n\n- `Enable`: **bool** (Default value is `$true`)\n\n  Enable or disable the rule during ScriptAnalyzer invocation.\n\n- `ExportedOnly`: **bool** (Default value is `$true`)\n\n  If enabled, throw violation only on functions/cmdlets that are exported using the\n  `Export-ModuleMember` cmdlet.\n\n- `BlockComment`: **bool** (Default value is `$true`)\n\n  If enabled, returns comment help in block comment style (`<#...#>`). Otherwise returns\n  comment help in line comment style where each comment line starts with `#`.\n\n- `VSCodeSnippetCorrection`: **bool** (Default value is `$false`)\n\n  If enabled, returns comment help in vscode snippet format.\n\n- `Placement`: **string** (Default value is `before`)\n\n  Represents the position of comment help with respect to the function definition.\n\n  Possible values are:\n\n  - `before`: means the help is placed before the function definition\n  - `begin` means the help is placed at the beginning of the function definition body\n  - `end` means the help is places the end of the function definition body\n\n  If any invalid value is given, the property defaults to `before`.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Get-File\n{\n    [CmdletBinding()]\n    Param\n    (\n        ...\n    )\n\n}\n```\n\n### Correct\n\n```powershell\n<#\n.Synopsis\n    Short description\n.DESCRIPTION\n    Long description\n.EXAMPLE\n    Example of how to use this cmdlet\n.EXAMPLE\n    Another example of how to use this cmdlet\n.INPUTS\n    Inputs to this cmdlet (if any)\n.OUTPUTS\n    Output from this cmdlet (if any)\n.NOTES\n    General notes\n.COMPONENT\n    The component this cmdlet belongs to\n.ROLE\n    The role this cmdlet belongs to\n.FUNCTIONALITY\n    The functionality that best describes this cmdlet\n#>\n\nfunction Get-File\n{\n    [CmdletBinding()]\n    Param\n    (\n        ...\n    )\n\n}\n```\n<!-- link references -->\n[01]: https://learn.microsoft.com/powershell/scripting/developer/help/writing-comment-based-help-topics\n[02]: https://learn.microsoft.com/powershell/scripting/developer/help/writing-help-for-windows-powershell-cmdlets\n[03]: https://learn.microsoft.com/powershell/utility-modules/platyps/create-help-using-platyps",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psreservedcmdletchar",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Reserved Characters in Cmdlet Names",
+    "description" : "This rule checks for reserved characters in PowerShell function or cmdlet names that can cause parsing or runtime errors.",
+    "explanation" : "---\ndescription: Reserved Cmdlet Chars\nms.date: 06/28/2023\nms.topic: reference\ntitle: ReservedCmdletChar\n---\n# ReservedCmdletChar\n\n**Severity Level: Error**\n\n## Description\n\nYou cannot use following reserved characters in a function or cmdlet name as these can cause parsing\nor runtime errors.\n\nReserved Characters include: ``#,(){}[]&/\\\\$^;:\\\"'<>|?@`*%+=~``\n\n## How\n\nRemove reserved characters from names.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction MyFunction[1]\n{...}\n```\n\n### Correct\n\n```powershell\nfunction MyFunction\n{...}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psreservedparams",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Redefining Reserved Parameters in Advanced Functions",
+    "description" : "Detects and disallows the redefinition of common reserved parameters in PowerShell advanced functions which use CmdletBinding or Parameter attributes.",
+    "explanation" : "---\ndescription: Reserved Parameters\nms.date: 03/06/2024\nms.topic: reference\ntitle: ReservedParams\n---\n# ReservedParams\n\n**Severity Level: Error**\n\n## Description\n\nYou can't redefine [common parameters][01] in an advanced function. Using the `CmdletBinding` or\n`Parameter` attributes creates an advanced function. The common parameters are are automatically\navailable in advanced functions, so you can't redefine them.\n\n## How\n\nChange the name of the parameter.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test\n{\n    [CmdletBinding()]\n    Param\n    (\n        $ErrorVariable,\n        $Parameter2\n    )\n}\n```\n\n### Correct\n\n```powershell\nfunction Test\n{\n    [CmdletBinding()]\n    Param\n    (\n        $Err,\n        $Parameter2\n    )\n}\n```\n\n[01]: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_commonparameters",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psreviewunusedparameter",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Unused Parameters",
+    "description" : "Ensure all parameters declared in a script, scriptblock, or function are used within the same scope where they are declared.",
+    "explanation" : "---\ndescription: ReviewUnusedParameter\nms.date: 03/26/2024\nms.topic: reference\ntitle: ReviewUnusedParameter\n---\n# ReviewUnusedParameter\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule identifies parameters declared in a script, scriptblock, or function scope that have not\nbeen used in that scope.\n\n## Configuration settings\n\nBy default, this rule doesn't consider child scopes other than scriptblocks provided to\n`Where-Object` or `ForEach-Object`. The `CommandsToTraverse` setting is an string array allows you\nto add additional commands that accept scriptblocks that this rule should examine.\n\n```powershell\n@{\n    Rules = @{\n        PSReviewUnusedParameter = @{\n            CommandsToTraverse = @(\n                'Invoke-PSFProtectedCommand'\n            )\n        }\n    }\n}\n```\n\n## How\n\nConsider removing the unused parameter.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Test-Parameter\n{\n    Param (\n        $Parameter1,\n\n        # this parameter is never called in the function\n        $Parameter2\n    )\n\n    Get-Something $Parameter1\n}\n```\n\n### Correct\n\n```powershell\nfunction Test-Parameter\n{\n    Param (\n        $Parameter1,\n\n        # now this parameter is being called in the same scope\n        $Parameter2\n    )\n\n    Get-Something $Parameter1 $Parameter2\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psshouldprocess",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce ShouldProcess Usage with SupportsShouldProcess Attribute",
+    "description" : "Ensures that PowerShell functions declaring the SupportsShouldProcess attribute also call ShouldProcess, and vice versa, to avoid errors or unexpected behavior.",
+    "explanation" : "---\ndescription: Should Process\nms.date: 06/28/2023\nms.topic: reference\ntitle: ShouldProcess\n---\n# ShouldProcess\n\n**Severity Level: Warning**\n\n## Description\n\nIf a cmdlet declares the `SupportsShouldProcess` attribute, then it should also call\n`ShouldProcess`. A violation is any function which either declares `SupportsShouldProcess` attribute\nbut makes no calls to `ShouldProcess` or it calls `ShouldProcess` but does not declare\n`SupportsShouldProcess`.\n\nFor more information, see the following articles:\n\n- [about_Functions_Advanced_Methods][01]\n- [about_Functions_CmdletBindingAttribute][02]\n- [Everything you wanted to know about ShouldProcess][03]\n\n## How\n\nTo fix a violation of this rule, please call `ShouldProcess` method when a cmdlet declares\n`SupportsShouldProcess` attribute. Or please add `SupportsShouldProcess` attribute argument when\ncalling `ShouldProcess`.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Set-File\n{\n    [CmdletBinding(SupportsShouldProcess=$true)]\n    Param\n    (\n        # Path to file\n        [Parameter(Mandatory=$true)]\n        $Path\n    )\n    'String' | Out-File -FilePath $Path\n}\n```\n\n### Correct\n\n```powershell\nfunction Set-File\n{\n    [CmdletBinding(SupportsShouldProcess=$true)]\n    Param\n    (\n        # Path to file\n        [Parameter(Mandatory=$true)]\n        $Path,\n\n        [Parameter(Mandatory=$true)]\n        [string]$Content\n    )\n\n    if ($PSCmdlet.ShouldProcess($Path, (\"Setting content to '{0}'\" -f $Content)))\n    {\n        $Content | Out-File -FilePath $Path\n    }\n    else\n    {\n        # Code that should be processed if doing a WhatIf operation\n        # Must NOT change anything outside of the function / script\n    }\n}\n```\n<!-- link references -->\n[01]: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_functions_advanced_methods\n[02]: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_Functions_CmdletBindingAttribute\n[03]: https://learn.microsoft.com/powershell/scripting/learn/deep-dives/everything-about-shouldprocess",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseapprovedverbs",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "EnforceUseOfApprovedCmdletVerbs",
+    "description" : "Ensures that all defined PowerShell functions use approved verbs in their names according to PowerShell best practices.",
+    "explanation" : "---\ndescription: Cmdlet Verbs\nms.date: 03/26/2024\nms.topic: reference\ntitle: UseApprovedVerbs\n---\n# UseApprovedVerbs\n\n**Severity Level: Warning**\n\n## Description\n\nAll cmdlets must used approved verbs.\n\nApproved verbs can be found by running the command `Get-Verb`.\n\nFor a more information about approved verbs, see [Approved Verbs for PowerShell Commands][01]. Some\nunapproved verbs are documented on the approved verbs page and point to approved alternatives. Try\nsearching for the verb you used to find its approved form. For example, searching for `Read`,\n`Open`, or `Search` leads you to `Get`.\n\n## How\n\nChange the verb in the cmdlet's name to an approved verb.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Change-Item\n{\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Update-Item\n{\n    ...\n}\n```\n\n<!-- link references -->\n[01]: /powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusebomforunicodeencodedfile",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Use of BOM for Unicode Encoded Files",
+    "description" : "Ensures that files encoded with a format other than ASCII include a Byte Order Mark (BOM) to allow correct interpretation by consuming applications.",
+    "explanation" : "---\ndescription: Use BOM encoding for non-ASCII files\nms.date: 01/07/2025\nms.topic: reference\ntitle: UseBOMForUnicodeEncodedFile\n---\n# UseBOMForUnicodeEncodedFile\n\n**Severity Level: Warning**\n\n## Description\n\nFor a file encoded with a format other than ASCII, ensure Byte Order Mark (BOM) is present to ensure\nthat any application consuming this file can interpret it correctly.\n\nYou can use this rule to test any arbitrary text file, but the intent is to ensure that PowerShell\nscripts are saved with a BOM when using a Unicode encoding.\n\n## How\n\nFor PowerShell commands that write to files, ensure that you set the encoding parameter to a value\nthat produces a BOM. In PowerShell 7 and higher, the following values of the **Encoding** parameter\nproduce a BOM:\n\n- `bigendianunicode`\n- `bigendianutf32`\n- `oem`\n- `unicode`\n- `utf32`\n- `utf8BOM`\n\nWhen you create a script file using a text editor, ensure that the editor is configured to save the\nfile with a BOM. Consult the documentation for your text editor for instructions on how to save\nfiles with a BOM.\n\n## Further reading\n\nFor more information, see the following articles:\n\n- [about_Character_Encoding](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_character_encoding)\n- [Set-Content](https://learn.microsoft.com/powershell/module/microsoft.powershell.management/set-content)\n- [Understanding file encoding in VS Code and PowerShell](https://learn.microsoft.com/powershell/scripting/dev-cross-plat/vscode/understanding-file-encoding)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusecmdletcorrectly",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Use Cmdlet Correctly",
+    "description" : "Ensures that cmdlets are invoked with all mandatory parameters.",
+    "explanation" : "---\ndescription: Use Cmdlet Correctly\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseCmdletCorrectly\n---\n# UseCmdletCorrectly\n\n**Severity Level: Warning**\n\n## Description\n\nWhenever we call a command, care should be taken that it is invoked with the correct syntax and\nparameters.\n\n## How\n\nSpecify all mandatory parameters when calling commands.\n\n## Example\n\n### Wrong\n\n```powershell\nFunction Set-TodaysDate ()\n{\n    Set-Date\n    ...\n}\n```\n\n### Correct\n\n```powershell\nFunction Set-TodaysDate ()\n{\n    $date = Get-Date\n    Set-Date -Date $date\n    ...\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusecompatiblecmdlets",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Use Compatible Cmdlets",
+    "description" : "Ensure that PowerShell scripts use cmdlets compatible with the specified PowerShell version, edition, and operating system.",
+    "explanation" : "---\ndescription: Use compatible cmdlets\nms.date: 12/12/2024\nms.topic: reference\ntitle: UseCompatibleCmdlets\n---\n# UseCompatibleCmdlets\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule flags cmdlets that aren't available in a given Edition and Version of PowerShell on a\ngiven Operating System. It works by comparing a cmdlet against a set of allowlists which ship with\nPSScriptAnalyzer. They can be found at `/path/to/PSScriptAnalyzerModule/Settings`. These files are\nof the form, `<psedition>-<psversion>-<os>.json` where `<psedition>` can be either `Core` or\n`Desktop`, `<os>` can be either `Windows`, `Linux` or `MacOS`, and `<psversion>` is the PowerShell\nversion. To enable the rule to check if your script is compatible on PowerShell Core on windows, put\nthe following your settings file:\n\n```powershell\n@{\n    'Rules' = @{\n        'PSUseCompatibleCmdlets' = @{\n            'compatibility' = @('core-6.1.0-windows')\n        }\n    }\n}\n```\n\nThe parameter `compatibility` is a list that contain any of the following\n\n- desktop-2.0-windows\n- desktop-3.0-windows\n- desktop-4.0-windows (taken from Windows Server 2012R2)\n- desktop-5.1.14393.206-windows\n- core-6.1.0-windows (taken from Windows 10 - 1803)\n- core-6.1.0-linux (taken from Ubuntu 18.04)\n- core-6.1.0-linux-arm (taken from Raspbian)\n- core-6.1.0-macos\n\nUsually, patched versions of PowerShell have the same cmdlet data, therefore only settings of major\nand minor versions of PowerShell are supplied. You can also create a custom settings file with the\n[New-CommandDataFile.ps1][01] script. Place the created `.json` file in the `Settings` folder of the\n`PSScriptAnalyzer` module folder. Then the `compatibility` parameter values is just the filename.\nNote that the `core-6.0.2-*` files were removed in PSScriptAnalyzer 1.18 since PowerShell 6.0\nreached it's end of life.\n\n<!-- link references -->\n[01]: https://github.com/PowerShell/PSScriptAnalyzer/blob/main/Utils/New-CommandDataFile.ps1",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusecompatiblecommands",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Use Compatible Commands",
+    "description" : "This rule identifies and warns about PowerShell commands that are not available on the targeted PowerShell platform or operating system version.",
+    "explanation" : "---\ndescription: Use compatible commands\nms.date: 12/12/2024\nms.topic: reference\ntitle: UseCompatibleCommands\n---\n# UseCompatibleCommands\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule identifies commands that are not available on a targeted PowerShell platform.\n\nA PowerShell platform is identified by a name in the following format:\n\n```\n<os-name>_<os-arch>_<os-version>_<ps-version>_<ps-arch>_<dotnet-version>_<dotnet-edition>\n```\n\nWhere:\n\n- `<os-name>`: The name of the operating system PowerShell is running on.\n    On Windows, this includes the SKU number.\n    On Linux, this is the name of the distribution.\n- `<os-arch>`: The machine architecture the operating system is running on (this is usually `x64`).\n- `<os-version>`: The self-reported version of the operating system (on Linux, this is the\n  distribution version).\n- `<ps-version>`: The PowerShell version (from `$PSVersionTable.PSVersion`).\n- `<ps-arch>`: The machine architecture of the PowerShell process.\n- `<dotnet-version>`: The reported version of the .NET runtime PowerShell is running on (from\n  `System.Environment.Version`).\n- `<dotnet-edition>`: The .NET runtime flavor PowerShell is running on (currently `framework` or\n  `core`).\n\nFor example:\n\n- `win-4_x64_10.0.18312.0_5.1.18312.1000_x64_4.0.30319.42000_framework` is PowerShell 5.1 running on\n  Windows 10 Enterprise (build 18312) for x64.\n- `win-4_x64_10.0.18312.0_6.1.2_x64_4.0.30319.42000_core` is PowerShell 6.1.2 running on the same\n  operating system.\n- `ubuntu_x64_18.04_6.2.0_x64_4.0.30319.42000_core` is PowerShell 6.2.0 running on Ubuntu 18.04.\n\nSome platforms come bundled with PSScriptAnalyzer as JSON files, named in this way for targeting in\nyour configuration.\n\nPlatforms bundled by default are:\n\n| PowerShell Version |    Operating System    |                                  ID                                   |\n| :----------------: | ---------------------- | --------------------------------------------------------------------- |\n|        3.0         | Windows Server 2012    | `win-8_x64_6.2.9200.0_3.0_x64_4.0.30319.42000_framework`              |\n|        4.0         | Windows Server 2012 R2 | `win-8_x64_6.3.9600.0_4.0_x64_4.0.30319.42000_framework`              |\n|        5.1         | Windows Server 2016    | `win-8_x64_10.0.14393.0_5.1.14393.2791_x64_4.0.30319.42000_framework` |\n|        5.1         | Windows Server 2019    | `win-8_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework`  |\n|        5.1         | Windows 10 Pro         | `win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework` |\n|        6.2         | Ubuntu 18.04 LTS       | `ubuntu_x64_18.04_6.2.4_x64_4.0.30319.42000_core`                     |\n|        6.2         | Windows 10.0.14393     | `win-8_x64_10.0.14393.0_6.2.4_x64_4.0.30319.42000_core`               |\n|        6.2         | Windows 10.0.17763     | `win-8_x64_10.0.17763.0_6.2.4_x64_4.0.30319.42000_core`               |\n|        6.2         | Windows 10.0.18362     | `win-4_x64_10.0.18362.0_6.2.4_x64_4.0.30319.42000_core`               |\n|        7.0         | Ubuntu 18.04 LTS       | `ubuntu_x64_18.04_7.0.0_x64_3.1.2_core`                               |\n|        7.0         | Windows 10.0.14393     | `win-8_x64_10.0.14393.0_7.0.0_x64_3.1.2_core`                         |\n|        7.0         | Windows 10.0.17763     | `win-8_x64_10.0.17763.0_7.0.0_x64_3.1.2_core`                         |\n|        7.0         | Windows 10.0.18362     | `win-4_x64_10.0.18362.0_7.0.0_x64_3.1.2_core`                         |\n\nOther profiles can be found in the [GitHub repo][02].\n\nYou can also generate your own platform profile using the [PSCompatibilityCollector module][01].\n\nThe compatibility profile settings takes a list of platforms to target under `TargetProfiles`. A\nplatform can be specified as:\n\n- A platform name (like `ubuntu_x64_18.04_6.1.1_x64_4.0.30319.42000_core`), which will have `.json`\n  added to the end and is searched for in the default profile directory.\n- A filename (like `my_custom_platform.json`), which will be searched for the in the default profile\n  directory.\n- An absolute path to a file (like `D:\\PowerShellProfiles\\TargetMachine.json`).\n\nThe default profile directory is under the PSScriptAnalzyer module at\n`$PSScriptRoot/compatibility_profiles` (where `$PSScriptRoot` here refers to the directory\ncontaining `PSScriptAnalyzer.psd1`).\n\nThe compatibility analysis compares a command used to both a target profile and a 'union' profile\n(containing all commands available in _any_ profile in the profile dir). If a command is not present\nin the union profile, it is assumed to be locally created and ignored. Otherwise, if a command is\npresent in the union profile but not present in a target, it is deemed to be incompatible with that\ntarget.\n\n## Configuration settings\n\n| Configuration key |                                     Meaning                                      |                                     Accepted values                                     |                                   Mandatory                                   |                                                            Example                                                            |\n| ----------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |\n| `Enable`          | Activates the rule                                                               | bool (`$true`/`$false`)                                                                 | No (default: `$false`)                                                        | `$true`                                                                                                                       |\n| `TargetProfiles`  | The list of PowerShell profiles to target                                        | string[]: absolute paths to profile files or names of profiles in the profile directory | No (default: `@()`)                                                           | `@('ubuntu_x64_18.04_6.1.3_x64_4.0.30319.42000_core', 'win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework')` |\n| `ProfileDirPath`  | The location to search for profiles by name and use for union profile generation | string: absolute path to new profile dir                                                | No (defaults to `compatibility_profiles` directory in PSScriptAnalyzer module | `C:\\Users\\me\\Documents\\pssaCompatProfiles`                                                                                    |\n| `IgnoreCommands`  | Commands to ignore compatibility of in scripts                                   | string[]: names of commands to ignore                                                   | No (default: `@()`)                                                           | `@('Get-ChildItem','Import-Module')`                                                                                          |\n\nAn example configuration might look like:\n\n```powershell\n@{\n    Rules = @{\n        PSUseCompatibleCommands = @{\n            Enable = $true\n            TargetProfiles = @(\n                'ubuntu_x64_18.04_6.1.3_x64_4.0.30319.42000_core'\n                'win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework'\n                'MyProfile'\n                'another_custom_profile_in_the_profiles_directory.json'\n                'D:\\My Profiles\\profile1.json'\n            )\n            # You can specify commands to not check like this, which also will ignore its parameters:\n            IgnoreCommands = @(\n                'Install-Module'\n            )\n        }\n    }\n}\n```\n\n## Suppression\n\nCommand compatibility diagnostics can be suppressed with an attribute on the `param` block of a\nscriptblock as with other rules.\n\n```powershell\n[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseCompatibleCommands', '')]\n```\n\nThe rule can also be suppressed only for particular commands:\n\n```powershell\n[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseCompatibleCommands',\n    'Start-Service')]\n```\n\nAnd also suppressed only for parameters:\n\n```powershell\n[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseCompatibleCommands',\n    'Import-Module/FullyQualifiedName')]\n```\n\n<!-- link references -->\n[01]: https://github.com/PowerShell/PSScriptAnalyzer/tree/main/PSCompatibilityCollector\n[02]: https://github.com/PowerShell/PSScriptAnalyzer/tree/main/PSCompatibilityCollector/optional_profiles",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusecompatiblesyntax",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Enforce Use of Compatible PowerShell Syntax",
+    "description" : "This rule identifies PowerShell script syntax elements that are incompatible with the targeted PowerShell versions specified.",
+    "explanation" : "---\ndescription: Use compatible syntax\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseCompatibleSyntax\n---\n# UseCompatibleSyntax\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule identifies syntax elements that are incompatible with targeted PowerShell versions.\n\nIt cannot identify syntax elements incompatible with PowerShell 3 or 4 when run from those\nPowerShell versions because they aren't able to parse the incompatible syntaxes.\n\n```powershell\n@{\n    Rules = @{\n        PSUseCompatibleSyntax = @{\n            Enable = $true\n            TargetVersions = @(\n                '6.0',\n                '5.1',\n                '4.0'\n            )\n        }\n    }\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusecompatibletypes",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Use Compatible Types",
+    "description" : "This rule identifies usage of types that are not available by default in the targeted PowerShell version and operating system platform.",
+    "explanation" : "---\ndescription: Use compatible types\nms.date: 12/12/2024\nms.topic: reference\ntitle: UseCompatibleTypes\n---\n# UseCompatibleTypes\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule identifies types that are not available (loaded by default) in targeted PowerShell\nplatforms.\n\nA PowerShell platform is identified by a name in the following format:\n\n```\n<os-name>_<os-arch>_<os-version>_<ps-version>_<ps-arch>_<dotnet-version>_<dotnet-edition>\n```\n\nWhere:\n\n- `<os-name>`: The name of the operating system PowerShell is running on.\n    On Windows, this includes the SKU number.\n    On Linux, this is the name of the distribution.\n- `<os-arch>`: The machine architecture the operating system is running on (this is usually `x64`).\n- `<os-version>`: The self-reported version of the operating system (on Linux, this is the\n  distribution version).\n- `<ps-version>`: The PowerShell version (from `$PSVersionTable.PSVersion`).\n- `<ps-arch>`: The machine architecture of the PowerShell process.\n- `<dotnet-version>`: The reported version of the .NET runtime PowerShell is running on (from\n  `System.Environment.Version`).\n- `<dotnet-edition>`: The .NET runtime flavor PowerShell is running on (currently `framework` or\n  `core`).\n\nFor example:\n\n- `win-4_x64_10.0.18312.0_5.1.18312.1000_x64_4.0.30319.42000_framework` is PowerShell 5.1 running on\n  Windows 10 Enterprise (build 18312) for x64.\n- `win-4_x64_10.0.18312.0_6.1.2_x64_4.0.30319.42000_core` is PowerShell 6.1.2 running on the same\n  operating system.\n- `ubuntu_x64_18.04_6.2.0_x64_4.0.30319.42000_core` is PowerShell 6.2.0 running on Ubuntu 18.04.\n\nSome platforms come bundled with PSScriptAnalyzer as JSON files, named in this way for targeting in\nyour configuration.\n\nPlatforms bundled by default are:\n\n| PowerShell Version |    Operating System    |                                  ID                                   |\n| :----------------: | ---------------------- | --------------------------------------------------------------------- |\n|        3.0         | Windows Server 2012    | `win-8_x64_6.2.9200.0_3.0_x64_4.0.30319.42000_framework`              |\n|        4.0         | Windows Server 2012 R2 | `win-8_x64_6.3.9600.0_4.0_x64_4.0.30319.42000_framework`              |\n|        5.1         | Windows Server 2016    | `win-8_x64_10.0.14393.0_5.1.14393.2791_x64_4.0.30319.42000_framework` |\n|        5.1         | Windows Server 2019    | `win-8_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework`  |\n|        5.1         | Windows 10 Pro         | `win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework` |\n|        6.2         | Ubuntu 18.04 LTS       | `ubuntu_x64_18.04_6.2.4_x64_4.0.30319.42000_core`                     |\n|        6.2         | Windows 10.0.14393     | `win-8_x64_10.0.14393.0_6.2.4_x64_4.0.30319.42000_core`               |\n|        6.2         | Windows 10.0.17763     | `win-8_x64_10.0.17763.0_6.2.4_x64_4.0.30319.42000_core`               |\n|        6.2         | Windows 10.0.18362     | `win-4_x64_10.0.18362.0_6.2.4_x64_4.0.30319.42000_core`               |\n|        7.0         | Ubuntu 18.04 LTS       | `ubuntu_x64_18.04_7.0.0_x64_3.1.2_core`                               |\n|        7.0         | Windows 10.0.14393     | `win-8_x64_10.0.14393.0_7.0.0_x64_3.1.2_core`                         |\n|        7.0         | Windows 10.0.17763     | `win-8_x64_10.0.17763.0_7.0.0_x64_3.1.2_core`                         |\n|        7.0         | Windows 10.0.18362     | `win-4_x64_10.0.18362.0_7.0.0_x64_3.1.2_core`                         |\n\nOther profiles can be found in the [GitHub repo][02].\n\nYou can also generate your own platform profile using the [PSCompatibilityCollector module][01].\n\nThe compatibility profile settings takes a list of platforms to target under `TargetProfiles`. A\nplatform can be specified as:\n\n- A platform name (like `ubuntu_x64_18.04_6.1.1_x64_4.0.30319.42000_core`), which will have `.json`\n  added to the end and is searched for in the default profile directory.\n- A filename (like `my_custom_platform.json`), which will be searched for the in the default profile\n  directory.\n- An absolute path to a file (like `D:\\PowerShellProfiles\\TargetMachine.json`).\n\nThe default profile directory is under the PSScriptAnalzyer module at\n`$PSScriptRoot/PSCompatibilityCollector/profiles` (where `$PSScriptRoot` here refers to the\ndirectory containing `PSScriptAnalyzer.psd1`).\n\nThe compatibility analysis compares a type used to both a target profile and a 'union' profile\n(containing all types available in _any_ profile in the profile dir). If a type is not present in\nthe union profile, it is assumed to be locally created and ignored. Otherwise, if a type is present\nin the union profile but not present in a target, it is deemed to be incompatible with that target.\n\n## Configuration settings\n\n| Configuration key |                                     Meaning                                      |                                     Accepted values                                     |                                   Mandatory                                   |                                                            Example                                                            |\n| ----------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |\n| `Enable`          | Activates the rule                                                               | bool (`$true`/`$false`)                                                                 | No (default: `$false`)                                                        | `$true`                                                                                                                       |\n| `TargetProfiles`  | The list of PowerShell profiles to target                                        | string[]: absolute paths to profile files or names of profiles in the profile directory | No (default: `@()`)                                                           | `@('ubuntu_x64_18.04_6.1.3_x64_4.0.30319.42000_core', 'win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework')` |\n| `ProfileDirPath`  | The location to search for profiles by name and use for union profile generation | string: absolute path to new profile dir                                                | No (defaults to `compatibility_profiles` directory in PSScriptAnalyzer module | `C:\\Users\\me\\Documents\\pssaCompatProfiles`                                                                                    |\n| `IgnoreTypes`     | Full names of types or type accelerators to ignore compatibility of in scripts   | string[]: names of types to ignore                                                      | No (default: `@()`)                                                           | `@('System.Collections.ArrayList','string')`                                                                                  |\n\nAn example configuration might look like:\n\n```powershell\n@{\n    Rules = @{\n        PSUseCompatibleTypes = @{\n            Enable = $true\n            TargetProfiles = @(\n                'ubuntu_x64_18.04_6.1.3_x64_4.0.30319.42000_core'\n                'win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework'\n                'MyProfile'\n                'another_custom_profile_in_the_profiles_directory.json'\n                'D:\\My Profiles\\profile1.json'\n            )\n            # You can specify types to not check like this, which will also ignore methods and members on it:\n            IgnoreTypes = @(\n                'System.IO.Compression.ZipFile'\n            )\n        }\n    }\n}\n```\n\nAlternatively, you could provide a settings object as follows:\n\n```powershell\nPS> $settings = @{\n      Rules = @{\n        PSUseCompatibleTypes = @{\n          Enable = $true\n          TargetProfiles = @('win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework')\n        }\n      }\n}\nPS> Invoke-ScriptAnalyzer -Settings $settings -ScriptDefinition \"[System.Management.Automation.SemanticVersion]'1.18.0-rc1'\"\n\nRuleName                Severity     ScriptName Line  Message\n--------                --------     ---------- ----  -------\nPSUseCompatibleTypes    Warning                 1     The type 'System.Management.Automation.SemanticVersion' is\n                                                      not available by default in PowerShell version\n                                                      '5.1.17763.316' on platform 'Microsoft Windows 10 Pro'\n```\n\n## Suppression\n\nCommand compatibility diagnostics can be suppressed with an attribute on the `param` block of a\nscriptblock as with other rules.\n\n```powershell\n[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseCompatibleTypes', '')]\n```\n\nThe rule can also be suppressed only for particular types:\n\n```powershell\n[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseCompatibleTypes',\n    'System.Management.Automation.Security.SystemPolicy')]\n```\n\nAnd also suppressed only for type members:\n\n```powershell\n[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseCompatibleCommands',\n    'System.Management.Automation.LanguagePrimitives/ConvertTypeNameToPSTypeName')]\n```\n\n<!-- link references -->\n[01]: https://github.com/PowerShell/PSScriptAnalyzer/tree/main/PSCompatibilityCollector\n[02]: https://github.com/PowerShell/PSScriptAnalyzer/tree/main/PSCompatibilityCollector/optional_profiles",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseconsistentindentation",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Indentation",
+    "description" : "Ensures that indentation is consistent throughout the PowerShell source file according to configured indentation size and style.",
+    "explanation" : "---\ndescription: Use consistent indentation\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseConsistentIndentation\n---\n# UseConsistentIndentation\n\n**Severity Level: Warning**\n\n## Description\n\nIndentation should be consistent throughout the source file.\n\n**Note**: This rule is not enabled by default. The user needs to enable it through settings.\n\n## Configuration\n\n```powershell\n    Rules = @{\n        PSUseConsistentIndentation = @{\n            Enable = $true\n            IndentationSize = 4\n            PipelineIndentation = 'IncreaseIndentationForFirstPipeline'\n            Kind = 'space'\n        }\n    }\n```\n\n### Parameters\n\n#### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n#### IndentationSize: int (Default value is `4`)\n\nIndentation size in the number of space characters.\n\n#### PipelineIndentation: string (Default value is `IncreaseIndentationForFirstPipeline`)\n\nWhether to increase indentation after a pipeline for multi-line statements. The settings are:\n\n- IncreaseIndentationForFirstPipeline (default): Indent once after the first pipeline and keep this\n  indentation. Example:\n\n  ```powershell\n  foo |\n      bar |\n      baz\n  ```\n\n- IncreaseIndentationAfterEveryPipeline: Indent more after the first pipeline and keep this\n  indentation. Example:\n\n  ```powershell\n  foo |\n      bar |\n          baz\n  ```\n\n- NoIndentation: Do not increase indentation. Example:\n\n  ```powershell\n  foo |\n  bar |\n  baz\n  ```\n\n- None: Do not change any existing pipeline indentation.\n\n#### Kind: string (Default value is `space`)\n\nRepresents the kind of indentation to be used. Possible values are: `space`, `tab`. If any invalid\nvalue is given, the property defaults to `space`.\n\n`space` means `IndentationSize` number of `space` characters are used to provide one level of\nindentation. `tab` means a tab character, `\\t`.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseconsistentwhitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Whitespace Usage",
+    "description" : "Ensures consistent use of whitespace in PowerShell scripts, including spaces around keywords, braces, parentheses, operators, pipes, separators, and parameters.",
+    "explanation" : "---\ndescription: Use whitespaces\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseConsistentWhitespace\n---\n# UseConsistentWhitespace\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule is not enabled by default. The user needs to enable it through settings.\n\n## Configuration\n\n```powershell\nRules = @{\n    PSUseConsistentWhitespace  = @{\n        Enable                          = $true\n        CheckInnerBrace                 = $true\n        CheckOpenBrace                  = $true\n        CheckOpenParen                  = $true\n        CheckOperator                   = $true\n        CheckPipe                       = $true\n        CheckPipeForRedundantWhitespace = $false\n        CheckSeparator                  = $true\n        CheckParameter                  = $false\n        IgnoreAssignmentOperatorInsideHashTable = $false\n    }\n}\n```\n\n### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n### CheckInnerBrace: bool (Default value is `$true`)\n\nChecks if there is a space after the opening brace and a space before the closing brace. E.g.\n`if ($true) { foo }` instead of `if ($true) {bar}`.\n\n### CheckOpenBrace: bool (Default value is `$true`)\n\nChecks if there is a space between a keyword and its corresponding open brace. E.g. `foo { }`\ninstead of `foo{ }`. If an open brace is preceded by an open parenthesis, then no space is required.\n\n### CheckOpenParen: bool (Default value is `$true`)\n\nChecks if there is space between a keyword and its corresponding open parenthesis. E.g. `if (true)`\ninstead of `if(true)`.\n\n### CheckOperator: bool (Default value is `$true`)\n\nChecks if a binary or unary operator is surrounded on both sides by a space. E.g. `$x = 1` instead\nof `$x=1`.\n\n### CheckSeparator: bool (Default value is `$true`)\n\nChecks if a comma or a semicolon is followed by a space. E.g. `@(1, 2, 3)` or `@{a = 1; b = 2}`\ninstead of `@(1,2,3)` or `@{a = 1;b = 2}`.\n\n### CheckPipe: bool (Default value is `$true`)\n\nChecks if a pipe is surrounded on both sides by a space but ignores redundant whitespace. E.g.\n`foo | bar` instead of `foo|bar`.\n\n### CheckPipeForRedundantWhitespace : bool (Default value is `$false`)\n\nChecks if a pipe is surrounded by redundant whitespace (i.e. more than 1 whitespace). E.g.\n`foo | bar` instead of `foo    |    bar`.\n\n### CheckParameter: bool (Default value is `$false` at the moment due to the setting being new)\n\nChecks if there is more than one space between parameters and values. E.g. `foo -bar $baz -bat`\ninstead of `foo   -bar   $baz   -bat`. This eliminates redundant whitespace that was probably added\nunintentionally. The rule does not check for whitespace between parameter and value when the colon\nsyntax `-ParameterName:$ParameterValue` is used as some users prefer either 0 or 1 whitespace in\nthis case.\n\n### IgnoreAssignmentOperatorInsideHashTable: bool (Default value is `$false`)\n\nWhen `CheckOperator` is set, ignore whitespace around assignment operators within multi-line hash\ntables. Set this option to use the `AlignAssignmentStatement` rule and still check whitespace around\noperators everywhere else.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusecorrectcasing",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Correct Casing for Cmdlets and Parameters",
+    "description" : "Ensure that cmdlet names and their parameters use the exact casing as defined for consistency and improved readability.",
+    "explanation" : "---\ndescription: Use exact casing of cmdlet/function/parameter name.\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseCorrectCasing\n---\n# UseCorrectCasing\n\n**Severity Level: Information**\n\n## Description\n\nThis is a style formatting rule. PowerShell is case insensitive where applicable. The casing of\ncmdlet names or parameters does not matter but this rule ensures that the casing matches for\nconsistency and also because most cmdlets/parameters start with an upper case and using that\nimproves readability to the human eye.\n\n## Configuration\n\n```powershell\nRules = @{\n    PS UseCorrectCasing = @{\n        Enable        = $true\n        CheckCommands = $true\n        CheckKeyword  = $true\n        CheckOperator = $true\n    }\n}\n```\n\n### Enable: bool (Default value is `$false`)\n\nEnable or disable the rule during ScriptAnalyzer invocation.\n\n### CheckCommands: bool (Default value is `$true`)\n\nIf true, require the case of all operators to be lowercase.\n\n### CheckKeyword: bool (Default value is `$true`)\n\nIf true, require the case of all keywords to be lowercase.\n\n### CheckOperator: bool (Default value is `$true`)\n\nIf true, require the case of all commands to match their actual casing.\n\n## How\n\nUse exact casing of the cmdlet and its parameters, e.g.\n`Invoke-Command { 'foo' } -RunAsAdministrator`.\n\n## Example\n\n### Wrong\n\n```powershell\ninvoke-command { 'foo' } -runasadministrator\n```\n\n### Correct\n\n```powershell\nInvoke-Command { 'foo' } -RunAsAdministrator\n```",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseliteralinitializerforhashtable",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Use of Literal Initializer for Hashtable",
+    "description" : "Ensures hashtables are created using the literal initializer @{} to guarantee case-insensitive key lookup.",
+    "explanation" : "---\ndescription: Create hashtables with literal initializers\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseLiteralInitializerForHashtable\n---\n# UseLiteralInitializerForHashtable\n\n**Severity Level: Warning**\n\n## Description\n\nCreating a hashtable using `[hashtable]::new()` or `New-Object -TypeName hashtable` without passing\na `IEqualityComparer` object to the constructor creates a hashtable where the keys are looked-up in\na case-sensitive manner. However, PowerShell is case-insensitive in nature and it is best to create\nhashtables with case-insensitive key look-up.\n\nThis rule is intended to warn the author of the case-sensitive nature of the hashtable when created\nusing the `new` method or the `New-Object` cmdlet.\n\n## How to Fix\n\nCreate the hashtable using a literal hashtable expression.\n\n## Example\n\n### Wrong\n\n```powershell\n$hashtable = [hashtable]::new()\n```\n\n### Wrong\n\n```powershell\n$hashtable = New-Object -TypeName hashtable\n```\n\n### Correct\n\n```powershell\n$hashtable = @{}\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseoutputtypecorrectly",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Correct Use of OutputType Attribute",
+    "description" : "Ensures that the objects returned by a PowerShell cmdlet match the types declared in the OutputType attribute.",
+    "explanation" : "---\ndescription: Use OutputType Correctly\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseOutputTypeCorrectly\n---\n# UseOutputTypeCorrectly\n\n**Severity Level: Information**\n\n## Description\n\nA command should return the same type as declared in `OutputType`.\n\nYou can get more details by running `Get-Help about_Functions_OutputTypeAttribute` command in\nPowerShell.\n\n## How\n\nSpecify that the OutputType attribute lists and the types returned in the cmdlet match.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Get-Foo\n{\n        [CmdletBinding()]\n        [OutputType([String])]\n        Param(\n        )\n        return 4\n}\n```\n\n### Correct\n\n```powershell\nfunction Get-Foo\n{\n        [CmdletBinding()]\n        [OutputType([String])]\n        Param(\n        )\n\n        return 'four'\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseprocessblockforpipelinecommand",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Use Process Block For Pipeline Command",
+    "description" : "Functions that accept input from the pipeline must handle that input within a process block to correctly bind pipeline objects to parameters.",
+    "explanation" : "---\ndescription: Use process block for command that accepts input from pipeline.\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseProcessBlockForPipelineCommand\n---\n# UseProcessBlockForPipelineCommand\n\n**Severity Level: Warning**\n\n## Description\n\nFunctions that support pipeline input should always handle parameter input in a process block.\nUnexpected behavior can result if input is handled directly in the body of a function where\nparameters declare pipeline support.\n\n## Example\n\n### Wrong\n\n```powershell\nFunction Get-Number\n{\n    [CmdletBinding()]\n    Param(\n        [Parameter(ValueFromPipeline)]\n        [int]\n        $Number\n    )\n\n    $Number\n}\n```\n\n#### Result\n\n```\nPS C:\\> 1..5 | Get-Number\n5\n```\n\n### Correct\n\n```powershell\nFunction Get-Number\n{\n    [CmdletBinding()]\n    Param(\n        [Parameter(ValueFromPipeline)]\n        [int]\n        $Number\n    )\n\n    process\n    {\n        $Number\n    }\n}\n```\n\n#### Result\n\n```\nPS C:\\> 1..5 | Get-Number\n1\n2\n3\n4\n5\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusepscredentialtype",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce PSCredential Type for Credential Parameter",
+    "description" : "Ensures that a parameter named Credential is of type PSCredential in PowerShell functions or cmdlets.",
+    "explanation" : "---\ndescription: Use PSCredential type.\nms.date: 06/28/2023\nms.topic: reference\ntitle: UsePSCredentialType\n---\n# UsePSCredentialType\n\n**Severity Level: Warning**\n\n## Description\n\nIf the cmdlet or function has a **Credential** parameter, the parameter must accept the\n**PSCredential** type.\n\n## How\n\nChange the **Credential** parameter's type to be **PSCredential**.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Credential([String]$Credential)\n{\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Credential([PSCredential]$Credential)\n{\n    ...\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseshouldprocessforstatechangingfunctions",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Use of ShouldProcess in State Changing Functions",
+    "description" : "Functions with verbs that change system state should support the ShouldProcess feature to enable confirmation and WhatIf capabilities.",
+    "explanation" : "---\ndescription: Use ShouldProcess For State Changing Functions\nms.date: 12/05/2024\nms.topic: reference\ntitle: UseShouldProcessForStateChangingFunctions\n---\n# UseShouldProcessForStateChangingFunctions\n\n**Severity Level: Warning**\n\n## Description\n\nFunctions whose verbs change system state should support `ShouldProcess`. To enable the\n`ShouldProcess` feature, set the `SupportsShouldProcess` argument in the `CmdletBinding` attribute.\nThe `SupportsShouldProcess` argument adds **Confirm** and **WhatIf** parameters to the function. The\n**Confirm** parameter prompts the user before it runs the command on each object in the pipeline.\nThe **WhatIf** parameter lists the changes that the command would make, instead of running the\ncommand.\n\nVerbs that should support `ShouldProcess`:\n\n- `New`\n- `Set`\n- `Remove`\n- `Start`\n- `Stop`\n- `Restart`\n- `Reset`\n- `Update`\n\n## How\n\nInclude the `SupportsShouldProcess` argument in the `CmdletBinding` attribute.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Set-ServiceObject\n{\n    [CmdletBinding()]\n    param\n    (\n        [string]\n        $Parameter1\n    )\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Set-ServiceObject\n{\n    [CmdletBinding(SupportsShouldProcess = $true)]\n    param\n    (\n        [string]\n        $Parameter1\n    )\n    ...\n}\n```\n\n## More information\n\n- [about_Functions_CmdletBindingAttribute][01]\n- [Everything you wanted to know about ShouldProcess][04]\n- [Required Development Guidelines][03]\n- [Requesting Confirmation from Cmdlets][02]\n\n<!-- link references -->\n[01]: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_functions_cmdletbindingattribute\n[02]: https://learn.microsoft.com/powershell/scripting/developer/cmdlet/requesting-confirmation-from-cmdlets\n[03]: https://learn.microsoft.com/powershell/scripting/developer/cmdlet/required-development-guidelines#support-confirmation-requests-rd04\n[04]: https://learn.microsoft.com/powershell/scripting/learn/deep-dives/everything-about-shouldprocess",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusesingularnouns",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Use of Singular Nouns in Cmdlet Names",
+    "description" : "Ensures that all defined PowerShell cmdlets use singular nouns instead of plural nouns in their names.",
+    "explanation" : "---\ndescription: Cmdlet Singular Noun\nms.date: 03/27/2024\nms.topic: reference\ntitle: UseSingularNouns\n---\n# UseSingularNouns\n\n**Severity Level: Warning**\n\n## Description\n\nPowerShell team best practices state cmdlets should use singular nouns and not plurals. Suppression\nallows you to suppress the rule for specific function names. For example:\n\n```\nfunction Get-Elements {\n    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', 'Get-Elements')]\n    Param()\n}\n```\n\n## Configuration\n\n```powershell\nRules = @{\n    PSUseSingularNouns = @{\n        Enable           = $true\n        NounAllowList    = 'Data', 'Windows', 'Foos'\n    }\n}\n```\n\n### Parameters\n\n- `Enable`: `bool` (Default value is `$true`)\n\n  Enable or disable the rule during ScriptAnalyzer invocation.\n\n- `NounAllowList`: `string[]` (Default value is `{'Data', 'Windows'}`)\n\n  Commands to be excluded from this rule. `Data` and `Windows` are common false positives and are\n  excluded by default.\n\n## How\n\nChange plurals to singular.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction Get-Files\n{\n    ...\n}\n```\n\n### Correct\n\n```powershell\nfunction Get-File\n{\n    ...\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusesupportsshouldprocess",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Manual Declaration of Confirm and WhatIf Parameters; Use SupportsShouldProcess Attribute",
+    "description" : "This rule discourages manual declaration of Confirm and WhatIf parameters in PowerShell functions or cmdlets, recommending the use of the SupportsShouldProcess attribute instead.",
+    "explanation" : "---\ndescription: Use SupportsShouldProcess\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseSupportsShouldProcess\n---\n# UseSupportsShouldProcess\n\n**Severity Level: Warning**\n\n## Description\n\nThis rule discourages manual declaration of `WhatIf` and `Confirm` parameters in a function/cmdlet.\nThese parameters are, however, provided automatically when a function declares a `CmdletBinding`\nattribute with `SupportsShouldProcess` as its named argument. Using `SupportsShouldProcess` not only\nprovides these parameters but also some generic functionality that allows the function/cmdlet\nauthors to provide the desired interactive experience while using the cmdlet.\n\n## Example\n\n### Wrong\n\n```powershell\nfunction foo {\n    param(\n        $param1,\n        $Confirm,\n        $WhatIf\n    )\n}\n```\n\n### Correct\n\n```powershell\nfunction foo {\n    [CmdletBinding(SupportsShouldProcess)]\n    param(\n        $param1\n    )\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psusetoexportfieldsinmanifest",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Avoid Wildcards or Null in ToExport Fields in Module Manifest",
+    "description" : "Module manifest fields AliasesToExport, CmdletsToExport, FunctionsToExport, and VariablesToExport should not contain wildcards or null values to improve module auto-discovery performance.",
+    "explanation" : "---\ndescription: Use the *ToExport module manifest fields.\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseToExportFieldsInManifest\n---\n# UseToExportFieldsInManifest\n\n**Severity Level: Warning**\n\n## Description\n\nTo improve the performance of module auto-discovery, module manifests should not use wildcards\n(`'*'`) or null (`$null`) in the following entries:\n\n- `AliasesToExport`\n- `CmdletsToExport`\n- `FunctionsToExport`\n- `VariablesToExport`\n\nUsing wildcards or null has causes PowerShell to perform expensive work to analyze a module during\nmodule auto-discovery.\n\n## How\n\nUse an explicit list in the entries.\n\n## Example 1\n\nSuppose there are no functions in your module to export. Then,\n\n### Wrong\n\n```powershell\nFunctionsToExport = $null\n```\n\n### Correct\n\n```powershell\nFunctionToExport = @()\n```\n\n## Example 2\n\nSuppose there are only two functions in your module, `Get-Foo` and `Set-Foo` that you want to\nexport. Then,\n\n### Wrong\n\n```powershell\nFunctionsToExport = '*'\n```\n\n### Correct\n\n```powershell\nFunctionToExport = @(Get-Foo, Set-Foo)\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseusingscopemodifierinnewrunspaces",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Using Scope Modifier in New RunSpace ScriptBlocks",
+    "description" : "Ensures variables in script blocks executed in new runspaces use the '$using:' scope modifier or are initialized within the script block.",
+    "explanation" : "---\ndescription: Use 'Using:' scope modifier in RunSpace ScriptBlocks\nms.date: 06/28/2023\nms.topic: reference\ntitle: UseUsingScopeModifierInNewRunspaces\n---\n# UseUsingScopeModifierInNewRunspaces\n\n**Severity Level: Warning**\n\n## Description\n\nIf a scriptblock is intended to be run in a new runspace, variables inside it should use the\n`$using:` scope modifier, or be initialized within the scriptblock. This applies to:\n\n- `Invoke-Command`- Only with the **ComputerName** or **Session** parameter.\n- `Workflow { InlineScript {} }`\n- `Foreach-Object` - Only with the **Parallel** parameter\n- `Start-Job`\n- `Start-ThreadJob`\n- The `Script` resource in DSC configurations, specifically for the `GetScript`, `TestScript` and\n  `SetScript` properties.\n\n## How to Fix\n\nWithin the ScriptBlock, instead of just using a variable from the parent scope, you have to add the\n`using:` scope modifier to it.\n\n## Example\n\n### Wrong\n\n```powershell\n$var = 'foo'\n1..2 | ForEach-Object -Parallel { $var }\n```\n\n### Correct\n\n```powershell\n$var = 'foo'\n1..2 | ForEach-Object -Parallel { $using:var }\n```\n\n## More correct examples\n\n```powershell\n$bar = 'bar'\nInvoke-Command -ComputerName 'foo' -ScriptBlock { $using:bar }\n```\n\n```powershell\n$bar = 'bar'\n$s = New-PSSession -ComputerName 'foo'\nInvoke-Command -Session $s -ScriptBlock { $using:bar }\n```\n\n```powershell\n# Remark: Workflow is supported on Windows PowerShell only\nWorkflow {\n    $foo = 'foo'\n    InlineScript { $using:foo }\n}\n```\n\n```powershell\n$foo = 'foo'\nStart-ThreadJob -ScriptBlock { $using:foo }\nStart-Job -ScriptBlock {$using:foo }\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "psuseutf8encodingforhelpfile",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce UTF8 Encoding For PowerShell Help File",
+    "description" : "Ensures that PowerShell help files (about_*.help.txt) use UTF-8 encoding.",
+    "explanation" : "---\ndescription: Use UTF8 Encoding For Help File\nms.date: 01/07/2025\nms.topic: reference\ntitle: UseUTF8EncodingForHelpFile\n---\n# UseUTF8EncodingForHelpFile\n\n**Severity Level: Warning**\n\n## Description\n\nCheck that an `about_` help file uses UTF-8 encoding. The filename must start with `about_` and end\nwith `.help.txt`. The rule uses the **CurrentEncoding** property of the **StreamReader** class to\ndetermine the encoding of the file.\n\n## How\n\nFor PowerShell commands that write to files, ensure that you set the encoding parameter to `utf8`,\n`utf8BOM`, or `utf8NoBOM`.\n\nWhen you create a help file using a text editor, ensure that the editor is configured to save the\nfile in a UTF8 format. Consult the documentation for your text editor for instructions on how to\nsave files with a specific encoding.\n\n## Further reading\n\nFor more information, see the following articles:\n\n- [System.IO.StreamReader](https://learn.microsoft.com/dotnet/api/system.io.streamreader.currentencoding)\n- [about_Character_Encoding](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_character_encoding)\n- [Set-Content](https://learn.microsoft.com/powershell/module/microsoft.powershell.management/set-content)\n- [Understanding file encoding in VS Code and PowerShell](https://learn.microsoft.com/powershell/scripting/dev-cross-plat/vscode/understanding-file-encoding)",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

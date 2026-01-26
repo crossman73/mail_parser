@@ -1,0 +1,492 @@
+[
+  {
+    "id" : "angle-bracket-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit Whitespace Around Angle Brackets",
+    "description" : "This rule prohibits whitespace immediately before or after an opening angle bracket '<' and before the closing angle bracket '>' in generic declarations and requirement lists.",
+    "explanation" : "### [angle-bracket-whitespace](https://github.com/sleekbyte/tailor/issues/87)\n\nThere should be no whitespace immediately before/after an opening chevron `<` and before the closing chevron `>`.\n\n#### Generics\n\n*Preferred*\n\n```\nfunc simpleMax<T: Comparable>(x: T, _ y: T) -> T {\n    if x < y {\n        return y\n    }\n    return x\n}\n```\n\n*Not Preferred*\n\n```\nfunc simpleMax < T: Comparable >(x: T, _ y: T) -> T {\n    if x < y {\n        return y\n    }\n    return x\n}\n```\n\n#### Requirement list\n\n*Preferred*\n\n```\nfunc allItemsMatch<\n    C1: Container, C2: Container\n    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>\n    (someContainer: C1, _ anotherContainer: C2) -> Bool {}\n```\n\n*Not Preferred*\n\n```\nfunc allItemsMatch <\n    C1: Container, C2: Container\n    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable >\n    (someContainer: C1, _ anotherContainer: C2) -> Bool {}\n```",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "arrow-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce single space before and after '->'",
+    "description" : "This rule enforces exactly one space before and after the '->' symbol in function, closure, subscript declarations, and function types.",
+    "explanation" : "### [arrow-whitespace](https://github.com/sleekbyte/tailor/issues/89)\n\nPrefer a single space before and after '->'.\n\n#### Function and Closure declarations\n\n*Preferred*\n\n```\nfunc onePlusTwo() -> Int {\n  return 1 + 2\n}\n\nnames.map() {\n  (name) -> Int in\n  return 1\n}\n```\n\n*Not Preferred*\n\n```\nfunc onePlusTwo()->Int {\n  return 1 + 2\n}\n\nnames.map() {\n  (name)  ->  Int in\n  return 1\n}\n\nclass SomeClass: SomeSuperClass{\n}\n```\n\n#### Subscript declarations\n*Preferred*\n\n```\nstruct TimesTable {\n    let multiplier: Int\n\n    subscript(index: Int) -> Int {\n        return multiplier * index\n    }\n}\n```\n\n*Not Preferred*\n\n```\nstruct TimesTable {\n    let multiplier: Int\n\n    subscript(index: Int)-> Int {\n        return multiplier * index\n    }\n}\n\nstruct SomeStruct : SomeParentStruct   {\n}\n```\n\n#### Function Types\n\n*Preferred*\n\n```\nfunc something() -> (Int, Int) -> (Int) {\n  // do something\n}\n```\n\n*Not Preferred*\n\n```\nfunc something() -> (Int, Int)-> (Int) {\n  // do something\n}\n\nfunc something() -> (Int, Int)  -> (Int){\n  // do something\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "brace-style",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce the One True Brace Style (1TBS)",
+    "description" : "Enforces that braces for classes, structs, functions, control flow constructs, initializers, protocols, enums, closures, getters, setters, and extensions follow the One True Brace Style (1TBS) convention.",
+    "explanation" : "### [brace-style](https://github.com/sleekbyte/tailor/issues/86)\nDefinitions of\n- `class`\n- `struct`\n- `function`\n- Control flow constructs (`if`, `else if`, `else`, `switch`, `for`, `while`, `repeat-while`)\n- `init`\n- `protocol`\n- `enum`\n- `closure`\n- Getters and Setters (`set`, `get`)\n- `extension`\n\nshould follow the [One True Brace Style (1TBS)](https://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS):\neach construct has its opening brace one the same line along with the same indentation level as its header, the statements within the braces are indented, and the closing brace at the end is on the same indentation level as the header of the function at a line of its own. Braces are not omitted for a control statement with only a single statement in its scope. Every opening brace must also have one space preceding it.\n\n#### Classes\n\n*Preferred*\n\n```\nclass SomeClass {\n}\n\nclass SomeClass: SomeSuperClass {\n}\n```\n\n*Not Preferred*\n\n```\nclass SomeClass\n{\n}\n\nclass SomeClass: SomeSuperClass{\n}\n```\n\n#### Structs\n\n*Preferred*\n\n```\nstruct SomeStruct {\n}\n\nstruct SomeStruct : SomeParentStruct {\n}\n```\n\n*Not Preferred*\n\n```\nstruct SomeStruct\n{\n}\n\nstruct SomeStruct : SomeParentStruct  {\n}\n```\n\n#### Functions\n\n*Preferred*\n\n```\nfunc someMethod() {\n}\n\nfunc someOtherFunction () -> () {\n}\n```\n\n*Not Preferred*\n\n```\nfunc someMethod()\n{\n}\n\nfunc someOtherFunction () -> ()\n{\n}\n```\n\n#### Control flow constructs\n\n- if, else if, and else statement\n\n*Preferred*\n\n```\nif SomeCondition {\n\n} else if someOtherCondition {\n} else {\n}\n```\n\n*Not Preferred*\n\n```\nif SomeCondition\n{\n\n}\nelse if someOtherCondition\n{\n}\nelse\n{\n}\n```\n\n- switch statement\n\n*Preferred*\n\n```\nswitch SomeData {\n\tdefault:\n\t\tbreak\n}\n```\n\n*Not Preferred*\n\n```\nswitch SomeData\n{\n\tdefault:\n\t\tbreak\n}\n```\n\n- for loop\n\n*Preferred*\n\n```\nfor var i = 0; i < 10; i+=1 {\n\n}\n```\n\n*Not Preferred*\n\n```\nfor var i = 0; i < 10; i+=1\n{\n\n}\n```\n\n- while loop\n\n*Preferred*\n\n```\nwhile SomeCondition {\n\n}\n```\n\n*Not Preferred*\n\n```\nwhile SomeCondition\n{\n\n}\n```\n\n- repeat-while loop\n\n*Preferred*\n\n```\nrepeat {\n\n} while SomeCondition\n```\n\n*Not Preferred*\n\n```\nrepeat\n{\n\n} while SomeCondition\n```\n\n#### Initializers\n\n*Preferred*\n\n```\ninit(someParameter:Double, someOtherParameter:Double) {\n   self.someMember = someParameter\n   self.someOtherMember = someOtherParameter\n}\n```\n\n*Not Preferred*\n\n```\ninit(someParameter:Double, someOtherParameter:Double)\n{\n   self.someMember = someParameter\n   self.someOtherMember = someOtherParameter\n}\n```\n\n#### Protocols\n\n*Preferred*\n\n```\nprotocol SomeProtocol {\n\n}\n\nprotocol SomeOtherProtocol : X {\n\n}\n```\n\n*Not Preferred*\n\n```\nprotocol SomeProtocol\n{\n\n}\n\nprotocol SomeOtherProtocol : X\n{\n}\n\n```\n\n#### Enums\n\n*Preferred*\n\n```\nenum SomeEnum {\n    case A, B, C, D\n}\n\nenum SomeEnum {\n    case A\n    case B\n    case C\n    case D\n}\n\nenum SomeEnum: Int {\n    case A, B, C = 5, D\n}\n```\n\n*Not Preferred*\n\n```\nenum SomeEnum\n{\n    case A, B, C, D\n}\n\nenum SomeEnum\n{\n    case A\n    case B\n    case C\n    case D\n}\n\nenum SomeEnum: Int\n{\n    case A, B, C = 5, D\n}\n```\n\n#### Closures\n\n*Preferred*\n\n```\nfunc someFunction () -> () {\n// closure\n}\n```\n\n*Not Preferred*\n\n```\nfunc someFunction () -> ()\n{\n// closure\n}\n```\n\n#### Setters and Getters\n\n- set\n\n*Preferred*\n\n```\nset {\n    oldValue = newValue / 2\n}\n```\n\n*Not Preferred*\n\n```\nset\n{\n    oldValue = newValue / 2\n}\n```\n\n- get\n\n*Preferred*\n\n```\nget {\n    return value * 2\n}\n```\n\n*Not Preferred*\n\n```\nget\n{\n    return value * 2\n}\n```\n\n#### Extensions\n\n*Preferred*\n\n```\nextension someExtension {\n}\n```\n\n*Not Preferred*\n\n```\nextension someExtension\n{\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "colon-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Whitespace Surrounding the Colon",
+    "description" : "Ensures there is no whitespace before the colon and exactly one whitespace after the colon in various Swift declarations and expressions, except for conditional expressions where there should be a single whitespace before and after the colon.",
+    "explanation" : "### [colon-whitespace](https://github.com/sleekbyte/tailor/issues/89)\n\nThere should be no whitespace preceding the colon, exactly one whitespace after the colon for:\n* `var`, `class`, `struct`, `protocol`, `extension`, `func`, and `tuple` declarations\n* `dict` literals and types\n* `case` statements\n\nHowever, for conditional expressions there should be a single whitespace before and after the colon.\n#### Variable declarations\n\n*Preferred*\n\n```\nvar x: Int = 2\n```\n\n*Not Preferred*\n\n```\nvar x : Int\nvar y:   String\n```\n\n#### Dictionary literals and types\n\n*Preferred*\n\n```\nvar x = [ 'key1': 1, 'key2': 2 ]\nvar y: [ Int: String ]\n```\n\n*Not Preferred*\n\n```\nvar x = [ 'key1' : 1, 'key2':  3]\nvar y: [ Int :    String ]\n```\n\n#### Case statements\n\n*Preferred*\n\n```\nswitch character {\ncase \"a\": doSomething(a);\ndefault: alert();\n}\n```\n\n*Not Preferred*\n\n```\nswitch character {\ncase \"a\" : doSomething(a);\ndefault:     alert();\n}\n```\n\n#### Class, Struct, Protocol, and Extension declarations\n\n*Preferred*\n\n```\nclass ClassName: BaseClass {\n}\n\nstruct StructName: BaseStruct {\n}\n\nprotocol ProtocolName: AnotherProtocol {\n}\n\nextension TypeName: ProtocolName {\n}\n```\n\n*Not Preferred*\n\n```\nclass ClassName : BaseClass {\n}\n\nstruct StructName:  BaseStruct {\n}\n\nprotocol ProtocolName:AnotherProtocol {\n}\n\nextension TypeName : ProtocolName {\n}\n```\n\n#### Tuple declarations\n\n*Preferred*\n\n```\nvar y = (key: 1, value: 2)\n```\n\n*Not Preferred*\n\n```\nvar y = (key:1, value : 2)\n```\n\n#### Function declarations\n\n*Preferred*\n\n```\nfunc someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {\n}\n```\n\n*Not Preferred*\n\n```\nfunc someFunction<T : SomeClass, U:SomeProtocol>(someT: T, someU: U) {\n}\n```\n\n#### Conditional expressions\n\n*Preferred*\n\n```\nvar x = condition ? a : b\n```\n\n*Not Preferred*\n\n```\nvar x = condition ? a: b\nvar x = condition ? a   : b\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "comma-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Whitespace Surrounding the Comma",
+    "description" : "This rule enforces that there should be no whitespace before a comma and exactly one whitespace after a comma in various Swift language constructs.",
+    "explanation" : "### [comma-whitespace](https://github.com/sleekbyte/tailor/issues/89)\n\nPrefer no spaces before and exactly one space after a comma (',') in the following structures:\n\n* Generics\n* Type Inheritance Clauses\n* Condition Clauses\n* Availability Arguments\n* Generic Argument Lists\n* Pattern Initializer Lists\n* Parameter Lists\n* Enum Case Lists\n* Tuple Pattern Lists\n* Tuple Type Lists\n* Expression Lists\n* Array Literal Items\n* Dictionary Literal Items\n* Capture List Items\n* Paranthesized Expressions\n* Identifier Lists\n* Switch Case Item Lists\n\n*Preferred*\n\n```\nfunc someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {\n    // function body goes here\n}\n\nfunc someFunction<T: SomeClass, U: SomeProtocol,\n\tV: AnotherClass>(someT: T, someU: U) {\n    // function body goes here\n}\n\nclass Bicycle: Vehicle, TwoWheeler {\n    var hasBasket = false\n}\n\nif x < 2, var y = val {\n    println(x + y)\n}\n\nif let roomCount = john.residence?.numberOfRooms, roomCountTwo = john.residence?.numberOfRooms {\n    println(\"John's residence has \\(roomCount) room(s).\")\n}\n\nif #available(iOS 9, OSX 10.10, *) {\n    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X\n}\n\nstruct Dictionary<Key: Hashable, Value>: CollectionType {}\n\nlet numX = 2, func_y = { x in println(x) }\n\nfunc initialize(x: Int, y: Int, z: Int) {}\n\nenum Planet {\n    case Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune\n}\n\nenum ASCIIControlCharacter: Character {\n    case Tab = \"\\t\", LineFeed = \"\\n\"\n    case CarriageReturn = \"\\r\"\n}\n\nvar (x, y): (Int, Int)\n\nfor (i = 0, j = n - 1; i < n && j >= 0; i++, j--) {\n  println(mat[i][j])\n}\n\nshoppingList += [\"Chocolate Spread\", \"Cheese\", \"Butter\"]\n\nvar airports: [String: String] = [\"YYZ\": \"Toronto Pearson\", \"DUB\": \"Dublin\"]\n\nlazy var someClosure: Void -> String = {\n    [unowned self, weak delegate = self.delegate!] in\n    // closure body goes here\n}\n\nvar arr = [ (1, 2, 3), (3, 4, 5) ]\n\nreversed = names.sort( { s1, s2 in s1 > s2 } )\n\nswitch character {\ncase \"a\", \"e\", \"i\", \"o\", \"u\", \" \": continue\ndefault: puzzleOutput.append(character)\n}\n```\n\n*Not Preferred*\n\n```\nfunc someFunction<T: SomeClass,U: SomeProtocol>(someT: T, someU: U) {\n    // function body goes here\n}\n\nfunc someFunction<T: SomeClass , U: SomeProtocol>(someT: T, someU: U) {\n    // function body goes here\n}\n\nclass Bicycle: Vehicle,  TwoWheeler {\n    var hasBasket = false\n}\n\nif x < 2 , var y = val {\n    println(x + y)\n}\n\nif let roomCount = john.residence?.numberOfRooms,roomCountTwo = john.residence?.numberOfRooms {\n    println(\"John's residence has \\(roomCount) room(s).\")\n}\n\nif #available(iOS 9, OSX 10.10,*) {\n    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X\n}\n\nstruct Dictionary<Key: Hashable,   Value>: CollectionType {}\n\nlet numX = 2 , func_y = { x in println(x) }\n\nfunc initialize(x: Int,y: Int,z: Int) {}\n\nenum Planet {\n    case Mercury,Venus, Earth, Mars,  Jupiter, Saturn, Uranus, Neptune\n}\n\nenum ASCIIControlCharacter: Character {\n    case Tab = \"\\t\" , LineFeed = \"\\n\"\n    case CarriageReturn = \"\\r\"\n}\n\nvar (x,y): (Int , Int)\n\nfor (i = 0,j = n - 1; i < n && j >= 0; i++,j--) {\n  println(mat[i][j])\n}\n\nshoppingList += [\"Chocolate Spread\" , \"Cheese\",  \"Butter\"]\n\nvar airports: [String: String] = [\"YYZ\": \"Toronto Pearson\",\"DUB\": \"Dublin\"]\n\nlazy var someClosure: Void -> String = {\n    [unowned self , weak delegate = self.delegate!] in\n    // closure body goes here\n}\n\nvar arr = [ (1,2, 3), (3 , 4, 5) ]\n\nreversed = names.sort( { s1,s2 in s1 > s2 } )\n\nswitch character {\ncase \"a\" , \"e\",  \"i\",\"o\", \"u\", \" \": continue\ndefault: puzzleOutput.append(character)\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "comment-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Whitespace After Comment Opening Symbol",
+    "description" : "Ensures there is at least one whitespace character after the opening symbols of comments and before the closing symbol in multi-line comments.",
+    "explanation" : "### [comment-whitespace](https://github.com/sleekbyte/tailor/issues/89)\n\nPrefer _at least one_ whitespace character after a comment opening symbol (`//`, `///`, `/*`, or `/**`) and _at least one_ whitespace character before a comment closing symbol (`*/`).\n\n*Preferred*\n\n```\n// This is a comment\n\n/// This is a documentation comment\n\n/* This is a\nmulti-line comment */\n\n/* This is a\nmulti-line comment\n*/\n\n/** This is a\ndocumentation multi-line\ncomment\n*/\n```\n\n*Not Preferred*\n\n```\n//This is a comment\n\n///This is a documentation comment\n\n/*This is a\nmulti-line comment*/\n\n/**This is a multi-line\ndocumentation comment */\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "constant-k-prefix",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit k-Prefixed Constants",
+    "description" : "This rule prohibits the use of constants prefixed with 'k' to enforce a consistent naming convention for constants.",
+    "explanation" : "### [constant-k-prefix](https://github.com/sleekbyte/tailor/issues/11)\nFlag \"k-prefixed\" constants.\n\n*Preferred*\n\n```\nlet maxHeight = 42\nlet MaxHeight = 42\n```\n\n*Not Preferred*\n\n```\nlet kMaxHeight = 42\n```",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "constant-naming",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Constant Naming Convention",
+    "description" : "This rule enforces that global constants follow either UpperCamelCase or lowerCamelCase naming conventions, while local constants should follow lowerCamelCase.",
+    "explanation" : "### [constant-naming](https://github.com/sleekbyte/tailor/issues/12)\nGlobal constants should follow either *UpperCamelCase* or *lowerCamelCase* naming conventions. Local constants should follow *lowerCamelCase* naming conventions.\n\n*Preferred*\n\n```\nlet MaxHeight = 42\nlet maxHeight = 42\n```\n\n*Not Preferred*\n\n```\nlet max_height = 42\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "forced-type-cast",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Prohibit Forced Type Cast Operator Usage",
+    "description" : "This rule prohibits using the forced form of the type cast operator (as!) in Swift code.",
+    "explanation" : "### [forced-type-cast](https://github.com/sleekbyte/tailor/issues/114)\nAvoid using the forced form of the type cast operator (`as!`) because Swift is not able to determine at compile time if the type conversion will succeed.  In the event of an unsuccessful conversion, a runtime error will be triggered. The conditional form of the type cast operator (`as?`) is safer and should be used when possible.\n\n*Preferred*\n\n```\nif let movie = item as? Movie {\n    print(\"Movie: '\\(movie.name)', dir. \\(movie.director)\")\n}\n```\n\n*Not Preferred*\n\n```\nlet movie = item as! Movie\nprint(\"Movie: '\\(movie.name)', dir. \\(movie.director)\")\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "function-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce One Blank Line Before and After Function Declarations",
+    "description" : "This rule enforces that every function and method declaration has exactly one blank line before and after it, with exceptions for functions at the start or end of a file.",
+    "explanation" : "### [function-whitespace](https://github.com/sleekbyte/tailor/issues/89)\n\nEvery function and method declaration should have _one_ blank line before and after itself. An exception to this rule are functions that are declared at the start of a file (only need one blank line after their declaration) or at the end of a file (only need one blank line before their declaration). Comments immediately before a function declaration (no blank lines between them and the function) are considered to be part of the declaration.\n\n*Preferred*\n\n```\nfunc function1() {\n  var text = 1\n  var text = 2\n}\n\nfunction1()\n\n// a comment\nfunc function2() {\n  // something goes here\n}\n\nstruct SomeStruct {\n\n  func function3() {\n    // something goes here\n  }\n\n  func function4() {\n    // something else goes here\n  };\n\n}\n\nfunc function5() {\n  // something goes here\n}\n```\n\n*Not Preferred*\n\n```\nfunc function1() {\n  var text = 1\n  var text = 2\n}\nfunction1()\n// a comment\nfunc function2() {\n  // something goes here\n}\n\nstruct SomeStruct {\n  func function3() {\n    // something goes here\n  }\n\n  func function4() {\n    // something else goes here\n  };\n}\nfunc function5() {\n  // something goes here\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "leading-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Source Files Begin Without Leading Whitespace",
+    "description" : "Ensures that source files start with a non-whitespace character to maintain clean and consistent file beginnings.",
+    "explanation" : "### [leading-whitespace](https://github.com/sleekbyte/tailor/issues/115)\nVerify that source files begin with a non-whitespace character.\n\n*Preferred*\n\n```\n1 import Foundation\n```\n\n*Not Preferred*\n\n```\n1 ¬\n2 import Foundation\n```\n\n```\n1 ••import Foundation\n```",
+    "enabled" : true,
+    "timeToFix" : 1,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lower-camel-case",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce lowerCamelCase Naming Convention",
+    "description" : "This rule enforces the use of lowerCamelCase naming convention for method and variable names.",
+    "explanation" : "### [lower-camel-case](https://github.com/sleekbyte/tailor/issues/9)\n`method` and `var` names should follow *lowerCamelCase* naming convention: first letter of the entire word is lowercase, but subsequent first letters are uppercase.\n#### Method and selector names\n*Preferred*\n\n```\nfunc someMethod() {\n\t// method definition goes here\n}\n```\n\n*Not Preferred*\n\n```\nfunc some-method() {\n\t// method definition goes here\n}\n```\n\n#### Variable names\n*Preferred*\n\n```\nvar someVariable = someValue\n```\n\n*Not Preferred*\n\n```\nvar Some_Var1able = someValue\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "max-class-length",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Class Length",
+    "description" : "This rule enforces a maximum line limit on the length of class bodies to ensure classes do not become excessively long.",
+    "explanation" : "### [max-class-length](https://github.com/sleekbyte/tailor/issues/14)\nEnforce a line limit on the lengths of class bodies.\n\n```\ntailor [--max-class-length <x>]\n```\n\nFor example, limiting classes to 2 lines would trigger a violation for the following 3 line class:\n\n```\n1 class ThreeLineClass {\n2     // This class spans from lines 1-4.\n3\n4 }\n```",
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "max-class-length",
+        "default" : "30",
+        "description" : "Maximum length of class bodies"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "max-closure-length",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Length on Closure Bodies",
+    "description" : "This rule enforces a maximum line limit on the length of closure bodies to keep them concise and readable.",
+    "explanation" : "### [max-closure-length](https://github.com/sleekbyte/tailor/issues/14)\nEnforce a line limit on the lengths of closure bodies.\n\n```\ntailor [--max-closure-length <x>]\n```\n\nFor example, limiting closures to 2 lines would trigger a violation for the following 3 line closure:\n\n```\n1 reversed = names.sort({ (s1: String, s2: String) -> Bool in\n2     // This closure spans from lines 1-4.\n3     return s1 > s2\n4 })\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "max-closure-length",
+        "default" : "5",
+        "description" : "Maximum length of closure bodies"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "max-file-length",
+    "level" : "Info",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Maximum File Length",
+    "description" : "This rule enforces a limit on the number of lines allowed in a single source code file.",
+    "explanation" : "### [max-file-length](https://github.com/sleekbyte/tailor/issues/14)\nEnforce a line limit on the length of each file.\n\n```\ntailor [--max-file-length <x>]\n```\n\nFor example, limiting files to 2 lines would trigger a violation for the following 3 line file:\n\n```\n1 let myHello = \"Hello,\"\n2 let myWorld = \" world!\"\n3 println(myHello + myWorld)\n```",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "max-file-length",
+        "default" : "100",
+        "description" : "Maximum length of closure bodies"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "max-function-length",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Function Length",
+    "description" : "This rule enforces a limit on the number of lines allowed in function bodies.",
+    "explanation" : "### [max-function-length](https://github.com/sleekbyte/tailor/issues/14)\nEnforce a line limit on the lengths of function bodies.\n\n```\ntailor [--max-function-length <x>]\n```\n\nFor example, limiting functions to 2 lines would trigger a violation for the following 3 line function:\n\n```\n1 func helloWorld() {\n2     // This function spans from lines 1-4.\n3     println(\"Hello, world!\")\n4 }\n```",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "max-function-length",
+        "default" : "10",
+        "description" : "Maximum length of function bodies"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "max-line-length",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Line Length",
+    "description" : "This rule enforces a maximum character limit on the length of each line in the source code.",
+    "explanation" : "### [max-line-length](https://github.com/sleekbyte/tailor/issues/13)\nEnforce a character limit on the length of each line.\n\n```\ntailor [-l <x>|--max-line-length <x>]\n```\n\nFor example, limiting lines to 10 characters would trigger a violation for the following 14 character line:\n\n```\nlet hello = 42\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "max-line-length",
+        "default" : "120",
+        "description" : "Maximum length of each line"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "max-name-length",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Name Length",
+    "description" : "Enforces a character limit on the maximum length of names for various constructs such as classes, functions, variables, and constants.",
+    "explanation" : "### [max-name-length](https://github.com/sleekbyte/tailor/issues/13)\nEnforce a character limit on the maximum length of each construct name for classes, enums, enumcases, structs, protocols, elements, functions, labels, setters, typealiases, types, variables, and constants.\n\n```\ntailor [--max-name-length <x>]\n```\n\nFor example, limiting names to 10 characters would trigger a violation for the following 12 character constant name:\n\n```\nlet my12CharName = 42\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "max-name-length",
+        "default" : "20",
+        "description" : "Maximum length of each name"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "max-struct-length",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce maximum length for struct bodies",
+    "description" : "This rule enforces a maximum line limit on the bodies of struct declarations to keep them concise.",
+    "explanation" : "### [max-struct-length](https://github.com/sleekbyte/tailor/issues/14)\nEnforce a line limit on the lengths of struct bodies.\n\n```\ntailor [--max-struct-length <x>]\n```\n\nFor example, limiting structs to 2 lines would trigger a violation for the following 3 line struct:\n\n```\n1 struct ThreeLineStruct {\n2     // This struct spans from lines 1-4.\n3\n4 }\n```",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "max-struct-length",
+        "default" : "10",
+        "description" : "Maximum length of struct bodies"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "min-name-length",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Minimum Name Length",
+    "description" : "Enforces a minimum character length for names of various constructs such as classes, variables, functions, and constants.",
+    "explanation" : "### [min-name-length](https://github.com/sleekbyte/tailor/issues/90)\nEnforce a character limit on the minimum length of each construct name for classes, enums, enumcases, structs, protocols, elements, functions, labels, setters, typealiases, types, variables, and constants.\n\n```\ntailor [--min-name-length <x>]\n```\n\nFor example, limiting names to at least 3 characters would trigger a violation for the following single character constant name:\n\n```\nlet a = 42\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "min-name-length",
+        "default" : "2",
+        "description" : "Minimum length of each name"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "multiple-imports",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit multiple import statements on a single line",
+    "description" : "This rule enforces that multiple import statements should not be combined on a single line.",
+    "explanation" : "### [multiple-imports](https://github.com/sleekbyte/tailor/issues/66)\nMultiple `import` statements should not be defined on a single line.\n\n*Preferred*\n\n```\nimport Foundation\nimport Cocoa\n```\n\n*Not Preferred*\n\n```\nimport Foundation; import Cocoa\n```",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "operator-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Whitespace Surrounding Operators",
+    "description" : "Ensures that operator declarations have exactly one space surrounding the operator symbol.",
+    "explanation" : "### [operator-whitespace](https://github.com/sleekbyte/tailor/issues/89)\n\nPrefer single space around operator in operator declarations.\n\n*Preferred*\n\n```\ninfix operator -+* { precedence 70 associativity right }\n```\n\n*Not Preferred*\n\n```\ninfix operator-+* { precedence 70 associativity right }\n\ninfix operator -+*  { precedence 70 associativity right }\n\ninfix operator -+*{ precedence 70 associativity right }\n\ninfix operator  -+* { precedence 70 associativity right }\n```",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "parenthesis-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit Whitespace Around Parentheses",
+    "description" : "This rule prohibits whitespace before or after an opening parenthesis and before a closing parenthesis.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "redundant-parentheses",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit Redundant Parentheses Around Control Flow, Exception Handling Constructs, and Initializers",
+    "description" : "Disallows the use of unnecessary parentheses around control flow statements, exception handling constructs, initializers, and method calls with trailing closures.",
+    "explanation" : "### [redundant-parentheses](https://github.com/sleekbyte/tailor/issues/72)\nControl flow constructs (`if`, `else if`, `switch`, `for`, `while`, `repeat-while`, and `guard` statements), Exception handling constructs (`throw`, and `do/catch` statements), and Initializers (`array`, `dictionary`, `initializer patterns`) should not be enclosed in parentheses.\n\nAdditionally, method calls with no parameters and a trailing closure should not have empty parentheses following the method name.\n\n#### Control flow constructs\n\n- if, else if statement\n\n*Preferred*\n\n```\nif SomeCondition {\n\n} else if SomeOtherCondition {\n}\n```\n\n*Not Preferred*\n\n```\nif (SomeCondition) {\n\n} else if (SomeOtherCondition) {\n}\n```\n\n- switch statement\n\n*Preferred*\n\n```\nswitch SomeData {\n\tdefault:\n\t\tbreak\n}\n```\n\n*Not Preferred*\n\n```\nswitch (SomeData) {\n\tdefault:\n\t\tbreak\n}\n```\n\n- for loop\n\n*Preferred*\n\n```\nfor var i = 0; i < 10; i+=1 {\n\n}\n```\n\n*Not Preferred*\n\n```\nfor (var i = 0; i < 10; i+=1) {\n\n}\n```\n\n- while loop\n\n*Preferred*\n\n```\nwhile SomeCondition {\n\n}\n```\n\n*Not Preferred*\n\n```\nwhile (SomeCondition) {\n\n}\n```\n\n- repeat-while loop\n\n*Preferred*\n\n```\nrepeat {\n\n} while SomeCondition\n```\n\n*Not Preferred*\n\n```\nrepeat {\n\n} while (SomeCondition)\n```\n\n- guard clause\n\n*Preferred*\n\n```\nguard true else {   }\n```\n\n*Not Preferred*\n\n```\nguard (true) else {   }\n```\n\n#### Exception handling constructs\n- do/catch statement\n\n*Preferred*\n\n```\ndo  {\n\n} catch SomeException {\n\n}\n```\n\n*Not Preferred*\n\n```\ndo  {\n\n} catch (SomeException) {\n\n}\n```\n\n- throw statement\n\n*Preferred*\n\n```\nthrow SomeException\n```\n\n*Not Preferred*\n\n```\nthrow (SomeException)\n```\n\n#### Initializers\n\n- array items\n\n*Preferred*\n\n```\nvar shoppingList: [String] = [\"Eggs\", \"Milk\"]\n```\n\n*Not Preferred*\n\n```\nvar shoppingList: [String] = [(\"Eggs\"), (\"Milk\")]\n```\n\n- dictionary items\n\n*Preferred*\n\n```\nvar airports: [String: String] = [\"YYZ\": \"Toronto Pearson\", \"DUB\": \"Dublin\"]\n```\n\n*Not Preferred*\n\n```\nvar airports: [String: String] = [(\"YYZ\"): (\"Toronto Pearson\"), (\"DUB\"): (\"Dublin\")]\n```\n\n- initializer patterns\n\n*Preferred*\n\n```\nvar x: Int = 2\nvar y: String = \"Sleekbyte\"\nvar x = 2\n```\n\n*Not Preferred*\n\n```\nvar x: Int = (2)\nvar y: String = (\"Sleekbyte\")\nvar x = (2)\n```\n\n#### Method calls\n\n*Preferred*\n\n```\nitems.map {\n  item in item.transform()\n}\n```\n\n*Not Preferred*\n\n```\nitems.map() {\n  item in item.transform()\n}\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "terminating-newline",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce source files terminate with exactly one newline character",
+    "description" : "Ensures that source files end with exactly one newline character to comply with POSIX standards.",
+    "explanation" : "### [terminating-newline](https://github.com/sleekbyte/tailor/issues/122)\nVerify that source files terminate with exactly one `\\n` character. This ensures that the last line of the file is valid according to the [POSIX standard](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_206). Also see [No Newline at End of File](https://robots.thoughtbot.com/no-newline-at-end-of-file) for more information.\n\nSwift source files should terminate with exactly 1 `\\n` character, not 0 nor more than 1.\n\n*Preferred*\n\n```\nlet myConstant = 42¬\n<EOF>\n```\n\n*Not Preferred*\n\n```\nlet myConstant = 42<EOF>\n```\n\n```\nlet myConstant = 42¬\n¬\n¬\n<EOF>\n```",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "terminating-semicolon",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit multiple statements on a single line",
+    "description" : "This rule prohibits writing multiple statements on a single line separated by semicolons in Swift code.",
+    "explanation" : "### [terminating-semicolon](https://github.com/sleekbyte/tailor/issues/10)\n\nSwift does not require a semicolon after each statement in your code unless you wish to combine multiple statements on a single line. Do not write multiple statements on a single line separated with semicolons.\n\n#### Imports\n*Preferred*\n\n```\nimport Foundation\n```\n\n*Not Preferred*\n\n```\nimport Foundation;\n```\n\n\n#### Enums and enum cases\n*Preferred*\n\n```\nenum CompassPoint {\n\tcase North\n\tcase South\n\tcase East\n\tcase West\n}\n```\n\n\n*Not Preferred*\n\n```\nenum CompassPoint {\n\tcase North;\n\tcase South;\n\tcase East;\n\tcase West;\n};\n```\n\n#### Protocols\n*Preferred*\n\n```\nprotocol SomeProtocol {\n\tvar SomeMethod: String { get }\n\tfunc SomeMethod()\n\tfunc SomeMethod(f: Int)\n\tfunc SomeMethod(bar: String, baz: Double)\n}\n```\n\n*Not Preferred*\n\n```\nprotocol SomeProtocol {\n\tvar SomeMethod: String { get };\n\tfunc SomeMethod();\n\tfunc SomeMethod(f: Int);\n\tfunc SomeMethod(bar: String, baz: Double);\n};\n```\n\n#### Extensions\n*Preferred*\n\n```\nextension SomeType {\n\n}\n```\n\n*Not Preferred*\n\n```\nextension SomeType {\n\n};\n```\n\n#### Structs\n*Preferred*\n\n```\nstruct DemoStruct {\n        var x: String // variables\n}\n```\n\n*Not Preferred*\n\n```\nstruct DemoStruct {\n        var x: String // variables\n};\n```\n\n#### Classes\n*Preferred*\n\n```\nclass SomeClass {\n\tlet b = 2 // constants\n}\n```\n\n*Not Preferred*\n\n```\nclass SomeClass {\n\tlet b = 2 // constants\n};\n```\n\n#### Loops\n*Preferred*\n\n```\n// while loop\nwhile true {\n\n}\n\n// for loop\nfor ; ; {\n}\n\n// repeat while\nrepeat {\n\n} while true\n```\n\n*Not Preferred*\n\n```\n// while loop\nwhile true {\n\n};\n\n// for loop\nfor ; ; {\n};\n\n// repeat while\nrepeat {\n\n} while true;\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "todo-syntax",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce TODO Comments Syntax",
+    "description" : "This rule enforces that TODO comments follow a specific syntax and are not nested or empty.",
+    "explanation" : "### [todo-syntax](https://github.com/sleekbyte/tailor/issues/68)\nTODO comments should be defined separately using non-nested single line comments. They should adhere to the `<TODO: description>` or `<TODO(developer-name): description>` syntax. Empty TODO comments will be flagged.\n\n*Preferred*\n\n```\n// TODO: <insert mandatory todo comment>\n// TODO(dev-name): <insert mandatory todo comment>\n```\n\n*Not Preferred*\n\n```\n// TODO:\n\n/// TODO: Documentation comments should not have TODOs\n\n//// TODO: Nested comments should not have TODOs\n\n// //TODO: Nested comments should not have TODOs\n\n// TODO: Nested comments should not have TODOs // some comment\n\n//// TODO: Nested comments should not have TODOs\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "trailing-closure",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Trailing Closure Syntax for Last Function Argument",
+    "description" : "This rule enforces the use of trailing closure syntax when a closure is the last argument of a function call.",
+    "explanation" : "### [trailing-closure](https://github.com/sleekbyte/tailor/issues/307)\n\nClosures that are the last argument of a function should be passed into the function using [trailing closure](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Closures.html#//apple_ref/doc/uid/TP40014097-CH11-ID94) syntax.\n\n*Preferred*\n\n```\nreversed = names.sort { s1, s2 in return s1 > s2 }\n```\n\n*Not Preferred*\n\n```\nreversed = names.sort({ s1, s2 in return s1 > s2 })\n```",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "trailing-whitespace",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit Trailing Whitespace",
+    "description" : "This rule prohibits any whitespace characters after the last non-whitespace character on each line before the newline.",
+    "explanation" : "### [trailing-whitespace](https://github.com/sleekbyte/tailor/issues/113)\nFlag whitespace after the last non-whitespace character on each line until the newline.\n\n*Preferred*\n\n```\nlet number = 42¬\n```\n\n*Not Preferred*\n\n```\nlet number = 42••¬\n```",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "upper-camel-case",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce UpperCamelCase Naming Convention",
+    "description" : "Ensures that class, enum, enum value, struct, and protocol names follow the UpperCamelCase naming convention where each word starts with a capital letter and words are joined without separators.",
+    "explanation" : "### [upper-camel-case](https://github.com/sleekbyte/tailor/issues/8)\n`class`, `enum`, enum value, `struct`, and `protocol` names should follow *UpperCamelCase* naming convention : several words are joined together, and the first letter of every word is capitalized.\n\n#### Class names\n\n*Preferred*\n\n```\nclass SomeClass {\n\t// class definition goes here\n}\n\nclass SomeClass : SomeSuperClass {\n\t// class definition goes here\n}\n```\n\n*Not Preferred*\n\n```\nclass invalidClassName {\n\t// class definition goes here\n}\n\nclass inval1dCla$$Name : SomeSuperClass {\n\t// class definition goes here\n}\n```\n\n#### Enumeration types\n\n*Preferred*\n\n```\nenum SomeEnumeration {\n\t// enumeration definition goes here\n}\n```\n\n*Not Preferred*\n\n```\nenum S0me_Enumer4t!on {\n\t// enumeration definition goes here\n}\n```\n\n#### Enumeration values\n\n*Preferred*\n\n```\nenum CompassPoint {\n\tcase North\n\tcase South\n\tcase East\n\tcase West\n}\n```\n\n*Not Preferred*\n\n```\nenum CompassPoint {\n\tcase N0rth\n\tcase Sou-th\n\tcase EAST\n\tcase We_$t\n}\n```\n\n#### Struct names\n\n*Preferred*\n\n```\nstruct SomeStructure {\n\t// structure definition goes here\n}\n```\n\n*Not Preferred*\n\n```\nstruct Some-Structure {\n\t// structure definition goes here\n}\n```\n\n#### Protocol names\n\n*Preferred*\n\n```\nprotocol SomeProtocol {\n\t// protocol definition goes here\n}\n```\n\n*Not Preferred*\n\n```\nprotocol someprotocol {\n\t// protocol definition goes here\n}\n```",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

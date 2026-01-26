@@ -1,0 +1,182 @@
+[
+  {
+    "id" : "bandit",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Common Security Issues in Python Code",
+    "description" : "Bandit scans Python code to detect common security vulnerabilities by analyzing the abstract syntax tree (AST) of the code.",
+    "explanation" : "# Bandit\n\nBandit is a tool designed to find common security issues in Python code. To do this Bandit processes each file, builds an AST from it, and runs appropriate plugins against the AST nodes. Once Bandit has finished scanning all the files it generates a report.\n\nBandit was originally developed within the OpenStack Security Project and later rehomed to PyCQA.\n\n## Notes on Codacy Bandit\n\nBandit is officially supported in Codady on its own. If you want better configurability, we suggest disabling Bandit in Prospector and using the \"Bandit\" tool in Codacy. If however, you prefer the Prospector default settings, you can disable the Codacy Bandit tool and use it from Prospector.",
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "dodgy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Detect Hardcoded Secrets and Sensitive Information",
+    "description" : "This rule detects hardcoded sensitive information such as secret keys, passwords, AWS tokens, or source control diffs in the codebase.",
+    "explanation" : "# dodgy\n\nDodgy is a very basic tool to run against your codebase to search for \"dodgy\" looking values. It is a series of simple regular expressions designed to detect things such as accidental SCM diff checkins, or passwords or secret keys hard coded into files.\n\nWhile this is primarily aimed at open source projects (for whom a publicly available secret key is pretty dangerous), it can also be used in private projects, with the caveat that it will point out things which are not a problem for private projects and is not configurable enough currently to change that.",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "mccabe",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Cyclomatic Complexity Threshold",
+    "description" : "Checks the cyclomatic complexity of functions or methods and warns when complexity exceeds a defined threshold.",
+    "explanation" : "# mccabe\n\nMcCabe or cyclomatic complexity is a measurement of how many paths there are in a given function or method. It measures how complicated your functions are, and warns if they reach a certain threshold. Methods that are too complex are prone to logic errors, and should be refactored to a series of smaller methods.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "mypy",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Use mypy for Static Type Checking in Python",
+    "description" : "Enforces the use of mypy to perform static type checking in Python code to detect type errors before runtime.",
+    "explanation" : "# mypy\n\nMypy is an optional static type checker for Python that aims to combine the benefits of dynamic (or \"duck\") typing and static typing. Mypy combines the expressive power and convenience of Python with a powerful type system and compile-time type checking. Mypy type checks standard Python programs; run them using any Python VM with basically no runtime overhead.",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "profile-validator",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Validate Prospector Profiles",
+    "description" : "Ensures that Prospector profile configurations are valid and correctly formatted.",
+    "explanation" : "# profile-validator\n\nThis is a simple tool built in to prospector which validates prospector profiles.",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pycodestyle",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce PEP8 Style Guide Compliance",
+    "description" : "This rule checks Python code for violations of the PEP8 style guide, ensuring consistent and standardized code formatting.",
+    "explanation" : "# pycodestyle\n\nPycodestyle is a tool to check your Python code against some of the style conventions in PEP 8.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pydocstyle",
+    "level" : "Info",
+    "category" : "Documentation",
+    "subCategory" : null,
+    "title" : "Enforce PEP 257 Docstring Conventions",
+    "description" : "Checks Python code for compliance with PEP 257 docstring conventions to ensure consistent and clear documentation.",
+    "explanation" : "# pydocstyle\n\nPydocstyle is a static analysis tool for checking compliance with Python docstring conventions.\n\nIt supports most of PEP 257 out of the box, but it should not be considered a reference implementation and it supports Python 3.6+",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pyflakes",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Detect Python Source Code Errors with Pyflakes",
+    "description" : "Detects various errors in Python source files by analyzing the code without importing it.",
+    "explanation" : "# pyflakes\n\nA simple program which checks Python source files for errors.\n\nPyflakes analyzes programs and detects various errors. It works by parsing the source file, not importing it, so it is safe to use on modules with side effects. It’s also much faster.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pylint",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Use Pylint for Comprehensive Python Static Analysis",
+    "description" : "This rule ensures that Pylint is used as the primary static analysis tool for Python code, providing thorough and comprehensive code quality checks.",
+    "explanation" : "# Pylint\n\nPylint is the most comprehensive static analysis tool for Python. It is extremely thorough and is the source of most messages that prospector outputs.\n\n## Notes on Codacy Pylint\n\nPylint is officially supported in Codady on its own. If you want better configurability, we suggest disabling Pylint in Prospector and using the \"Pylint\" tool in Codacy. If however, you prefer the Prospector default settings, you can disable the Codacy Pylint tool and use it from Prospector.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pyright",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Use Pyright Static Type Checker",
+    "description" : "Enforces the use of Pyright, a static type checker for Python, to detect type errors and improve code quality.",
+    "explanation" : "## pyright\n\nPyright is a full-featured, standards-based static type checker for Python. It is designed for high performance and can be used with large Python source bases.",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "pyroma",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Python Package Metadata Best Practices",
+    "description" : "This rule checks that the Python package setup.py follows best practices for metadata completeness and correctness to improve package quality and usability on PyPI.",
+    "explanation" : "# pyroma\n\nPyroma rhymes with aroma, and is a product aimed at giving a rating of how well a Python project complies with the best practices of the Python packaging ecosystem, primarily PyPI, pip, Distribute etc, as well as a list of issues that could be improved.\n\nThe aim of this is both to help people make a project that is nice and usable, but also to improve the quality of Python third-party software, making it easier and more enjoyable to use the vast array of available modules for Python.\n\nIt's written so that there are a library with methods to call from Python, as well as a script, also called pyroma.\n\n## Tests\n\nThis is the list of checks that are currently performed:\n\n* The package should have a name, a version and a Description. If it does not, it will receive a rating of 0.\n\n* The version number should be a string. A floating point number will work with distutils, but most other tools will fail.\n\n* The version number should comply to PEP386.\n\n* The description should be over 10 characters, and the long_description should be over a 100 characters.\n\n* Pyroma will convert your long_description to HTML using Docutils, to verify that it is possible. This guarantees pretty formatting of your description on PyPI. As long as Docutils can convert it, this passes, even if there are warnings or error in the conversion. These warnings and errors are printed to stdout so you will see them.\n\n NB! Currently this doesn't change the rating, this is because Docutils no longer raises an error during this process, so I have to rewrite the test. Once it's reinstated, incorrect syntax will be fatal.\n\n* You should have the following meta data fields filled in: classifiers, keywords, author, author_email, url and license.\n\n* You should have classifiers specifying the supported Python versions.\n\n* You should have requires-python/python_requires specifying the Python versions you support.\n\n* You should have a classifier specifying the project license.\n\n* If you are checking on a PyPI package, and not a local directory or local package, pyroma will check the number of owners the package has on PyPI. It should be three or more, to minimize the \"Bus factor\", the risk of the index owners suddenly going off-line for whatever reason.\n\n* If you are checking on a PyPI package, and not a local directory or local package, pyroma will check that you have uploaded a source distribution, and not just binary distributions.",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vulture",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Detect Unused Code",
+    "description" : "Detects unused classes, functions, and variables in Python code to identify dead code and potential cleanup opportunities.",
+    "explanation" : "# Vulture - Find dead code\n\nVulture finds unused code in Python programs. This is useful for cleaning up and finding errors in large code bases. If you run Vulture on both your library and test suite you can find untested code.\n\nDue to Python's dynamic nature, static code analyzers like Vulture are likely to miss some dead code. Also, code that is only called implicitly may be reported as unused. Nonetheless, Vulture can be a very helpful tool for higher code quality.\n\n## Features\n\n- fast: uses static code analysis\n- tested: tests itself and has complete test coverage\n- complements pyflakes and has the same output syntax\n- sorts unused classes and functions by size with --sort-by-size\n- supports Python >= 3.6",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

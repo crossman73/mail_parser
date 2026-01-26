@@ -22,6 +22,7 @@
         <div class="card-body">
           <h5 class="card-title"><i class="fas fa-list"></i> 총 실행 횟수</h5>
           <h2 id="totalCount">0</h2>
+          <small>&nbsp;</small>
         </div>
       </div>
     </div>
@@ -75,6 +76,7 @@
             <option value="failed">실패만</option>
             <option value="error">오류만</option>
           </select>
+          <div class="form-text">&nbsp;</div>
         </div>
         <div class="col-md-2">
           <label class="form-label small">카테고리 필터</label>
@@ -521,7 +523,7 @@
       <div class="row">
         <div class="col-md-6">
           <p><strong>테스트명:</strong> ${historyItem.test_name}</p>
-          <p><strong>카테고리:</strong> <span class="badge category-badge ${getCategoryClass(
+          <p><strong>카테고리:</strong> <span class="badge ${getCategoryBadgeClass(
             historyItem.test_category
           )}">${historyItem.test_category || "-"}</span></p>
           <p><strong>테스트 키:</strong> <code>${
@@ -529,7 +531,7 @@
           }</code></p>
         </div>
         <div class="col-md-6">
-          <p><strong>실행 시간:</strong> ${formatDateTimeFull(
+          <p><strong>실행 시간:</strong> ${formatDateTimeLong(
             historyItem.execution_time
           )}</p>
           <p><strong>소요 시간:</strong> ${historyItem.duration_ms}ms</p>

@@ -90,13 +90,43 @@ function formatDateTime(dateStr) {
 
 /**
  * 전체 날짜/시간 포맷 함수
- * - 날짜와 시간을 모두 표시 (YYYY-MM-DD HH:mm:ss)
+ * - 오늘: 시간만 표시 (HH:mm)
+ * - 오늘이 아닌 경우: 날짜 표시 (YYYY/MM/DD)
  * @param {string|Date} dateStr - 날짜 문자열 또는 Date 객체
  * @returns {string} 포맷된 날짜/시간 문자열
  */
 function formatDateTimeFull(dateStr) {
   if (!dateStr) return '-';
 
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '-';
+
+  const now = new Date();
+  const isToday = date.getFullYear() === now.getFullYear() &&
+                  date.getMonth() === now.getMonth() &&
+                  date.getDate() === now.getDate();
+
+  if (isToday) {
+    // 오늘: 시간만 표시
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    return `${hour}:${minute}`;
+  } else {
+    // 오늘이 아닌 경우: 날짜만 표시
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  }
+}
+
+/**
+ * 전체 날짜/시간 (긴 형식) — 항상 YYYY-MM-DD HH:mm:ss 반환
+ * @param {string|Date} dateStr
+ * @returns {string}
+ */
+function formatDateTimeLong(dateStr) {
+  if (!dateStr) return '-';
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return '-';
 

@@ -28,19 +28,9 @@ try:
     use_full = os.environ.get('USE_FULL_UI', '').lower() in (
         '1', 'true', 'yes', 'on')
 
-    if use_minimal and not use_full:
-        # Explicit: developer asked for minimal compatibility UI
-        from src.web.app_factory import create_app
-    else:
-        # Default: prefer legacy full UI for development and testing
-        try:
-            from src.web.app import create_app
-        except Exception:
-            # Fallback to the compatibility factory if legacy app import fails
-            from src.web.app_factory import create_app
-except Exception:
-    # Absolute fallback
-    from src.web.app_factory import create_app
+    # Prefer the main application factory; compatibility factory removed.
+    # Keep a simple import to avoid import-time issues during linting.
+    from src.web.app import create_app
 
 try:
     import psutil

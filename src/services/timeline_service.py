@@ -217,13 +217,13 @@ class TimelineService:
             print(f"타임라인 필터링 오류: {e}")
             return timeline_data
 
-    def export_timeline(self, timeline_data: Dict[str, Any], format: str = 'json') -> str:
+    def export_timeline(self, timeline_data: Dict[str, Any], output_format: str = 'json') -> str:
         """타임라인 내보내기"""
         try:
-            if format.lower() == 'json':
+            if output_format.lower() == 'json':
                 return json.dumps(timeline_data, ensure_ascii=False, indent=2)
 
-            elif format.lower() == 'csv':
+            elif output_format.lower() == 'csv':
                 import csv
                 import io
 
@@ -248,7 +248,7 @@ class TimelineService:
 
                 return output.getvalue()
 
-            elif format.lower() == 'html':
+            elif output_format.lower() == 'html':
                 return self._generate_timeline_html(timeline_data)
 
             return ""

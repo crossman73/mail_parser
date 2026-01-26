@@ -1,0 +1,92 @@
+[
+  {
+    "id" : "malicious_packages",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Malicious Packages",
+    "description" : "Detect packages matching entries in the OpenSSF Malicious Packages database (typosquatting, dependency confusion, or packages with malicious payloads).",
+    "explanation" : "## Malicious packages detection\nDetects malicious packages identified in the OpenSSF Malicious Packages database, including typosquatting attacks, dependency confusion, and packages with malicious payloads.",
+    "enabled" : true,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "secret",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Detect Secret Exposure",
+    "description" : "Detects secrets such as keys, passwords, and authentication tokens that should not be committed to repositories or disclosed.",
+    "explanation" : "## Secret detection\nDetects secrets that should not be committed to a repository or otherwise disclosed, such as secret keys, passwords, and authentication tokens from multiple products.",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vulnerability_critical",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Insecure Dependencies (Critical Severity)",
+    "description" : "Detects insecure dependencies with critical severity by checking declared libraries and flagging those with known security vulnerabilities.",
+    "explanation" : "## Insecure dependencies detection (critical severity)\nDetects insecure dependencies (critical severity) by checking the libraries declared in the package manager and flagging used library versions with known security vulnerabilities.",
+    "enabled" : true,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vulnerability_high",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Insecure Dependencies (High Severity)",
+    "description" : "Detects insecure dependencies by checking declared libraries and flagging those with known high severity security vulnerabilities.",
+    "explanation" : "## Insecure dependencies detection (high severity)\nDetects insecure dependencies (high severity) by checking the libraries declared in the package manager and flagging used library versions with known security vulnerabilities.",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vulnerability_medium",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Insecure Dependencies (Medium Severity)",
+    "description" : "Detects insecure dependencies by checking declared libraries and flagging versions with known medium severity security vulnerabilities.",
+    "explanation" : "## Insecure dependencies detection (medium severity)\nDetects insecure dependencies (medium severity) by checking the libraries declared in the package manager and flagging used library versions with known security vulnerabilities.",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vulnerability_minor",
+    "level" : "Info",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Insecure Dependencies (Minor Severity)",
+    "description" : "Detects insecure dependencies with known minor security vulnerabilities in declared libraries of package managers.",
+    "explanation" : "## Insecure dependencies detection (minor severity)\nDetects insecure dependencies (minor severity) by checking the libraries declared in the package manager and flagging used library versions with known security vulnerabilities.",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

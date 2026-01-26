@@ -1,0 +1,422 @@
+[
+  {
+    "id" : "adjoining-classes",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Avoid Adjoining Classes in CSS",
+    "description" : "This rule flags the use of adjoining classes (class chaining) in CSS selectors, such as '.foo.bar'.",
+    "explanation" : "Adjoining classes, sometimes also called class chaining, look like `.foo.bar`.\nWhile technically allowed in CSS, these aren't handled properly by Internet Explorer 6 and earlier.\nIE will match the selector as if it were simply `.bar` which means your selector will match more frequently\nthan you intend it to and create cross-browser bugs.\n\nEx:\n\n     .foo.bar {\n       color: red;\n     }\n\nShould be:\n\n     .baz {\n       color: red;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-adjoining-classes)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "box-model",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit broken box size",
+    "description" : "Disallow using width or height properties when padding or border are set without box-sizing to avoid unexpected element sizing.",
+    "explanation" : "The box model is one of the most frequently misunderstood parts of CSS.\n\"Box model\" refers to the series of boxes that make up an element visually.\nThis starts with the content, which is the inner-most box.\nContent is surrounded by padding, which in turn is surrounded by borders.\nThe way these measurements interact, however, is a bit confusing. Consider the following:\n\n     .mybox {\n       border: 1px solid black;\n       padding: 5px;\n       width: 100px;\n     }\n\nA new developer might assume that the width of an element with the mybox class would be 100 pixels.\nIn fact, the width is 112 pixels because width refers to the content box and padding and borders are added on top of that.\nFrequently when developers include this combination of properties, it is an error because they are expecting different behavior.\n\nYou can force most browsers to obey width and height as the full size of an element by using the box-sizing property\nand setting it to border-box, as in this example:\n\n     .mybox {\n       box-sizing: border-box;\n       border: 1px solid black;\n       padding: 5px;\n       width: 100px;\n     }\n\nNow an element with a class of mybox will have an actual width of 100 pixels, and the padding\nand borders will exist inside of that area, leaving 88 pixels for content instead of 100 pixels.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Beware-of-box-model-size)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "box-sizing",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Disallow Use of box-sizing Property",
+    "description" : "This rule disallows the use of the CSS box-sizing property due to lack of support in Internet Explorer 6 and 7.",
+    "explanation" : "The CSS box-sizing property is used to define how borders, padding, width, and height interact with each other.\nThe default value is content-box, meaning that width and height refer to an element's content, and then padding\nand borders are added around it. Consider the following:\n\n     .mybox {\n       border: 1px solid black;\n       padding: 5px;\n       width: 100px;\n     }\n\nThe actual width of this box is 112 pixels. That's because the 100 pixels specified by width indicates how much area the content\nshould take up, then 5 pixels are added on each side for padding, and 1 pixel on each side for the border.\n\nWhen you change box-sizing to border-box, the calculation is done differently:\n\n     .mybox {\n       box-sizing: border-box;\n       border: 1px solid black;\n       padding: 5px;\n       width: 100px;\n     }\n\nThis box has an actual width of 100 pixels while the space available for content is only 88 pixels\n(100 - 5px padding - 5px padding - 1px border - 1px border). Many consider the border-box setting to be more logical\nand more like how these properties should work.\n\nThere is only a problem using box-sizing when you need to support Internet Explorer 6 and 7.\nThese browsers do not support box-sizing and so will interpret the box model properties differently.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-box-sizing)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "bulletproof-font-face",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Enforce Bulletproof @font-face Syntax",
+    "description" : "Ensure the use of bulletproof @font-face syntax to prevent 404 errors in old Internet Explorer versions.",
+    "explanation" : "When using @font-face to declare multiple font types for cross browser compatibility, you can see 404's in old versions of IE\ndue to a bug in the way that IE parses the font declarations. For example, this syntax:\n\n     @font-face {\n       font-family: 'MyFontFamily';\n       src: url('myfont-webfont.eot') format('embedded-opentype'),\n         url('myfont-webfont.woff') format('woff'),\n         url('myfont-webfont.ttf')  format('truetype'),\n         url('myfont-webfont.svg#svgFontName') format('svg');\n     }\n\nWill cause a 404 in IE 6, 7, and 8. The fix is to add a question mark after the first font URL, so IE sees\nthe rest of the property value as a query string. This is a correct example:\n\n     @font-face {\n       font-family: 'MyFontFamily';\n       src: url('myfont-webfont.eot?#iefix') format('embedded-opentype'),\n         url('myfont-webfont.woff') format('woff'),\n         url('myfont-webfont.ttf')  format('truetype'),\n         url('myfont-webfont.svg#svgFontName') format('svg');\n     }\n\n[More information](http://www.fontspring.com/blog/the-new-bulletproof-font-face-syntax)\n\n[Source](https://github.com/CSSLint/csslint/wiki/Bulletproof-font-face)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "compatible-vendor-prefixes",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Enforce Compatible Vendor Prefixes",
+    "description" : "Ensure all compatible vendor prefixes are included for CSS properties to support a wider range of browsers.",
+    "explanation" : "Experimental CSS properties are typically implemented using vendor prefixes until the final behavior has been established\nand agreed upon. Most CSS3 properties have vendor-prefixed equivalents for multiple vendors, including Firefox (`-moz`),\nSafari/Chrome (`-webkit`), Opera (`-o`), and Internet Explorer (`-ms`).\n\nIt's easy to forget to include the vendor prefixed version of a property when there are so many to keep track of.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Require-compatible-vendor-prefixes)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "display-property-grouping",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Require Properties Appropriate for Display",
+    "description" : "Ensures CSS properties used are compatible with the element's display value to avoid ineffective styles.",
+    "explanation" : "Even though you can define any group of properties together in a CSS rule, some of them will be ignored due to the display of the element.\nThis leads to extra cruft in your CSS and misunderstandings around how a rule should work.\n\nFor display: `inline`, the `width`, `height`, `margin-top`, `margin-bottom`, and `float` properties have no effect\nbecause inline elements don't have a formal box with which to apply the styles.\nThe `margin-left` and `margin-right` properties still work reliably for indentation purposes but the other margin settings do not.\nThe `float` property is sometimes used as a fix for the IE6 double-margin bug.\n\nOther general rules based on display are:\n\n+ display: inline-block should not use float.\n+ display: block should not use vertical-align.\n+ display: table-* should not use margin (and all variants) or float.\n\nRemoved the ignored or problematic properties decreases file size thereby improving performance\n\n[Source](https://github.com/CSSLint/csslint/wiki/Require-properties-appropriate-for-display)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "duplicate-background-images",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Prohibit duplicated background images",
+    "description" : "This rule prohibits the use of duplicated background images across different CSS selectors to optimize performance.",
+    "explanation" : "The main solutions for performance is to use as few bytes as possible. In the example bellow we are loading the same image two\ntimes what makes your page slow since those are images that can have big sizes.\n\nEx:\n\n     .icon-a {\n       background: url(icons.png) 10px 0 no-repeat;\n     }\n\n     .icon-b {\n       background: url(icons.png) 20px 0 no-repeat;\n     }\n\nShould be:\n\n     .icons {\n       background: url(icons.png) no-repeat;\n     }\n\n     .icon-a {\n       background-position: 10px 0;\n     }\n\n     .icon-b {\n       background-position: 20px 0;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-duplicate-background-images)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "duplicate-properties",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Duplicate CSS Properties to Appear Consecutively",
+    "description" : "Ensures that duplicate CSS properties appear one after the other in the style declaration.",
+    "explanation" : "Early on in web development, including the same CSS property twice was certainly an error, especially if there were two different values.\nFor example:\n\n     .mybox {\n       width: 100px;\n       width: 120px;\n     }\n\nAnyone looking at this code would think that this is clearly an error. Recently, however, including duplicate properties\nis used as a way to deal with varying levels of browser support for CSS properties.\nFor example, some browsers support RGBA color while others do not, so it's quite common to see patterns such as:\n\n     .mybox {\n       background: #fff;\n       background: rgba(255, 255, 255, 0.5);\n     }\n\nThis is quite clearly intentional. The developer wants to use RGBA when available but wants to fall back to a regular color when not available.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-duplicate-properties)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "empty-rules",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Prohibit Empty CSS Rules",
+    "description" : "This rule prohibits CSS rules that have no properties defined inside them.",
+    "explanation" : "An empty rule is one that doesn't contain any properties, such as:\n\n     .foo {\n     }\n\nA lot of times, empty rules appear as a result of refactoring without further cleanup.\nEliminating empty rules results in smaller file sizes and less style information for the browser to deal with.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-empty-rules)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "errors",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Prohibit CSS Syntax Errors",
+    "description" : "Ensures that stylesheets contain no syntax errors.",
+    "explanation" : "Stylesheets with syntax errors become invalid and browsers may fail to parse them. This problem is usually caused by mistyped characters.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Rules)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fallback-colors",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Enforce fallback colors",
+    "description" : "Ensure that CSS color declarations using rgba(), hsl(), or hsla() include a fallback color in a format supported by older browsers.",
+    "explanation" : "In CSS2, there were three ways to specify colors: in hexadecimal format, using either three or six characters,\nnamed colors such as red, and rgb(). CSS3 has since added several new color formats including rgba(), hsl(), and hsla().\nWhile these new color formats bring a remarkable amount of flexibility to how developers define colors\nand the relationships between them, it can also leave older browsers looking worse than expected.\n\nThe problem is that CSS parsers in browsers will skip a property whose name or value is not understood.\nOlder browsers such as Internet Explorer 8 and earlier, do not understand rgba(), hsl(), or hsla(), and as a result will drop\nany declarations containing them. Consider the following:\n\n     .box {\n       background: #000;\n       color: rgba(100, 100, 200, 0.5);\n     }\n\nSupporting browsers will treat this CSS code as described. Non-supporting browsers will completely drop the color property\nbecause the value isn't understood. That means the actual color used will be inherited from the surrounding context\nand might actually end up black (the same as the background).\nTo prevent this, you should always include a fallback color in either hexadecimal, named, or rgb() format, such as:\n\n     .box {\n       background: #000;\n       color: blue;\n       color: rgba(100, 100, 200, 0.5);\n     }\n\nThe fallback color should always go before the new color to ensure older browsers see and use it correctly,\nand that newer browsers continue on to use the newer color format.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Require-fallback-colors)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "gradients",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Enforce Use of All Vendor-Prefixed Gradients",
+    "description" : "Ensure that all necessary vendor-prefixed CSS gradient definitions are included for cross-browser compatibility.",
+    "explanation" : "CSS gradients in a cross-browser way requires using many different vendor-prefixed versions.\nThere are currently five different vendor-prefixed versions of CSS gradient:\n\n+ -ms-linear-gradient and -ms-radial-gradient for Internet Explorer 10+\n+ -moz-linear-gradient and -moz-radial-gradient for Firefox 3.6+\n+ -o-linear-gradient and -o-radial-gradient for Opera 11.10+\n+ -webkit-linear-gradient and -webkit-radial-gradient for Safari 5+ and Chrome\n+ -webkit-gradient for Safari 4+ and Chrome (aka \"Old WebKit\")\n\nMeaning a simple two-color gradient that works across all browsers must look like this:\n\n     background: -moz-linear-gradient(...); /* FF3.6+ */\n     background: -webkit-gradient(...); /* Chrome,Safari4+ */\n     background: -webkit-linear-gradient(...); /* Chrome10+,Safari5.1+ */\n     background: -o-linear-gradient(...); /* Opera 11.10+ */\n     background: -ms-linear-gradient(...); /* IE10+ */\n\nIt's easy to forget one or more gradient definitions with all of the various vendor prefix gradients available.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Require-all-gradient-definitions)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ids",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit IDs in selectors",
+    "description" : "This rule enforces that CSS selectors should not contain IDs.",
+    "explanation" : "For years, developers have treated IDs as the way to say \"that thing!\" However, IDs have a downside: they are completely unique\nand therefore cannot be reused. You could potentially style every element on your page with an ID selector but you would lose\na lot of the benefit of CSS in the process.\n\nOne of CSS's benefits is the ability to reuse style rules in multiple places. When you start out with an ID selector,\nyou're automatically limiting that style to a single element. Suppose you have this:\n\n     #header a {\n       color: black;\n     }\n\nThis style is only useful within the element with the ID of header. But now suppose that you want another section of the page\nto be styled the same way, you'll probably end up defining a new class that does the same thing, such as:\n\n     #header a,\n     .callout a {\n       color: black;\n     }\n\nOnce you've gotten to this point, you might as well just use the class and not mention the ID:\n\n     .callout a {\n       color: black;\n     }\n\nEventually you will end up needing or wanting to reuse the style specified with the ID, and you'll end up defining a class\nfor that purpose. By not using IDs from the start, you allow for the maximum level of reusability with your CSS.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-IDs-in-selectors)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "import",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Prohibit @import Usage",
+    "description" : "Disallow the use of the @import rule in CSS files and recommend using <link> tags instead.",
+    "explanation" : "The @import command is used to include CSS files within other CSS files, for example:\n\n     @import url(more.css);\n     @import url(andmore.css);\n\n     a {\n       color: black;\n     }\n\nThis code includes two more style sheets at the beginning of a style sheet. When the browser parses this code,\nit stops at each @import and starts to download the specified file. The browser doesn't continue downloading\nother style sheets until this one has finished, eliminating any possible parallel downloads of CSS.\n\nThere are two alternatives to using @import:\n\nUse a build system to concatenate CSS files together before deploying.\nUse multiple <link> tags to include the style sheets you want. These will still be downloaded in parallel.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-%40import)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "important",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit !important Usage",
+    "description" : "Warns against the use of !important in CSS to prevent excessive specificity and maintain manageable stylesheets.",
+    "explanation" : "The !important annotation is used to artificially increase the specificity of a given property value in a rule.\nThis is usually an indication that the specificity of the entire CSS has gotten a bit out of control and needs to be refactored.\nThe more frequently !important is found in CSS, the more likely it is that developers are having trouble styling parts of a page effectively.\n\n\nThis rule is aimed at keeping your specificity levels in check. As such, it warns whenever !important is used.\n\nThe following patterns are considered warnings:\n\n     .mybox {\n       color: red !important;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-%21important)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "known-properties",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce known CSS3 properties",
+    "description" : "This rule ensures that CSS property names are either recognized CSS3 properties or vendor-prefixed properties.",
+    "explanation" : "This rule checks each property name to make sure that it is a known CSS property. The CSS property list is maintained\nas part of the CSS parser and this rule uses the parser information to determine whether or not the property has been verified.\nThis list will need to be updated as CSS continues to develop, but is a good start for avoiding errors.\nThe intent of this is to warn when there are misspellings.\n\nAll vendor-prefixed properties (those beginning with a -) are ignored because vendors may add in their own properties\nat any point in time, and there are no canonical lists of these properties. This behavior is different than a CSS validator,\nwhich warns when a vendor-prefixed property is used.\n\nIn addition to checking the property name, this rule also checks the property value against the property name\nto ensure proper values are being supplied. Not all properties are supported yet, but a large number are.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Require-use-of-known-properties)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "outline-none",
+    "level" : "High",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit outline: none except on :focus",
+    "description" : "Disallow use of 'outline: none' or 'outline: 0' except within :focus rules to preserve accessibility focus indicators.",
+    "explanation" : "The CSS outline property is used to define a border around elements. Unlike the border property, the outline property\ndoes not alter the size or layout of the element. Because of this, browsers frequently use outline as the specification\nfor an active state. In Internet Explorer and Firefox, the outline of a selected element is a single pixel dotted line\nwhen focus has moved to that element.\n\nThe focus outline is important for accessibility because it gives a visual indication as to where the focus is on the page.\nFor keyboard-only users, tracking the focus on a web page is impossible without the visual indication given by the focus outline.\nUnfortunately, some consider the focus outline to be \"ugly\" or unappealing, and remove it using code such as :\n\n     a {\n       outline: none;\n     }\n\nOr:\n\n     a {\n       outline: 0;\n     }\n\nBoth of these will remove the outline from an element, so it won't appear even when focus has moved to that element.\nThis is very bad for accessibility.\n\nOf course, there are times when you may want to provide a custom focus decoration for users instead of the default dotted border.\nIn those instances, it's appropriate to remove the outline and add another treatment. The best way to do this is to use\n:focus and provide the alternate treatment along with resetting outline, such as:\n\n     a:focus {\n       border: 1px solid red;\n       outline: none;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-outline%3Anone)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "overqualified-elements",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Avoid Overqualified Elements in CSS Selectors",
+    "description" : "This rule controls the use of overqualified CSS selectors, which combine element names with classes or IDs unnecessarily.",
+    "explanation" : "Using selector like the one bellow is almost every time unnecessary, unless the element name causes the class to behave differently\nyou can omit it. With this you will shrink the file size and speedup your page load time.\n\nBad practice:\n\n     li.foo {\n       color: #ddd;\n     }\n\nAcceptable:\n\n     li.foo {\n       color: #ddd;\n     }\n\n     li.bar {\n       color: #ccc;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-overqualified-elements)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "qualified-headings",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit Qualified Headings",
+    "description" : "This rule enforces that heading elements (h1-h6) should not be qualified or namespaced with other selectors, ensuring they remain top-level styles.",
+    "explanation" : "Heading elements (h1-h6) should be defined as top-level styles and not scoped to particular areas of the page.\nThe headings are considered to be built-in objects in Object-Oriented CSS, and their appearance should be consistent\nacross an entire site. This allows those styles to be reused across your site for better visual consistency and performance\nand easier maintenance. For example, this is an example of an overqualified heading:\n\n     .foo h1 {\n       font-size: 110%;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-qualified-headings)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "regex-selectors",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Avoid Regular Expression Selectors in CSS",
+    "description" : "This rule controls the use of CSS selectors that resemble or use regular expressions, which should be avoided.",
+    "explanation" : "CSS3 added a new kind of selector that allows you to use regular expressions.\nAlthough it is a feature it should be avoided since it has bad performance implications in your application.\nTo replace it you just need create a new class in the target search of your previous regex.\n\nEx:\n\n     a[class*=ex-name] {\n       color: red;\n     }\n\nShould be:\n\n     a.new-ex-name {\n       color: red;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-selectors-that-look-like-regular-expressions)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "shorthand",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce shorthand properties",
+    "description" : "Ensure CSS uses shorthand properties where possible to reduce file size and improve readability.",
+    "explanation" : "When using a rule like the one bellow you should check if it has a shorthand property and if possible use it, it will shrink your file\nand speedup your page load time and it will even make your CSS more readable and simple.\n\nEx:\n\n     .foo {\n       margin-top: 10px;\n       margin-right: 20px;\n       margin-bottom: 10px;\n       margin-left: 20px;\n     }\n\nShould be:\n\n     .foo {\n       margin: 10px 20px;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Require-shorthand-properties)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "star-property-hack",
+    "level" : "Info",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Prohibit Star Property Hack",
+    "description" : "Detects and prohibits the use of the star property hack in CSS, which targets Internet Explorer 6 and 7 by prefixing properties with an asterisk.",
+    "explanation" : "The star hack is a famous (or perhaps infamous) technique for applying CSS properties only to Internet Explorer prior to version 8.\nBy placing an asterisk immediately before the property name, older versions of Internet Explorer treated as if the asterisk\nisn't there while other browsers simply ignore it. For example:\n\n     .mybox {\n       border: 1px solid black;\n       padding: 5px;\n       width: 100px;\n       *width: 200px;\n     }\n\nIn this example, the *width property is treated as if it were width by Internet Explorer 7 and earlier, so it uses the value\nof 200px; other browsers skip that property and use the value of 100px.\n\nStar hack relies on an old CSS parser bug in Internet Explorer, and as such, some prefer not to use it.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-star-hack)\n      ",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "text-indent",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit Negative Text Indent",
+    "description" : "This rule checks for CSS text-indent values less than -99px, which are typically used to hide text off-screen.",
+    "explanation" : "Negative text indents are typically used to hide text off-screen for accessibility purposes. Often used as part of\nan image replacement technique, using a negative text indent ensures that screen readers will read the text even though\nit appears offscreen. Using visibility: hidden or display: none causes the text to be skipped by screen readers,\nso a negative text indent has been deemed as better for accessibility.\n\nThe technique usually involves a very large negative number such as -999px or -9999px, such as:\n\n     .mybox {\n       background: url(bg.png) no-repeat;\n       text-indent: -9999px;\n     }\n\nThe intent of this technique is to allow the background image to show through for sighted users while screen readers\nreceive the inline text instead.\n\nNegative text indents are also problematic when used in a right-to-left language page, as the effect may cause\na long horizontal scrollbar to appear. This problem can be fixed by adding direction: ltr to the rule, such as:\n\n     .mybox {\n       background: url(bg.png) no-repeat;\n       direction: ltr;\n       text-indent: -9999px;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-negative-text-indent)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "underscore-property-hack",
+    "level" : "Info",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Prohibit Underscore Prefix in CSS Properties",
+    "description" : "Detects and prohibits the use of the underscore prefix hack in CSS properties, which targets Internet Explorer 6 and earlier.",
+    "explanation" : "The underscore hack is a technique for applying CSS properties only to Internet Explorer prior to version 7.\nBy placing an underscore immediately before the property name, older versions of Internet Explorer treated as\nif the underscore isn't there while other browsers simply ignore it. For example:\n\n     .mybox {\n       border: 1px solid black;\n       padding: 5px;\n       width: 100px;\n       _width: 200px;\n     }\n\nIn this example, the _width property is treated as if it were width by Internet Explorer 6 and earlier, so it uses\nthe value of 200px; other browsers skip that property and use the value of 100px.\n\nThe underscore hack relies on an old CSS parser bug in Internet Explorer, and as such, some prefer not to use it.\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-underscore-hack)\n      ",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "unique-headings",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit multiple heading style definitions",
+    "description" : "Ensures that each heading element (h1-h6) has only one style rule defining its appearance to maintain atomic and reusable CSS objects.",
+    "explanation" : "Object-Oriented CSS (OOCSS) works by defining reusable objects that can be put into place anywhere on a site and appear exactly the same.\nThe heading elements (h1-h6) are considered to be built-in objects that should look the same regardless of where they appear.\nAs such, each heading should have exactly one rule defining its appearance. Multiple rules defining the same heading appearance can lead\nto objects that are hard to use because the context defines the appearance rather than being completely atomic.\n\nThis rule is aimed at flagging duplicate heading declarations. As such, a warning occurs when more than one rule\ndefines properties targeted at the same heading.\n\nThe following patterns are considered warnings:\n\n     /* Two rules for h3 */\n     h3 {\n       font-weight: normal;\n     }\n\n     .box h3 {\n       font-weight: bold;\n     }\n\nThe following patterns are considered okay and do not cause warnings:\n\n     /* :hover doesn't count */\n     h3 {\n       font-weight: normal;\n     }\n\n     h3:hover {\n       font-weight: bold;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Headings-should-only-be-defined-once)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "universal-selector",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Avoid universal selector",
+    "description" : "This rule enforces avoiding the use of the universal selector (*) in CSS stylesheets.",
+    "explanation" : "The universal selector (*) matches all elements.\nAlthough it may seem convenient for selecting a bunch of elements, this selector has bad performance implications in your application.\nThis happens because browsers evaluate selectors from right to left so in the example below it will start by selecting all the elements\nin the documents and only then it will filter for the next criteria.\n\nEx:\n\n     .ex-class * {\n       color: #fff;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-universal-selector)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "unqualified-attributes",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Avoid Unqualified Attribute Selectors",
+    "description" : "This rule discourages the use of unqualified attribute selectors in CSS selectors.",
+    "explanation" : "Unqualified attribute selectors, such as the one bellow, match all the page before check their attributes.\nSo, like the universal selector they evaluate selectors from right to left.\n\nEx:\n\n     .ex-class [type=text] {\n       font-size: 16px;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-unqualified-attribute-selectors)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "zero-units",
+    "level" : "Info",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Prohibit Units on Zero Values",
+    "description" : "Disallow the use of units (e.g., px, em) when the CSS value is zero.",
+    "explanation" : "Even if CSS allows you to put units in the value 0 you should not.\nThe value is always the same, with or without units, and without those units your will shrink the file size\nand speedup your page load time.\n\nEx:\n\n     .foo {\n       width: 0px;\n     }\n\nShould be:\n\n     .foo {\n       width: 0;\n     }\n\n[Source](https://github.com/CSSLint/csslint/wiki/Disallow-units-for-zero-values)\n      ",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

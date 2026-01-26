@@ -74,7 +74,7 @@ class EmailService:
                     import email.utils
                     parsed_date = email.utils.parsedate_to_datetime(date_str)
                     date_formatted = parsed_date.strftime('%Y-%m-%d %H:%M')
-                except:
+                except Exception:
                     date_formatted = date_str
 
                 # 첨부파일 개수 확인

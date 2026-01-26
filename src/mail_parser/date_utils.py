@@ -24,7 +24,7 @@ def get_email_date(message) -> datetime:
     try:
         # 수동 파싱 시도
         return parse_date_fallback(date_str)
-    except:
+    except Exception:
         return datetime.now()
 
 

@@ -1,0 +1,1037 @@
+[
+  {
+    "id" : "BasicAuth",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Avoid Using http_basic_authenticate_with with Hardcoded Passwords",
+    "description" : "Detects the use of http_basic_authenticate_with in Rails controllers when the password is hardcoded as a string in the source code.",
+    "explanation" : "In Rails 3.1, a new feature was added to simplify basic authentication.\n\nThe example provided in the official Rails Guide looks like this:\n\n    class PostsController < ApplicationController\n\n      http_basic_authenticate_with :name => \"dhh\", :password => \"secret\", :except => :index\n\n      #...\n\n    end\n    \nThis warning will be raised if http_basic_authenticate_with is used and the password is found to be a string (i.e., stored somewhere in the code).\n\n[Source](http://brakemanscanner.org/docs/warning_types/basic_authentication/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "BasicAuthTimingAttack",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Detect Timing Attack Vulnerability in Basic Authentication",
+    "description" : "Detects potential timing attack vulnerabilities in basic authentication implementations that could leak sensitive information.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ContentTag",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Avoid Unescaped XSS in Calls to content_tag",
+    "description" : "Detects potential cross-site scripting (XSS) vulnerabilities caused by unescaped values in Rails content_tag helper calls.",
+    "explanation" : "Warns for unescaped values in `content_tag`\n\n    content_tag :tag, body\n                       ^-- Unescaped in Rails 2.x\n\n    content_tag, :tag, body, attribute => value\n                                ^-- Unescaped in all versions\n\n    content_tag, :tag, body, attribute => value\n                                            ^\n                                            |\n            Escaped by default, can be explicitly escaped\n            or not by passing in (true|false) as fourth argument\n\n[Source](http://brakemanscanner.org/docs/warning_types/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CreateWith",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Avoid Strong Parameters Bypass via create_with",
+    "description" : "Detects usage of create_with method that can bypass strong parameters, leading to security vulnerabilities.",
+    "explanation" : "Prohibits strong params bypass.\ncreate_with is vulnerable to strong params bypass. Consider upgrading to Rails 4.0.9 or 4.1.5\n\nThis vulnerability has been assigned the CVE identifier CVE-2014-3514.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/M4chq5Sb540/CC1Fh0Y_NWwJ)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CrossSiteScripting",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Avoid Unescaped Output in Views to Prevent Cross-Site Scripting",
+    "description" : "Detects unescaped user input output in views which can lead to Cross-Site Scripting (XSS) vulnerabilities.",
+    "explanation" : "XSS occurs when a user-manipulatable value is displayed on a web page without escaping it, allowing someone to inject Javascript or HTML into the page.\n\nIn Rails 2.x, values need to be explicitly escaped (e.g., by using the h method). In Rails 3.x, auto-escaping in views is enabled by default. However, one can still use the raw method to output a value directly.\n\n\n[Source](http://brakemanscanner.org/docs/warning_types/cross_site_scripting/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "DefaultRoutes",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Routes",
+    "title" : "Avoid Default Routes",
+    "description" : "Detects usage of default routes that allow any public method on any controller to be called as an action.",
+    "explanation" : "The general default routes warning means there is a call to\n\n    #Rails 2.x\n    map.connect \":controller/:action/:id\"\n\nor\n\n    Rails 3.x\n    match ':controller(/:action(/:id(.:format)))'\n\n    \nin config/routes.rb. This allows any public method on any controller to be called as an action.\n\nIf this warning is reported for a particular controller, it means there is a route to that controller containing :action.\n\nDefault routes can be dangerous if methods are made public which are not intended to be used as URLs or actions.\n\n\n[Source](http://brakemanscanner.org/docs/warning_types/default_routes/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Deserialize",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Unsafe Deserialization of Objects",
+    "description" : "Detects unsafe deserialization of Ruby objects which can lead to security vulnerabilities.",
+    "explanation" : "Objects in Ruby may be serialized to strings.\nThe main method for doing so is the built-in Marshal class. The YAML, JSON, and CSV libraries also have methods for dumping Ruby objects into strings, and then creating objects from those strings.\n\n[Source](http://brakemanscanner.org/docs/warning_types/unsafe_deserialization/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "DetailedExceptions",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "UnexpectedBehaviour",
+    "title" : "Avoid Information Disclosure via Detailed Exceptions",
+    "description" : "Detects when detailed exception information is displayed to end users, potentially exposing sensitive system information.",
+    "explanation" : "Also known as information leakage or information exposure, this vulnerability refers to system or internal information (such as debugging output, stack traces, error messages, etc.) which is displayed to an end user.\n\nFor example, Rails provides detailed exception reports by default in the development environment, but it is turned off by default in production:\n\n    # Full error reports are disabled\n    config.consider_all_requests_local = false\n\nThis settings should not be true in production, and neither should be a show_detailed_exceptions? method in a controller which does not return false.\n\n[Source](http://brakemanscanner.org/docs/warning_types/information_disclosure/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "DigestDoS",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Detect Digest Authentication DoS Vulnerability",
+    "description" : "Detects a denial of service (DoS) vulnerability in Rails digest authentication handling.",
+    "explanation" : "DoS Vulnerability in authenticate_or_request_with_http_digest\n\nThere is a DoS vulnerability in Action Pack digest authentication handling in Rails.\nThis vulnerability has been assigned the CVE identifier CVE-2012-3424.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/vxJjrc15qYM/discussion)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "DivideByZero",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Potential Division by Zero",
+    "description" : "Detects and warns about code that may perform division by zero.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "DynamicFinders",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "SQLInjection",
+    "title" : "Avoid Unsafe Usage of find_by_* Dynamic Finders",
+    "description" : "Detects unsafe usage of dynamic finders like find_by_* in Ruby on Rails applications that can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EscapeFunction",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Avoid Vulnerable Escape Method in Ruby on Rails Versions Before 2.3.14",
+    "description" : "Detects usage of Ruby on Rails versions before 2.3.14 that contain a vulnerable escape method susceptible to XSS attacks.",
+    "explanation" : "The versions before 2.3.14 have a vulnerable escape method\n\nThis is a XSS Vulnerability in the escaping function in Ruby on Rails\nThere is a vulnerability in the escaping code used by Ruby on Rails, using specially crafted malformed unicode strings an attacker can bypass the escaping code.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/Vr_7WSOrEZU/discussion)",
+    "enabled" : true,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Evaluation",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Evaluation of User Input",
+    "description" : "Detects use of eval and similar methods with user input which is dangerous.",
+    "explanation" : "User input in an eval statement is VERY dangerous, so this will always raise a warning.\nBrakeman looks for calls to eval, instance_eval, class_eval, and module_eval.\n\n[Source](http://brakemanscanner.org/docs/warning_types/dangerous_evaluation/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Execute",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Detect Possible Command Injection",
+    "description" : "Detects instances in Ruby code where user input may lead to command injection vulnerabilities.",
+    "explanation" : "There are several cases of remote code execution, in which a user is able to control and execute code in ways unintended by application authors.\n\nThe obvious form of this is the use of eval with user input.\n\nHowever, we report on dangerous uses of send, constantize, and other methods which allow creation of arbitrary objects or calling of arbitrary methods.\n\n[Source](http://brakemanscanner.org/docs/warning_types/remote_code_execution/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "FileAccess",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid File Access Using User Input",
+    "description" : "Detects potential file access vulnerabilities where user input is used to specify file paths.",
+    "explanation" : "Using user input when accessing files (local or remote) will raise a warning.\n\nFor example\n\n    File.open(\"/tmp/#{cookie[:file]}\")\n    will raise an error like\n\n    Cookie value used in file name near line 4: File.open(\"/tmp/#{cookie[:file]}\")\n\nThis type of vulnerability can be used to access arbitrary files on a server (including /etc/passwd.\n\n[Source](http://brakemanscanner.org/docs/warning_types/file_access/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "FileDisclosure",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Detect File Existence Disclosure Vulnerability",
+    "description" : "Detects versions of Ruby on Rails with a file existence disclosure vulnerability in Action Pack.",
+    "explanation" : "Arbitrary file existence disclosure in Action Pack\n\nThere is an information leak vulnerability in Action Pack. This vulnerability\nhas been assigned the CVE identifier CVE-2014-7829.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/23fiuwb1NBA/MQVM1-5GkPMJ)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "FilterSkipping",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Filter Skipping Vulnerability in Ruby on Rails 3.0-3.0.9",
+    "description" : "Detects Ruby on Rails versions 3.0 to 3.0.9 which have a template selection vulnerability allowing unauthorized view rendering.",
+    "explanation" : "Filter Skipping Vulnerability in Ruby on Rails 3.0\nThere is a vulnerability in the template selection code in Ruby on Rails releases after 3.0 which could allow an attacker to render a view they should not have access to.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/NCCsca7TEtY/discussion)",
+    "enabled" : true,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ForgerySetting",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CSRF",
+    "title" : "Enforce protect_from_forgery Enabled in ActionController Subclasses",
+    "description" : "Ensures that protect_from_forgery is enabled in direct subclasses of ActionController::Base to provide CSRF protection.",
+    "explanation" : "Verifies that protect_from_forgery is enabled in ApplicationController\n\nThere is a vulnerability in Ruby on Rails which could allow an attacker\nto circumvent the CSRF protection provided. This vulnerability has been\nassigned the CVE Identifier CVE-2011-0447.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/LZWjzCPgNmU/discussion)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "HeaderDoS",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Detect Header DoS Vulnerability (CVE-2013-6414)",
+    "description" : "Detects potential denial of service vulnerabilities in header handling within Ruby on Rails Action View.",
+    "explanation" : "Denial of Service Vulnerability in Action View\n\nThere is a denial of service vulnerability in the header handling component of\nAction View. This vulnerability has been assigned the CVE identifier CVE-2013-6414.\n\n[Source](https://groups.google.com/d/msg/ruby-security-ann/A-ebV4WxzKg/KNPTbX8XAQUJ)",
+    "enabled" : true,
+    "timeToFix" : 30,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "I18nXSS",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect i18n Reflective XSS Vulnerability (CVE-2013-4491)",
+    "description" : "Detects reflective cross-site scripting (XSS) vulnerabilities related to the internationalization (i18n) component in Ruby on Rails.",
+    "explanation" : "Reflective XSS Vulnerability in Ruby on Rails\n\nThere is a vulnerability in the internationalization component of Ruby on Rails. Under certain common configurations an attacker can provide specially crafted input which will execute a reflective XSS attack.\nThis vulnerability has been assigned the CVE identifier CVE-2013-4491.\n\n[Source](https://groups.google.com/d/msg/ruby-security-ann/pLrh6DUw998/bLFEyIO4k_EJ)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "JRubyXML",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Detect Vulnerable JRuby XML Parsing Backend Usage",
+    "description" : "Detects usage of JRuby XML parsing backend versions vulnerable to denial of service and file access attacks.",
+    "explanation" : "XML Parsing Vulnerability affecting JRuby users\n\nThere is a vulnerability in the JDOM backend to ActiveSupport's XML parser.  This could allow an attacker to perform a denial of service attack or gain access to files stored on the application server.\nThis vulnerability has been assigned the CVE identifier CVE-2013-1856.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/KZwsQbYsOiI/5kUV7dSCJGwJ)",
+    "enabled" : true,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "JSONEncoding",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect Missing JSON Encoding to Prevent XSS Vulnerability",
+    "description" : "Checks for missing JSON encoding in Ruby on Rails applications to prevent Cross-Site Scripting (XSS) vulnerabilities.",
+    "explanation" : "XSS Vulnerability in ActiveSupport::JSON.encode\n\nThere is an XSS vulnerability in the ActiveSupport::JSON.encode method in Ruby on Rails.\nThis vulnerability has been assigned the CVE identifier CVE-2015-3226.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/7VlB_pck3hU/3QZrGIaQW6cJ)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "JSONParsing",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect JSON Parsing Vulnerabilities CVE-2013-0333 and CVE-2013-0269",
+    "description" : "Detects usage of vulnerable JSON parsing methods in Ruby on Rails that can lead to security breaches.",
+    "explanation" : "There is a vulnerability in the JSON  code for Ruby on Rails which\nallows attackers to bypass authentication systems, inject arbitrary\nSQL, inject and execute arbitrary code, or perform a DoS attack on a\nRails application. This vulnerability has been assigned the CVE\nidentifier CVE-2013-0333.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/1h2DR63ViGo/discussion)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LinkTo",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Warn for XSS Vulnerabilities in link_to Before Rails 3.0",
+    "description" : "Detects use of link_to method in Ruby on Rails versions prior to 3.0 where the first argument is not escaped, potentially causing cross-site scripting (XSS) vulnerabilities.",
+    "explanation" : "Warns for calls to link_to in versions of Ruby where link_to did not escape the first argument.\n\n[Source](https://rails.lighthouseapp.com/projects/8994/tickets/3518-link_to-doesnt-escape-its-input/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LinkToHref",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Ensure href values in link_to are sanitized with a url_safe_method",
+    "description" : "Checks that values used for href attributes in link_to are sanitized using a url_safe_method to prevent javascript:/data: XSS attacks.",
+    "explanation" : "Warns for calls to link_to which pass in potentially hazardous data\nto the second argument.  While this argument must be html_safe to not break\nthe html, it must also be url safe as determined by calling a\n:url_safe_method.  This prevents attacks such as javascript:evil() or\ndata:<encoded XSS> which is html_safe, but not safe as an href\n\n[Source](http://brakemanscanner.org/docs/warning_types/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MailTo",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Avoid mail_to XSS Vulnerability in Certain Versions",
+    "description" : "Detects use of the mail_to helper in Ruby on Rails with the :encode => :javascript option that is vulnerable to XSS attacks in certain versions.",
+    "explanation" : "There is a vulnerability in mail_to helper in Ruby on Rails when used\nwith the :encode => :javascript option. This vulnerability has been\nassigned the CVE identifier CVE-2011-0446.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/8CpI7egxX4E/discussion)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MassAssignment",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Avoid Unprotected Mass Assignment",
+    "description" : "Detects instances where mass assignment is used without protection, which can lead to security vulnerabilities in Rails applications.",
+    "explanation" : "Mass assignment is a feature of Rails which allows an application to create a record from the values of a hash.\n\nExample:\n\n    User.new(params[:user])\n\nUnfortunately, if there is a user field called admin which controls administrator access, now any user can make themselves an administrator.\nattr_accessible and attr_protected can be used to limit mass assignment. However, Brakeman will warn unless attr_accessible is used, or mass assignment is completely disabled.\n\nThere are two different mass assignment warnings which can arise. The first is when mass assignment actually occurs, such as the example above. This results in a warning like\n\n    Unprotected mass assignment near line 61: User.new(params[:user])\n\nThe other warning is raised whenever a model is found which does not use attr_accessible. This produces generic warnings like\n\n    Mass assignment is not restricted using attr_accessible\n\nwith a list of affected models.\nIn Rails 3.1 and newer, mass assignment can easily be disabled:\n\n    config.active_record.whitelist_attributes = true\n\nUnfortunately, it can also easily be bypassed:\n\n    User.new(params[:user], :without_protection => true)\n\nThe tool will warn on uses of without_protection.\n\n[Source](http://brakemanscanner.org/docs/warning_types/mass_assignment/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MimeTypeDoS",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Detect Mime Type Denial of Service (CVE-2016-0751)",
+    "description" : "Checks for vulnerabilities related to mime type denial of service (CVE-2016-0751) in Ruby applications.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 30,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ModelAttrAccessible",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Avoid Dangerous Attributes in attr_accessible Whitelist",
+    "description" : "Detects models that define dangerous attributes in the attr_accessible whitelist, potentially allowing unsafe mass assignment.",
+    "explanation" : "Reports models which have dangerous attributes defined under the attr_accessible whitelist.\n\nThis warning comes up if a model does not limit what attributes can be set through mass assignment.\nIn particular, this check looks for attr_accessible inside model definitions. If it is not found, this warning will be issued.\nThe tool also warns on use of attr_protected - especially since it was found to be vulnerable to bypass.\n\n\n[Source](http://brakemanscanner.org/docs/warning_types/attribute_restriction/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ModelAttributes",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Enforce use of attr_restricted and avoid attr_protected in models",
+    "description" : "Detects models that do not use attr_restricted and warns about usage of attr_protected in Ruby on Rails models.",
+    "explanation" : "Reports models which do not use attr_restricted and warns on models that use attr_protected\n\nCircumvention of attr_protected.\nThere is a vulnerability in the attr_protected method in ActiveRecord. This vulnerability has been assigned the CVE identifier CVE-2013-0276.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/AFBKNY7VSH8/discussion)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ModelSerialize",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using serialize in Vulnerable Rails Versions",
+    "description" : "Detects uses of serialize in Ruby on Rails versions vulnerable to CVE-2013-0277.",
+    "explanation" : "Serialized Attributes YAML Vulnerability with Rails 2.3 and 3.0\n\nThere is a vulnerability in the serialized attribute handling code in Ruby on Rails 2.3 and 3.0, applications which allow users to directly assign to the serialized fields in their models are at risk of Denial of Service or Remote Code Execution vulnerabilities. This vulnerability has been assigned the CVE identifier CVE-2013-0277.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/KtmwSbEpzrU/discussion)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "NestedAttributes",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Detect Nested Attributes Vulnerability in Rails 2.3.9 and 3.0.0",
+    "description" : "Detects the nested attributes vulnerability present in Ruby on Rails versions 2.3.9 and 3.0.0 that allows attackers to manipulate form parameters to alter unintended records.",
+    "explanation" : "There is a vulnerability in the nested attributes handling code in some\nversions of Ruby on Rails.  An attacker could manipulate form parameters\nand make changes to records other than those the developer intended.\nThis vulnerability has been assigned the identifier CVE-2010-3933.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/-fkT0yja_gw/discussion)",
+    "enabled" : true,
+    "timeToFix" : 30,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "NestedAttributesBypass",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Detect Nested Attributes Vulnerability (CVE-2015-7577)",
+    "description" : "Detects the presence of a nested attributes vulnerability that can allow unauthorized mass assignment in Ruby on Rails applications.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "NumberToCurrency",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect Number Helpers XSS Vulnerabilities",
+    "description" : "Detects cross-site scripting (XSS) vulnerabilities related to number helper methods in certain versions of Ruby on Rails.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "PermitAttributes",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Warn on Potentially Dangerous Attributes Whitelisted via Permit",
+    "description" : "Detects potentially dangerous attributes being whitelisted in Rails controller strong parameters using permit.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "QuoteTableName",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "SQLInjection",
+    "title" : "Detect quote_table_name SQL Injection Vulnerability",
+    "description" : "Detects the SQL injection vulnerability in the quote_table_name method in Ruby on Rails versions before 2.3.14 and 3.0.10.",
+    "explanation" : "SQL Injection Vulnerability in quote_table_name\nThere is a vulnerability in the quote_table_name method which could allow malicious users to inject arbitrary SQL into a query.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/ah5HN0S8OJs/discussion)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Redirect",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Routes",
+    "title" : "Avoid unvalidated redirects with user input in redirect_to",
+    "description" : "Detects calls to redirect_to in Ruby on Rails where user input is used as arguments, potentially allowing unvalidated redirects.",
+    "explanation" : "Looks for calls to redirect_to with user input as arguments\n\nUnvalidated redirects and forwards are #10 on the OWASP Top Ten.\n\nRedirects which rely on user-supplied values can be used to “spoof” websites or hide malicious links in otherwise harmless-looking URLs. They can also allow access to restricted areas of a site if the destination is not validated.\n\nBrakeman will raise warnings whenever redirect_to appears to be used with a user-supplied value that may allow them to change the :host option.\n\nFor example,\n\n    redirect_to params.merge(:action => :home)\n\nwill create a warning like\n\n    Possible unprotected redirect near line 46: redirect_to(params)\n\nThis is because params could contain :host => 'evilsite.com' which would redirect away from your site and to a malicious site.\n\nIf the first argument to redirect_to is a hash, then adding :only_path => true will limit the redirect to the current host. Another option is to specify the host explicitly.\n\n    redirect_to params.merge(:only_path => true)\n\n    redirect_to params.merge(:host => 'myhost.com')\n\nIf the first argument is a string, then it is possible to parse the string and extract the path:\n\n    redirect_to URI.parse(some_url).path\n\nIf the URL does not contain a protocol (e.g., http://), then you will probably get unexpected results, as redirect_to will prepend the current host name and a protocol.\n\n[Source](http://brakemanscanner.org/docs/warning_types/redirect/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RegexDoS",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Avoid Converting User Input to Symbol to Prevent DoS",
+    "description" : "Detects instances where user input is converted to a Symbol, which can lead to denial of service via memory exhaustion.",
+    "explanation" : "Searches regexes including user input.\n\nDenial of Service (DoS) is any attack which causes a service to become unavailable for legitimate clients.\n\nFor issues that Brakeman detects, this typically arises in the form of memory leaks. In particular, since Symbols are not garbage collected, creation of large numbers of Symbols could lead to a server running out of memory.\n\nBrakeman checks for instances of user input which is converted to a Symbol. When this is not restricted, an attacker could create an unlimited number of Symbols.\n\nThe best approach is to simply never convert user-controlled input to a Symbol. If this cannot be avoided, use a whitelist of acceptable values.\n\nFor example:\n\n    valid_values = [\"valid\", \"values\", \"here\"]\n\n    if valid_values.include? params[:value]\n      symbolized = params[:value].to_sym\n    end\n\nHowever, Brakeman will still warn about this, because it cannot tell a valid guard expression has been used.\n\nAvoiding the warning itself becomes silly:\n\n    valid_values.each do |v|\n      if v == params[:value]\n        symbolized = v.to_sym\n        break\n      end\n    end\n\n[Source](http://brakemanscanner.org/docs/warning_types/denial_of_service/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Render",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid Dynamic Render Paths",
+    "description" : "Detects calls to render with dynamically generated paths, which might allow unauthorized file access or code execution.",
+    "explanation" : "When a call to render uses a dynamically generated path, template name, file name, or action, there is the possibility that a user can access templates that should be restricted. The issue may be worse if those templates execute code or modify the database.\n\nThis warning is shown whenever the path to be rendered is not a static string or symbol.\nThese warnings may be false positives, however, because it can be difficult to manipulate Rails’ assumptions about paths to perform malicious behavior. Reports of dynamic render paths should be checked carefully to see if they can actually be manipulated maliciously by the user.\n\n[Source](http://brakemanscanner.org/docs/warning_types/dynamic_render_paths/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RenderDoS",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Warn about Denial of Service with render :text",
+    "description" : "Detects usage of render :text in Ruby on Rails versions before 3.2.17 that can lead to denial of service due to memory consumption.",
+    "explanation" : "Warn about denial of service with render :text (CVE-2014-0082)\n\nactionpack/lib/action_view/template/text.rb in Action View in Ruby on Rails 3.x before 3.2.17 converts MIME type strings to symbols during use of the :text option to the render method,\nwhich allows remote attackers to cause a denial of service (memory consumption) by including these strings in headers.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/LMxO_3_eCuc/ozGBEhKaJbIJ)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RenderInline",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect Cross-Site Scripting in render Calls",
+    "description" : "Detects potential cross-site scripting (XSS) vulnerabilities in render calls where user input might be rendered without proper escaping.",
+    "explanation" : "Cross site scripting (or XSS) is #2 on the 2010 OWASP Top Ten web security risks and it pops up nearly everywhere.\n\nXSS occurs when a user-manipulatable value is displayed on a web page without escaping it, allowing someone to inject Javascript or HTML into the page.\n\nIn Rails 2.x, values need to be explicitly escaped (e.g., by using the h method). In Rails 3.x, auto-escaping in views is enabled by default. However, one can still use the raw method to output a value directly.\n\n[Source](http://brakemanscanner.org/docs/warning_types/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ResponseSplitting",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "HTTP",
+    "title" : "Detect Response Splitting Vulnerability in Rails 2.3.0 - 2.3.13",
+    "description" : "Detects response splitting vulnerabilities in Ruby on Rails versions 2.3.0 through 2.3.13 caused by unsafe content type handling that allows HTTP header injection.",
+    "explanation" : "Warns about response splitting in Rails 2.3.0 - 2.3.13\n\nThere is a vulnerability in the content type handling in Ruby on Rails 2.3 which could allow an attacker to inject arbitrary HTTP headers into a response.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/b_yTveAph2g/discussion)",
+    "enabled" : true,
+    "timeToFix" : 30,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RouteDoS",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Detect Route Denial of Service (DoS) Vulnerability",
+    "description" : "Detects potential Denial of Service vulnerabilities in routing configurations (CVE-2015-7581) in Ruby applications.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SafeBufferManipulation",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect Unsafe SafeBuffer Manipulation in Rails",
+    "description" : "Detects usage of vulnerable Rails versions where SafeBuffer#[] method can mark unescaped strings as safe, leading to potential security issues.",
+    "explanation" : "There is a vulnerability in the SafeBuffer#[] in Ruby On Rails where unescaped safe buffers can be marked as safe.\n\n[Source](https://groups.google.com/group/rubyonrails-security/browse_thread/thread/edd28f1e3d04e913?pli=1)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SanitizeMethods",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect Vulnerable sanitize and sanitize_css Methods",
+    "description" : "Detects usage of vulnerable versions of sanitize and sanitize_css methods in Ruby on Rails that are susceptible to XSS attacks.",
+    "explanation" : "XSS Vulnerability in the sanitize helper of Ruby on Rails\n\nThere is an XSS vulnerability in the sanitize helper in Ruby on Rails. This vulnerability has been assigned the CVE identifier CVE-2013-1857.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/zAAU7vGTPvI/1vZDWXqB)",
+    "enabled" : true,
+    "timeToFix" : 30,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Secrets",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Detect Secrets Stored in Source Code",
+    "description" : "This rule checks for secrets such as passwords, API keys, or tokens stored directly in the source code.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SelectTag",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Uses of select_tag() with Prompt in Rails 3.x",
+    "description" : "Detects unsafe usage of the select_tag() helper with a prompt parameter in certain Rails 3.x versions that leads to a security vulnerability.",
+    "explanation" : "There is a vulnerability in Ruby on Rails in the select_tag helper\nmethod when a \"prompt\" is supplied. This vulnerability has been assigned\nthe CVE identifier CVE-2012-3463.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/fV3QUToSMSw/discussion)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SelectVulnerability",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Uses of select() Helper",
+    "description" : "Detects unsafe usage patterns of the select() helper in Ruby on Rails that can lead to vulnerabilities when generating options tags.",
+    "explanation" : "Looks for unsafe uses of select() helper\nThere is a vulnerability for users that generate their own options tags for use with the select helper in Ruby On Rails.\n\n[Source](http://groups.google.com/group/rubyonrails-security/browse_thread/thread/9da0c515a6c4664)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Send",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of Object#send",
+    "description" : "Detects unsafe use of Ruby's Object#send method where unfiltered user input is used to determine the method or target, which can lead to security vulnerabilities.",
+    "explanation" : "Using unfiltered user data to select a Class or Method to be dynamically sent is dangerous.\n\nIt is much safer to whitelist the desired target or method.\n\nUnsafe use of method:\n\n    method = params[:method]\n    @result = User.send(method.to_sym)\n\nSafe:\n\n    method = params[:method] == 1 ? :method_a : :method_b\n    @result = User.send(method, *args)\n\nUnsafe use of target:\n\n    table = params[:table]\n    model = table.classify.constantize\n    @result = model.send(:method)\n\nSafe:\n\n    target = params[:target] == 1 ? Account : User\n    @result = target.send(:method, *args)\n    Including user data in the arguments passed to an Object#send is safe, as long as the method can properly handle potentially bad data.\n\nSafe:\n\n    args = params[\"args\"] || []\n    @result = User.send(:method, *args)\n\n[Source](http://brakemanscanner.org/docs/warning_types/dangerous_send/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SendFile",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid Using User Input Directly in send_file",
+    "description" : "Detects when user input is used directly in calls to send_file, which can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SessionManipulation",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Avoid User Input in Session Keys",
+    "description" : "Detects usage of user input as keys in session storage.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SessionSettings",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cookies",
+    "title" : "Enforce Secure Session Settings",
+    "description" : "Checks that session cookies have adequate key length and are set as HTTP-only, and ensures secret tokens are not included in version control.",
+    "explanation" : "*HTTP Only*\n\nIt is recommended that session cookies be set to “http-only”. This helps prevent stealing of cookies via cross site scripting.\n\n*Secret Length*\n\nThe tool will warn if the key length for the session cookies is less than 30 characters.\n\n*Version control inclusion*\n\nThe tool will warn if the config/initializers/secret_token.rb is included in the version control. It is recommended that secret_token.rb is excluded from version control, and included in .gitignore\n\n[Source](http://brakemanscanner.org/docs/warning_types/session_setting/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SimpleFormat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect simple_format XSS Vulnerability (CVE-2013-6416)",
+    "description" : "Detects the presence of an XSS vulnerability in certain versions of the Ruby on Rails simple_format helper.",
+    "explanation" : "XSS Vulnerability in simple_format helper\n\nThere is a vulnerability in the simple_format helper in Ruby on Rails. This vulnerability has been assigned the CVE identifier CVE-2013-6416.\n\n[Source](https://groups.google.com/d/msg/ruby-security-ann/5ZI1-H5OoIM/ZNq4FoR2GnIJ)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SingleQuotes",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Check for Versions That Do Not Escape Single Quotes",
+    "description" : "Detect Ruby on Rails versions with a vulnerability that fails to escape single quotes in HTML escaping, identified as CVE-2012-3464.",
+    "explanation" : "There is a vulnerability in the HTML escaping code in Ruby on Rails.\nThis vulnerability has been assigned the CVE identifier CVE-2012-3464.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/kKGNeMrnmiY/discussion)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SkipBeforeFilter",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CSRF",
+    "title" : "Warn When Skipping CSRF or Authentication Checks by Default",
+    "description" : "Detects when CSRF or authentication filters are skipped by default in Ruby on Rails controllers, which can expose security vulnerabilities.",
+    "explanation" : "Filter Skipping Vulnerability in Ruby on Rails 3.0\nThere is a vulnerability in the template selection code in Ruby on Rails releases after 3.0 which could allow an attacker to render a view they should not have access to.\n\n[Source](http://groups.google.com/group/rubyonrails-security/browse_thread/thread/3420ac71aed312d6)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SQL",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "SQLInjection",
+    "title" : "Check for SQL Injection",
+    "description" : "Detects potential SQL injection vulnerabilities in Ruby on Rails ActiveRecord queries where user input is unsafely interpolated into SQL statements.",
+    "explanation" : "Injection is #1 on the 2010 OWASP Top Ten web security risks. SQL injection is when a user is able to manipulate a value which is used unsafely inside a SQL query. This can lead to data leaks, data loss, elevation of privilege, and other unpleasant outcomes.\n\nBrakeman focuses on ActiveRecord methods dealing with building SQL statements.\n\nA basic (Rails 2.x) example looks like this:\n\n    User.first(:conditions => \"username = '#{params[:username]}'\")\n\nBrakeman would produce a warning like this:\n\n    Possible SQL injection near line 30: User.first(:conditions => (\"username = '#{params[:username]}'\"))\n\nThe safe way to do this query is to use a parameterized query:\n\n    User.first(:conditions => [\"username = ?\", params[:username]])\n\nBrakeman also understands the new Rails 3.x way of doing things (and local variables and concatentation):\n\n    username = params[:user][:name].downcase\n    password = params[:user][:password]\n\n    User.first.where(\"username = '\" + username + \"' AND password = '\" + password + \"'\")\n\nThis results in this kind of warning:\n\n    Possible SQL injection near line 37:\n    User.first.where(((((\"username = '\" + params[:user][:name].downcase) + \"' AND password = '\") + params[:user][:password]) + \"'\"))\n\n[Source](http://brakemanscanner.org/docs/warning_types/sql_injection/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SQLCVEs",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "SQLInjection",
+    "title" : "Detect SQL Injection Vulnerabilities in Active Record",
+    "description" : "Detects data injection vulnerabilities in Active Record, specifically those related to PostgreSQL array columns that can be exploited by specially crafted strings.",
+    "explanation" : "Data Injection Vulnerability in Active Record\n\nThere is a data injection vulnerability in Active Record. Specially\ncrafted strings can be used to save data in PostgreSQL array columns that may\nnot be intended. This vulnerability has been assigned the CVE identifier\nCVE-2014-0080.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/Wu96YkTUR6s/pPLBMZrlwvYJ)",
+    "enabled" : true,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SSLVerify",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "SSL",
+    "title" : "Avoid OpenSSL::SSL::VERIFY_NONE to Enforce SSL Certificate Verification",
+    "description" : "Detects usage of OpenSSL::SSL::VERIFY_NONE which disables SSL certificate verification, making the connection vulnerable to man-in-the-middle attacks.",
+    "explanation" : "Simply using SSL isn’t enough to ensure the data you are sending is secure. Man in the middle (MITM) attacks are well known and widely used. In some cases, these attacks rely on the client to establish a connection that doesn’t check the validity of the SSL certificate presented by the server. In this case, the attacker can present their own certificate and act as a man in the middle.\n\nIn Ruby, this happens when the OpenSSL verification mode is set to VERIFY_NONE\n\n    require \"net/https\"\n    require \"uri\"\n\n    uri = URI.parse(\"https://ssl-site.com/\")\n    http = Net::HTTP.new(uri.host, uri.port)\n    http.use_ssl = true\n    http.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\n    request = Net::HTTP::Get.new(uri.request_uri)\n\n    response = http.request(request)\n\nIn this case, if an invalid certificate was presented, no verification would occur, providing an opportunity for attack. When successful, the data transmitted (cookies, request parameters, POST bodies, etc.) would all be able to be intercepted by the MITM.\n\nBrakeman would produce a warning like this:\n\n    SSL certificate verification was bypassed near line 24: http.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nTo ensure that SSL verification happens use the following mode:\n\n    http.verify_mode = OpenSSL::SSL::VERIFY_PEER\n\nIf the server certificate is invalid or context.ca_file is not set when verifying peers an OpenSSL::SSL::SSLError will be raised.\n\n[Source](http://brakemanscanner.org/docs/warning_types/ssl_verification_bypass/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StripTags",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect Vulnerabilities in strip_tags Usage",
+    "description" : "Detects vulnerabilities related to the use of the strip_tags helper in Ruby on Rails that can allow arbitrary JavaScript execution.",
+    "explanation" : "There is a vulnerability in the strip_tags helper of Ruby on Rails which\ncould allow an attacker to execute arbitrary javascript. This\nvulnerability has been assigned the CVE identifier CVE-2012-3465.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/FgVEtBajcTY/discussion)",
+    "enabled" : true,
+    "timeToFix" : 30,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SymbolDoS",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Avoid Symbol Denial of Service",
+    "description" : "Detects potential denial of service vulnerabilities caused by converting untrusted user input to Symbols, which are not garbage collected and can lead to memory exhaustion.",
+    "explanation" : "Denial of Service (DoS) is any attack which causes a service to become unavailable for legitimate clients.\n\nFor issues that the tool detects, this typically arises in the form of memory leaks. In particular, since Symbols are not garbage collected, creation of large numbers of Symbols could lead to a server running out of memory.\n\nThis tool checks for instances of user input which is converted to a Symbol. When this is not restricted, an attacker could create an unlimited number of Symbols.\n\nThe best approach is to simply never convert user-controlled input to a Symbol. If this cannot be avoided, use a whitelist of acceptable values.\n\nFor example:\n\n    valid_values = [\"valid\", \"values\", \"here\"]\n\n    if valid_values.include? params[:value]\n      symbolized = params[:value].to_sym\n    end\n\nHowever, Brakeman will still warn about this, because it cannot tell a valid guard expression has been used.\n\nAvoiding the warning itself becomes silly:\n\n    valid_values.each do |v|\n      if v == params[:value]\n        symbolized = v.to_sym\n        break\n      end\n    end\n\n[Source](http://brakemanscanner.org/docs/warning_types/denial_of_service/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SymbolDoSCVE",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Detect ActiveRecord Symbol Denial of Service Vulnerability",
+    "description" : "Detects usage of vulnerable versions of ActiveRecord susceptible to symbol denial of service (DoS) attacks.",
+    "explanation" : "Symbol DoS vulnerability in Active Record\n\nThere is a symbol DoS vulnerability in Active Record.\nThis vulnerability has been assigned the CVE identifier CVE-2013-1854.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/jgJ4cjjS8FE/BGbHRxnDRTIJ)",
+    "enabled" : true,
+    "timeToFix" : 20,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TranslateBug",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect XSS Vulnerability in Translate Helper",
+    "description" : "Detects cross-site scripting (XSS) vulnerabilities caused by unsafe usage of the translate helper method in Ruby on Rails applications.",
+    "explanation" : "There is a vulnerability in the translate helper method which may allow\nan attacker to insert arbitrary code into a page.  This vulnerability\nhas been disclosed to the public so no a CVE identifier has yet to be\nassigned.\n\n[Source](http://groups.google.com/group/rubyonrails-security/browse_thread/thread/2b61d70fb73c7cc5)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UnsafeReflection",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Unsafe Reflection Usage",
+    "description" : "Detects usage of unsafe reflection methods like Module#const_get with user-controlled input which can lead to vulnerabilities.",
+    "explanation" : "There is a class of vulnerabilities known as Unsafe Reflection related to the recent deserialization vulnerabilities found in Rails.\nUnsafe Reflection vulnerabilities via constant creation occur in Ruby normally when the Module#const_get method is called with user-controlled data.\n\n[Source](http://blog.conviso.com.br/exploiting-unsafe-reflection-in-rubyrails-applications/)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UnscopedFind",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unscoped ActiveRecord Queries",
+    "description" : "Detects use of unscoped ActiveRecord find queries that can lead to insecure direct object references.",
+    "explanation" : "Unscoped find (and related methods) are a form of Direct Object Reference. Models which belong to another model should typically be accessed via a scoped query.\n\nFor example, if an Account belongs to a User, then this may be an unsafe unscoped find:\n\n    Account.find(params[:id])\n\nDepending on the action, this could allow an attacker to access any account they wish.\n\nInstead, it should be scoped to the currently logged-in user:\n\n    current_user = User.find(session[:user_id])\n    current_user.accounts.find(params[:id])\n\n[Source](http://brakemanscanner.org/docs/warning_types/unscoped_find/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ValidationRegex",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Enforce Proper Anchors in validates_format_of",
+    "description" : "Detects usage of validates_format_of with regular expressions that do not use \\A and \\z anchors, which can lead to improper validation.",
+    "explanation" : "Calls to validates_format_of ..., :with => // which do not use \\A and \\z as anchors will cause this warning.\nUsing ^ and $ is not sufficient, as they will only match up to a new line. This allows an attacker to put whatever malicious input they would like before or after a new line character.\n\n[Source](http://brakemanscanner.org/docs/warning_types/format_validation/)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "WeakHash",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Use of Weak Hashes like MD5",
+    "description" : "This rule detects the use of weak cryptographic hash functions such as MD5 in Ruby code.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "WithoutProtection",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "MassAssignment",
+    "title" : "Avoid mass assignment using without_protection",
+    "description" : "Detects usage of mass assignment in Rails models with the 'without_protection' option, which bypasses attribute protection.",
+    "explanation" : "Mass assignment is a feature of Rails which allows an application to create a record from the values of a hash.\n\nExample:\n\n    User.new(params[:user])\n\nUnfortunately, if there is a user field called admin which controls administrator access, now any user can make themselves an administrator.\n\nattr_accessible and attr_protected can be used to limit mass assignment. However, Brakeman will warn unless attr_accessible is used, or mass assignment is completely disabled.\n\nThere are two different mass assignment warnings which can arise. The first is when mass assignment actually occurs, such as the example above. This results in a warning like\n\n    Unprotected mass assignment near line 61: User.new(params[:user])\n\nThe other warning is raised whenever a model is found which does not use attr_accessible. This produces generic warnings like\n\n    Mass assignment is not restricted using attr_accessible\n\nwith a list of affected models.\n\nIn Rails 3.1 and newer, mass assignment can easily be disabled:\n\n    config.active_record.whitelist_attributes = true\n\nUnfortunately, it can also easily be bypassed:\n\n    User.new(params[:user], :without_protection => true)\n\nBrakeman will warn on uses of without_protection.\n\n[Source](http://brakemanscanner.org/docs/warning_types/mass_assignment/)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "XMLDoS",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Detect XML Denial of Service Vulnerability (CVE-2015-3227)",
+    "description" : "Detects potential XML denial of service vulnerabilities in Active Support XML processing.",
+    "explanation" : "Possible Denial of Service attack in Active Support\n\nThere is a possible denial of service attack in the XML processing in Active\nSupport. This vulnerability has been assigned the CVE identifier CVE-2015-3227.\n\n[Source](https://groups.google.com/d/msg/rubyonrails-security/bahr2JLnxvk/x4EocXnHPp8J)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "YAMLParsing",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect YAML Parsing Vulnerabilities (CVE-2013-0156)",
+    "description" : "Detects unsafe YAML parsing in Ruby on Rails applications that can lead to security vulnerabilities.",
+    "explanation" : "Multiple vulnerabilities in parameter parsing in Action Pack\n\nThere are multiple weaknesses in the parameter parsing code for Ruby on Rails which allows attackers to bypass authentication systems, inject arbitrary SQL, inject and execute arbitrary code, or perform a DoS attack on a Rails application.\nThis vulnerability has been assigned the CVE identifier CVE-2013-0156.\n\n[Source](https://groups.google.com/d/topic/rubyonrails-security/61bkgvnSGTQ/discussion)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

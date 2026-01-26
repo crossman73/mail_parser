@@ -1,0 +1,1082 @@
+[
+  {
+    "id" : "AL01_aliasing.table",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce explicit aliasing of tables",
+    "description" : "This rule enforces that table aliases in SQL queries are explicitly defined using the AS keyword rather than implicitly assigned.",
+    "explanation" : "# AL01_aliasing.table\n\nImplicit/explicit aliasing of table.\n\nAliasing of table to follow preference\n(requiring an explicit ``AS`` is the default).\n\n**Anti-pattern**\n\nIn this example, the alias ``voo`` is implicit.\n\n.. code-block:: sql\n\n    SELECT\n        voo.a\n    FROM foo voo\n\n**Best practice**\n\nAdd ``AS`` to make it explicit.\n\n.. code-block:: sql\n\n    SELECT\n        voo.a\n    FROM foo AS voo",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL02_aliasing.column",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce explicit aliasing of columns using AS",
+    "description" : "This rule enforces explicit aliasing of columns in SQL queries by requiring the use of the AS keyword for column aliases.",
+    "explanation" : "# AL02_aliasing.column\n\nImplicit/explicit aliasing of columns.\n\nAliasing of columns to follow preference\n(explicit using an ``AS`` clause is default).\n\n**Anti-pattern**\n\nIn this example, the alias for column ``a`` is implicit.\n\n.. code-block:: sql\n\n    SELECT\n        a alias_col\n    FROM foo\n\n**Best practice**\n\nAdd ``AS`` to make it explicit.\n\n.. code-block:: sql\n\n    SELECT\n        a AS alias_col\n    FROM foo",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL03_aliasing.expression",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce explicit aliasing of column expressions",
+    "description" : "Ensures that column expressions in SQL SELECT statements use explicit aliases with the AS clause.",
+    "explanation" : "# AL03_aliasing.expression\n\nColumn expression without alias. Use explicit `AS` clause.\n\n**Anti-pattern**\n\nIn this example, there is no alias for both sums.\n\n.. code-block:: sql\n\n    SELECT\n        sum(a),\n        sum(b)\n    FROM foo\n\n**Best practice**\n\nAdd aliases.\n\n.. code-block:: sql\n\n    SELECT\n        sum(a) AS a_sum,\n        sum(b) AS b_sum\n    FROM foo",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL04_aliasing.unique.table",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Unique Table Aliases",
+    "description" : "Ensures that table aliases are unique within each SQL clause to avoid ambiguity and errors.",
+    "explanation" : "# AL04_aliasing.unique.table\n\nTable aliases should be unique within each clause.\n\nReusing table aliases is very likely a coding error.\n\n**Anti-pattern**\n\nIn this example, the alias ``t`` is reused for two different tables:\n\n.. code-block:: sql\n\n    SELECT\n        t.a,\n        t.b\n    FROM foo AS t, bar AS t\n\n    -- This can also happen when using schemas where the\n    -- implicit alias is the table name:\n\n    SELECT\n        a,\n        b\n    FROM\n        2020.foo,\n        2021.foo\n\n**Best practice**\n\nMake all tables have a unique alias.\n\n.. code-block:: sql\n\n    SELECT\n        f.a,\n        b.b\n    FROM foo AS f, bar AS b\n\n    -- Also use explicit aliases when referencing two tables\n    -- with the same name from two different schemas.\n\n    SELECT\n        f1.a,\n        f2.b\n    FROM\n        2020.foo AS f1,\n        2021.foo AS f2",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL05_aliasing.unused",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid unused table aliases",
+    "description" : "Tables should not be aliased if the alias is not used in the query.",
+    "explanation" : "# AL05_aliasing.unused\n\nTables should not be aliased if that alias is not used.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    SELECT\n        a\n    FROM foo AS zoo\n\n**Best practice**\n\nUse the alias or remove it. An unused alias makes code\nharder to read without changing any functionality.\n\n.. code-block:: sql\n\n    SELECT\n        zoo.a\n    FROM foo AS zoo\n\n    -- Alternatively...\n\n    SELECT\n        a\n    FROM foo",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL06_aliasing.length",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce table alias lengths",
+    "description" : "This rule enforces the length of table aliases used in FROM clauses and JOIN conditions in SQL queries, discouraging the use of short aliases.",
+    "explanation" : "# AL06_aliasing.length\n\nEnforce table alias lengths in from clauses and join conditions.\n\n**Anti-pattern**\n\nIn this example, alias ``o`` is used for the orders table.\n\n.. code-block:: sql\n\n    SELECT\n        SUM(o.amount) as order_amount,\n    FROM orders as o\n\n\n**Best practice**\n\nAvoid aliases. Avoid short aliases when aliases are necessary.\n\nSee also: :sqlfluff:ref:`AL07`.\n\n.. code-block:: sql\n\n    SELECT\n        SUM(orders.amount) as order_amount,\n    FROM orders\n\n    SELECT\n        replacement_orders.amount,\n        previous_orders.amount\n    FROM\n        orders AS replacement_orders\n    JOIN\n        orders AS previous_orders\n        ON replacement_orders.id = previous_orders.replacement_id",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL07_aliasing.forbid",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid table aliases in FROM clauses and JOIN conditions",
+    "description" : "This rule enforces avoiding the use of table aliases in FROM clauses and JOIN conditions in SQL queries to improve readability and clarity.",
+    "explanation" : "# AL07_aliasing.forbid\n\nAvoid table aliases in from clauses and join conditions.\n\n.. note::\n   This rule was taken from the `dbt Style Guide\n   <https://github.com/dbt-labs/corp/blob/main/dbt_style_guide.md>`_\n   which notes that:\n\n    Avoid table aliases in join conditions (especially initialisms) - it's\n    harder to understand what the table called \"c\" is compared to \"customers\".\n\n   This rule is controversial and for many larger databases avoiding alias is\n   neither realistic nor desirable. In particular for BigQuery due to the\n   complexity of backtick requirements and determining whether a name refers\n   to a project or dataset so automated fixes can potentially break working\n   SQL code. For most users :sqlfluff:ref:`AL06` is likely a more appropriate\n   linting rule to drive a sensible behaviour around aliasing.\n\n   The stricter treatment of aliases in this rule may be useful for more\n   focused projects, or temporarily as a refactoring tool because the\n   :code:`fix` routine of the rule can remove aliases.\n\n   This rule is disabled by default for all dialects it can be enabled with\n   the ``force_enable = True`` flag.\n\n**Anti-pattern**\n\nIn this example, alias ``o`` is used for the orders table, and ``c`` is used for\n``customers`` table.\n\n.. code-block:: sql\n\n    SELECT\n        COUNT(o.customer_id) as order_amount,\n        c.name\n    FROM orders as o\n    JOIN customers as c on o.id = c.user_id\n\n\n**Best practice**\n\nAvoid aliases.\n\n.. code-block:: sql\n\n    SELECT\n        COUNT(orders.customer_id) as order_amount,\n        customers.name\n    FROM orders\n    JOIN customers on orders.id = customers.user_id\n\n    -- Self-join will not raise issue\n\n    SELECT\n        table1.a,\n        table_alias.b,\n    FROM\n        table1\n        LEFT JOIN table1 AS table_alias ON\n            table1.foreign_key = table_alias.foreign_key",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL08_aliasing.unique.column",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Unique Column Aliases",
+    "description" : "Ensures that column aliases are unique within each SQL clause to avoid ambiguity and confusion.",
+    "explanation" : "# AL08_aliasing.unique.column\n\nColumn aliases should be unique within each clause.\n\nReusing column aliases is very likely a coding error. Note that while\nin many dialects, quoting an identifier makes it case-sensitive\nthis rule always compares in a case-insensitive way. This is because\ncolumns with the same name, but different case, are still confusing\nand potentially ambiguous to other readers.\n\nIn situations where it is *necessary* to have columns with the same\nname (whether they differ in case or not) we recommend disabling this\nrule for either just the line, or the whole file.\n\n**Anti-pattern**\n\nIn this example, the alias ``foo`` is reused for two different columns:\n\n.. code-block:: sql\n\n    SELECT\n        a as foo,\n        b as foo\n    FROM tbl;\n\n    -- This can also happen when referencing the same column\n    -- column twice, or aliasing an expression to the same\n    -- name as a column:\n\n    SELECT\n        foo,\n        foo,\n        a as foo\n    FROM tbl;\n\n**Best practice**\n\nMake all columns have a unique alias.\n\n.. code-block:: sql\n\n    SELECT\n        a as foo,\n        b as bar\n    FROM tbl;\n\n    -- Avoid also using the same column twice unless aliased:\n\n    SELECT\n        foo as foo1,\n        foo as foo2,\n        a as foo3\n    FROM tbl;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AL09_aliasing.self_alias.column",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Self-Aliasing of Columns",
+    "description" : "This rule prevents aliasing a column to itself in SQL queries, which is redundant and unnecessary unless changing the casing of the identifier.",
+    "explanation" : "# AL09_aliasing.self_alias.column\n\nColumn aliases should not alias to itself, i.e. self-alias.\n\nRenaming the column to itself is a redundant piece of SQL,\nwhich doesn't affect its functionality. This rule only applies\nwhen aliasing to an exact copy of the column reference (e.g.\n:code:`foo as foo` or :code:`\"BAR\" as \"BAR\"`, see note below on\nmore complex examples). Aliases which effectively change the casing of\nan identifier are still allowed.\n\n.. note::\n\n   This rule works in conjunction with :sqlfluff:ref:`references.quoting`\n   (:sqlfluff:ref:`RF06`) and :sqlfluff:ref:`capitalisation.identifiers`\n   (:sqlfluff:ref:`CP02`) to handle self aliases with mixed quoting\n   and casing. In the situation that these two rules are not enabled\n   then this rule will only fix the strict case where the quoting\n   and casing of the alias and reference are the same.\n\n   If those two rules are enabled, the fixes applied may result in a\n   situation where this rule can kick in as a secondary effect. For\n   example this :ref:`snowflake_dialect_ref` query:\n\n   .. code-block:: sql\n\n      -- Original Query. AL09 will not trigger because casing and\n      -- quoting are different. RF06 will however fix the unnecessary\n      -- quoting of \"COL\".\n      SELECT \"COL\" AS col FROM table;\n      -- After RF06, the query will look like this, at which point\n      -- CP02 will see the inconsistent capitalisation. Depending\n      -- on the configuration it will change one of the identifiers.\n      -- Let's assume the default configuration of \"consistent\".\n      SELECT COL AS col FROM table;\n      -- After CP02, the alias and the reference will be the same\n      -- and at this point AL09 can take over and remove the alias.\n      SELECT COL AS COL FROM table;\n      -- ..resulting in:\n      SELECT COL FROM table;\n\n   This interdependence between the rules, and the configuration\n   options offered by each one means a variety of outcomes can be\n   achieved by enabling and disabling each one. See\n   :ref:`ruleselection` and :ref:`ruleconfig` for more details.\n\n**Anti-pattern**\n\nAliasing the column to itself, where not necessary for changing the case\nof an identifier.\n\n.. code-block:: sql\n\n    SELECT\n        col AS col,\n        \"Col\" AS \"Col\",\n        COL AS col\n    FROM table;\n\n**Best practice**\n\nNot to use alias to rename the column to its original name.\nSelf-aliasing leads to redundant code without changing any functionality,\nunless used to effectively change the case of the identifier.\n\n.. code-block:: sql\n\n    SELECT\n        col,\n        \"Col\"\n        COL,\n    FROM table;\n\n    -- Re-casing aliasing is still allowed where necessary, i.e.\n    SELECT\n        col as \"Col\",\n        \"col\" as \"COL\"\n    FROM table;",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM01_ambiguous.distinct",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid ambiguous use of DISTINCT with GROUP BY",
+    "description" : "Detects ambiguous and conflicting use of DISTINCT clause in a SELECT statement that also contains a GROUP BY clause.",
+    "explanation" : "# AM01_ambiguous.distinct\n\nAmbiguous use of ``DISTINCT`` in a ``SELECT`` statement with ``GROUP BY``.\n\nWhen using ``GROUP BY`` a `DISTINCT`` clause should not be necessary as every\nnon-distinct ``SELECT`` clause must be included in the ``GROUP BY`` clause.\n\n**Anti-pattern**\n\n``DISTINCT`` and ``GROUP BY`` are conflicting.\n\n.. code-block:: sql\n\n    SELECT DISTINCT\n        a\n    FROM foo\n    GROUP BY a\n\n**Best practice**\n\nRemove ``DISTINCT`` or ``GROUP BY``. In our case, removing ``GROUP BY`` is better.\n\n.. code-block:: sql\n\n    SELECT DISTINCT\n        a\n    FROM foo",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM02_ambiguous.union",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce explicit UNION modifier",
+    "description" : "This rule enforces specifying either DISTINCT or ALL explicitly after UNION in SQL statements.",
+    "explanation" : "# AM02_ambiguous.union\n\n``UNION [DISTINCT|ALL]`` is preferred over just ``UNION``.\n\n.. note::\n   This rule is only enabled for dialects that support ``UNION`` and\n   ``UNION DISTINCT`` (``ansi``, ``bigquery``, ``clickhouse``,\n   ``databricks``, ``db2``, ``hive``, ``mysql``, ``redshift``,\n   ``snowflake``, and ``trino``).\n\n**Anti-pattern**\n\nIn this example, ``UNION DISTINCT`` should be preferred over ``UNION``, because\nexplicit is better than implicit.\n\n.. code-block:: sql\n\n    SELECT a, b FROM table_1\n    UNION\n    SELECT a, b FROM table_2\n\n**Best practice**\n\nSpecify ``DISTINCT`` or ``ALL`` after ``UNION`` (note that ``DISTINCT`` is the\ndefault behavior).\n\n.. code-block:: sql\n\n    SELECT a, b FROM table_1\n    UNION DISTINCT\n    SELECT a, b FROM table_2",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM03_ambiguous.order_by",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Ordering Directions in ORDER BY Clause",
+    "description" : "Ensures that when any column in an ORDER BY clause specifies an ordering direction (ASC or DESC), all columns explicitly specify their ordering direction to avoid ambiguity.",
+    "explanation" : "# AM03_ambiguous.order_by\n\nAmbiguous ordering directions for columns in order by clause.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    SELECT\n        a, b\n    FROM foo\n    ORDER BY a, b DESC\n\n**Best practice**\n\nIf any columns in the ``ORDER BY`` clause specify ``ASC`` or ``DESC``, they should\nall do so.\n\n.. code-block:: sql\n\n    SELECT\n        a, b\n    FROM foo\n    ORDER BY a ASC, b DESC",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM04_ambiguous.column_count",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid querying with ambiguous column count",
+    "description" : "This rule detects SQL queries that produce an unknown number of result columns by using SELECT * or similar patterns, which can cause issues if the table schema changes.",
+    "explanation" : "# AM04_ambiguous.column_count\n\nQuery produces an unknown number of result columns.\n\n**Anti-pattern**\n\nQuerying all columns using ``*`` produces a query result where the number\nor ordering of columns changes if the upstream table's schema changes.\nThis should generally be avoided because it can cause slow performance,\ncause important schema changes to go undetected, or break production code.\nFor example:\n\n* If a query does ``SELECT t.*`` and is expected to return columns ``a``, ``b``,\n  and ``c``, the actual columns returned will be wrong/different if columns\n  are added to or deleted from the input table.\n* ``UNION`` and ``DIFFERENCE`` clauses require the inputs have the same number\n  of columns (and compatible types).\n* ``JOIN`` queries may break due to new column name conflicts, e.g. the\n  query references a column ``c`` which initially existed in only one input\n  table but a column of the same name is added to another table.\n* ``CREATE TABLE (<<column schema>>) AS SELECT *``\n\n\n.. code-block:: sql\n\n    WITH cte AS (\n        SELECT * FROM foo\n    )\n\n    SELECT * FROM cte\n    UNION\n    SELECT a, b FROM t\n\n**Best practice**\n\nSomewhere along the \"path\" to the source data, specify columns explicitly.\n\n.. code-block:: sql\n\n    WITH cte AS (\n        SELECT * FROM foo\n    )\n\n    SELECT a, b FROM cte\n    UNION\n    SELECT a, b FROM t",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM05_ambiguous.join",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Fully Qualified Join Clauses",
+    "description" : "This rule enforces that SQL join clauses specify the type of join explicitly, such as using INNER JOIN instead of just JOIN.",
+    "explanation" : "# AM05_ambiguous.join\n\nJoin clauses should be fully qualified.\n\nBy default this rule is configured to enforce fully qualified ``INNER JOIN``\nclauses, but not ``[LEFT/RIGHT/FULL] OUTER JOIN``. If you prefer a stricter\nlint then this is configurable.\n\n**Anti-pattern**\n\nA join is used without specifying the **kind** of join.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo\n    FROM bar\n    JOIN baz;\n\n**Best practice**\n\nUse ``INNER JOIN`` rather than ``JOIN``.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo\n    FROM bar\n    INNER JOIN baz;",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM06_ambiguous.column_references",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid inconsistent column references in GROUP BY and ORDER BY clauses",
+    "description" : "This rule checks for inconsistent usage of implicit and explicit column references within GROUP BY and ORDER BY clauses in SQL statements.",
+    "explanation" : "# AM06_ambiguous.column_references\n\nInconsistent column references in ``GROUP BY/ORDER BY`` clauses.\n\n.. note::\n   ``ORDER BY`` clauses from ``WINDOW`` clauses are ignored by this rule.\n\n**Anti-pattern**\n\nA mix of implicit and explicit column references are used in a ``GROUP BY``\nclause.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo,\n        bar,\n        sum(baz) AS sum_value\n    FROM fake_table\n    GROUP BY\n        foo, 2;\n\n    -- The same also applies to column\n    -- references in ORDER BY clauses.\n\n    SELECT\n        foo,\n        bar\n    FROM fake_table\n    ORDER BY\n        1, bar;\n\n**Best practice**\n\nReference all ``GROUP BY``/``ORDER BY`` columns either by name or by position.\n\n.. code-block:: sql\n   :force:\n\n    -- GROUP BY: Explicit\n    SELECT\n        foo,\n        bar,\n        sum(baz) AS sum_value\n    FROM fake_table\n    GROUP BY\n        foo, bar;\n\n    -- ORDER BY: Explicit\n    SELECT\n        foo,\n        bar\n    FROM fake_table\n    ORDER BY\n        foo, bar;\n\n    -- GROUP BY: Implicit\n    SELECT\n        foo,\n        bar,\n        sum(baz) AS sum_value\n    FROM fake_table\n    GROUP BY\n        1, 2;\n\n    -- ORDER BY: Implicit\n    SELECT\n        foo,\n        bar\n    FROM fake_table\n    ORDER BY\n        1, 2;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM07_ambiguous.set_columns",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce consistent number of columns in set queries",
+    "description" : "Ensures that all queries within a set operation (e.g., UNION) return the same number of columns.",
+    "explanation" : "# AM07_ambiguous.set_columns\n\nQueries within set query produce different numbers of columns.\n\n**Anti-pattern**\n\nWhen writing set expressions, all queries must return the same number of columns.\n\n.. code-block:: sql\n\n    WITH cte AS (\n        SELECT\n            a,\n            b\n        FROM foo\n    )\n    SELECT * FROM cte\n    UNION\n    SELECT\n        c,\n        d,\n        e\n     FROM t\n\n**Best practice**\n\nAlways specify columns when writing set queries\nand ensure that they all seleect same number of columns\n\n.. code-block:: sql\n\n    WITH cte AS (\n        SELECT a, b FROM foo\n    )\n    SELECT\n        a,\n        b\n    FROM cte\n    UNION\n    SELECT\n        c,\n        d\n    FROM t",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM08_ambiguous.join_condition",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Implicit Cross Join",
+    "description" : "Detects and discourages implicit cross joins in SQL queries which can cause unintended Cartesian products.",
+    "explanation" : "# AM08_ambiguous.join_condition\n\nImplicit cross join detected.\n\n**Anti-pattern**\n\nCross joins are valid, but rare in the wild - and more often created by mistake\nthan on purpose. This rule catches situations where a cross join has been specified,\nbut not explicitly and so the risk of a mistaken cross join is highly likely.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo\n    FROM bar\n    JOIN baz;\n\n**Best practice**\n\nUse CROSS JOIN.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo\n    FROM bar\n    CROSS JOIN baz;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AM09_ambiguous.order_by_limit",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Use of limit and offset",
+    "description" : "Use of LIMIT and OFFSET without ORDER BY may lead to non-deterministic results.\n\nWhen using ``LIMIT`` or ``OFFSET``, it's generally recommended to include\nan ``ORDER BY`` clause to ensure deterministic results.\n\n**Anti-pattern**\n\nThe following query has LIMIT and OFFSET without ORDER BY, which may return\ndifferent results in successive executions.\n\n.. code-block:: sql\n\n    SELECT *\n    FROM foo\n    LIMIT 10 OFFSET 5;\n\n**Best practice**\n\nInclude an ``ORDER BY`` clause:\n\n.. code-block:: sql\n\n    SELECT *\n    FROM foo\n    ORDER BY id\n    LIMIT 10 OFFSET 5;",
+    "explanation" : "# AM09_ambiguous.order_by_limit\n\nUse of LIMIT and OFFSET without ORDER BY may lead to non-deterministic results.\n\nWhen using ``LIMIT`` or ``OFFSET``, it's generally recommended to include\nan ``ORDER BY`` clause to ensure deterministic results.\n\n**Anti-pattern**\n\nThe following query has LIMIT and OFFSET without ORDER BY, which may return\ndifferent results in successive executions.\n\n.. code-block:: sql\n\n    SELECT *\n    FROM foo\n    LIMIT 10 OFFSET 5;\n\n**Best practice**\n\nInclude an ``ORDER BY`` clause:\n\n.. code-block:: sql\n\n    SELECT *\n    FROM foo\n    ORDER BY id\n    LIMIT 10 OFFSET 5;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CP01_capitalisation.keywords",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent capitalisation of SQL keywords",
+    "description" : "This rule enforces consistent capitalisation of SQL keywords throughout the code, requiring all keywords to be either all upper-case or all lower-case.",
+    "explanation" : "# CP01_capitalisation.keywords\n\nInconsistent capitalisation of keywords.\n\n**Anti-pattern**\n\nIn this example, ``select`` is in lower-case whereas ``FROM`` is in upper-case.\n\n.. code-block:: sql\n\n    select\n        a\n    FROM foo\n\n**Best practice**\n\nMake all keywords either in upper-case or in lower-case.\n\n.. code-block:: sql\n\n    SELECT\n        a\n    FROM foo\n\n    -- Also good\n\n    select\n        a\n    from foo",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CP02_capitalisation.identifiers",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent capitalisation of unquoted identifiers",
+    "description" : "This rule enforces consistent use of either upper-case or lower-case for all unquoted SQL identifiers such as column names, table names, and aliases.",
+    "explanation" : "# CP02_capitalisation.identifiers\n\nInconsistent capitalisation of unquoted identifiers.\n\nThis rule applies to all unquoted identifiers, whether references\nor aliases, and whether they refer to columns or other objects (such\nas tables or schemas).\n\n.. note::\n\n   In **most** dialects, unquoted identifiers are treated as case-insensitive\n   and so the fixes proposed by this rule do not change the interpretation\n   of the query. **HOWEVER**, some databases (notably :ref:`bigquery_dialect_ref`,\n   :ref:`trino_dialect_ref` and :ref:`clickhouse_dialect_ref`) do take the casing\n   of *unquoted* identifiers into account when determining the casing of the column\n   heading in the *result*.\n\n   As this feature is only present in a few dialects, and not widely understood\n   by users, we regard it as *an antipattern*. It is more widely understood that\n   if the case of an identifier *matters*, then it should be quoted. If you, or\n   your organisation, do wish to rely on this feature, we recommend that you\n   disabled this rule (see :ref:`ruleselection`).\n\n**Anti-pattern**\n\nIn this example, unquoted identifier ``a`` is in lower-case but\n``B`` is in upper-case.\n\n.. code-block:: sql\n\n    select\n        a,\n        B\n    from foo\n\nIn this more complicated example, there are a mix of capitalisations\nin both reference and aliases of columns and tables. That inconsistency\nis acceptable when those identifiers are quoted, but not when unquoted.\n\n.. code-block:: sql\n\n    select\n        col_1 + Col_2 as COL_3,\n        \"COL_4\" as Col_5\n    from Foo as BAR\n\n**Best practice**\n\nEnsure all unquoted identifiers are either in upper-case or in lower-case.\n\n.. code-block:: sql\n\n    select\n        a,\n        b\n    from foo;\n\n    -- ...also good...\n\n    select\n        A,\n        B\n    from foo;\n\n    --- ...or for comparison with our more complex example, this too:\n\n    select\n        col_1 + col_2 as col_3,\n        \"COL_4\" as col_5\n    from foo as bar",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CP03_capitalisation.functions",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Capitalisation of SQL Function Names",
+    "description" : "This rule enforces consistent capitalisation of SQL function names within a query.",
+    "explanation" : "# CP03_capitalisation.functions\n\nInconsistent capitalisation of function names.\n\n**Anti-pattern**\n\nIn this example, the two ``SUM`` functions don't have the same capitalisation.\n\n.. code-block:: sql\n\n    SELECT\n        sum(a) AS aa,\n        SUM(b) AS bb\n    FROM foo\n\n**Best practice**\n\nMake the case consistent.\n\n.. code-block:: sql\n\n    SELECT\n        sum(a) AS aa,\n        sum(b) AS bb\n    FROM foo",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CP04_capitalisation.literals",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent capitalisation of boolean and null literals",
+    "description" : "This rule enforces consistent capitalization of boolean (true/false) and null literals in SQL code.",
+    "explanation" : "# CP04_capitalisation.literals\n\nInconsistent capitalisation of boolean/null literal.\n\n**Anti-pattern**\n\nIn this example, ``null`` and ``false`` are in lower-case whereas ``TRUE`` is in\nupper-case.\n\n.. code-block:: sql\n\n    select\n        a,\n        null,\n        TRUE,\n        false\n    from foo\n\n**Best practice**\n\nEnsure all literal ``null``/``true``/``false`` literals are consistently\nupper or lower case\n\n.. code-block:: sql\n\n    select\n        a,\n        NULL,\n        TRUE,\n        FALSE\n    from foo\n\n    -- Also good\n\n    select\n        a,\n        null,\n        true,\n        false\n    from foo",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CP05_capitalisation.types",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent capitalisation of datatypes",
+    "description" : "This rule ensures that SQL datatypes are capitalised consistently within a statement.",
+    "explanation" : "# CP05_capitalisation.types\n\nInconsistent capitalisation of datatypes.\n\n**Anti-pattern**\n\nIn this example, ``int`` and ``unsigned`` are in lower-case whereas\n``VARCHAR`` is in upper-case.\n\n.. code-block:: sql\n\n    CREATE TABLE t (\n        a int unsigned,\n        b VARCHAR(15)\n    );\n\n**Best practice**\n\nEnsure all datatypes are consistently upper or lower case\n\n.. code-block:: sql\n\n    CREATE TABLE t (\n        a INT UNSIGNED,\n        b VARCHAR(15)\n    );",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV01_convention.not_equal",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Usage of Not Equal Operators",
+    "description" : "Ensures consistent usage of either '!=' or '<>' for the 'not equal to' operator in SQL queries, avoiding mixing both.",
+    "explanation" : "# CV01_convention.not_equal\n\nConsistent usage of ``!=`` or ``<>`` for \"not equal to\" operator.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    SELECT * FROM X WHERE 1 <> 2 AND 3 != 4;\n\n**Best practice**\n\nEnsure all \"not equal to\" comparisons are consistent, not mixing ``!=`` and ``<>``.\n\n.. code-block:: sql\n\n    SELECT * FROM X WHERE 1 != 2 AND 3 != 4;",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV02_convention.coalesce",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Use COALESCE Instead of IFNULL or NVL",
+    "description" : "Enforce using COALESCE function instead of IFNULL or NVL to handle NULL values in SQL queries.",
+    "explanation" : "# CV02_convention.coalesce\n\nUse ``COALESCE`` instead of ``IFNULL`` or ``NVL``.\n\n**Anti-pattern**\n\n``IFNULL`` or ``NVL`` are used to fill ``NULL`` values.\n\n.. code-block:: sql\n\n    SELECT ifnull(foo, 0) AS bar,\n    FROM baz;\n\n    SELECT nvl(foo, 0) AS bar,\n    FROM baz;\n\n**Best practice**\n\nUse ``COALESCE`` instead.\n``COALESCE`` is universally supported,\nwhereas Redshift doesn't support ``IFNULL``\nand BigQuery doesn't support ``NVL``.\nAdditionally, ``COALESCE`` is more flexible\nand accepts an arbitrary number of arguments.\n\n.. code-block:: sql\n\n    SELECT coalesce(foo, 0) AS bar,\n    FROM baz;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV03_convention.select_trailing_comma",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Disallow Trailing Commas in SELECT Clause",
+    "description" : "This rule enforces that no trailing commas are present after the last element in the SELECT clause of an SQL query.",
+    "explanation" : "# CV03_convention.select_trailing_comma\n\nTrailing commas within select clause.\n\n.. note::\n   For many database backends this is allowed. For some users\n   this may be something they wish to enforce (in line with\n   Python best practice). Many database backends regard this\n   as a syntax error, and as such the `SQLFluff` default is to\n   forbid trailing commas in the select clause.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    SELECT\n        a,\n        b,\n    FROM foo\n\n**Best practice**\n\n.. code-block:: sql\n\n    SELECT\n        a,\n        b\n    FROM foo",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV04_convention.count_rows",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent COUNT syntax for row counting",
+    "description" : "Ensure consistent use of COUNT syntax (COUNT(*), COUNT(1), or COUNT(0)) to express counting the number of rows in SQL queries.",
+    "explanation" : "# CV04_convention.count_rows\n\nUse consistent syntax to express \"count number of rows\".\n\nNote:\n    If both ``prefer_count_1`` and ``prefer_count_0`` are set to true\n    then ``prefer_count_1`` has precedence.\n\n``COUNT(*)``, ``COUNT(1)``, and even ``COUNT(0)`` are equivalent syntaxes\nin many SQL engines due to optimizers interpreting these instructions as\n\"count number of rows in result\".\n\nThe ANSI-92_ spec mentions the ``COUNT(*)`` syntax specifically as\nhaving a special meaning:\n\n    If COUNT(*) is specified, then\n    the result is the cardinality of T.\n\nSo by default, `SQLFluff` enforces the consistent use of ``COUNT(*)``.\n\nIf the SQL engine you work with, or your team, prefers ``COUNT(1)`` or\n``COUNT(0)`` over ``COUNT(*)``, you can configure this rule to consistently\nenforce your preference.\n\n.. _ANSI-92: http://msdn.microsoft.com/en-us/library/ms175997.aspx\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    select\n        count(1)\n    from table_a\n\n**Best practice**\n\nUse ``count(*)`` unless specified otherwise by config ``prefer_count_1``,\nor ``prefer_count_0`` as preferred.\n\n.. code-block:: sql\n\n    select\n        count(*)\n    from table_a",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV05_convention.is_null",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Use of IS or IS NOT for NULL Comparisons",
+    "description" : "This rule enforces that comparisons with NULL values in SQL use the IS or IS NOT operators instead of equality operators like = or <>.",
+    "explanation" : "# CV05_convention.is_null\n\nComparisons with NULL should use \"IS\" or \"IS NOT\".\n\n**Anti-pattern**\n\nIn this example, the ``=`` operator is used to check for ``NULL`` values.\n\n.. code-block:: sql\n\n    SELECT\n        a\n    FROM foo\n    WHERE a = NULL\n\n\n**Best practice**\n\nUse ``IS`` or ``IS NOT`` to check for ``NULL`` values.\n\n.. code-block:: sql\n\n    SELECT\n        a\n    FROM foo\n    WHERE a IS NULL",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV06_convention.terminator",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce statement termination with a semi-colon",
+    "description" : "Ensures that SQL statements are immediately terminated with a semi-colon.",
+    "explanation" : "# CV06_convention.terminator\n\nStatements must end with a semi-colon.\n\n**Anti-pattern**\n\nA statement is not immediately terminated with a semi-colon. The ``•`` represents\nspace.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        a\n    FROM foo\n\n    ;\n\n    SELECT\n        b\n    FROM bar••;\n\n**Best practice**\n\nImmediately terminate the statement with a semi-colon.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        a\n    FROM foo;",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV07_convention.statement_brackets",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Wrapping Top-Level SQL Statements in Brackets",
+    "description" : "This rule enforces that top-level SQL statements should not be wrapped in brackets.",
+    "explanation" : "# CV07_convention.statement_brackets\n\nTop-level statements should not be wrapped in brackets.\n\n**Anti-pattern**\n\nA top-level statement is wrapped in brackets.\n\n.. code-block:: sql\n   :force:\n\n    (SELECT\n        foo\n    FROM bar)\n\n    -- This also applies to statements containing a sub-query.\n\n    (SELECT\n        foo\n    FROM (SELECT * FROM bar))\n\n**Best practice**\n\nDon't wrap top-level statements in brackets.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo\n    FROM bar\n\n    -- Likewise for statements containing a sub-query.\n\n    SELECT\n        foo\n    FROM (SELECT * FROM bar)",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV08_convention.left_join",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce use of LEFT JOIN instead of RIGHT JOIN",
+    "description" : "This rule enforces the use of LEFT JOIN instead of RIGHT JOIN in SQL queries.",
+    "explanation" : "# CV08_convention.left_join\n\nUse ``LEFT JOIN`` instead of ``RIGHT JOIN``.\n\n**Anti-pattern**\n\n``RIGHT JOIN`` is used.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo.col1,\n        bar.col2\n    FROM foo\n    RIGHT JOIN bar\n        ON foo.bar_id = bar.id;\n\n**Best practice**\n\nRefactor and use ``LEFT JOIN`` instead.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        foo.col1,\n        bar.col2\n    FROM bar\n    LEFT JOIN foo\n        ON foo.bar_id = bar.id;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV09_convention.blocked_words",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Block Configurable Words Usage",
+    "description" : "This rule prevents the use of certain configurable words in SQL code to enforce preferred keywords, avoid deprecated objects, or disallow specific functions or terms.",
+    "explanation" : "# CV09_convention.blocked_words\n\nBlock a list of configurable words from being used.\n\nThis generic rule can be useful to prevent certain keywords, functions, or objects\nfrom being used. Only whole words can be blocked, not phrases, nor parts of words.\n\nThis block list is case insensitive.\n\n**Example use cases**\n\n* We prefer ``BOOL`` over ``BOOLEAN`` and there is no existing rule to enforce\n  this. Until such a rule is written, we can add ``BOOLEAN`` to the deny list\n  to cause a linting error to flag this.\n* We have deprecated a schema/table/function and want to prevent it being used\n  in future. We can add that to the denylist and then add a ``-- noqa: CV09`` for\n  the few exceptions that still need to be in the code base for now.\n\n**Anti-pattern**\n\nIf the ``blocked_words`` config is set to ``deprecated_table,bool`` then the\nfollowing will flag:\n\n.. code-block:: sql\n\n    SELECT * FROM deprecated_table WHERE 1 = 1;\n    CREATE TABLE myschema.t1 (a BOOL);\n\n**Best practice**\n\nDo not used any blocked words:\n\n.. code-block:: sql\n\n    SELECT * FROM another_table WHERE 1 = 1;\n    CREATE TABLE myschema.t1 (a BOOLEAN);",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV10_convention.quoted_literals",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Usage of Preferred Quotes for Quoted Literals",
+    "description" : "Ensures consistent use of preferred single or double quotes for quoted literals in SQL, reducing unnecessary escaping.",
+    "explanation" : "# CV10_convention.quoted_literals\n\nConsistent usage of preferred quotes for quoted literals.\n\nSome databases allow quoted literals to use either single or double quotes.\nPrefer one type of quotes as specified in rule setting, falling back to\nalternate quotes to reduce the need for escapes.\n\nDollar-quoted raw strings are excluded from this rule, as they are mostly used for\nliteral UDF Body definitions.\n\n.. note::\n   This rule only checks quoted literals and not quoted identifiers as they often\n   cannot interchange single and double quotes\n\n   This rule is only enabled for dialects that allow single *and* double quotes for\n   quoted literals\n   (currently ``bigquery``, ``databricks``, ``hive``, ``mysql``, ``sparksql``).\n   It can be enabled for other dialects with the ``force_enable = True`` flag.\n\n**Anti-pattern**\n\n.. code-block:: sql\n   :force:\n\n    select\n        \"abc\",\n        'abc',\n        \"\\\"\",\n        \"abc\" = 'abc'\n    from foo\n\n**Best practice**\n\nEnsure all quoted literals use preferred quotes, unless escaping can be reduced by\nusing alternate quotes.\n\n.. code-block:: sql\n   :force:\n\n    select\n        \"abc\",\n        \"abc\",\n        '\"',\n        \"abc\" = \"abc\"\n    from foo",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV11_convention.casting_style",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent type casting style",
+    "description" : "This rule enforces the use of a consistent type casting style in SQL queries, avoiding mixing different casting methods such as CONVERT, ::, and CAST.",
+    "explanation" : "# CV11_convention.casting_style\n\nEnforce consistent type casting style.\n\n.. note::\n    This is only compatible with 2-arguments CONVERT as\n    some dialects allow an optional 3rd argument e.g TSQL,\n    which cannot be rewritten into CAST.\n    This rule is disabled by default for Teradata because it supports different\n    type casting apart from CONVERT and ::\n    e.g DATE '2007-01-01', '9999-12-31' (DATE).\n\n**Anti-pattern**\n\nUsing mixture of CONVERT, :: and CAST when ``preferred_type_casting_style``\nconfig is set to ``consistent`` (default).\n\n.. code-block:: sql\n\n    SELECT\n        CONVERT(int, 1) AS bar,\n        100::int::text,\n        CAST(10 AS text) AS coo\n    FROM foo;\n\n**Best practice**\n\nUse consistent type casting style.\n\n.. code-block:: sql\n\n    SELECT\n        CAST(1 AS int) AS bar,\n        CAST(CAST(100 AS int) AS text),\n        CAST(10 AS text) AS coo\n    FROM foo;",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CV12_convention.join_condition",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Use JOIN ON for join conditions",
+    "description" : "Enforce the use of JOIN ... ON syntax instead of WHERE clause for specifying join conditions in SQL queries.",
+    "explanation" : "# CV12_convention.join_condition\n\nUse `JOIN ... ON ...` instead of `WHERE ...` for join conditions.\n\n**Anti-pattern**\n\nUsing WHERE clause for join conditions.\n\n.. code-block:: sql\n\n    SELECT\n        foo.a\n        , bar.b\n    FROM foo\n    JOIN bar\n    WHERE foo.x = bar.y;\n\n**Best practice**\n\nUse JOIN ON clause for join condition.\n\n.. code-block:: sql\n\n    SELECT\n        foo.a\n        , bar.b\n    FROM foo\n    JOIN bar\n    ON foo.x = bar.y;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "JJ01_jinja.padding",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce single whitespace padding around Jinja tags",
+    "description" : "This rule enforces that Jinja tags in SQL files have exactly one whitespace character on each side for better readability.",
+    "explanation" : "# JJ01_jinja.padding\n\nJinja tags should have a single whitespace on either side.\n\nThis rule is only active if the ``jinja`` templater (or one of it's\nsubclasses, like the ``dbt`` templater) are used for the current file.\n\n**Anti-pattern**\n\nJinja tags with either no whitespace or very long whitespace\nare hard to read.\n\n.. code-block:: jinja\n   :force:\n\n    SELECT {{    a     }} from {{ref('foo')}}\n\n**Best practice**\n\nA single whitespace surrounding Jinja tags, alternatively\nlonger gaps containing newlines are acceptable.\n\n.. code-block:: jinja\n   :force:\n\n    SELECT {{ a }} from {{ ref('foo') }};\n    SELECT {{ a }} from {{\n        ref('foo')\n    }};",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT01_layout.spacing",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Appropriate Spacing in SQL",
+    "description" : "This rule enforces correct spacing in SQL code, including preventing excessive whitespace, trailing whitespace, and ensuring proper spacing between elements according to configuration.",
+    "explanation" : "# LT01_layout.spacing\n\nInappropriate Spacing.\n\nThis rule checks for an enforces the spacing as configured in\n:ref:`layoutconfig`. This includes excessive whitespace,\ntrailing whitespace at the end of a line and also the wrong\nspacing between elements on the line. Because of this wide reach\nyou may find that you wish to add specific configuration in your\nproject to tweak how specific elements are treated. Rather than\nconfiguration on this specific rule, use the `sqlfluff.layout`\nsection of your configuration file to customise how this rule\noperates.\n\nThe ``•`` character represents a space in the examples below.\n\n**Anti-pattern**\n\n.. code-block:: sql\n    :force:\n\n    SELECT\n        a,        b(c) as d••\n    FROM foo••••\n    JOIN bar USING(a)\n\n**Best practice**\n\n* Unless an indent or preceding a comment, whitespace should\n  be a single space.\n\n* There should also be no trailing whitespace at the ends of lines.\n\n* There should be a space after :code:`USING` so that it's not confused\n  for a function.\n\n.. code-block:: sql\n\n    SELECT\n        a, b(c) as d\n    FROM foo\n    JOIN bar USING (a)",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT02_layout.indent",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Correct Indentation",
+    "description" : "This rule enforces consistent indentation using multiples of four spaces (or tabs if configured) in SQL code.",
+    "explanation" : "# LT02_layout.indent\n\nIncorrect Indentation.\n\n**Anti-pattern**\n\nThe ``•`` character represents a space and the ``→`` character represents a tab.\nIn this example, the third line contains five spaces instead of four and\nthe second line contains two spaces and one tab.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n    ••→a,\n    •••••b\n    FROM foo\n\n\n**Best practice**\n\nChange the indentation to use a multiple of four spaces. This example also\nassumes that the ``indent_unit`` config value is set to ``space``. If it\nhad instead been set to ``tab``, then the indents would be tabs instead.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n    ••••a,\n    ••••b\n    FROM foo",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT03_layout.operators",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Standard Operator Positioning in SQL",
+    "description" : "Ensures that SQL operators follow a consistent standard for placement before or after newlines based on configuration.",
+    "explanation" : "# LT03_layout.operators\n\nOperators should follow a standard for being before/after newlines.\n\nThe configuration for whether operators should be ``trailing`` or\n``leading`` is part of :ref:`layoutconfig`. The default configuration is:\n\n.. code-block:: cfg\n\n    [sqlfluff:layout:type:binary_operator]\n    line_position = leading\n\n    [sqlfluff:layout:type:comparison_operator]\n    line_position = leading\n\n**Anti-pattern**\n\nIn this example, if ``line_position = leading`` (or unspecified, as is the\ndefault), then the operator ``+`` should not be at the end of the second line.\n\n.. code-block:: sql\n\n    SELECT\n        a +\n        b\n    FROM foo\n\n\n**Best practice**\n\nIf ``line_position = leading`` (or unspecified, as this is the default),\nplace the operator after the newline.\n\n.. code-block:: sql\n\n    SELECT\n        a\n        + b\n    FROM foo\n\nIf ``line_position = trailing``, place the operator before the newline.\n\n.. code-block:: sql\n\n    SELECT\n        a +\n        b\n    FROM foo",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT04_layout.commas",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent leading or trailing commas",
+    "description" : "This rule enforces consistent use of either leading or trailing commas in SQL statements according to configuration.",
+    "explanation" : "# LT04_layout.commas\n\nLeading/Trailing comma enforcement.\n\nThe configuration for whether operators should be ``trailing`` or\n``leading`` is part of :ref:`layoutconfig`. The default configuration is:\n\n.. code-block:: cfg\n\n    [sqlfluff:layout:type:comma]\n    line_position = trailing\n\n**Anti-pattern**\n\nThere is a mixture of leading and trailing commas.\n\n.. code-block:: sql\n\n    SELECT\n        a\n        , b,\n        c\n    FROM foo\n\n**Best practice**\n\nBy default, `SQLFluff` prefers trailing commas. However it\nis configurable for leading commas. The chosen style must be used\nconsistently throughout your SQL.\n\n.. code-block:: sql\n\n    SELECT\n        a,\n        b,\n        c\n    FROM foo\n\n    -- Alternatively, set the configuration file to 'leading'\n    -- and then the following would be acceptable:\n\n    SELECT\n        a\n        , b\n        , c\n    FROM foo",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT05_layout.long_lines",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce line length limit",
+    "description" : "This rule checks for lines in SQL code that exceed a recommended maximum length.",
+    "explanation" : "# LT05_layout.long_lines\n\nLine is too long.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT06_layout.functions",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce function name immediately followed by parenthesis",
+    "description" : "Ensures that in SQL code, function names are immediately followed by an opening parenthesis without any space.",
+    "explanation" : "# LT06_layout.functions\n\nFunction name not immediately followed by parenthesis.\n\n**Anti-pattern**\n\nIn this example, there is a space between the function and the parenthesis.\n\n.. code-block:: sql\n\n    SELECT\n        sum (a)\n    FROM foo\n\n**Best practice**\n\nRemove the space between the function and the parenthesis.\n\n.. code-block:: sql\n\n    SELECT\n        sum(a)\n    FROM foo",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT07_layout.cte_bracket",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce WITH Clause Closing Bracket on New Line",
+    "description" : "Ensures that the closing bracket of a WITH clause in SQL is placed on a new line.",
+    "explanation" : "# LT07_layout.cte_bracket\n\n``WITH`` clause closing bracket should be on a new line.\n\n**Anti-pattern**\n\nIn this example, the closing bracket is on the same line as CTE.\n\n.. code-block:: sql\n   :force:\n\n    WITH zoo AS (\n        SELECT a FROM foo)\n\n    SELECT * FROM zoo\n\n**Best practice**\n\nMove the closing bracket on a new line.\n\n.. code-block:: sql\n\n    WITH zoo AS (\n        SELECT a FROM foo\n    )\n\n    SELECT * FROM zoo",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT08_layout.cte_newline",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce blank line after CTE closing bracket",
+    "description" : "Ensures there is a blank line after the closing bracket of a Common Table Expression (CTE) to improve readability.",
+    "explanation" : "# LT08_layout.cte_newline\n\nBlank line expected but not found after CTE closing bracket.\n\n**Anti-pattern**\n\nThere is no blank line after the CTE closing bracket. In queries with many\nCTEs, this hinders readability.\n\n.. code-block:: sql\n\n    WITH plop AS (\n        SELECT * FROM foo\n    )\n    SELECT a FROM plop\n\n**Best practice**\n\nAdd a blank line.\n\n.. code-block:: sql\n\n    WITH plop AS (\n        SELECT * FROM foo\n    )\n\n    SELECT a FROM plop",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT09_layout.select_targets",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce select targets on new lines",
+    "description" : "Ensures that multiple select targets in a SQL SELECT statement are each placed on their own new line, except when there is only one select target.",
+    "explanation" : "# LT09_layout.select_targets\n\nSelect targets should be on a new line unless there is only one select target.\n\n.. note::\n   By default, a wildcard (e.g. ``SELECT *``) is considered a single select target.\n   If you want it to be treated as multiple select targets, configure\n   ``wildcard_policy = multiple``.\n\n**Anti-pattern**\n\nMultiple select targets on the same line.\n\n.. code-block:: sql\n\n    select a, b\n    from foo;\n\n    -- Single select target on its own line.\n\n    SELECT\n        a\n    FROM foo;\n\n\n**Best practice**\n\nMultiple select targets each on their own line.\n\n.. code-block:: sql\n\n    select\n        a,\n        b\n    from foo;\n\n    -- Single select target on the same line as the ``SELECT``\n    -- keyword.\n\n    SELECT a\n    FROM foo;\n\n    -- When select targets span multiple lines, however they\n    -- can still be on a new line.\n\n    SELECT\n        SUM(\n            1 + SUM(\n                2 + 3\n            )\n        ) AS col\n    FROM test_table;",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT10_layout.select_modifiers",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce SELECT Modifiers on Same Line as SELECT",
+    "description" : "Ensures that SELECT modifiers like DISTINCT are placed on the same line as the SELECT keyword in SQL queries.",
+    "explanation" : "# LT10_layout.select_modifiers\n\n``SELECT`` modifiers (e.g. ``DISTINCT``) must be on the same line as ``SELECT``.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    select\n        distinct a,\n        b\n    from x\n\n\n**Best practice**\n\n.. code-block:: sql\n\n    select distinct\n        a,\n        b\n    from x",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT11_layout.set_operators",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce set operators to be surrounded by newlines",
+    "description" : "This rule enforces that SQL set operators (e.g., UNION ALL) should be placed on their own line, surrounded by newlines.",
+    "explanation" : "# LT11_layout.set_operators\n\nSet operators should be surrounded by newlines.\n\n**Anti-pattern**\n\nIn this example, `UNION ALL` is not on a line itself.\n\n.. code-block:: sql\n\n    SELECT 'a' AS col UNION ALL\n    SELECT 'b' AS col\n\n**Best practice**\n\n.. code-block:: sql\n\n    SELECT 'a' AS col\n    UNION ALL\n    SELECT 'b' AS col",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT12_layout.end_of_file",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce files end with a single trailing newline",
+    "description" : "Ensures that SQL files end with exactly one trailing newline character.",
+    "explanation" : "# LT12_layout.end_of_file\n\nFiles must end with a single trailing newline.\n\n**Anti-pattern**\n\nThe content in file does not end with a single trailing newline. The ``$``\nrepresents end of file.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        a\n    FROM foo$\n\n    -- Ending on an indented line means there is no newline\n    -- at the end of the file, the • represents space.\n\n    SELECT\n    ••••a\n    FROM\n    ••••foo\n    ••••$\n\n    -- Ending on a semi-colon means the last line is not a\n    -- newline.\n\n    SELECT\n        a\n    FROM foo\n    ;$\n\n    -- Ending with multiple newlines.\n\n    SELECT\n        a\n    FROM foo\n\n    $\n\n**Best practice**\n\nAdd trailing newline to the end. The ``$`` character represents end of file.\n\n.. code-block:: sql\n   :force:\n\n    SELECT\n        a\n    FROM foo\n    $\n\n    -- Ensuring the last line is not indented so is just a\n    -- newline.\n\n    SELECT\n    ••••a\n    FROM\n    ••••foo\n    $\n\n    -- Even when ending on a semi-colon, ensure there is a\n    -- newline after.\n\n    SELECT\n        a\n    FROM foo\n    ;\n    $",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT13_layout.start_of_file",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Disallow files to begin with newlines or whitespace",
+    "description" : "This rule enforces that SQL files must not start with any newlines or whitespace before the first code or comment line.",
+    "explanation" : "# LT13_layout.start_of_file\n\nFiles must not begin with newlines or whitespace.\n\n**Anti-pattern**\n\nThe file begins with newlines or whitespace. The ``^``\nrepresents the beginning of the file.\n\n.. code-block:: sql\n   :force:\n\n    ^\n\n    SELECT\n        a\n    FROM foo\n\n    -- Beginning on an indented line is also forbidden,\n    -- (the • represents space).\n\n    ••••SELECT\n    ••••a\n    FROM\n    ••••foo\n\n**Best practice**\n\nStart file on either code or comment. (The ``^`` represents the beginning\nof the file.)\n\n.. code-block:: sql\n   :force:\n\n\n    ^SELECT\n        a\n    FROM foo\n\n    -- Including an initial block comment.\n\n    ^/*\n    This is a description of my SQL code.\n    */\n    SELECT\n        a\n    FROM\n        foo\n\n    -- Including an initial inline comment.\n\n    ^--This is a description of my SQL code.\n    SELECT\n        a\n    FROM\n        foo",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT14_layout.keyword_newline",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Keyword Clause Newline Layout",
+    "description" : "Ensures that SQL keyword clauses are placed consistently before or after newlines for better readability.",
+    "explanation" : "# LT14_layout.keyword_newline\n\nKeyword clauses should follow a standard for being before/after newlines.\n\n**Anti-pattern**\n\nIn this example, the keyword are not at the beginning of or alone on the line.\n\n.. code-block:: sql\n\n    SELECT 'a' AS col FROM tab WHERE x = 4 ORDER BY y LIMIT 5\n\n**Best practice**\n\n.. code-block:: sql\n\n    SELECT 'a' AS col\n    FROM tab\n    WHERE x = 4\n    ORDER BY y\n    LIMIT 5\n\n.. code-block:: sql\n\n    SELECT 'a' AS col\n    FROM\n        tab\n    WHERE\n        x = 4\n    ORDER BY\n        y\n    LIMIT\n        5",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LT15_layout.newlines",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Too Many Consecutive Blank Lines",
+    "description" : "This rule detects and prevents having too many consecutive blank lines within SQL statements.",
+    "explanation" : "# LT15_layout.newlines\n\nToo many consecutive blank lines.\n\n**Anti-pattern**\n\nIn this example, the maximum number of empty lines inside a statement is set to 0.\n\n.. code-block:: sql\n\n    SELECT 'a' AS col\n    FROM tab\n\n\n    WHERE x = 4\n    ORDER BY y\n\n\n    LIMIT 5\n    ;\n\n**Best practice**\n\n.. code-block:: sql\n\n    SELECT 'a' AS col\n    FROM tab\n    WHERE x = 4\n    ORDER BY y\n    LIMIT 5\n    ;",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RF01_references.from",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Disallow references to objects not in FROM clause",
+    "description" : "This rule ensures that SQL references only refer to objects declared in the FROM clause.",
+    "explanation" : "# RF01_references.from\n\nReferences cannot reference objects not present in ``FROM`` clause.\n\n.. note::\n\n   This rule is disabled by default for Athena, BigQuery, Databricks, DuckDB, Hive,\n   Redshift, SOQL and SparkSQL due to the support of things like\n   structs and lateral views which trigger false positives. It can be\n   enabled with the ``force_enable = True`` flag.\n\n**Anti-pattern**\n\nIn this example, the reference ``vee`` has not been declared.\n\n.. code-block:: sql\n\n    SELECT\n        vee.a\n    FROM foo\n\n**Best practice**\n\nRemove the reference.\n\n.. code-block:: sql\n\n    SELECT\n        a\n    FROM foo",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RF02_references.qualification",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Qualification of References in Multi-Table SELECT",
+    "description" : "Ensures that column references are qualified with their table names when a SELECT statement involves more than one table or view, except when columns are part of a USING clause.",
+    "explanation" : "# RF02_references.qualification\n\nReferences should be qualified if select has more than one referenced table/view.\n\n.. note::\n   Except if they're present in a ``USING`` clause.\n\n**Anti-pattern**\n\nIn this example, the reference ``vee`` has not been declared,\nand the variables ``a`` and ``b`` are potentially ambiguous.\n\n.. code-block:: sql\n\n    SELECT a, b\n    FROM foo\n    LEFT JOIN vee ON vee.a = foo.a\n\n**Best practice**\n\nAdd the references.\n\n.. code-block:: sql\n\n    SELECT foo.a, vee.b\n    FROM foo\n    LEFT JOIN vee ON vee.a = foo.a",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RF03_references.consistent",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Qualification of Column References",
+    "description" : "Ensures that column references in single table SQL statements are consistently qualified or unqualified.",
+    "explanation" : "# RF03_references.consistent\n\nColumn references should be qualified consistently in single table statements.\n\n.. note::\n    For BigQuery, Hive and Redshift this rule is disabled by default.\n    This is due to historical false positives associated with STRUCT data types.\n    This default behaviour may be changed in the future.\n    The rule can be enabled with the ``force_enable = True`` flag.\n\n\"consistent\" will be fixed to \"qualified\" if inconsistency is found.\n\n**Anti-pattern**\n\nIn this example, only the reference to ``b`` is qualified.\n\n.. code-block:: sql\n\n    SELECT\n        a,\n        foo.b\n    FROM foo\n\n**Best practice**\n\nEither all column references should be qualified, or all unqualified.\n\n.. code-block:: sql\n\n    SELECT\n        a,\n        b\n    FROM foo\n\n    -- Also good\n\n    SELECT\n        foo.a,\n        foo.b\n    FROM foo",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RF04_references.keywords",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Keywords as Identifiers",
+    "description" : "This rule enforces that SQL keywords should not be used as identifiers such as aliases to prevent ambiguity and parsing errors.",
+    "explanation" : "# RF04_references.keywords\n\nKeywords should not be used as identifiers.\n\nAlthough `unreserved` keywords `can` be used as identifiers,\nand `reserved words` can be used as quoted identifiers,\nbest practice is to avoid where possible, to avoid any\nmisunderstandings as to what the alias represents.\n\n.. note::\n   Note that `reserved` keywords cannot be used as unquoted identifiers\n   and will cause parsing errors and so are not covered by this rule.\n\n**Anti-pattern**\n\nIn this example, ``SUM`` (built-in function) is used as an alias.\n\n.. code-block:: sql\n\n    SELECT\n        sum.a\n    FROM foo AS sum\n\n**Best practice**\n\nAvoid keywords as the name of an alias.\n\n.. code-block:: sql\n\n    SELECT\n        vee.a\n    FROM foo AS vee",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RF05_references.special_chars",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Special Characters in Identifiers",
+    "description" : "This rule enforces that identifiers in SQL should not contain special characters and should only use alphanumeric characters and underscores.",
+    "explanation" : "# RF05_references.special_chars\n\nDo not use special characters in identifiers.\n\n**Anti-pattern**\n\nUsing special characters within identifiers when creating or aliasing objects.\n\n.. code-block:: sql\n\n    CREATE TABLE DBO.ColumnNames\n    (\n        [Internal Space] INT,\n        [Greater>Than] INT,\n        [Less<Than] INT,\n        Number# INT\n    )\n\n**Best practice**\n\nIdentifiers should include only alphanumerics and underscores.\n\n.. code-block:: sql\n\n    CREATE TABLE DBO.ColumnNames\n    (\n        [Internal_Space] INT,\n        [GreaterThan] INT,\n        [LessThan] INT,\n        NumberVal INT\n    )",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RF06_references.quoting",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Unnecessary Quoted Identifiers",
+    "description" : "This rule detects when SQL identifiers are unnecessarily quoted based on the dialect and configuration settings, ensuring quotes are used only when required to preserve case or special characters.",
+    "explanation" : "# RF06_references.quoting\n\nUnnecessary quoted identifier.\n\nThis rule will fail if the quotes used to quote an identifier are (un)necessary\ndepending on the ``force_quote_identifier`` configuration. This rule applies to\nboth column *references* and their *aliases*. The *default* (safe) behaviour is\ndesigned not to unexpectedly corrupt SQL. That means the circumstances in which\nquotes can be safely removed depends on the current dialect would resolve the\nunquoted variant of the identifier (see below for examples).\n\nAdditionally this rule may be configured to a more aggressive setting by setting\n:code:`case_sensitive` to :code:`False`, in which case quotes will be removed\nregardless of the casing of the contained identifier. Any identifiers which contain\nspecial characters, spaces or keywords will still be left quoted. This setting is\nmore appropriate for projects or teams where there is more control over the inputs\nand outputs of queries, and where it's more viable to institute rules such\nas enforcing that all identifiers are the default casing (and therefore meaning\nthat using quotes to change the case of identifiers is unnecessary).\n\n.. list-table::\n   :widths: 26 26 48\n   :header-rows: 1\n\n   * - Dialect group\n     - ✅ Example where quotes are safe to remove.\n     - ⚠️ Examples where quotes are not safe to remove.\n   * - Natively :code:`UPPERCASE` dialects e.g. Snowflake, BigQuery,\n       TSQL & Oracle.\n     - Identifiers which, without quotes, would resolve to the default\n       casing of :code:`FOO` i.e. :code:`\"FOO\"`.\n     - Identifiers where the quotes are necessary to preserve case\n       (e.g. :code:`\"Foo\"` or :code:`\"foo\"`), or where the identifier\n       contains something invalid without the quotes such as keywords\n       or special characters e.g. :code:`\"SELECT\"`, :code:`\"With Space\"`\n       or :code:`\"Special&Characters\"`.\n   * - Natively :code:`lowercase` dialects e.g. Athena,\n       Hive & Postgres\n     - Identifiers which, without quotes, would resolve to the default\n       casing of :code:`foo` i.e. :code:`\"foo\"`.\n     - Identifiers where the quotes are necessary to preserve case\n       (e.g. :code:`\"Foo\"` or :code:`\"foo\"`), or where the identifier\n       contains something invalid without the quotes such as keywords\n       or special characters e.g. :code:`\"SELECT\"`, :code:`\"With Space\"`\n       or :code:`\"Special&Characters\"`.\n   * - Case insensitive dialects e.g. :ref:`duckdb_dialect_ref` or\n       :ref:`sparksql_dialect_ref`\n     - Any identifiers which are valid without quotes: e.g. :code:`\"FOO\"`,\n       :code:`\"foo\"`, :code:`\"Foo\"`, :code:`\"fOo\"`, :code:`FOO` and\n       :code:`foo` would all resolve to the same object.\n     - Identifiers which contain something invalid without the quotes\n       such as keywords or special characters e.g. :code:`\"SELECT\"`,\n       :code:`\"With Space\"` or :code:`\"Special&Characters\"`.\n\nThis rule is closely associated with (and constrained by the same above\nfactors) as :sqlfluff:ref:`aliasing.self_alias.column` (:sqlfluff:ref:`AL09`).\n\nWhen ``prefer_quoted_identifiers = False`` (default behaviour), the quotes are\nunnecessary, except for reserved keywords and special characters in identifiers.\n\n**Anti-pattern**\n\nIn this example, valid unquoted identifiers,\nthat are not also reserved keywords, are needlessly quoted.\n\n.. code-block:: sql\n\n    SELECT \"foo\" as \"bar\";  -- For lowercase dialects like Postgres\n    SELECT \"FOO\" as \"BAR\";  -- For uppercase dialects like Snowflake\n\n**Best practice**\n\nUse unquoted identifiers where possible.\n\n.. code-block:: sql\n\n    SELECT foo as bar;  -- For lowercase dialects like Postgres\n    SELECT FOO as BAR;  -- For uppercase dialects like Snowflake\n\n    -- Note that where the case of the quoted identifier requires\n    -- the quotes to remain, or where the identifier cannot be\n    -- unquoted because it would be invalid to do so, the quotes\n    -- may remain. For example:\n    SELECT\n        \"Case_Sensitive_Identifier\" as is_allowed,\n        \"Identifier with spaces or speci@l characters\" as this_too,\n        \"SELECT\" as also_reserved_words\n    FROM \"My Table With Spaces\"\n\nWhen ``prefer_quoted_identifiers = True``, the quotes are always necessary, no\nmatter if the identifier is valid, a reserved keyword, or contains special\ncharacters.\n\n.. note::\n   Note due to different quotes being used by different dialects supported by\n   `SQLFluff`, and those quotes meaning different things in different contexts,\n   this mode is not ``sqlfluff fix`` compatible.\n\n**Anti-pattern**\n\nIn this example, a valid unquoted identifier, that is also not a reserved keyword,\nis required to be quoted.\n\n.. code-block:: sql\n\n    SELECT 123 as foo\n\n**Best practice**\nUse quoted identifiers.\n\n.. code-block:: sql\n\n    SELECT 123 as \"foo\" -- For ANSI, ...\n    -- or\n    SELECT 123 as `foo` -- For BigQuery, MySql, ...",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST01_structure.else_null",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid specifying else null in CASE WHEN statements",
+    "description" : "This rule enforces omitting the redundant 'else null' clause in SQL CASE WHEN statements.",
+    "explanation" : "# ST01_structure.else_null\n\nDo not specify ``else null`` in a case when statement (redundant).\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    select\n        case\n            when name like '%cat%' then 'meow'\n            when name like '%dog%' then 'woof'\n            else null\n        end\n    from x\n\n**Best practice**\n\nOmit ``else null``\n\n.. code-block:: sql\n\n    select\n        case\n            when name like '%cat%' then 'meow'\n            when name like '%dog%' then 'woof'\n        end\n    from x",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST02_structure.simple_case",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Unnecessary CASE Statement",
+    "description" : "Detects and discourages unnecessary CASE statements that simply return booleans or replace NULL values, which can be simplified using COALESCE or direct expressions.",
+    "explanation" : "# ST02_structure.simple_case\n\nUnnecessary ``CASE`` statement.\n\n**Anti-pattern**\n\n``CASE`` statement returns booleans.\n\n.. code-block:: sql\n    :force:\n\n    select\n        case\n            when fab > 0 then true\n            else false\n        end as is_fab\n    from fancy_table\n\n    -- This rule can also simplify CASE statements\n    -- that aim to fill NULL values.\n\n    select\n        case\n            when fab is null then 0\n            else fab\n        end as fab_clean\n    from fancy_table\n\n    -- This also covers where the case statement\n    -- replaces NULL values with NULL values.\n\n    select\n        case\n            when fab is null then null\n            else fab\n        end as fab_clean\n    from fancy_table\n\n**Best practice**\n\nReduce to ``WHEN`` condition within ``COALESCE`` function.\n\n.. code-block:: sql\n    :force:\n\n    select\n        coalesce(fab > 0, false) as is_fab\n    from fancy_table\n\n    -- To fill NULL values.\n\n    select\n        coalesce(fab, 0) as fab_clean\n    from fancy_table\n\n    -- NULL filling NULL.\n\n    select fab as fab_clean\n    from fancy_table",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST03_structure.unused_cte",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Avoid Unused Common Table Expressions (CTEs)",
+    "description" : "Detects and flags common-table expressions (CTEs) defined in a SQL query that are not used in the query body.",
+    "explanation" : "# ST03_structure.unused_cte\n\nQuery defines a CTE (common-table expression) but does not use it.\n\n**Anti-pattern**\n\nDefining a CTE that is not used by the query is harmless, but it means\nthe code is unnecessary and could be removed.\n\n.. code-block:: sql\n\n    WITH cte1 AS (\n      SELECT a\n      FROM t\n    ),\n    cte2 AS (\n      SELECT b\n      FROM u\n    )\n\n    SELECT *\n    FROM cte1\n\n**Best practice**\n\nRemove unused CTEs.\n\n.. code-block:: sql\n\n    WITH cte1 AS (\n      SELECT a\n      FROM t\n    )\n\n    SELECT *\n    FROM cte1",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST04_structure.nested_case",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Nested CASE Statements in ELSE Clause",
+    "description" : "Detects nested CASE statements inside an ELSE clause that can be flattened for better readability and simplicity.",
+    "explanation" : "# ST04_structure.nested_case\n\nNested ``CASE`` statement in ``ELSE`` clause could be flattened.\n\n**Anti-pattern**\n\nIn this example, the outer ``CASE``'s ``ELSE`` is an unnecessary, nested ``CASE``.\n\n.. code-block:: sql\n\n    SELECT\n      CASE\n        WHEN species = 'Cat' THEN 'Meow'\n        ELSE\n        CASE\n           WHEN species = 'Dog' THEN 'Woof'\n        END\n      END as sound\n    FROM mytable\n\n**Best practice**\n\nMove the body of the inner ``CASE`` to the end of the outer one.\n\n.. code-block:: sql\n\n    SELECT\n      CASE\n        WHEN species = 'Cat' THEN 'Meow'\n        WHEN species = 'Dog' THEN 'Woof'\n      END AS sound\n    FROM mytable",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST05_structure.subquery",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Subqueries in Join/From Clauses",
+    "description" : "This rule enforces that Join and From clauses should not contain subqueries and recommends using Common Table Expressions (CTEs) instead.",
+    "explanation" : "# ST05_structure.subquery\n\nJoin/From clauses should not contain subqueries. Use CTEs instead.\n\nBy default this rule is configured to allow subqueries within ``FROM``\nclauses but not within ``JOIN`` clauses. If you prefer a stricter lint\nthen this is configurable.\n\n.. note::\n   Some dialects don't allow CTEs, and for those dialects\n   this rule makes no sense and should be disabled.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    select\n        a.x, a.y, b.z\n    from a\n    join (\n        select x, z from b\n    ) using(x)\n\n\n**Best practice**\n\n.. code-block:: sql\n\n    with c as (\n        select x, z from b\n    )\n    select\n        a.x, a.y, c.z\n    from a\n    join c using(x)",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST06_structure.column_order",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce select targets order by complexity",
+    "description" : "Ensure SELECT clause targets are ordered by ascending complexity: wildcards first, then simple columns, followed by calculations and aggregates.",
+    "explanation" : "# ST06_structure.column_order\n\nSelect wildcards then simple targets before calculations and aggregates.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    select\n        a,\n        *,\n        row_number() over (partition by id order by date) as y,\n        b\n    from x\n\n\n**Best practice**\n\nOrder ``select`` targets in ascending complexity\n\n.. code-block:: sql\n\n    select\n        *,\n        a,\n        b,\n        row_number() over (partition by id order by date) as y\n    from x",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST07_structure.using",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prefer specifying join keys instead of USING",
+    "description" : "This rule encourages specifying join keys explicitly with ON instead of using the USING syntax in SQL JOINs.",
+    "explanation" : "# ST07_structure.using\n\nPrefer specifying join keys instead of using ``USING``.\n\n.. note::\n   This rule was originally taken from the `dbt Style Guide\n   <https://github.com/dbt-labs/corp/blob/ main/dbt_style_guide.md>`_\n   which notes that:\n\n    Certain warehouses have inconsistencies in ``USING``\n    results (specifically Snowflake).\n\n   In fact `dbt removed it from their style guide in February 2022\n   <https://github.com/dbt-labs/corp/pull/58>`_. However, some like the\n   rule, so for now we will keep it in SQLFluff, but encourage those that\n   do not find value in the rule, to turn it off.\n\n.. note::\n\n   This rule is disabled for ClickHouse as it supports ``USING`` without\n   brackets which this rule does not support.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    SELECT\n        table_a.field_1,\n        table_b.field_2\n    FROM\n        table_a\n    INNER JOIN table_b USING (id)\n\n**Best practice**\n\nSpecify the keys directly\n\n.. code-block:: sql\n\n    SELECT\n        table_a.field_1,\n        table_b.field_2\n    FROM\n        table_a\n    INNER JOIN table_b\n        ON table_a.id = table_b.id",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST08_structure.distinct",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid using DISTINCT with parentheses",
+    "description" : "This rule checks for usage of DISTINCT with parentheses in SQL queries, which is unnecessary and can cause confusion.",
+    "explanation" : "# ST08_structure.distinct\n\n``DISTINCT`` used with parentheses.\n\n**Anti-pattern**\n\nIn this example, parentheses are not needed and confuse\n``DISTINCT`` with a function. The parentheses can also be misleading\nabout which columns are affected by the ``DISTINCT`` (all the columns!).\n\n.. code-block:: sql\n\n    SELECT DISTINCT(a), b FROM foo\n\n**Best practice**\n\nRemove parentheses to be clear that the ``DISTINCT`` applies to\nboth columns.\n\n.. code-block:: sql\n\n    SELECT DISTINCT a, b FROM foo",
+    "enabled" : false,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST09_structure.join_condition_order",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Join Condition Table Order",
+    "description" : "Ensures join conditions list the table referenced earlier or later first according to configuration.",
+    "explanation" : "# ST09_structure.join_condition_order\n\nJoins should list the table referenced earlier/later first.\n\nThis rule will break conditions from join clauses down into subconditions\nusing the \"and\" and \"or\" binary operators.\n\nSubconditions that are made up of a qualified column reference,\na comparison operator and another qualified column reference\nare then evaluated to check whether they list the table that was referenced\nearlier - or later, depending on the ``preferred_first_table_in_join_clause``\nconfiguration.\n\nSubconditions that do not follow that pattern are ignored by this rule.\n\n.. note::\n   Joins in ``WHERE`` clauses are currently not supported by this rule.\n\n**Anti-pattern**\n\nIn this example, the tables that were referenced later are listed first\nand the ``preferred_first_table_in_join_clause`` configuration\nis set to ``earlier``.\n\n.. code-block:: sql\n\n    select\n        foo.a,\n        foo.b,\n        bar.c\n    from foo\n    left join bar\n        -- This subcondition does not list\n        -- the table referenced earlier first:\n        on bar.a = foo.a\n        -- Neither does this subcondition:\n        and bar.b = foo.b\n\n**Best practice**\n\nList the tables that were referenced earlier first.\n\n.. code-block:: sql\n\n    select\n        foo.a,\n        foo.b,\n        bar.c\n    from foo\n    left join bar\n        on foo.a = bar.a\n        and foo.b = bar.b",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST10_structure.constant_expression",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Redundant Constant Expressions",
+    "description" : "Detects expressions in SQL statements that always evaluate to TRUE or FALSE regardless of input, which are unnecessary and reduce readability.",
+    "explanation" : "# ST10_structure.constant_expression\n\nRedundant constant expression.\n\nIncluding an expression that always evaluates to\neither ``TRUE`` or ``FALSE`` regardless of the input columns is\nunnecessary and makes statements harder to read and understand.\n\nConstant conditions are sometimes mistakes (by mistyping the column\nname intended), and sometimes the result of incorrect information that\nthey are necessary in some circumstances. In the former case, they can\nsometimes result in a cartesian join if it was supposed to be a join\ncondition. Given the ambiguity of intent, this rule does not suggest\nan automatic fix, and instead invites the user to resolve the problem\nmanually.\n\n**Anti-pattern**\n\n.. code-block:: sql\n\n    SELECT *\n    FROM my_table\n    -- This following WHERE clause is redundant.\n    WHERE my_table.col = my_table.col\n\n**Best practice**\n\n.. code-block:: sql\n\n    SELECT *\n    FROM my_table\n    -- Replace with a condition that includes meaningful logic,\n    -- or remove the condition entirely.\n    WHERE my_table.col > 3",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST11_structure.unused_join",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Unused Outer Joins",
+    "description" : "Detects outer joined tables in SQL SELECT statements that are not referenced elsewhere in the query.",
+    "explanation" : "# ST11_structure.unused_join\n\nJoined table not referenced in query.\n\nThis rule will check if any tables are referenced in the\n``FROM`` or ``JOIN`` clause of a ``SELECT`` statement where no\ncolumns from that table are referenced in any of the other clauses.\nBecause some types of joins are often used as filters or to otherwise\ncontrol granularity without being referenced (e.g. ``INNER`` and ``CROSS``),\nthis rule only applies to explicit ``OUTER`` joins (i.e. ``LEFT``, ``RIGHT``,\nand ``FULL`` joins).\n\nThis rule relies on all of the column references in the ``SELECT``\nstatement being qualified with at least the table name, and so is\ndesigned to work alongside :sqlfluff:ref:`references.qualification`\n(:sqlfluff:ref:`RF02`). This is because, without the knowledge of what\ncolumns exist in each upstream table, the rule is unable to resolve\nwhich table an unqualified column reference is pulled from.\n\nThis rule does not propose a fix because it assumes that an unused\ntable is a mistake, but it doesn't know whether the mistake was due to the join\nor the failure to use the table.\n\n**Anti-pattern**\n\nIn this example, the table ``bar`` is included in the ``JOIN`` clause\nbut not columns from it are referenced in\n\n.. code-block:: sql\n\n    SELECT\n        foo.a,\n        foo.b\n    FROM foo\n    LEFT JOIN bar ON foo.a = bar.a\n\n**Best practice**\n\nRemove the join, or use the table.\n\n.. code-block:: sql\n\n    SELECT foo.a, vee.b\n    FROM foo;\n\n    SELECT\n        foo.a,\n        foo.b,\n        bar.c\n    FROM foo\n    LEFT JOIN bar ON foo.a = bar.a\n\nIn the (*very rare*) situations that it is logically necessary to include\na table in a join clause, but not otherwise refer to it (likely for\ngranularity reasons, or as a stepping stone to another table), we recommend\nignoring this rule for that specific line by using ``-- noqa: ST11`` at\nthe end of the line.\n\n.. note:\n\n   To avoid sticky situations with casing and quoting in different dialects\n   this rule uses case-insensitive comparison. That means if you have two\n   tables with the same name, but different cases (and you're really sure\n   that's a good idea!), then this rule may not detect if one of them is\n   unused.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ST12_structure.consecutive_semicolons",
+    "level" : "Error",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Consecutive semicolons detected",
+    "description" : "Consecutive semicolons detected.\n\nThis rule flags runs of two or more semicolons (optionally with intervening\nwhitespace/newlines) which usually indicate an empty statement or an\naccidental duplicate terminator.\n\n**Anti-pattern**\n\n.. code-block:: sql\n   :force:\n\n    SELECT 1;;\n    ;;SELECT 2;\n\n**Best practice**\n\nCollapse duplicate semicolons unless intentionally separating batches.\n\n.. code-block:: sql\n   :force:\n\n    SELECT 1;\n    SELECT 2;",
+    "explanation" : "# ST12_structure.consecutive_semicolons\n\nConsecutive semicolons detected.\n\nThis rule flags runs of two or more semicolons (optionally with intervening\nwhitespace/newlines) which usually indicate an empty statement or an\naccidental duplicate terminator.\n\n**Anti-pattern**\n\n.. code-block:: sql\n   :force:\n\n    SELECT 1;;\n    ;;SELECT 2;\n\n**Best practice**\n\nCollapse duplicate semicolons unless intentionally separating batches.\n\n.. code-block:: sql\n   :force:\n\n    SELECT 1;\n    SELECT 2;",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TQ01_tsql.sp_prefix",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid using the 'sp_' prefix for user-defined stored procedures",
+    "description" : "This rule enforces that user-defined stored procedures in T-SQL should not use the 'sp_' prefix.",
+    "explanation" : "# TQ01_tsql.sp_prefix\n\n``SP_`` prefix should not be used for user-defined stored procedures in T-SQL.\n\n**Anti-pattern**\n\nThe ``SP_`` prefix is used to identify system procedures and can adversely\naffect performance of the user-defined stored procedure. It can also break\nsystem procedures if there is a naming conflict.\n\n.. code-block:: sql\n   :force:\n\n    CREATE PROCEDURE dbo.sp_pull_data\n    AS\n    SELECT\n        ID,\n        DataDate,\n        CaseOutput\n    FROM table1\n\n**Best practice**\n\nUse a different name for the stored procedure.\n\n.. code-block:: sql\n   :force:\n\n    CREATE PROCEDURE dbo.pull_data\n    AS\n    SELECT\n        ID,\n        DataDate,\n        CaseOutput\n    FROM table1\n\n    -- Alternatively prefix with USP_ to\n    -- indicate a user-defined stored procedure.\n\n    CREATE PROCEDURE dbo.usp_pull_data\n    AS\n    SELECT\n        ID,\n        DataDate,\n        CaseOutput\n    FROM table1",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TQ02_tsql.procedure_begin_end",
+    "level" : "Warning",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Procedure bodies with multiple statements",
+    "description" : "Procedure bodies with multiple statements should be wrapped in BEGIN/END.\n\n**Anti-pattern**\n\nProcedure bodies with multiple statements should be wrapped in BEGIN/END\nfor clarity and consistency.\n\n.. code-block:: sql\n   :force:\n\n    CREATE PROCEDURE Reporting.MultipleStatements\n    AS\n    SELECT\n        [ID],\n        [DataDate],\n        [CaseOutput]\n    FROM Table1;\n\n    SELECT\n        [ID],\n        [DataDate],\n        [CaseOutput]\n    FROM Table2;\n\n**Best practice**\n\nWrap procedure bodies with multiple statements in BEGIN/END blocks.\n\n.. code-block:: sql\n   :force:\n\n    CREATE PROCEDURE Reporting.MultipleStatements\n    AS\n    BEGIN\n        SELECT\n            [ID],\n            [DataDate],\n            [CaseOutput]\n        FROM Table1;\n\n        SELECT\n            [ID],\n            [DataDate],\n            [CaseOutput]\n        FROM Table2;\n    END",
+    "explanation" : "# TQ02_tsql.procedure_begin_end\n\nProcedure bodies with multiple statements should be wrapped in BEGIN/END.\n\n**Anti-pattern**\n\nProcedure bodies with multiple statements should be wrapped in BEGIN/END\nfor clarity and consistency.\n\n.. code-block:: sql\n   :force:\n\n    CREATE PROCEDURE Reporting.MultipleStatements\n    AS\n    SELECT\n        [ID],\n        [DataDate],\n        [CaseOutput]\n    FROM Table1;\n\n    SELECT\n        [ID],\n        [DataDate],\n        [CaseOutput]\n    FROM Table2;\n\n**Best practice**\n\nWrap procedure bodies with multiple statements in BEGIN/END blocks.\n\n.. code-block:: sql\n   :force:\n\n    CREATE PROCEDURE Reporting.MultipleStatements\n    AS\n    BEGIN\n        SELECT\n            [ID],\n            [DataDate],\n            [CaseOutput]\n        FROM Table1;\n\n        SELECT\n            [ID],\n            [DataDate],\n            [CaseOutput]\n        FROM Table2;\n    END",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TQ03_tsql.empty_batch",
+    "level" : "Warning",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Remove empty batches",
+    "description" : "Remove empty batches.\n\n**Anti-pattern**\n\nEmpty batches (containing only GO statements) should be removed.\n\n.. code-block:: sql\n   :force:\n\n    CREATE TABLE dbo.test (\n        testcol1 INT NOT NULL,\n        testcol2 INT NOT NULL\n    );\n\n    GO\n\n    GO\n\n**Best practice**\n\nRemove empty batches.\n\n.. code-block:: sql\n   :force:\n\n    CREATE TABLE dbo.test (\n        testcol1 INT NOT NULL,\n        testcol2 INT NOT NULL\n    );\n\n    GO",
+    "explanation" : "# TQ03_tsql.empty_batch\n\nRemove empty batches.\n\n**Anti-pattern**\n\nEmpty batches (containing only GO statements) should be removed.\n\n.. code-block:: sql\n   :force:\n\n    CREATE TABLE dbo.test (\n        testcol1 INT NOT NULL,\n        testcol2 INT NOT NULL\n    );\n\n    GO\n\n    GO\n\n**Best practice**\n\nRemove empty batches.\n\n.. code-block:: sql\n   :force:\n\n    CREATE TABLE dbo.test (\n        testcol1 INT NOT NULL,\n        testcol2 INT NOT NULL\n    );\n\n    GO",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

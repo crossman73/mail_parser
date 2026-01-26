@@ -1,0 +1,5 @@
+flask>=2.2.5
+werkzeug>=3.0.6
+cryptography>=42.0.2
+ujson>=5.4.0
+reportlab>=3.6.13

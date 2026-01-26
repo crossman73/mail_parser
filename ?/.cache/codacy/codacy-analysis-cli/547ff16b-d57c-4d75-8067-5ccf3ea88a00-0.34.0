@@ -1,0 +1,1037 @@
+[
+  {
+    "id" : "MD001",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Incremental Heading Levels",
+    "description" : "Ensure that heading levels in Markdown documents only increment by one level at a time without skipping levels.",
+    "explanation" : "# `MD001` - Heading levels should only increment by one level at a time\n\nTags: `headings`\n\nAliases: `heading-increment`\n\nThis rule is triggered when you skip heading levels in a Markdown document, for\nexample:\n\n```markdown\n# Heading 1\n\n### Heading 3\n\nWe skipped out a 2nd level heading in this document\n```\n\nWhen using multiple heading levels, nested headings should increase by only one\nlevel at a time:\n\n```markdown\n# Heading 1\n\n## Heading 2\n\n### Heading 3\n\n#### Heading 4\n\n## Another Heading 2\n\n### Another Heading 3\n```\n\nRationale: Headings represent the structure of a document and can be confusing\nwhen skipped - especially for accessibility scenarios. More information:\n<https://www.w3.org/WAI/tutorials/page-structure/headings/>.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD003",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Heading Style",
+    "description" : "This rule enforces consistent heading styles within a Markdown document to avoid mixing different heading formats.",
+    "explanation" : "# `MD003` - Heading style\n\nTags: `headings`\n\nAliases: `heading-style`\n\nParameters:\n\n- `style`: Heading style (`string`, default `consistent`, values `atx` /\n  `atx_closed` / `consistent` / `setext` / `setext_with_atx` /\n  `setext_with_atx_closed`)\n\nThis rule is triggered when different heading styles are used in the same\ndocument:\n\n```markdown\n# ATX style H1\n\n## Closed ATX style H2 ##\n\nSetext style H1\n===============\n```\n\nTo fix the issue, use consistent heading styles throughout the document:\n\n```markdown\n# ATX style H1\n\n## ATX style H2\n```\n\nThe `setext_with_atx` and `setext_with_atx_closed` settings allow ATX-style\nheadings of level 3 or more in documents with setext-style headings (which only\nsupport level 1 and 2 headings):\n\n```markdown\nSetext style H1\n===============\n\nSetext style H2\n---------------\n\n### ATX style H3\n```\n\nNote: The configured heading style can be a specific style to require (`atx`,\n`atx_closed`, `setext`, `setext_with_atx`, `setext_with_atx_closed`), or may\njust require that usage is consistent within the document via `consistent`.\n\nNote: The placement of a horizontal rule directly below a line of text can\ntrigger this rule by turning that text into a level 2 setext-style heading:\n\n```markdown\nA line of text followed by a horizontal rule becomes a heading\n---\n```\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "Heading style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD004",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Unordered List Style",
+    "description" : "This rule enforces consistent use of symbols for unordered list items in Markdown documents according to the configured style.",
+    "explanation" : "# `MD004` - Unordered list style\n\nTags: `bullet`, `ul`\n\nAliases: `ul-style`\n\nParameters:\n\n- `style`: List style (`string`, default `consistent`, values `asterisk` /\n  `consistent` / `dash` / `plus` / `sublist`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when the symbols used in the document for unordered\nlist items do not match the configured unordered list style:\n\n```markdown\n* Item 1\n+ Item 2\n- Item 3\n```\n\nTo fix this issue, use the configured style for list items throughout the\ndocument:\n\n```markdown\n* Item 1\n* Item 2\n* Item 3\n```\n\nThe configured list style can be a specific symbol to use (asterisk, plus,\ndash), to ensure that all list styling is consistent, or to ensure that each\nsublist has a consistent symbol that differs from its parent list.\n\nFor example, the following is valid for the `sublist` style because the\nouter-most indent uses asterisk, the middle indent uses plus, and the inner-most\nindent uses dash:\n\n```markdown\n* Item 1\n  + Item 2\n    - Item 3\n  + Item 4\n* Item 4\n  + Item 5\n```\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "List style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD005",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent indentation for list items at the same level",
+    "description" : "This rule checks that list items at the same level in Markdown have consistent indentation.",
+    "explanation" : "# `MD005` - Inconsistent indentation for list items at the same level\n\nTags: `bullet`, `indentation`, `ul`\n\nAliases: `list-indent`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when list items are parsed as being at the same level,\nbut don't have the same indentation:\n\n```markdown\n* Item 1\n  * Nested Item 1\n  * Nested Item 2\n   * A misaligned item\n```\n\nUsually, this rule will be triggered because of a typo. Correct the indentation\nfor the list to fix it:\n\n```markdown\n* Item 1\n  * Nested Item 1\n  * Nested Item 2\n  * Nested Item 3\n```\n\nSequentially-ordered list markers are usually left-aligned such that all items\nhave the same starting column:\n\n```markdown\n...\n8. Item\n9. Item\n10. Item\n11. Item\n...\n```\n\nThis rule also supports right-alignment of list markers such that all items have\nthe same ending column:\n\n```markdown\n...\n 8. Item\n 9. Item\n10. Item\n11. Item\n...\n```\n\nRationale: Violations of this rule can lead to improperly rendered content.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD007",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Unordered List Indentation",
+    "description" : "Ensures unordered list items in Markdown are indented by the configured number of spaces (default 2).",
+    "explanation" : "# `MD007` - Unordered list indentation\n\nTags: `bullet`, `indentation`, `ul`\n\nAliases: `ul-indent`\n\nParameters:\n\n- `indent`: Spaces for indent (`integer`, default `2`)\n- `start_indent`: Spaces for first level indent (when start_indented is set)\n  (`integer`, default `2`)\n- `start_indented`: Whether to indent the first level of the list (`boolean`,\n  default `false`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when list items are not indented by the configured\nnumber of spaces (default: 2).\n\nExample:\n\n```markdown\n* List item\n   * Nested list item indented by 3 spaces\n```\n\nCorrected Example:\n\n```markdown\n* List item\n  * Nested list item indented by 2 spaces\n```\n\nNote: This rule applies to a sublist only if its parent lists are all also\nunordered (otherwise, extra indentation of ordered lists interferes with the\nrule).\n\nThe `start_indented` parameter allows the first level of lists to be indented by\nthe configured number of spaces rather than starting at zero. The `start_indent`\nparameter allows the first level of lists to be indented by a different number\nof spaces than the rest (ignored when `start_indented` is not set).\n\nRationale: Indenting by 2 spaces allows the content of a nested list to be in\nline with the start of the content of the parent list when a single space is\nused after the list marker. Indenting by 4 spaces is consistent with code blocks\nand simpler for editors to implement. Additionally, this can be a compatibility\nissue for other Markdown parsers, which require 4-space indents. More\ninformation: [Markdown Style Guide][markdown-style-guide].\n\nNote: See [Prettier.md](Prettier.md) for compatibility information.\n\n[markdown-style-guide]: https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "indent",
+        "default" : "2",
+        "description" : "Spaces for indent"
+      },
+      {
+        "name" : "start_indent",
+        "default" : "2",
+        "description" : "Spaces for first level indent (when start_indented is set)"
+      },
+      {
+        "name" : "start_indented",
+        "default" : "false",
+        "description" : "Whether to indent the first level of the list"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD009",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Trailing Spaces",
+    "description" : "This rule detects and controls the presence of unexpected trailing whitespace at the end of lines in Markdown files.",
+    "explanation" : "# `MD009` - Trailing spaces\n\nTags: `whitespace`\n\nAliases: `no-trailing-spaces`\n\nParameters:\n\n- `br_spaces`: Spaces for line break (`integer`, default `2`)\n- `list_item_empty_lines`: Allow spaces for empty lines in list items\n  (`boolean`, default `false`)\n- `strict`: Include unnecessary breaks (`boolean`, default `false`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered on any lines that end with unexpected whitespace. To fix\nthis, remove the trailing space from the end of the line.\n\nNote: Trailing space is allowed in indented and fenced code blocks because some\nlanguages require it.\n\nThe `br_spaces` parameter allows an exception to this rule for a specific number\nof trailing spaces, typically used to insert an explicit line break. The default\nvalue allows 2 spaces to indicate a hard break (\\<br> element).\n\nNote: You must set `br_spaces` to a value >= 2 for this parameter to take\neffect. Setting `br_spaces` to 1 behaves the same as 0, disallowing any trailing\nspaces.\n\nBy default, this rule will not trigger when the allowed number of spaces is\nused, even when it doesn't create a hard break (for example, at the end of a\nparagraph). To report such instances as well, set the `strict` parameter to\n`true`.\n\n```markdown\nText text text\ntext[2 spaces]\n```\n\nUsing spaces to indent blank lines inside a list item is usually not necessary,\nbut some parsers require it. Set the `list_item_empty_lines` parameter to `true`\nto allow this (even when `strict` is `true`):\n\n```markdown\n- list item text\n  [2 spaces]\n  list item text\n```\n\nRationale: Except when being used to create a line break, trailing whitespace\nhas no purpose and does not affect the rendering of content.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "br_spaces",
+        "default" : "2",
+        "description" : "Spaces for line break"
+      },
+      {
+        "name" : "list_item_empty_lines",
+        "default" : "false",
+        "description" : "Allow spaces for empty lines in list items"
+      },
+      {
+        "name" : "strict",
+        "default" : "false",
+        "description" : "Include unnecessary breaks"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD010",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Hard Tabs",
+    "description" : "This rule detects the use of hard tab characters for indentation in Markdown files and enforces the use of spaces instead.",
+    "explanation" : "# `MD010` - Hard tabs\n\nTags: `hard_tab`, `whitespace`\n\nAliases: `no-hard-tabs`\n\nParameters:\n\n- `code_blocks`: Include code blocks (`boolean`, default `true`)\n- `ignore_code_languages`: Fenced code languages to ignore (`string[]`, default\n  `[]`)\n- `spaces_per_tab`: Number of spaces for each hard tab (`integer`, default `1`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered by any lines that contain hard tab characters instead\nof using spaces for indentation. To fix this, replace any hard tab characters\nwith spaces instead.\n\nExample:\n\n<!-- markdownlint-disable no-hard-tabs -->\n\n```markdown\nSome text\n\n\t* hard tab character used to indent the list item\n```\n\n<!-- markdownlint-restore -->\n\nCorrected example:\n\n```markdown\nSome text\n\n    * Spaces used to indent the list item instead\n```\n\nYou have the option to exclude this rule for code blocks and spans. To do so,\nset the `code_blocks` parameter to `false`. Code blocks and spans are included\nby default since handling of tabs by Markdown tools can be inconsistent (e.g.,\nusing 4 vs. 8 spaces).\n\nWhen code blocks are scanned (e.g., by default or if `code_blocks` is `true`),\nthe `ignore_code_languages` parameter can be set to a list of languages that\nshould be ignored (i.e., hard tabs will be allowed, though not required). This\nmakes it easier for documents to include code for languages that require hard\ntabs.\n\nBy default, violations of this rule are fixed by replacing the tab with 1 space\ncharacter. To use a different number of spaces, set the `spaces_per_tab`\nparameter to the desired value.\n\nRationale: Hard tabs are often rendered inconsistently by different editors and\ncan be harder to work with than spaces.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "code_blocks",
+        "default" : "true",
+        "description" : "Include code blocks"
+      },
+      {
+        "name" : "ignore_code_languages",
+        "default" : "[]",
+        "description" : "Fenced code languages to ignore"
+      },
+      {
+        "name" : "spaces_per_tab",
+        "default" : "1",
+        "description" : "Number of spaces for each hard tab"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD011",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Reversed Link Syntax",
+    "description" : "This rule detects when the Markdown link syntax is reversed, i.e., the parentheses and square brackets are swapped.",
+    "explanation" : "# `MD011` - Reversed link syntax\n\nTags: `links`\n\nAliases: `no-reversed-links`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when text that appears to be a link is encountered, but\nwhere the syntax appears to have been reversed (the `[]` and `()` are\nreversed):\n\n```markdown\n(Incorrect link syntax)[https://www.example.com/]\n```\n\nTo fix this, swap the `[]` and `()` around:\n\n```markdown\n[Correct link syntax](https://www.example.com/)\n```\n\nNote: [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra)-style\nfootnotes do not trigger this rule:\n\n```markdown\nFor (example)[^1]\n```\n\nRationale: Reversed links are not rendered as usable links.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD012",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Disallow Multiple Consecutive Blank Lines",
+    "description" : "This rule detects and disallows multiple consecutive blank lines in markdown documents outside of code blocks.",
+    "explanation" : "# `MD012` - Multiple consecutive blank lines\n\nTags: `blank_lines`, `whitespace`\n\nAliases: `no-multiple-blanks`\n\nParameters:\n\n- `maximum`: Consecutive blank lines (`integer`, default `1`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when there are multiple consecutive blank lines in the\ndocument:\n\n```markdown\nSome text here\n\n\nSome more text here\n```\n\nTo fix this, delete the offending lines:\n\n```markdown\nSome text here\n\nSome more text here\n```\n\nNote: this rule will not be triggered if there are multiple consecutive blank\nlines inside code blocks.\n\nNote: The `maximum` parameter can be used to configure the maximum number of\nconsecutive blank lines.\n\nRationale: Except in a code block, blank lines serve no purpose and do not\naffect the rendering of content.",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+      {
+        "name" : "maximum",
+        "default" : "1",
+        "description" : "Consecutive blank lines"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD013",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Line Length",
+    "description" : "This rule enforces a maximum line length in Markdown files to improve readability and maintainability.",
+    "explanation" : "# `MD013` - Line length\n\nTags: `line_length`\n\nAliases: `line-length`\n\nParameters:\n\n- `code_block_line_length`: Number of characters for code blocks (`integer`,\n  default `80`)\n- `code_blocks`: Include code blocks (`boolean`, default `true`)\n- `heading_line_length`: Number of characters for headings (`integer`, default\n  `80`)\n- `headings`: Include headings (`boolean`, default `true`)\n- `line_length`: Number of characters (`integer`, default `80`)\n- `stern`: Stern length checking (`boolean`, default `false`)\n- `strict`: Strict length checking (`boolean`, default `false`)\n- `tables`: Include tables (`boolean`, default `true`)\n\nThis rule is triggered when there are lines that are longer than the\nconfigured `line_length` (default: 80 characters). To fix this, split the line\nup into multiple lines. To set a different maximum length for headings, use\n`heading_line_length`. To set a different maximum length for code blocks, use\n`code_block_line_length`\n\nThis rule has an exception when there is no whitespace beyond the configured\nline length. This allows you to include items such as long URLs without being\nforced to break them in the middle. To disable this exception, set the `strict`\nparameter to `true` and an issue will be reported when any line is too long. To\nwarn for lines that are too long and could be fixed but allow long lines\nwithout spaces, set the `stern` parameter to `true`.\n\nFor example (assuming normal behavior):\n\n```markdown\nIF THIS LINE IS THE MAXIMUM LENGTH\nThis line is okay because there are-no-spaces-beyond-that-length\nThis line is a violation because there are spaces beyond that length\nThis-line-is-okay-because-there-are-no-spaces-anywhere-within\n```\n\nIn `strict` mode, the last three lines above are all violations. In `stern`\nmode, the middle two lines above are both violations, but the last is okay.\n\nYou have the option to exclude this rule for code blocks, tables, or headings.\nTo do so, set the `code_blocks`, `tables`, or `headings` parameter(s) to false.\n\nCode blocks are included in this rule by default since it is often a\nrequirement for document readability, and tentatively compatible with code\nrules. Still, some languages do not lend themselves to short lines.\n\nLines with link/image reference definitions and standalone lines (i.e., not part\nof a paragraph) with only a link/image (possibly using (strong) emphasis) are\nalways exempted from this rule (even in `strict` mode) because there is often no\nway to split such lines without breaking the URL.\n\nRationale: Extremely long lines can be difficult to work with in some editors.\nMore information: <https://cirosantilli.com/markdown-style-guide#line-wrapping>.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "code_block_line_length",
+        "default" : "80",
+        "description" : "Number of characters for code blocks"
+      },
+      {
+        "name" : "code_blocks",
+        "default" : "true",
+        "description" : "Include code blocks"
+      },
+      {
+        "name" : "heading_line_length",
+        "default" : "80",
+        "description" : "Number of characters for headings"
+      },
+      {
+        "name" : "headings",
+        "default" : "true",
+        "description" : "Include headings"
+      },
+      {
+        "name" : "line_length",
+        "default" : "80",
+        "description" : "Number of characters"
+      },
+      {
+        "name" : "stern",
+        "default" : "false",
+        "description" : "Stern length checking"
+      },
+      {
+        "name" : "strict",
+        "default" : "false",
+        "description" : "Strict length checking"
+      },
+      {
+        "name" : "tables",
+        "default" : "true",
+        "description" : "Include tables"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD014",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Dollar Signs Before Commands Without Showing Output",
+    "description" : "This rule detects shell command lines in markdown code blocks that start with dollar signs but do not show command output.",
+    "explanation" : "# `MD014` - Dollar signs used before commands without showing output\n\nTags: `code`\n\nAliases: `commands-show-output`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when there are code blocks showing shell commands to be\ntyped, and *all* of the shell commands are preceded by dollar signs ($):\n\n<!-- markdownlint-disable commands-show-output -->\n\n```markdown\n$ ls\n$ cat foo\n$ less bar\n```\n\n<!-- markdownlint-restore -->\n\nThe dollar signs are unnecessary in this situation, and should not be\nincluded:\n\n```markdown\nls\ncat foo\nless bar\n```\n\nShowing output for commands preceded by dollar signs does not trigger this rule:\n\n```markdown\n$ ls\nfoo bar\n$ cat foo\nHello world\n$ cat bar\nbaz\n```\n\nBecause some commands do not produce output, it is not a violation if *some*\ncommands do not have output:\n\n```markdown\n$ mkdir test\nmkdir: created directory 'test'\n$ ls test\n```\n\nRationale: It is easier to copy/paste and less noisy if the dollar signs\nare omitted when they are not needed. See\n<https://cirosantilli.com/markdown-style-guide#dollar-signs-in-shell-code>\nfor more information.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD018",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce space after hash in ATX style heading",
+    "description" : "Ensures there is a space after the hash characters in ATX style Markdown headings.",
+    "explanation" : "# `MD018` - No space after hash on atx style heading\n\nTags: `atx`, `headings`, `spaces`\n\nAliases: `no-missing-space-atx`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when spaces are missing after the hash characters\nin an atx style heading:\n\n```markdown\n#Heading 1\n\n##Heading 2\n```\n\nTo fix this, separate the heading text from the hash character by a single\nspace:\n\n```markdown\n# Heading 1\n\n## Heading 2\n```\n\nRationale: Violations of this rule can lead to improperly rendered content.",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD019",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Multiple Spaces After Hash in ATX Style Heading",
+    "description" : "Ensures that there is only one space between the hash characters and the heading text in ATX style Markdown headings.",
+    "explanation" : "# `MD019` - Multiple spaces after hash on atx style heading\n\nTags: `atx`, `headings`, `spaces`\n\nAliases: `no-multiple-space-atx`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when more than one space is used to separate the\nheading text from the hash characters in an atx style heading:\n\n```markdown\n#  Heading 1\n\n##  Heading 2\n```\n\nTo fix this, separate the heading text from the hash character by a single\nspace:\n\n```markdown\n# Heading 1\n\n## Heading 2\n```\n\nRationale: Extra space has no purpose and does not affect the rendering of\ncontent.",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD020",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Space Inside Hashes on Closed Atx Style Headings",
+    "description" : "This rule ensures there is a single space inside the hash characters on both sides of a closed atx style heading in Markdown.",
+    "explanation" : "# `MD020` - No space inside hashes on closed atx style heading\n\nTags: `atx_closed`, `headings`, `spaces`\n\nAliases: `no-missing-space-closed-atx`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when spaces are missing inside the hash characters\nin a closed atx style heading:\n\n```markdown\n#Heading 1#\n\n##Heading 2##\n```\n\nTo fix this, separate the heading text from the hash character by a single\nspace:\n\n```markdown\n# Heading 1 #\n\n## Heading 2 ##\n```\n\nNote: this rule will fire if either side of the heading is missing spaces.\n\nRationale: Violations of this rule can lead to improperly rendered content.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD021",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Multiple Spaces Inside Hashes on Closed ATX Style Headings",
+    "description" : "This rule detects multiple spaces inside the hashes of closed ATX style Markdown headings.",
+    "explanation" : "# `MD021` - Multiple spaces inside hashes on closed atx style heading\n\nTags: `atx_closed`, `headings`, `spaces`\n\nAliases: `no-multiple-space-closed-atx`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when more than one space is used to separate the\nheading text from the hash characters in a closed atx style heading:\n\n```markdown\n#  Heading 1  #\n\n##  Heading 2  ##\n```\n\nTo fix this, separate the heading text from the hash character by a single\nspace:\n\n```markdown\n# Heading 1 #\n\n## Heading 2 ##\n```\n\nNote: this rule will fire if either side of the heading contains multiple\nspaces.\n\nRationale: Extra space has no purpose and does not affect the rendering of\ncontent.",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD022",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Headings Surrounded by Blank Lines",
+    "description" : "This rule ensures that all markdown headings are preceded and followed by at least one blank line.",
+    "explanation" : "# `MD022` - Headings should be surrounded by blank lines\n\nTags: `blank_lines`, `headings`\n\nAliases: `blanks-around-headings`\n\nParameters:\n\n- `lines_above`: Blank lines above heading (`integer|integer[]`, default `1`)\n- `lines_below`: Blank lines below heading (`integer|integer[]`, default `1`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when headings (any style) are either not preceded or not\nfollowed by at least one blank line:\n\n```markdown\n# Heading 1\nSome text\n\nSome more text\n## Heading 2\n```\n\nTo fix this, ensure that all headings have a blank line both before and after\n(except where the heading is at the beginning or end of the document):\n\n```markdown\n# Heading 1\n\nSome text\n\nSome more text\n\n## Heading 2\n```\n\nThe `lines_above` and `lines_below` parameters can be used to specify a\ndifferent number of blank lines (including `0`) above or below each heading.\nIf the value `-1` is used for either parameter, any number of blank lines is\nallowed. To customize the number of lines above or below each heading level\nindividually, specify a `number[]` where values correspond to heading levels\n1-6 (in order).\n\nNotes: If `lines_above` or `lines_below` are configured to require more than one\nblank line, [MD012/no-multiple-blanks](md012.md) should also be customized. This\nrule checks for *at least* as many blank lines as specified; any extra blank\nlines are ignored.\n\nRationale: Aside from aesthetic reasons, some parsers, including `kramdown`,\nwill not parse headings that don't have a blank line before, and will parse them\nas regular text.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "lines_above",
+        "default" : "1",
+        "description" : "Blank lines above heading"
+      },
+      {
+        "name" : "lines_below",
+        "default" : "1",
+        "description" : "Blank lines below heading"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD023",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Headings Start at Beginning of Line",
+    "description" : "Ensures that Markdown headings start at the beginning of the line without leading spaces.",
+    "explanation" : "# `MD023` - Headings must start at the beginning of the line\n\nTags: `headings`, `spaces`\n\nAliases: `heading-start-left`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when a heading is indented by one or more spaces:\n\n```markdown\nSome text\n\n  # Indented heading\n```\n\nTo fix this, ensure that all headings start at the beginning of the line:\n\n```markdown\nSome text\n\n# Heading\n```\n\nNote that scenarios like block quotes \"indent\" the start of the line, so the\nfollowing is also correct:\n\n```markdown\n> # Heading in Block Quote\n```\n\nRationale: Headings that don't start at the beginning of the line will not be\nparsed as headings, and will instead appear as regular text.",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD024",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Multiple Headings with the Same Content",
+    "description" : "This rule detects multiple headings in a Markdown document that have identical text content.",
+    "explanation" : "# `MD024` - Multiple headings with the same content\n\nTags: `headings`\n\nAliases: `no-duplicate-heading`\n\nParameters:\n\n- `siblings_only`: Only check sibling headings (`boolean`, default `false`)\n\nThis rule is triggered if there are multiple headings in the document that have\nthe same text:\n\n```markdown\n# Some text\n\n## Some text\n```\n\nTo fix this, ensure that the content of each heading is different:\n\n```markdown\n# Some text\n\n## Some more text\n```\n\nIf the parameter `siblings_only` is set to `true`, duplication is allowed for\nheadings with different parents (as is common in changelogs):\n\n```markdown\n# Change log\n\n## 1.0.0\n\n### Features\n\n## 2.0.0\n\n### Features\n```\n\nRationale: Some Markdown parsers generate anchors for headings based on the\nheading name; headings with the same content can cause problems with that.",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "siblings_only",
+        "default" : "false",
+        "description" : "Only check sibling headings"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD025",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Single Top-Level Heading in Markdown Document",
+    "description" : "Ensures that a Markdown document contains only one top-level heading (usually an h1) to serve as the document title.",
+    "explanation" : "# `MD025` - Multiple top-level headings in the same document\n\nTags: `headings`\n\nAliases: `single-h1`, `single-title`\n\nParameters:\n\n- `front_matter_title`: RegExp for matching title in front matter (`string`,\n  default `^\\s*title\\s*[:=]`)\n- `level`: Heading level (`integer`, default `1`)\n\nThis rule is triggered when a top-level heading is in use (the first line of\nthe file is an h1 heading), and more than one h1 heading is in use in the\ndocument:\n\n```markdown\n# Top level heading\n\n# Another top-level heading\n```\n\nTo fix, structure your document so there is a single h1 heading that is\nthe title for the document. Subsequent headings must be\nlower-level headings (h2, h3, etc.):\n\n```markdown\n# Title\n\n## Heading\n\n## Another heading\n```\n\nNote: The `level` parameter can be used to change the top-level (ex: to h2) in\ncases where an h1 is added externally.\n\nIf [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and\ncontains a `title` property (commonly used with blog posts), this rule treats\nthat as a top level heading and will report a violation for any subsequent\ntop-level headings. To use a different property name in the front matter,\nspecify the text of a regular expression via the `front_matter_title` parameter.\nTo disable the use of front matter by this rule, specify `\"\"` for\n`front_matter_title`.\n\nRationale: A top-level heading is an h1 on the first line of the file, and\nserves as the title for the document. If this convention is in use, then there\ncan not be more than one title for the document, and the entire document should\nbe contained within this heading.",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "front_matter_title",
+        "default" : "^\\s*title\\s*[:=]",
+        "description" : "RegExp for matching title in front matter"
+      },
+      {
+        "name" : "level",
+        "default" : "1",
+        "description" : "Heading level"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD026",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Trailing Punctuation in Headings",
+    "description" : "This rule enforces that headings should not end with trailing punctuation characters.",
+    "explanation" : "# `MD026` - Trailing punctuation in heading\n\nTags: `headings`\n\nAliases: `no-trailing-punctuation`\n\nParameters:\n\n- `punctuation`: Punctuation characters (`string`, default `.,;:!。，；：！`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered on any heading that has one of the specified normal or\nfull-width punctuation characters as the last character in the line:\n\n```markdown\n# This is a heading.\n```\n\nTo fix this, remove the trailing punctuation:\n\n```markdown\n# This is a heading\n```\n\nNote: The `punctuation` parameter can be used to specify what characters count\nas punctuation at the end of a heading. For example, you can change it to\n`\".,;:\"` to allow headings that end with an exclamation point. `?` is\nallowed by default because of how common it is in headings of FAQ-style\ndocuments. Setting the `punctuation` parameter to `\"\"` allows all characters -\nand is equivalent to disabling the rule.\n\nNote: The trailing semicolon of [HTML entity references][html-entity-references]\nlike `&copy;`, `&#169;`, and `&#x000A9;` is ignored by this rule.\n\nRationale: Headings are not meant to be full sentences. More information:\n[Punctuation at the end of headers][end-punctuation].\n\n[end-punctuation]: https://cirosantilli.com/markdown-style-guide#punctuation-at-the-end-of-headers\n[html-entity-references]: https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "punctuation",
+        "default" : ".,;:!。，；：！",
+        "description" : "Punctuation characters"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD027",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Multiple Spaces After Blockquote Symbol",
+    "description" : "This rule detects when there are multiple spaces after the blockquote symbol '>' in Markdown documents, enforcing only one space after the symbol.",
+    "explanation" : "# `MD027` - Multiple spaces after blockquote symbol\n\nTags: `blockquote`, `indentation`, `whitespace`\n\nAliases: `no-multiple-space-blockquote`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when blockquotes have more than one space after the\nblockquote (`>`) symbol:\n\n```markdown\n>  This is a blockquote with bad indentation\n>  there should only be one.\n```\n\nTo fix, remove any extraneous space:\n\n```markdown\n> This is a blockquote with correct\n> indentation.\n```\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD028",
+    "level" : "Info",
+    "category" : "Comprehensibility",
+    "subCategory" : null,
+    "title" : "Avoid Blank Line Inside Blockquote",
+    "description" : "Ensures that blockquotes are not separated by blank lines, which can cause inconsistent rendering across Markdown parsers.",
+    "explanation" : "# `MD028` - Blank line inside blockquote\n\nTags: `blockquote`, `whitespace`\n\nAliases: `no-blanks-blockquote`\n\nThis rule is triggered when two blockquote blocks are separated by nothing\nexcept for a blank line:\n\n```markdown\n> This is a blockquote\n> which is immediately followed by\n\n> this blockquote. Unfortunately\n> In some parsers, these are treated as the same blockquote.\n```\n\nTo fix this, ensure that any blockquotes that are right next to each other\nhave some text in between:\n\n```markdown\n> This is a blockquote.\n\nAnd Jimmy also said:\n\n> This too is a blockquote.\n```\n\nAlternatively, if they are supposed to be the same quote, then add the\nblockquote symbol at the beginning of the blank line:\n\n```markdown\n> This is a blockquote.\n>\n> This is the same blockquote.\n```\n\nRationale: Some Markdown parsers will treat two blockquotes separated by one\nor more blank lines as the same blockquote, while others will treat them as\nseparate blockquotes.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD029",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Ordered List Item Prefix Consistency",
+    "description" : "This rule enforces that ordered list items in Markdown documents use consistent numbering prefixes according to a configured style, such as all '1.' prefixes or incrementing numbers.",
+    "explanation" : "# `MD029` - Ordered list item prefix\n\nTags: `ol`\n\nAliases: `ol-prefix`\n\nParameters:\n\n- `style`: List style (`string`, default `one_or_ordered`, values `one` /\n  `one_or_ordered` / `ordered` / `zero`)\n\nThis rule is triggered for ordered lists that do not either start with '1.' or\ndo not have a prefix that increases in numerical order (depending on the\nconfigured style). The less-common pattern of using '0.' as a first prefix or\nfor all prefixes is also supported.\n\nExample valid list if the style is configured as 'one':\n\n```markdown\n1. Do this.\n1. Do that.\n1. Done.\n```\n\nExamples of valid lists if the style is configured as 'ordered':\n\n```markdown\n1. Do this.\n2. Do that.\n3. Done.\n```\n\n```markdown\n0. Do this.\n1. Do that.\n2. Done.\n```\n\nAll three examples are valid when the style is configured as 'one_or_ordered'.\n\nExample valid list if the style is configured as 'zero':\n\n```markdown\n0. Do this.\n0. Do that.\n0. Done.\n```\n\nExample invalid list for all styles:\n\n```markdown\n1. Do this.\n3. Done.\n```\n\nThis rule supports 0-prefixing ordered list items for uniform indentation:\n\n```markdown\n...\n08. Item\n09. Item\n10. Item\n11. Item\n...\n```\n\nNote: This rule will report violations for cases like the following where an\nimproperly-indented code block (or similar) appears between two list items and\n\"breaks\" the list in two:\n\n<!-- markdownlint-disable code-fence-style -->\n\n~~~markdown\n1. First list\n\n```text\nCode block\n```\n\n1. Second list\n~~~\n\nThe fix is to indent the code block so it becomes part of the preceding list\nitem as intended:\n\n~~~markdown\n1. First list\n\n   ```text\n   Code block\n   ```\n\n2. Still first list\n~~~\n\n<!-- markdownlint-restore -->\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "one_or_ordered",
+        "description" : "List style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD030",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Spaces After List Markers",
+    "description" : "Ensures the correct number of spaces after list markers in Markdown lists.",
+    "explanation" : "# `MD030` - Spaces after list markers\n\nTags: `ol`, `ul`, `whitespace`\n\nAliases: `list-marker-space`\n\nParameters:\n\n- `ol_multi`: Spaces for multi-line ordered list items (`integer`, default `1`)\n- `ol_single`: Spaces for single-line ordered list items (`integer`, default\n  `1`)\n- `ul_multi`: Spaces for multi-line unordered list items (`integer`, default\n  `1`)\n- `ul_single`: Spaces for single-line unordered list items (`integer`, default\n  `1`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule checks for the number of spaces between a list marker (e.g. '`-`',\n'`*`', '`+`' or '`1.`') and the text of the list item.\n\nThe number of spaces checked for depends on the document style in use, but the\ndefault is 1 space after any list marker:\n\n```markdown\n* Foo\n* Bar\n* Baz\n\n1. Foo\n1. Bar\n1. Baz\n\n1. Foo\n   * Bar\n1. Baz\n```\n\nA document style may change the number of spaces after unordered list items\nand ordered list items independently, as well as based on whether the content\nof every item in the list consists of a single paragraph or multiple\nparagraphs (including sub-lists and code blocks).\n\nFor example, the style guide at\n<https://cirosantilli.com/markdown-style-guide#spaces-after-list-marker>\nspecifies that 1 space after the list marker should be used if every item in\nthe list fits within a single paragraph, but to use 2 or 3 spaces (for ordered\nand unordered lists respectively) if there are multiple paragraphs of content\ninside the list:\n\n```markdown\n* Foo\n* Bar\n* Baz\n```\n\nvs.\n\n```markdown\n*   Foo\n\n    Second paragraph\n\n*   Bar\n```\n\nor\n\n```markdown\n1.  Foo\n\n    Second paragraph\n\n1.  Bar\n```\n\nTo fix this, ensure the correct number of spaces are used after the list marker\nfor your selected document style.\n\nRationale: Violations of this rule can lead to improperly rendered content.\n\nNote: See [Prettier.md](Prettier.md) for compatibility information.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "ol_multi",
+        "default" : "1",
+        "description" : "Spaces for multi-line ordered list items"
+      },
+      {
+        "name" : "ol_single",
+        "default" : "1",
+        "description" : "Spaces for single-line ordered list items"
+      },
+      {
+        "name" : "ul_multi",
+        "default" : "1",
+        "description" : "Spaces for multi-line unordered list items"
+      },
+      {
+        "name" : "ul_single",
+        "default" : "1",
+        "description" : "Spaces for single-line unordered list items"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD031",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce blank lines surrounding fenced code blocks",
+    "description" : "Ensures fenced code blocks in Markdown are preceded and followed by blank lines.",
+    "explanation" : "# `MD031` - Fenced code blocks should be surrounded by blank lines\n\nTags: `blank_lines`, `code`\n\nAliases: `blanks-around-fences`\n\nParameters:\n\n- `list_items`: Include list items (`boolean`, default `true`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when fenced code blocks are either not preceded or not\nfollowed by a blank line:\n\n````markdown\nSome text\n```\nCode block\n```\n\n```\nAnother code block\n```\nSome more text\n````\n\nTo fix this, ensure that all fenced code blocks have a blank line both before\nand after (except where the block is at the beginning or end of the document):\n\n````markdown\nSome text\n\n```\nCode block\n```\n\n```\nAnother code block\n```\n\nSome more text\n````\n\nSet the `list_items` parameter to `false` to disable this rule for list items.\nDisabling this behavior for lists can be useful if it is necessary to create a\n[tight](https://spec.commonmark.org/0.29/#tight) list containing a code fence.\n\nRationale: Aside from aesthetic reasons, some parsers, including kramdown, will\nnot parse fenced code blocks that don't have blank lines before and after them.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "list_items",
+        "default" : "true",
+        "description" : "Include list items"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD032",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Lists Surrounded by Blank Lines",
+    "description" : "This rule ensures that lists in markdown are preceded and followed by blank lines to improve readability and parsing.",
+    "explanation" : "# `MD032` - Lists should be surrounded by blank lines\n\nTags: `blank_lines`, `bullet`, `ol`, `ul`\n\nAliases: `blanks-around-lists`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when lists (of any kind) are either not preceded or not\nfollowed by a blank line:\n\n```markdown\nSome text\n* List item\n* List item\n\n1. List item\n2. List item\n***\n```\n\nIn the first case above, text immediately precedes the unordered list. In the\nsecond case above, a thematic break immediately follows the ordered list. To fix\nviolations of this rule, ensure that all lists have a blank line both before and\nafter (except when the list is at the very beginning or end of the document):\n\n```markdown\nSome text\n\n* List item\n* List item\n\n1. List item\n2. List item\n\n***\n```\n\nNote that the following case is **not** a violation of this rule:\n\n```markdown\n1. List item\n   More item 1\n2. List item\nMore item 2\n```\n\nAlthough it is not indented, the text \"More item 2\" is referred to as a\n[lazy continuation line][lazy-continuation] and considered part of the second\nlist item.\n\nRationale: In addition to aesthetic reasons, some parsers, including kramdown,\nwill not parse lists that don't have blank lines before and after them.\n\n[lazy-continuation]: https://spec.commonmark.org/0.30/#lazy-continuation-line",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD033",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Disallow Inline HTML in Markdown",
+    "description" : "This rule flags the use of raw inline HTML within Markdown documents.",
+    "explanation" : "# `MD033` - Inline HTML\n\nTags: `html`\n\nAliases: `no-inline-html`\n\nParameters:\n\n- `allowed_elements`: Allowed elements (`string[]`, default `[]`)\n\nThis rule is triggered whenever raw HTML is used in a Markdown document:\n\n```markdown\n<h1>Inline HTML heading</h1>\n```\n\nTo fix this, use 'pure' Markdown instead of including raw HTML:\n\n```markdown\n# Markdown heading\n```\n\nNote: To allow specific HTML elements, use the `allowed_elements` parameter.\n\nRationale: Raw HTML is allowed in Markdown, but this rule is included for\nthose who want their documents to only include \"pure\" Markdown, or for those\nwho are rendering Markdown documents into something other than HTML.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "allowed_elements",
+        "default" : "[]",
+        "description" : "Allowed elements"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD034",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Angle Brackets Around Bare URLs",
+    "description" : "This rule detects URLs or email addresses in Markdown that are not enclosed in angle brackets, which can prevent them from being converted into clickable links by some Markdown parsers.",
+    "explanation" : "# `MD034` - Bare URL used\n\nTags: `links`, `url`\n\nAliases: `no-bare-urls`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered whenever a URL or email address appears without\nsurrounding angle brackets:\n\n```markdown\nFor more info, visit https://www.example.com/ or email user@example.com.\n```\n\nTo fix this, add angle brackets around the URL or email address:\n\n```markdown\nFor more info, visit <https://www.example.com/> or email <user@example.com>.\n```\n\nNote: To include a bare URL or email without it being converted into a link,\nwrap it in a code span:\n\n```markdown\nNot a clickable link: `https://www.example.com`\n```\n\nNote: The following scenario does not trigger this rule because it could be a\nshortcut link:\n\n```markdown\n[https://www.example.com]\n```\n\nNote: The following syntax triggers this rule because the nested link could be\na shortcut link (which takes precedence):\n\n```markdown\n[text [shortcut] text](https://example.com)\n```\n\nTo avoid this, escape both inner brackets:\n\n```markdown\n[link \\[text\\] link](https://example.com)\n```\n\nRationale: Without angle brackets, a bare URL or email isn't converted into a\nlink by some Markdown parsers.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD035",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Horizontal Rule Style",
+    "description" : "This rule enforces consistent use of horizontal rule styles throughout a Markdown document.",
+    "explanation" : "# `MD035` - Horizontal rule style\n\nTags: `hr`\n\nAliases: `hr-style`\n\nParameters:\n\n- `style`: Horizontal rule style (`string`, default `consistent`)\n\nThis rule is triggered when inconsistent styles of horizontal rules are used\nin the document:\n\n```markdown\n---\n\n- - -\n\n***\n\n* * *\n\n****\n```\n\nTo fix this, ensure any horizontal rules used in the document are consistent,\nor match the given style if the rule is so configured:\n\n```markdown\n---\n\n---\n```\n\nNote: by default, this rule is configured to just require that all horizontal\nrules in the document are the same and will trigger if any of the horizontal\nrules are different than the first one encountered in the document. If you\nwant to configure the rule to match a specific style, the parameter given to\nthe 'style' option is a string containing the exact horizontal rule text that\nis allowed.\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "Horizontal rule style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD036",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Using Emphasis Instead of Headings",
+    "description" : "This rule detects when emphasized text (bold or italic) is used to separate sections instead of proper Markdown headings.",
+    "explanation" : "# `MD036` - Emphasis used instead of a heading\n\nTags: `emphasis`, `headings`\n\nAliases: `no-emphasis-as-heading`\n\nParameters:\n\n- `punctuation`: Punctuation characters (`string`, default `.,;:!?。，；：！？`)\n\nThis check looks for instances where emphasized (i.e. bold or italic) text is\nused to separate sections, where a heading should be used instead:\n\n```markdown\n**My document**\n\nLorem ipsum dolor sit amet...\n\n_Another section_\n\nConsectetur adipiscing elit, sed do eiusmod.\n```\n\nTo fix this, use Markdown headings instead of emphasized text to denote\nsections:\n\n```markdown\n# My document\n\nLorem ipsum dolor sit amet...\n\n## Another section\n\nConsectetur adipiscing elit, sed do eiusmod.\n```\n\nNote: This rule looks for single-line paragraphs that consist entirely\nof emphasized text. It won't fire on emphasis used within regular text,\nmulti-line emphasized paragraphs, or paragraphs ending in punctuation\n(normal or full-width). Similarly to rule MD026, you can configure what\ncharacters are recognized as punctuation.\n\nRationale: Using emphasis instead of a heading prevents tools from inferring\nthe structure of a document. More information:\n<https://cirosantilli.com/markdown-style-guide#emphasis-vs-headers>.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "punctuation",
+        "default" : ".,;:!?。，；：！？",
+        "description" : "Punctuation characters"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD037",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Disallow Spaces Inside Emphasis Markers",
+    "description" : "Ensures that emphasis markers (bold, italic) in Markdown do not have spaces between the markers and the text.",
+    "explanation" : "# `MD037` - Spaces inside emphasis markers\n\nTags: `emphasis`, `whitespace`\n\nAliases: `no-space-in-emphasis`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when emphasis markers (bold, italic) are used, but they\nhave spaces between the markers and the text:\n\n```markdown\nHere is some ** bold ** text.\n\nHere is some * italic * text.\n\nHere is some more __ bold __ text.\n\nHere is some more _ italic _ text.\n```\n\nTo fix this, remove the spaces around the emphasis markers:\n\n```markdown\nHere is some **bold** text.\n\nHere is some *italic* text.\n\nHere is some more __bold__ text.\n\nHere is some more _italic_ text.\n```\n\nRationale: Emphasis is only parsed as such when the asterisks/underscores\naren't surrounded by spaces. This rule attempts to detect where\nthey were surrounded by spaces, but it appears that emphasized text was\nintended by the author.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD038",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Disallow Spaces Inside Code Span Elements",
+    "description" : "This rule controls the presence of spaces adjacent to backticks in inline code spans in Markdown files.",
+    "explanation" : "# `MD038` - Spaces inside code span elements\n\nTags: `code`, `whitespace`\n\nAliases: `no-space-in-code`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered for code span elements that have spaces adjacent to the\nbackticks:\n\n```markdown\n`some text `\n\n` some text`\n```\n\nTo fix this, remove any spaces adjacent to the backticks:\n\n```markdown\n`some text`\n```\n\nNote: A single leading and trailing space is allowed by the specification and\nautomatically trimmed (in order to allow for code spans that embed backticks):\n\n```markdown\n`` `backticks` ``\n```\n\nNote: A single leading or trailing space is allowed if used to separate code\nspan markers from an embedded backtick (though the space is not trimmed):\n\n```markdown\n`` ` embedded backtick``\n```\n\nRationale: Violations of this rule are usually unintentional and may lead to\nimproperly-rendered content. If spaces beside backticks are intentional, this\nrule can be disabled for that line or file.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD039",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Spaces Inside Link Text",
+    "description" : "This rule detects and prevents spaces inside the square brackets of Markdown link text.",
+    "explanation" : "# `MD039` - Spaces inside link text\n\nTags: `links`, `whitespace`\n\nAliases: `no-space-in-links`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered on links that have spaces surrounding the link text:\n\n```markdown\n[ a link ](https://www.example.com/)\n```\n\nTo fix this, remove the spaces surrounding the link text:\n\n```markdown\n[a link](https://www.example.com/)\n```\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD040",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce language specification in fenced code blocks",
+    "description" : "This rule requires fenced code blocks in Markdown to specify a language for syntax highlighting.",
+    "explanation" : "# `MD040` - Fenced code blocks should have a language specified\n\nTags: `code`, `language`\n\nAliases: `fenced-code-language`\n\nParameters:\n\n- `allowed_languages`: List of languages (`string[]`, default `[]`)\n- `language_only`: Require language only (`boolean`, default `false`)\n\nThis rule is triggered when fenced code blocks are used, but a language isn't\nspecified:\n\n````markdown\n```\n#!/bin/bash\necho Hello world\n```\n````\n\nTo fix this, add a language specifier to the code block:\n\n````markdown\n```bash\n#!/bin/bash\necho Hello world\n```\n````\n\nTo display a code block without syntax highlighting, use:\n\n````markdown\n```text\nPlain text in a code block\n```\n````\n\nYou can configure the `allowed_languages` parameter to specify a list of\nlanguages code blocks could use. Languages are case sensitive. The default value\nis `[]` which means any language specifier is valid.\n\nYou can prevent extra data from being present in the info string of fenced code\nblocks. To do so, set the `language_only` parameter to `true`.\n\n<!-- markdownlint-disable-next-line no-space-in-code -->\nInfo strings with leading/trailing whitespace (ex: `js `) or other content (ex:\n`ruby startline=3`) will trigger this rule.\n\nRationale: Specifying a language improves content rendering by using the\ncorrect syntax highlighting for code. More information:\n<https://cirosantilli.com/markdown-style-guide#option-code-fenced>.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "allowed_languages",
+        "default" : "[]",
+        "description" : "List of languages"
+      },
+      {
+        "name" : "language_only",
+        "default" : "false",
+        "description" : "Require language only"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD041",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce First Line as Top-Level Heading",
+    "description" : "Ensures the first line in a markdown file is a top-level heading (h1).",
+    "explanation" : "# `MD041` - First line in a file should be a top-level heading\n\nTags: `headings`\n\nAliases: `first-line-h1`, `first-line-heading`\n\nParameters:\n\n- `front_matter_title`: RegExp for matching title in front matter (`string`,\n  default `^\\s*title\\s*[:=]`)\n- `level`: Heading level (`integer`, default `1`)\n\nThis rule is intended to ensure documents have a title and is triggered when\nthe first line in the file isn't a top-level (h1) heading:\n\n```markdown\nThis is a file without a heading\n```\n\nTo fix this, add a top-level heading to the beginning of the file:\n\n```markdown\n# File with heading\n\nThis is a file with a top-level heading\n```\n\nBecause it is common for projects on GitHub to use an image for the heading of\n`README.md` and that is not well-supported by Markdown, HTML headings are also\npermitted by this rule. For example:\n\n```markdown\n<h1 align=\"center\"><img src=\"https://placekitten.com/300/150\"/></h1>\n\nThis is a file with a top-level HTML heading\n```\n\nNote: The `level` parameter can be used to change the top-level (ex: to h2) in\ncases where an h1 is added externally.\n\nIf [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and\ncontains a `title` property (commonly used with blog posts), this rule will not\nreport a violation. To use a different property name in the front matter,\nspecify the text of a regular expression via the `front_matter_title` parameter.\nTo disable the use of front matter by this rule, specify `\"\"` for\n`front_matter_title`.\n\nRationale: The top-level heading often acts as the title of a document. More\ninformation: <https://cirosantilli.com/markdown-style-guide#top-level-header>.",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "front_matter_title",
+        "default" : "^\\s*title\\s*[:=]",
+        "description" : "RegExp for matching title in front matter"
+      },
+      {
+        "name" : "level",
+        "default" : "1",
+        "description" : "Heading level"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD042",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Disallow Empty Links",
+    "description" : "This rule ensures that markdown links are not empty and have a valid destination.",
+    "explanation" : "# `MD042` - No empty links\n\nTags: `links`\n\nAliases: `no-empty-links`\n\nThis rule is triggered when an empty link is encountered:\n\n```markdown\n[an empty link]()\n```\n\nTo fix the violation, provide a destination for the link:\n\n```markdown\n[a valid link](https://example.com/)\n```\n\nEmpty fragments will trigger this rule:\n\n```markdown\n[an empty fragment](#)\n```\n\nBut non-empty fragments will not:\n\n```markdown\n[a valid fragment](#fragment)\n```\n\nRationale: Empty links do not lead anywhere and therefore don't function as\nlinks.",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD043",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Required Heading Structure",
+    "description" : "Ensures that the headings in a Markdown file match a specified standard heading structure.",
+    "explanation" : "# `MD043` - Required heading structure\n\nTags: `headings`\n\nAliases: `required-headings`\n\nParameters:\n\n- `headings`: List of headings (`string[]`, default `[]`)\n- `match_case`: Match case of headings (`boolean`, default `false`)\n\nThis rule is triggered when the headings in a file do not match the array of\nheadings passed to the rule. It can be used to enforce a standard heading\nstructure for a set of files.\n\nTo require exactly the following structure:\n\n```markdown\n# Head\n## Item\n### Detail\n```\n\nSet the `headings` parameter to:\n\n```json\n[\n    \"# Head\",\n    \"## Item\",\n    \"### Detail\"\n]\n```\n\nTo allow optional headings as with the following structure:\n\n```markdown\n# Head\n## Item\n### Detail (optional)\n## Foot\n### Notes (optional)\n```\n\nUse the special value `\"*\"` meaning \"zero or more unspecified headings\" or the\nspecial value `\"+\"` meaning \"one or more unspecified headings\" and set the\n`headings` parameter to:\n\n```json\n[\n    \"# Head\",\n    \"## Item\",\n    \"*\",\n    \"## Foot\",\n    \"*\"\n]\n```\n\nWhen an error is detected, this rule outputs the line number of the first\nproblematic heading (otherwise, it outputs the last line number of the file).\n\nNote that while the `headings` parameter uses the \"## Text\" ATX heading style\nfor simplicity, a file may use any supported heading style.\n\nBy default, the case of headings in the document is not required to match that\nof `headings`. To require that case match exactly, set the `match_case`\nparameter to `true`.\n\nRationale: Projects may wish to enforce a consistent document structure across\na set of similar content.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "headings",
+        "default" : "[]",
+        "description" : "List of headings"
+      },
+      {
+        "name" : "match_case",
+        "default" : "false",
+        "description" : "Match case of headings"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD044",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Proper Capitalization of Proper Names",
+    "description" : "This rule ensures that proper names in markdown documents have the correct capitalization as specified.",
+    "explanation" : "# `MD044` - Proper names should have the correct capitalization\n\nTags: `spelling`\n\nAliases: `proper-names`\n\nParameters:\n\n- `code_blocks`: Include code blocks (`boolean`, default `true`)\n- `html_elements`: Include HTML elements (`boolean`, default `true`)\n- `names`: List of proper names (`string[]`, default `[]`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when any of the strings in the `names` array do not have\nthe specified capitalization. It can be used to enforce a standard letter case\nfor the names of projects and products.\n\nFor example, the language \"JavaScript\" is usually written with both the 'J' and\n'S' capitalized - though sometimes the 's' or 'j' appear in lower-case. To\nenforce the proper capitalization, specify the desired letter case in the\n`names` array:\n\n```json\n[\n    \"JavaScript\"\n]\n```\n\nSet the `code_blocks` parameter to `false` to disable this rule for code blocks\nand spans. Set the `html_elements` parameter to `false` to disable this rule\nfor HTML elements and attributes (such as when using a proper name as part of\na path for `a`/`href` or `img`/`src`).\n\nRationale: Incorrect capitalization of proper names is usually a mistake.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "code_blocks",
+        "default" : "true",
+        "description" : "Include code blocks"
+      },
+      {
+        "name" : "html_elements",
+        "default" : "true",
+        "description" : "Include HTML elements"
+      },
+      {
+        "name" : "names",
+        "default" : "[]",
+        "description" : "List of proper names"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD045",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Images to Have Alternate Text (alt text)",
+    "description" : "This rule ensures that all images include alternate text (alt text) to describe their content.",
+    "explanation" : "# `MD045` - Images should have alternate text (alt text)\n\nTags: `accessibility`, `images`\n\nAliases: `no-alt-text`\n\nThis rule is triggered when an image is missing alternate text (alt text)\ninformation.\n\nAlternate text is commonly specified inline as:\n\n```markdown\n![Alternate text](image.jpg)\n```\n\nOr with reference syntax as:\n\n```markdown\n![Alternate text][ref]\n\n...\n\n[ref]: image.jpg \"Optional title\"\n```\n\nOr with HTML as:\n\n```html\n<img src=\"image.jpg\" alt=\"Alternate text\" />\n```\n\nGuidance for writing alternate text is available from the [W3C][w3c],\n[Wikipedia][wikipedia], and [other locations][phase2technology].\n\nRationale: Alternate text is important for accessibility and describes the\ncontent of an image for people who may not be able to see it.\n\n[phase2technology]: https://www.phase2technology.com/blog/no-more-excuses\n[w3c]: https://www.w3.org/WAI/alt/\n[wikipedia]: https://en.wikipedia.org/wiki/Alt_attribute",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD046",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce consistent code block style",
+    "description" : "This rule enforces consistent usage of code block styles (either fenced or indented) within a Markdown document.",
+    "explanation" : "# `MD046` - Code block style\n\nTags: `code`\n\nAliases: `code-block-style`\n\nParameters:\n\n- `style`: Block style (`string`, default `consistent`, values `consistent` /\n  `fenced` / `indented`)\n\nThis rule is triggered when unwanted or different code block styles are used in\nthe same document.\n\nIn the default configuration this rule reports a violation for the following\ndocument:\n\n<!-- markdownlint-disable code-block-style -->\n\n    Some text.\n\n        # Indented code\n\n    More text.\n\n    ```ruby\n    # Fenced code\n    ```\n\n    More text.\n\n<!-- markdownlint-restore -->\n\nTo fix violations of this rule, use a consistent style (either indenting or code\nfences).\n\nThe specified style can be specific (`fenced`, `indented`) or simply require\nthat usage be consistent within the document (`consistent`).\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "Block style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD047",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Single Trailing Newline at End of File",
+    "description" : "Ensures that files end with exactly one newline character.",
+    "explanation" : "# `MD047` - Files should end with a single newline character\n\nTags: `blank_lines`\n\nAliases: `single-trailing-newline`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when there is not a single newline character at the end\nof a file.\n\nAn example that triggers the rule:\n\n```markdown\n# Heading\n\nThis file ends without a newline.[EOF]\n```\n\nTo fix the violation, add a newline character to the end of the file:\n\n```markdown\n# Heading\n\nThis file ends with a newline.\n[EOF]\n```\n\nRationale: Some programs have trouble with files that do not end with a newline.\n\nMore information: [What's the point in adding a new line to the end of a\nfile?][stack-exchange]\n\n[stack-exchange]: https://unix.stackexchange.com/questions/18743/whats-the-point-in-adding-a-new-line-to-the-end-of-a-file",
+    "enabled" : false,
+    "timeToFix" : 1,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD048",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Code Fence Style",
+    "description" : "Ensures that fenced code blocks in Markdown use a consistent code fence style throughout the document.",
+    "explanation" : "# `MD048` - Code fence style\n\nTags: `code`\n\nAliases: `code-fence-style`\n\nParameters:\n\n- `style`: Code fence style (`string`, default `consistent`, values `backtick`\n  / `consistent` / `tilde`)\n\nThis rule is triggered when the symbols used in the document for fenced code\nblocks do not match the configured code fence style:\n\n````markdown\n```ruby\n# Fenced code\n```\n\n~~~ruby\n# Fenced code\n~~~\n````\n\nTo fix this issue, use the configured code fence style throughout the\ndocument:\n\n````markdown\n```ruby\n# Fenced code\n```\n\n```ruby\n# Fenced code\n```\n````\n\nThe configured list style can be a specific symbol to use (backtick, tilde), or\ncan require that usage be consistent within the document.\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "Code fence style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD049",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Emphasis Style",
+    "description" : "Ensures that the markdown document uses a consistent symbol style for emphasis (either asterisk or underscore) throughout the document.",
+    "explanation" : "# `MD049` - Emphasis style\n\nTags: `emphasis`\n\nAliases: `emphasis-style`\n\nParameters:\n\n- `style`: Emphasis style (`string`, default `consistent`, values `asterisk` /\n  `consistent` / `underscore`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when the symbols used in the document for emphasis do not\nmatch the configured emphasis style:\n\n```markdown\n*Text*\n_Text_\n```\n\nTo fix this issue, use the configured emphasis style throughout the document:\n\n```markdown\n*Text*\n*Text*\n```\n\nThe configured emphasis style can be a specific symbol to use (\"asterisk\",\n\"underscore\"), or can require that usage be consistent within the document.\n\nNote: Emphasis within a word is restricted to \"asterisk\" in order to avoid\nunwanted emphasis for words containing internal underscores like_this_one.\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "Emphasis style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD050",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Strong Style",
+    "description" : "This rule enforces consistent use of symbols for strong emphasis in Markdown documents.",
+    "explanation" : "# `MD050` - Strong style\n\nTags: `emphasis`\n\nAliases: `strong-style`\n\nParameters:\n\n- `style`: Strong style (`string`, default `consistent`, values `asterisk` /\n  `consistent` / `underscore`)\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when the symbols used in the document for strong do not\nmatch the configured strong style:\n\n```markdown\n**Text**\n__Text__\n```\n\nTo fix this issue, use the configured strong style throughout the document:\n\n```markdown\n**Text**\n**Text**\n```\n\nThe configured strong style can be a specific symbol to use (\"asterisk\",\n\"underscore\"), or can require that usage be consistent within the document.\n\nNote: Emphasis within a word is restricted to \"asterisk\" in order to avoid\nunwanted emphasis for words containing internal underscores like_this_one.\n\nRationale: Consistent formatting makes it easier to understand a document.",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "Strong style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD051",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Valid Link Fragments in Markdown",
+    "description" : "Ensures that link fragments in Markdown documents correctly reference existing heading anchors or valid fragment identifiers.",
+    "explanation" : "# `MD051` - Link fragments should be valid\n\nTags: `links`\n\nAliases: `link-fragments`\n\nFixable: Some violations can be fixed by tooling\n\nThis rule is triggered when a link fragment does not match any of the fragments\nthat are automatically generated for headings in a document:\n\n```markdown\n# Heading Name\n\n[Link](#fragment)\n```\n\nTo fix this issue, change the link fragment to reference an existing heading's\ngenerated name (see below):\n\n```markdown\n# Heading Name\n\n[Link](#heading-name)\n```\n\nLink fragments may be handled case-sensitively, so this rule requires fragments\nto exactly match the [GitHub heading algorithm][github-heading-algorithm].\nTherefore, the following example is reported as a violation:\n\n```markdown\n# Heading Name\n\n[Link](#Heading-Name)\n```\n\nAlternatively, some platforms allow the syntax `{#named-anchor}` to be used\nwithin a heading to provide a specific name (consisting of only lower-case\nletters, numbers, `-`, and `_`):\n\n```markdown\n# Heading Name {#custom-name}\n\n[Link](#custom-name)\n```\n\nAlternatively, any HTML tag with an `id` attribute or an `a` tag with a `name`\nattribute can be used to define a fragment:\n\n```markdown\n<a id=\"bookmark\"></a>\n\n[Link](#bookmark)\n```\n\nAn `a` tag can be useful in scenarios where a heading is not appropriate or for\ncontrol over the text of the fragment identifier.\n\nThis rule also recognizes the custom fragment syntax used by GitHub to highlight\n[specific content in a document][github-linking-to-content].\n\nFor example, this link to line 20:\n\n```markdown\n[Link](#L20)\n```\n\nAnd this link to content starting within line 19 running into line 21:\n\n```markdown\n[Link](#L19C5-L21C11)\n```\n\nRationale: [GitHub section links][github-section-links] are created\nautomatically for every heading when Markdown content is displayed on GitHub.\nThis makes it easy to link directly to different sections within a document.\nHowever, section links change if headings are renamed or removed. This rule\nhelps identify broken section links within a document.\n\nSection links are **not** part of the CommonMark specification. This rule\nenforces the [GitHub heading algorithm][github-heading-algorithm] which is:\nconvert heading to lowercase, remove punctuation, convert spaces to dashes,\nappend an incrementing integer as needed for uniqueness.\n\n[github-section-links]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links\n[github-heading-algorithm]: https://github.com/gjtorikian/html-pipeline/blob/f13a1534cb650ba17af400d1acd3a22c28004c09/lib/html/pipeline/toc_filter.rb\n[github-linking-to-content]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-markdown#linking-to-markdown",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD052",
+    "level" : "Warning",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Enforce Defined Labels for Reference Links and Images",
+    "description" : "Ensures that reference links and images in Markdown use labels that are actually defined elsewhere in the document.",
+    "explanation" : "# `MD052` - Reference links and images should use a label that is defined\n\nTags: `images`, `links`\n\nAliases: `reference-links-images`\n\nParameters:\n\n- `shortcut_syntax`: Include shortcut syntax (`boolean`, default `false`)\n\nLinks and images in Markdown can provide the link destination or image source\nat the time of use or can define it elsewhere and use a label for reference.\nThe reference format is convenient for keeping paragraph text clutter-free\nand makes it easy to reuse the same URL in multiple places.\n\nThere are three kinds of reference links and images:\n\n```markdown\nFull: [text][label]\nCollapsed: [label][]\nShortcut: [label]\n\nFull: ![text][image]\nCollapsed: ![image][]\nShortcut: ![image]\n\n[label]: https://example.com/label\n[image]: https://example.com/image\n```\n\nA link or image renders correctly when the corresponding label is defined, but\ndisplays as text with brackets when the label is not present. By default, this\nrule warns of undefined labels for \"full\" and \"collapsed\" reference syntax but\nnot for \"shortcut\" syntax because it is ambiguous.\n\nThe text `[example]` could be a shortcut link or the text \"example\" in brackets,\nso \"shortcut\" syntax is ignored by default. To include \"shortcut\" syntax, set\nthe `include_shortcut` parameter to `true`. Note that doing so produces warnings\nfor *all* text in the document that *could* be a shortcut. If bracketed text is\nintentional, brackets can be escaped with the `\\` character: `\\[example\\]`.",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "shortcut_syntax",
+        "default" : "false",
+        "description" : "Include shortcut syntax"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD053",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Link and Image Reference Definitions Are Needed",
+    "description" : "Ensures that all link and image reference definitions in a Markdown document are actually used and not duplicated.",
+    "explanation" : "# `MD053` - Link and image reference definitions should be needed\n\nTags: `images`, `links`\n\nAliases: `link-image-reference-definitions`\n\nParameters:\n\n- `ignored_definitions`: Ignored definitions (`string[]`, default `[\"//\"]`)\n\nFixable: Some violations can be fixed by tooling\n\nLinks and images in Markdown can provide the link destination or image source\nat the time of use or can use a label to reference a definition elsewhere in\nthe document. The latter reference format is convenient for keeping paragraph\ntext clutter-free and makes it easy to reuse the same URL in multiple places.\n\nBecause link and image reference definitions are located separately from\nwhere they are used, there are two scenarios where a definition can be\nunnecessary:\n\n1. If a label is not referenced by any link or image in a document, that\n   definition is unused and can be deleted.\n2. If a label is defined multiple times in a document, the first definition is\n   used and the others can be deleted.\n\nThis rule considers a reference definition to be used if any link or image\nreference has the corresponding label. The \"full\", \"collapsed\", and \"shortcut\"\nformats are all supported.\n\nIf there are reference definitions that are deliberately unreferenced, they can\nbe ignored by setting the `ignored_definitions` parameter. The default value of\nthis parameter ignores the following convention for adding non-HTML comments to\nMarkdown:\n\n```markdown\n[//]: # (This behaves like a comment)\n```",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "ignored_definitions",
+        "default" : "[\"//\"]",
+        "description" : "Ignored definitions"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD054",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Link and Image Style in Markdown",
+    "description" : "This rule controls the style of links and images in Markdown documents, allowing or disallowing autolinks, inline, full reference, collapsed reference, and shortcut reference styles to ensure consistent formatting.",
+    "explanation" : "# `MD054` - Link and image style\n\nTags: `images`, `links`\n\nAliases: `link-image-style`\n\nParameters:\n\n- `autolink`: Allow autolinks (`boolean`, default `true`)\n- `collapsed`: Allow collapsed reference links and images (`boolean`, default\n  `true`)\n- `full`: Allow full reference links and images (`boolean`, default `true`)\n- `inline`: Allow inline links and images (`boolean`, default `true`)\n- `shortcut`: Allow shortcut reference links and images (`boolean`, default\n  `true`)\n- `url_inline`: Allow URLs as inline links (`boolean`, default `true`)\n\nFixable: Some violations can be fixed by tooling\n\nLinks and images in Markdown can provide the link destination or image source at\nthe time of use or can use a label to reference a definition elsewhere in the\ndocument. The three reference formats are convenient for keeping paragraph text\nclutter-free and make it easy to reuse the same URL in multiple places.\n\nBy default, this rule allows all link/image styles.\n\nSetting the `autolink` parameter to `false` disables autolinks:\n\n```markdown\n<https://example.com>\n```\n\nSetting the `inline` parameter to `false` disables inline links and images:\n\n```markdown\n[link](https://example.com)\n\n![image](https://example.com)\n```\n\nSetting the `full` parameter to `false` disables full reference links and\nimages:\n\n```markdown\n[link][url]\n\n![image][url]\n\n[url]: https://example.com\n```\n\nSetting the `collapsed` parameter to `false` disables collapsed reference links\nand images:\n\n```markdown\n[url][]\n\n![url][]\n\n[url]: https://example.com\n```\n\nSetting the `shortcut` parameter to `false` disables shortcut reference links\nand images:\n\n```markdown\n[url]\n\n![url]\n\n[url]: https://example.com\n```\n\nTo fix violations of this rule, change the link or image to use an allowed\nstyle. This rule can automatically fix violations when a link or image can be\nconverted to the `inline` style (preferred) or a link can be converted to the\n`autolink` style (which does not support images and must be an absolute URL).\nThis rule does *not* fix scenarios that require converting a link or image to\nthe `full`, `collapsed`, or `shortcut` reference styles because that involves\nnaming the reference and determining where to insert it in the document.\n\nSetting the `url_inline` parameter to `false` prevents the use of inline links\nwith the same absolute URL text/destination and no title because such links can\nbe converted to autolinks:\n\n```markdown\n[https://example.com](https://example.com)\n```\n\nTo fix `url_inline` violations, use the simpler autolink syntax instead:\n\n```markdown\n<https://example.com>\n```\n\nRationale: Consistent formatting makes it easier to understand a document.\nAutolinks are concise, but appear as URLs which can be long and confusing.\nInline links and images can include descriptive text, but take up more space in\nMarkdown form. Reference links and images can be easier to read and manipulate\nin Markdown form, but require a separate link reference definition.",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "autolink",
+        "default" : "true",
+        "description" : "Allow autolinks"
+      },
+      {
+        "name" : "collapsed",
+        "default" : "true",
+        "description" : "Allow collapsed reference links and images"
+      },
+      {
+        "name" : "full",
+        "default" : "true",
+        "description" : "Allow full reference links and images"
+      },
+      {
+        "name" : "inline",
+        "default" : "true",
+        "description" : "Allow inline links and images"
+      },
+      {
+        "name" : "shortcut",
+        "default" : "true",
+        "description" : "Allow shortcut reference links and images"
+      },
+      {
+        "name" : "url_inline",
+        "default" : "true",
+        "description" : "Allow URLs as inline links"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD055",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Table Pipe Style Consistency",
+    "description" : "Ensures consistent use of leading and trailing pipe characters in GitHub Flavored Markdown tables.",
+    "explanation" : "# `MD055` - Table pipe style\n\nTags: `table`\n\nAliases: `table-pipe-style`\n\nParameters:\n\n- `style`: Table pipe style (`string`, default `consistent`, values\n  `consistent` / `leading_and_trailing` / `leading_only` /\n  `no_leading_or_trailing` / `trailing_only`)\n\nThis rule is triggered when a [GitHub Flavored Markdown table][gfm-table-055]\nis inconsistent about its use of leading and trailing pipe characters (`|`).\n\nBy default (`consistent` style), the header row of the first table in a document\nis used to determine the style that is enforced for all tables in that document.\nA specific style can be required by setting the `style` parameter accordingly.\n\nThis table's header row has leading and trailing pipes, but its delimiter row is\nmissing the trailing pipe and its first row of cells is missing the leading\npipe:\n\n```markdown\n| Header | Header |\n| ------ | ------\n  Cell   | Cell   |\n```\n\nTo fix these issues, make sure there is a pipe character at the beginning and\nend of every row:\n\n```markdown\n| Header | Header |\n| ------ | ------ |\n| Cell   | Cell   |\n```\n\nNote that text immediately following a table (i.e., not separated by an empty\nline) is treated as part of the table (per the specification) and may also\ntrigger this rule:\n\n```markdown\n| Header | Header |\n| ------ | ------ |\n| Cell   | Cell   |\nThis text is part of the table\n```\n\nRationale: Some parsers have difficulty with tables that are missing their\nleading or trailing pipe characters. The use of leading/trailing pipes can also\nhelp provide visual clarity.\n\n[gfm-table-055]: https://github.github.com/gfm/#tables-extension-",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "style",
+        "default" : "consistent",
+        "description" : "Table pipe style"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MD056",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Consistent Table Column Count",
+    "description" : "Ensures that all rows in a GitHub Flavored Markdown table have the same number of columns.",
+    "explanation" : "# `MD056` - Table column count\n\nTags: `table`\n\nAliases: `table-column-count`\n\nThis rule is triggered when a [GitHub Flavored Markdown table][gfm-table-056]\ndoes not have the same number of cells in every row.\n\nThis table's second data row has too few cells and its third data row has too\nmany cells:\n\n```markdown\n| Header | Header |\n| ------ | ------ |\n| Cell   | Cell   |\n| Cell   |\n| Cell   | Cell   | Cell   |\n```\n\nTo fix these issues, ensure every row has the same number of cells:\n\n```markdown\n| Header | Header |\n| ------ | ------ |\n| Cell   | Cell   |\n| Cell   | Cell   |\n| Cell   | Cell   |\n```\n\nNote that a table's header row and its delimiter row must have the same number\nof cells or it will not be recognized as a table (per specification).\n\nRationale: Extra cells in a row are usually not shown, so their data is lost.\nMissing cells in a row create holes in the table and suggest an omission.\n\n[gfm-table-056]: https://github.github.com/gfm/#tables-extension-",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

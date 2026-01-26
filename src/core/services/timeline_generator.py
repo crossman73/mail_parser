@@ -226,17 +226,17 @@ class TimelineGenerator:
             for event in filtered_events
         ]
 
-    def export_timeline(self, timeline_id: str, format: str = 'json') -> str:
+    def export_timeline(self, timeline_id: str, output_format: str = 'json') -> str:
         """타임라인 내보내기"""
         timeline = self.timelines.get(timeline_id)
         if not timeline:
             return ""
 
-        if format.lower() == 'json':
+        if output_format.lower() == 'json':
             import json
             return json.dumps(timeline.to_dict(), ensure_ascii=False, indent=2)
 
-        elif format.lower() == 'csv':
+        elif output_format.lower() == 'csv':
             import csv
             import io
 

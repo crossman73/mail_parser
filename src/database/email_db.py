@@ -483,7 +483,7 @@ class EmailDatabase:
                         try:
                             log_dict['extra_data'] = json.loads(
                                 log_dict['extra_data'])
-                        except:
+                        except Exception:
                             pass
                     logs.append(log_dict)
 

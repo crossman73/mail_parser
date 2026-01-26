@@ -161,6 +161,19 @@ def create_app(config_path: str = None):
         cleanup_thread.start()
         app.logger.info("✅ 임시 파일 자동 정리 스케줄러 시작 (6시간 간격)")
 
+        # 데이터베이스 초기화 (API 문서 수집에 필요)
+        try:
+            from src.database.connection import db_connection
+            db_path = Path(__file__).parent.parent.parent / 'data' / 'db' / 'email_parser.db'
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+            if not db_connection.db_path:
+                if db_connection.initialize(str(db_path)):
+                    print(f"✅ DB 초기화 완료: {db_path}")
+                else:
+                    print("⚠️ DB 초기화 실패")
+        except Exception as e:
+            print(f"⚠️ DB 초기화 오류 (계속 진행): {e}")
+
         # API 문서 자동 수집
         try:
             print("🔍 API 문서 수집 시작...")
@@ -302,11 +315,16 @@ def create_app(config_path: str = None):
         import psutil
 
         try:
+            # Use project root as base so we report filesystem stats for
+            # the environment where the app is running (WSL native copy).
+            base_dir = Path(__file__).parent.parent.parent.resolve()
+
             memory = psutil.virtual_memory()
-            disk = psutil.disk_usage('/')
+            # Disk usage for the filesystem containing the project
+            disk = psutil.disk_usage(str(base_dir))
 
             # 처리된 이메일 통계 (비동기 처리)
-            processed_dir = Path('processed_emails')
+            processed_dir = base_dir / 'processed_emails'
             processed_count = len([d for d in processed_dir.iterdir(
             ) if d.is_dir()]) if processed_dir.exists() else 0
 
@@ -317,8 +335,8 @@ def create_app(config_path: str = None):
                 ), key=lambda x: x.stat().st_mtime, reverse=True)[:5]
                 recent_emails = [d.name for d in recent_dirs if d.is_dir()]
 
-            # 업로드 파일 통계
-            upload_dir = Path('uploads')
+            # 업로드 파일 통계 (프로젝트 루트 기준)
+            upload_dir = base_dir / 'uploads'
             upload_count = len(list(upload_dir.glob('*'))
                                ) if upload_dir.exists() else 0
 
@@ -333,8 +351,8 @@ def create_app(config_path: str = None):
                     'time': datetime.fromtimestamp(f.stat().st_mtime).strftime('%Y-%m-%d %H:%M')
                 } for f in recent_files if f.is_file()]
 
-            # 로그 파일 크기 및 최근 로그
-            log_dir = Path('logs')
+            # 로그 파일 크기 및 최근 로그 (프로젝트 루트 기준)
+            log_dir = base_dir / 'logs'
             log_size = sum(f.stat().st_size for f in log_dir.glob(
                 '*') if f.is_file()) if log_dir.exists() else 0
 
@@ -434,6 +452,38 @@ def create_app(config_path: str = None):
                     'info': f'연결 실패: {str(db_error)}',
                     'healthy': False
                 })
+            # If running under WSL, also include a quick summary of common
+            # Windows-mounted drives (e.g. /mnt/c) so the UI can show host
+            # disk info when useful. This is optional and best-effort.
+            wsl_info = {}
+            try:
+                is_wsl = False
+                if Path('/proc/version').exists():
+                    pv = Path('/proc/version').read_text(errors='ignore')
+                    if 'microsoft' in pv.lower() or 'wsl' in pv.lower():
+                        is_wsl = True
+                if os.environ.get('WSL_DISTRO_NAME'):
+                    is_wsl = True
+
+                if is_wsl:
+                    mounts = {}
+                    for m in ('/mnt/c', '/mnt/d'):
+                        mp = Path(m)
+                        if mp.exists():
+                            try:
+                                usage = psutil.disk_usage(str(mp))
+                                mounts[m] = {
+                                    'total_gb': f"{usage.total / 1024 / 1024 / 1024:.1f}",
+                                    'used_percent': usage.percent,
+                                    'free_gb': f"{usage.free / 1024 / 1024 / 1024:.1f}"
+                                }
+                            except Exception:
+                                mounts[m] = {'error': 'unavailable'}
+                    wsl_info = {'is_wsl': True, 'windows_mounts': mounts}
+                else:
+                    wsl_info = {'is_wsl': False}
+            except Exception:
+                wsl_info = {'is_wsl': False}
 
             return {
                 'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),

@@ -180,5 +180,5 @@ def verify_checksum_file(checksum_path: Union[str, Path]) -> dict:
 
 
 def quick_hash(text: str, length: int = 8) -> str:
-    """빠른 해시 (짧은 식별자용)"""
-    return hashlib.md5(text.encode('utf-8')).hexdigest()[:length]
+    """빠른 해시 (짧은 식별자용) - SHA-256 사용"""
+    return hashlib.sha256(text.encode('utf-8')).hexdigest()[:length]

@@ -1,0 +1,822 @@
+[
+  {
+    "id" : "rulesets-cleancode.xml-BooleanArgumentFlag",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Boolean Flag Arguments",
+    "description" : "This rule detects the use of boolean flag arguments in methods or functions, which often indicate a violation of the Single Responsibility Principle (SRP).",
+    "explanation" : "A boolean flag argument is a reliable indicator for a violation of the Single Responsibility Principle (SRP). You can fix this problem by extracting the logic in the boolean flag into its own class or method.\n\n[Source](http://phpmd.org/rules/cleancode.html#booleanargumentflag)",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-cleancode.xml-DuplicatedArrayKey",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Avoid Defining Duplicate Keys in Array Literals",
+    "description" : "Detects and prevents defining multiple values for the same key in an array literal, which causes the earlier value to be overridden and effectively unused.",
+    "explanation" : "Defining another value for the same key in an array literal overrides the previous key/value, which makes it effectively an unused code. If it's known from the beginning that the key will have different value, there is usually no point in defining first one.\n\n[Source](http://phpmd.org/rules/cleancode.html#duplicatedarraykey)",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-cleancode.xml-ElseExpression",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Else Expressions",
+    "description" : "This rule enforces the use of return statements instead of else expressions to simplify control flow.",
+    "explanation" : "\nInstead of using an else block, you can use an early return statement:\n\n    class Foo\n    {\n        public function bar($flag)\n        {\n            if ($flag) {\n                // one branch\n            } else {\n                // another branch\n            }\n        }\n    }\n\nRewrite without the else:\n\n    class Foo\n    {\n        public function bar($flag)\n        {\n            if ($flag) {\n                // one branch\n                return;\n            }\n\n            // another branch\n        }\n    }\n      ",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-cleancode.xml-ErrorControlOperator",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Error Suppression Operator",
+    "description" : "This rule enforces avoiding the use of the error suppression operator as it suppresses all errors, including unexpected ones.",
+    "explanation" : "Error suppression should be avoided if possible as it doesn't just suppress the error, that you are trying to stop, but will also suppress errors that you didn't predict would ever occur. Consider changing error_reporting() level and/or setting up your own error handler.\n\n[Source](http://phpmd.org/rules/cleancode.html#errorcontroloperator)",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-cleancode.xml-IfStatementAssignment",
+    "level" : "Warning",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Assignments in If Statements",
+    "description" : "Detects and discourages assignments within if statement conditions as they can cause subtle bugs.",
+    "explanation" : "Assignments in if clauses and the like are considered a code smell. Assignments in PHP return the right operand as their result. In many cases, this is an expected behavior, but can lead to many difficult to spot bugs, especially when the right operand could result in zero, null or an empty string and the like.\n\n[Source](http://phpmd.org/rules/cleancode.html#ifstatementassignment)",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-cleancode.xml-MissingImport",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Importing All External Classes via Use Statements",
+    "description" : "This rule enforces that all external classes used in a PHP file are explicitly imported using use statements, making dependencies clearly visible.",
+    "explanation" : "Importing all external classes in a file through use statements makes them clearly visible.\n\n[Source](http://phpmd.org/rules/cleancode.html#MissingImport)",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-cleancode.xml-StaticAccess",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Static Access",
+    "description" : "This rule discourages the use of static access in code.",
+    "explanation" : "\n Static access increases dependencies and leads to hard to test code. You should instead\n inject dependencies through the constructor\n\n [Source](http://phpmd.org/rules/cleancode.html#staticaccess)\n      ",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exceptions",
+        "default" : "",
+        "description" : "Comma-separated class name list of exceptions"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-cleancode.xml-UndefinedVariable",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Using Undefined Variables",
+    "description" : "Detects usage of variables that have not been defined before their use.",
+    "explanation" : "Detects when a variable is used that has not been defined before.\n\n[Source](https://phpmd.org/rules/cleancode.html#undefinedvariable)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-CyclomaticComplexity",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Limit Cyclomatic Complexity",
+    "description" : "This rule reports methods with high cyclomatic complexity, indicating too many decision points within a single method.",
+    "explanation" : "\nCyclomatic complexity is determined by the number of decision points in a method plus one for the method entry.\nThe following keywords create new decision points: 'if', 'while', 'for', and 'case labels'. For example, this\ncode has a cyclomatic complexity level of 2:\n\n    function foo()\n    {\n        $t=date(\"H\");\n        if ($t<\"20\")\n        {\n            echo \"Have a good day!\";\n        }\n    }\n\n1-4 indicates low complexity, 5-7 medium complexity, 8-10 high complexity and 11+ indicates very high complexity.\n\n[Source](http://phpmd.org/rules/codesize.html#cyclomaticcomplexity)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "reportLevel",
+        "default" : "10",
+        "description" : "The Cyclomatic Complexity reporting threshold"
+      },
+      {
+        "name" : "showClassesComplexity",
+        "default" : "true",
+        "description" : "Indicate if class average violation should be included"
+      },
+      {
+        "name" : "showMethodsComplexity",
+        "default" : "true",
+        "description" : "Indicate if method average violation should be included"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-ExcessiveClassComplexity",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Class Complexity",
+    "description" : "Detects classes with a high weighted method count indicating excessive complexity.",
+    "explanation" : "\nThe weighted method count metric is defined as the sum of complexities of all methods declared in a class.\nThis metric is a good indicator how much effort will be necessary to maintain and develop a particular class.\nUsually, a WMC higher than 50 is a sign that you need to refactor your code.\n\n[Source](http://phpmd.org/rules/codesize.html#excessiveclasscomplexity)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "maximum",
+        "default" : "50",
+        "description" : "The maximum WMC tolerable for a class"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-ExcessiveClassLength",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Class Length",
+    "description" : "This rule detects classes that are excessively long in terms of lines of code.",
+    "explanation" : "\nLong Class files are an indicator that the class may be trying to do too much.\nTry to break it down, and reduce the size to something manageable.\n\n[Source](http://phpmd.org/rules/codesize.html#excessiveclasslength)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "minimum",
+        "default" : "1000",
+        "description" : "Reporting threshold for the number of lines in a class"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-ExcessiveMethodLength",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Method Length",
+    "description" : "This rule reports methods that are excessively long, indicating that the method may be doing too much.",
+    "explanation" : "\nLong methods are an indicator that the method is doing too much.\nTry to break it down, and reduce the size to something manageable.\n\n[Source](http://phpmd.org/rules/codesize.html#excessivemethodlength)\n      ",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "minimum",
+        "default" : "100",
+        "description" : "Reporting threshold for the number of lines in a method"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-ExcessiveParameterList",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Parameter Lists",
+    "description" : "Detects methods that have an excessively high number of parameters.",
+    "explanation" : "\nLong parameter lists can indicate that a new object should be created to wrap the numerous parameters.\n\n[Source](http://phpmd.org/rules/codesize.html#excessiveparameterlist)\n      ",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "minimum",
+        "default" : "10",
+        "description" : "Reporting threshold for the number of arguments in a method"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-ExcessivePublicCount",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Public Attributes",
+    "description" : "Detects classes that declare an excessive number of public methods and attributes.",
+    "explanation" : "\nA large number of public methods and attributes declared in a class can indicate\nthe class may need to be broken up. Properly testing a class with a large number of\npublicly exposed members is difficult and time consuming.\n\n[Source](http://phpmd.org/rules/codesize.html#excessivepubliccount)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "minimum",
+        "default" : "45",
+        "description" : "Reporting threshold for the number of public methods and attributes in a class"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-NPathComplexity",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid High NPath Complexity",
+    "description" : "This rule detects methods with a large number of possible code execution paths, indicating high NPath complexity.",
+    "explanation" : "\nNPath complexity measures all the possible code paths in your methods. For example, the following method has NPath complexity of 8:\n\n\n    function foo($value) {\n        $result = '';\n\n        if($value % 3 == 0) {\n            $result .= 'divisible by 3';\n        }\n\n        if($value % 5 == 0) {\n            $result .= 'divisible by 5';\n        }\n\n        if(!$result) {\n            $result = $value;\n        }\n\n        return $result;\n    }\n\nAs a rule of thumb, methods with NPath complexity higher than 200 should be refactored.\n\n[Source](http://phpmd.org/rules/codesize.html#npathcomplexity)\n      ",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "minimum",
+        "default" : "200",
+        "description" : "Reporting threshold"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-TooManyFields",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Fields in Classes",
+    "description" : "Detects classes that have an excessively high number of fields, which can make them difficult to maintain.",
+    "explanation" : "\nClasses with lots of fields are difficult to maintain.\nYou should redesign them and group the information in other classes - ex: instead of `zip`, `city`\nand `country` fields you could have an `Address` class\n\n[Source](http://phpmd.org/rules/codesize.html#toomanyfields)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "maxfields",
+        "default" : "15",
+        "description" : "Reporting threshold for the number of fields in a class"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-TooManyMethods",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Methods in Classes",
+    "description" : "This rule detects classes that contain an excessive number of methods.",
+    "explanation" : "\nClasses with lots of methods are difficult to maintain. You should refactor the code in order to reduce complexity.\n\n[Source](http://phpmd.org/rules/codesize.html#toomanymethods)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "maxmethods",
+        "default" : "10",
+        "description" : "Reporting threshold for the number of methods in a class"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-codesize.xml-TooManyPublicMethods",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Public Methods",
+    "description" : "Detects classes that have an excessive number of public methods, which may indicate high complexity and poor design.",
+    "explanation" : "A class with too many public methods is probably a good suspect for refactoring, in order to reduce its complexity and find a way to have more fine grained objects. By default it ignores methods starting with 'get' or 'set'.\n\n[Source](http://phpmd.org/rules/design.html#toomanypublicmethods)",
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "ignorepattern",
+        "default" : "(^(set|get))i",
+        "description" : "Ignore methods matching this regex"
+      },
+      {
+        "name" : "maxmethods",
+        "default" : "10",
+        "description" : "The method count reporting threshold"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-controversial.xml-CamelCaseClassName",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce CamelCase for Class Names",
+    "description" : "Requires all PHP class names to use CamelCase style.",
+    "explanation" : "\nNaming PHP classes in camel case is considered a best practice. Instead of writing:\n\n    class my_class { }\n\nYou should write:\n\n    class MyClass { }\n\n[Source](http://phpmd.org/rules/controversial.html#camelcaseclassname)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-controversial.xml-CamelCaseMethodName",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce CamelCase in Methods",
+    "description" : "This rule requires all method names to use the CamelCase naming style.",
+    "explanation" : "\nNaming methods in camel case is considered a best practice. Instead of writing:\n\n    class MyClass {\n         public function my_method() { }\n    }\n\nYou should write:\n\n    class MyClass {\n         public function myMethod() { }\n\n    }\n\n[Source](http://phpmd.org/rules/controversial.html#camelcasemethodname)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-controversial.xml-CamelCaseParameterName",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce CamelCase Parameter Names",
+    "description" : "Requires all parameter names in functions and methods to use CamelCase style.",
+    "explanation" : "\nNaming methods in camel case is considered a best practice. Instead of writing:\n\n    class MyClass {\n         public function getSomething($some_argument) { }\n    }\n\nYou should write:\n\n    class MyClass {\n         public function getSomething($someArgument) { }\n    }\n\n[Source](http://phpmd.org/rules/controversial.html#camelcaseparametername)\n      ",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-controversial.xml-CamelCasePropertyName",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Enforce CamelCase in Properties",
+    "description" : "Requires all class property names to use CamelCase style.",
+    "explanation" : "\nNaming class properties in camel case is considered a best practice. Instead of writing:\n\n    class MyClass {\n        protected $my_property;\n    }\n\nYou should write:\n\n    class MyClass {\n        protected $MyProperty;\n    }\n\n[Source](http://phpmd.org/rules/controversial.html#camelcasepropertyname)\n      ",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-controversial.xml-CamelCaseVariableName",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce CamelCase Variable Naming",
+    "description" : "Requires all variable names to use the CamelCase style.",
+    "explanation" : "\nNaming variables in camel case is considered a best practice. Instead of writing:\n\n    class MyClass {\n         public function getSomething() {\n             $some_variable = new Something();\n         }\n    }\n\nYou should write:\n\n    class MyClass {\n         public function getSomething() {\n             $someVariable = new Something();\n         }\n    }\n\n[Source](http://phpmd.org/rules/controversial.html#camelcasevariablename)\n      ",
+    "enabled" : false,
+    "timeToFix" : 3,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-controversial.xml-Superglobals",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Encapsulate Superglobals",
+    "description" : "Prohibits direct access to PHP superglobal variables to promote better code encapsulation.",
+    "explanation" : "\n[Superglobal variables](http://www.php.net/manual/en/language.variables.superglobals.php) in PHP should not be accessed directly.\nInstead of writing:\n\n    $name = $_POST['foo'];\n\nYou should encapsulate the call in an single class.\nMost PHP frameworks already wrap Superglobals into a request object so you can use that.\n\n[Source](http://phpmd.org/rules/controversial.html#superglobals)\n      ",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-CountInLoopExpression",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Avoid Using count/sizeof in Loop Expressions",
+    "description" : "This rule detects the use of count() or sizeof() function calls within loop expressions, which can lead to performance issues and bugs.",
+    "explanation" : "Using count/sizeof in loops expressions is considered bad practice and is a potential source of\nmany bugs, especially when the loop manipulates an array, as count happens on each iteration.\n\nExample to avoid:\n\n    class Foo {\n        public function bar()\n            {\n                $array = array();\n                for ($i = 0; count($array); $i++) {\n                    // ...\n                }\n            }\n    }\n\n[Source](http://phpmd.org/rules/design.html#countinloopexpression)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-CouplingBetweenObjects",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Low Coupling Between Objects",
+    "description" : "Ensures that a class maintains low coupling by limiting its dependencies on other classes.",
+    "explanation" : "A class with too many dependencies has negative impacts on several quality aspects of a class.\nThis includes quality criteria like stability, maintainability and understandability\n\n[Source](http://phpmd.org/rules/design.html#couplingbetweenobjects)",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "maximum",
+        "default" : "13",
+        "description" : "Maximum number of acceptable dependencies."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-DepthOfInheritance",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Class Inheritance Depth",
+    "description" : "Detects classes that have too many parent classes in their inheritance hierarchy.",
+    "explanation" : "\nA class with many parents is an indicator for an unbalanced and wrong class hierarchy.\nYou should consider to refactor this class hierarchy.\n\n[Source](http://phpmd.org/rules/design.html#depthofinheritance)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "minimum",
+        "default" : "6",
+        "description" : "Maximum number of acceptable parent classes"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-DevelopmentCodeFragment",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit Calling Debug Functions in Production Code",
+    "description" : "This rule detects calls to debug functions such as var_dump() and print_r() that are typically used during development but should not remain in production code.",
+    "explanation" : "Functions like var_dump(), print_r() etc. are normally only used during development and therefore such calls in production code are a good indicator that they were just forgotten.\n\n[Source](http://phpmd.org/rules/design.html#developmentcodefragment)",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "ignore-namespaces",
+        "default" : "false",
+        "description" : "Ignore namespaces when looking for dev. fragments"
+      },
+      {
+        "name" : "unwanted-functions",
+        "default" : "var_dump,print_r,debug_zval_dump,debug_print_backtrace",
+        "description" : "Comma separated list of suspect function images."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-EmptyCatchBlock",
+    "level" : "High",
+    "category" : "ErrorProne",
+    "subCategory" : null,
+    "title" : "Avoid Empty Catch Blocks",
+    "description" : "Detects empty catch blocks that silently swallow exceptions without handling them.",
+    "explanation" : "Usually empty try-catch is a bad idea because you are silently swallowing an error condition\nand then continuing execution. Occasionally this may be the right thing to do, but often\nit's a sign that a developer saw an exception, didn't know what to do about it,\nand so used an empty catch to silence the problem.\n\nExample to avoid:\n\n    class Foo {\n        public function bar()\n            {\n                try {\n                    // ...\n                } catch (Exception $e) {} // empty catch block\n            }\n    }\n\n[Source](http://phpmd.org/rules/design.html#emptycatchblock)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-EvalExpression",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Prohibit eval expression",
+    "description" : "This rule prohibits the use of the eval expression in PHP code.",
+    "explanation" : "\nAn eval-expression is untestable, a security risk and bad practice.\nTherefore it should be avoided.\nConsider to replace the eval-expression with regular code.\n\nExample to avoid:\n\n    class Foo {\n        public function bar($param)  {\n            if ($param === 42) {\n                eval('$param = 23;');\n            }\n        }\n    }\n\n[Source](http://phpmd.org/rules/design.html#evalexpression)\n      ",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-ExitExpression",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit Exit Expressions",
+    "description" : "This rule prohibits the use of exit expressions within regular code as they make the code untestable.",
+    "explanation" : "\nAn exit-expression within regular code is untestable and therefore it should be avoided.\nConsider to move the exit-expression into some kind of startup script where an\nerror/exception code is returned to the calling environment.\n\nExample to avoid:\n\n    class Foo {\n        public function bar($param)  {\n            if ($param === 42) {\n                exit(23);\n            }\n        }\n    }\n\n[Source](http://phpmd.org/rules/design.html#exitexpression)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-GotoStatement",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Prohibit goto Statement",
+    "description" : "This rule prohibits the use of the goto statement in PHP code.",
+    "explanation" : "\nGoto makes code harder to read and it is nearly impossible to understand the control flow of an application\nthat uses this language construct. Therefore it should be avoided.\nConsider to replace Goto with regular control structures and separate methods/function, which are easier to read.\n\nExample to avoid:\n\n    class Foo {\n        public function bar($param)  {\n            A:\n            if ($param === 42) {\n                goto X;\n            }\n            Y:\n            if (time() % 42 === 23) {\n                goto Z;\n            }\n            X:\n            if (time() % 23 === 42) {\n                goto Y;\n            }\n            Z:\n            return 42;\n        }\n    }\n\n[Source](http://phpmd.org/rules/design.html#gotostatement)\n      ",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-design.xml-NumberOfChildren",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Number of Class Children",
+    "description" : "This rule detects classes that have an excessive number of child classes, indicating a potentially unbalanced class hierarchy.",
+    "explanation" : "\nA class with an excessive number of children is an indicator for an unbalanced class hierarchy.\nYou should consider to refactor this class hierarchy.\n\n[Source](http://phpmd.org/rules/design.html#numberofchildren)\n      ",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "minimum",
+        "default" : "15",
+        "description" : "Maximum number of acceptable child classes"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-BooleanGetMethodName",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Boolean Method Naming Convention",
+    "description" : "This rule ensures that methods returning boolean values are named using 'isX()' or 'hasX()' instead of 'getX()'.",
+    "explanation" : "\nMethods named 'getX()' should not return boolean types. They should be renamed to 'isX()' or 'hasX()':\n\n    class Foo {\n        /** * @return boolean */\n        public function getFoo() {} // bad\n        /** * @return bool */\n        public function isFoo(); // ok\n    }\n\n[Source](http://phpmd.org/rules/naming.html#booleangetmethodname)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-ConstantNamingConventions",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce uppercase constants",
+    "description" : "Constant names should always be defined in uppercase.",
+    "explanation" : "\n It is a common convention to name constants in uppercase.\n\n[Source](http://phpmd.org/rules/naming.html#constantnamingconventions)\n      ",
+    "enabled" : true,
+    "timeToFix" : 2,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-ConstructorWithNameAsEnclosingClass",
+    "level" : "Warning",
+    "category" : "Compatibility",
+    "subCategory" : null,
+    "title" : "Prohibit Constructor Named As Enclosing Class",
+    "description" : "This rule enforces that constructors in PHP 5+ should not have the same name as their enclosing class, but use the __construct() method instead.",
+    "explanation" : "\n You should use PHP 5 notation for constructors:\n\n    class MyClass {\n        // this is bad because it is PHP 4 style\n        public function MyClass() {}\n        // this is good because it is a PHP 5\n        constructor public function __construct() {}\n    }\n[Source](http://phpmd.org/rules/naming.html#constructorwithnameasenclosingclass)\n      ",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-LongClassName",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid excessively long class names",
+    "description" : "Detects and discourages the use of excessively long class or interface names.",
+    "explanation" : "Avoid excessively long class names like {0}. Keep class name length under {1}.\n\nExample to avoid:\n\n    class ATooLongClassNameThatHintsAtADesignProblem {\n        }\n\n    interface ATooLongInterfaceNameThatHintsAtADesignProblem {\n        }\n\n    class ClassGroupPrefixesThatIsUsedForGrouping {\n        }\n\n[Source](http://phpmd.org/rules/naming.html#longclassname)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "maximum",
+        "default" : "40",
+        "description" : "The class name length reporting threshold"
+      },
+      {
+        "name" : "subtract-prefixes",
+        "default" : "",
+        "description" : "Comma-separated list of prefixes that will not count in the length of the class name. Only the first matching prefix will be subtracted."
+      },
+      {
+        "name" : "subtract-suffixes",
+        "default" : "",
+        "description" : "Comma-separated list of suffixes that will not count in the length of the class name. Only the first matching suffix will be subtracted."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-LongVariable",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Prohibit Long Variable Names",
+    "description" : "Detects when a variable name (field, local variable, or parameter) exceeds 20 characters in length.",
+    "explanation" : "\nVariable names with more than 20 characters are reported as being too long. You should use short names, but they must be long enough to be descriptive.\n\n[Source](http://phpmd.org/rules/naming.html#longvariable)\n      ",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "maximum",
+        "default" : "20",
+        "description" : "Maximum length for a variable"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-ShortClassName",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Classes with Short Names",
+    "description" : "Detects and discourages the use of very short names for classes or interfaces.",
+    "explanation" : "Avoid classes with short names like {0}. Configured minimum length is {1}\n\nExample to avoid:\n\n    class Fo {\n        }\n\n    interface Fo {\n        }\n\n[Source](http://phpmd.org/rules/naming.html#shortclassname)",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "exceptions",
+        "default" : "",
+        "description" : "Comma-separated list of exceptions. Example: Log,URL,FTP"
+      },
+      {
+        "name" : "minimum",
+        "default" : "3",
+        "description" : "The class name length reporting threshold"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-ShortMethodName",
+    "level" : "Info",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Prohibit Short Method Names",
+    "description" : "Detects and prohibits method names that are shorter than three characters to encourage descriptive naming.",
+    "explanation" : "\nMethod names with less than 3 characters are reported as being too small. You should use descriptive method names.\n\n[Source](http://phpmd.org/rules/naming.html#shortmethodname)\n      ",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "exceptions",
+        "default" : "",
+        "description" : "Comma-separated list of exceptions"
+      },
+      {
+        "name" : "minimum",
+        "default" : "3",
+        "description" : "Minimum length for a method"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-naming.xml-ShortVariable",
+    "level" : "Info",
+    "category" : "Comprehensibility",
+    "subCategory" : null,
+    "title" : "Prohibit Short Variable Names",
+    "description" : "Detects and prohibits the use of very short variable names for fields, locals, or parameters.",
+    "explanation" : "\nYou should use descriptive names in your variables. Variables with short names make the code harder to read.\n\n[Source](http://phpmd.org/rules/naming.html#shortvariable)\n      ",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "exceptions",
+        "default" : "",
+        "description" : "Comma-separated list of exceptions"
+      },
+      {
+        "name" : "minimum",
+        "default" : "3",
+        "description" : "Minimum length for a variable"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-unusedcode.xml-UnusedFormalParameter",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Prohibit Unused Formal Parameters",
+    "description" : "This rule prohibits the definition of unused parameters in methods or constructors.",
+    "explanation" : "\nAvoid passing parameters to methods or constructors and then not using those parameters.\n\n[Source](http://phpmd.org/rules/unusedcode.html#unusedformalparameter)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-unusedcode.xml-UnusedLocalVariable",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Prohibit Unused Local Variables",
+    "description" : "Detects and prohibits the definition or assignment of local variables that are never used within the code.",
+    "explanation" : "\nDetects when a local variable is declared and/or assigned, but not used.\n\n[Source](http://phpmd.org/rules/unusedcode.html#unusedlocalvariable)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-unusedcode.xml-UnusedPrivateField",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Prohibit Unused Private Variables",
+    "description" : "Detects and prohibits the declaration or assignment of private variables that are never used within the code.",
+    "explanation" : "\nDetects when a private field is declared and/or assigned a value, but not used.\n\n[Source](http://phpmd.org/rules/unusedcode.html#unusedprivatefield)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "rulesets-unusedcode.xml-UnusedPrivateMethod",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Prohibit Unused Private Methods",
+    "description" : "Detects private methods that are declared but never used within the class.",
+    "explanation" : "\nUnused Private Method detects when a private method is declared but is unused.\n\n[Source](http://phpmd.org/rules/unusedcode.html#unusedprivatemethod)\n      ",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

@@ -552,7 +552,9 @@ def api_restart_service():
 
             # Windows에서는 프로세스 재시작
             if sys.platform == 'win32':
-                os.execv(sys.executable, ['python'] + sys.argv)
+                # 첫 번째 인자는 실행 파일 경로여야 하므로
+                # `sys.executable`을 both path and argv[0]로 전달합니다.
+                os.execv(sys.executable, [sys.executable] + sys.argv)
             else:
                 # Unix/Linux에서는 SIGHUP 시그널 사용
                 os.kill(os.getpid(), signal.SIGHUP)

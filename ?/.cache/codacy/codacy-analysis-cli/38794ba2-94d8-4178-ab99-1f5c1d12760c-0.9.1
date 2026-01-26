@@ -1,0 +1,32 @@
+[
+  {
+    "id" : "Insecure Dependency",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Disallow Insecure Dependencies",
+    "description" : "This rule disallows the use of dependencies with known vulnerabilities in Ruby projects.",
+    "explanation" : "It is common for applications to have dependencies and these dependencies can\nhave bugs which are hard to detect and can cause security\nholes in the application. By checking the Gemfile.lock file, developers are\nwarned  of gem versions with known security issues in order to avoid bugs more\neasily.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "Insecure Source",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Disallow Insecure Source URIs",
+    "description" : "This rule disallows the use of insecure source URIs in Ruby gem dependencies, enforcing the use of secure protocols.",
+    "explanation" : "Checking insecure gem sources is essential once they can be harmful\nand susceptible to attacks.\n\n\nHttps should be used:\n\n`source 'https://rubygems.org'`\n\ninstead of http:\n\n`source 'http://rubygems.org'`\n\n\nHttps should be used:\n\n`gem 'rails', :git => 'https://github.com/rails/rails.git'`\n\ninstead of ssh:\n \n `gem 'rails', :git => 'git@github.com:rails/rails.git'`",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

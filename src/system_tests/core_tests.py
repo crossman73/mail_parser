@@ -8,7 +8,7 @@ from typing import Any, Dict
 def test_web_application() -> Dict[str, Any]:
     """웹 애플리케이션 테스트"""
     try:
-        from src.web.app_factory import create_app
+        from src.web.app import create_app
 
         app = create_app()
 
@@ -43,7 +43,7 @@ def test_web_application() -> Dict[str, Any]:
 def test_health_check() -> Dict[str, Any]:
     """헬스체크 엔드포인트 테스트"""
     try:
-        from src.web.app_factory import create_app
+        from src.web.app import create_app
 
         app = create_app()
         client = app.test_client()
@@ -236,7 +236,7 @@ def test_forensic_integrity_service() -> Dict[str, Any]:
 def test_api_endpoints() -> Dict[str, Any]:
     """API 엔드포인트 테스트"""
     try:
-        from src.web.app_factory import create_app
+            from src.web.app import create_app
 
         app = create_app()
         client = app.test_client()

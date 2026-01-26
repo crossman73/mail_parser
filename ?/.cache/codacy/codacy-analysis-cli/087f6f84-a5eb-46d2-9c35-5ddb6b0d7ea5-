@@ -1,0 +1,17 @@
+[
+  {
+    "id" : "deadcode",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Avoid Dead Code",
+    "description" : "Detects code that is never used or unreachable in the codebase.",
+    "explanation" : "# Deadcode\n\nCode that is never used.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

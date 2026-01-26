@@ -247,14 +247,14 @@ class EvidenceService:
             'date_range': date_range
         }
 
-    def export_evidence_list(self, format: str = 'json') -> str:
+    def export_evidence_list(self, output_format: str = 'json') -> str:
         """증거 목록 내보내기"""
         evidence_list = self.get_evidence_list()
 
-        if format.lower() == 'json':
+        if output_format.lower() == 'json':
             return json.dumps(evidence_list, ensure_ascii=False, indent=2)
 
-        elif format.lower() == 'csv':
+        elif output_format.lower() == 'csv':
             import csv
             import io
 

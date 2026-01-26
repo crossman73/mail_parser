@@ -1,0 +1,3332 @@
+[
+  {
+    "id" : "access",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Detect Potential Security Flaws in access() Calls",
+    "description" : "Detects potential security vulnerabilities related to the use of access() system calls that can lead to race conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "AddAccessAllowedAce",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid AddAccessAllowedAce calls without setting inheritance bits",
+    "description" : "Detects AddAccessAllowedAce calls that do not set the inheritance bits in the access control entry (ACE) header.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "atoi",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of atoi",
+    "description" : "Detects usage of the atoi function which can lead to unchecked integer conversion and potential overflow.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "atol",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unchecked use of atol",
+    "description" : "Detects potential security problems when using atol without checking the result, which can exceed the expected numeric range.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "bcopy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of bcopy",
+    "description" : "Detects potential security problems in bcopy calls that do not check for buffer overflows when copying to destination.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "char",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect Potential Security Problems in char Array Usage",
+    "description" : "This rule identifies potential security issues related to the use of statically-sized char arrays, which can lead to buffer overflows or similar vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "chgrp",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid Race Condition in chgrp Calls",
+    "description" : "Detects potential security problems in chgrp calls where filename arguments can lead to race conditions if an attacker can move those files.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "chmod",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid insecure use of chmod with filename arguments",
+    "description" : "Detects potential security vulnerabilities in chmod calls when using filename arguments that can be manipulated by attackers, leading to race conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "chown",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid insecure use of chown calls",
+    "description" : "Detects potential security problems in chown system calls that accept filename arguments vulnerable to race conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "chroot",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Detect Potential Security Issues in chroot Calls",
+    "description" : "This rule identifies potential security problems when using the chroot system call in C and C++ code.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CoImpersonateClient",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Avoid failing CoImpersonateClient calls",
+    "description" : "Detects potential security problems when the CoImpersonateClient call fails, which may result in failure to drop heightened privileges.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CopyMemory",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe CopyMemory Calls",
+    "description" : "Detects potential security problems in CopyMemory calls that do not check for buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CreateProcess",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe Use of CreateProcess Calls",
+    "description" : "Detects potentially unsafe use of CreateProcess calls that can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CreateProcessAsUser",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe Use of CreateProcessAsUser",
+    "description" : "Detects potentially unsafe uses of the CreateProcessAsUser API that can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "CreateProcessWithLogon",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe Use of CreateProcessWithLogon",
+    "description" : "Detects potentially unsafe usage of the CreateProcessWithLogon function that can cause security issues.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "crypt",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using Weak crypt() Function",
+    "description" : "Detects usage of the crypt() function which employs a weak one-way hashing algorithm with limited password and salt length, making it vulnerable to dictionary attacks.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "crypt_r",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using crypt_r with Weak Hashing Algorithm",
+    "description" : "Detects usage of crypt_r functions that use a weak one-way hashing algorithm with limited password and salt length, making them vulnerable to dictionary attacks.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "curl_getenv",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using curl_getenv with Untrusted Environment Variables",
+    "description" : "Detects use of curl_getenv to access environment variables that may be controlled by an attacker, posing security risks.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "cuserid",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid use of cuserid() function",
+    "description" : "Detects usage of the cuserid() function which is insecure and non-portable.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "drand48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using drand48 for Security-Sensitive Randomness",
+    "description" : "Detects use of drand48 function which is not sufficiently random for security-sensitive purposes such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "equal",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of equal calls",
+    "description" : "Detects unsafe usage of equal calls where the second iterator is not checked for over-read conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "erand48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using erand48 for Security-Critical Randomness",
+    "description" : "Detects usage of erand48 function which is not sufficiently random for security-related functions like key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_des_cbc",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Use of EVP_des_cbc (DES with CBC mode)",
+    "description" : "Detects use of EVP_des_cbc which implements DES encryption with a 56-bit key size, considered insecure due to short key length.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_des_cfb",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using EVP_des_cfb Due to Weak DES Encryption",
+    "description" : "Detects usage of EVP_des_cfb which uses DES encryption with a 56-bit key size, considered insecure.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_des_ecb",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using EVP_des_ecb for Encryption",
+    "description" : "This rule detects usage of the EVP_des_ecb encryption function which uses DES with a 56-bit key size.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_des_ofb",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using EVP_des_ofb with DES",
+    "description" : "Detects use of EVP_des_ofb which employs DES encryption with a 56-bit key size, considered insecure.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_desx_cbc",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using EVP_desx_cbc with DES Encryption",
+    "description" : "Detects use of EVP_desx_cbc which relies on DES encryption with a 56-bit key size, considered insecure.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_rc2_40_cbc",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using EVP_rc2_40_cbc with Small Key Sizes",
+    "description" : "Detects usage of EVP_rc2_40_cbc encryption calls with small key sizes that are insecure for modern computing standards.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_rc2_64_cbc",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using EVP_rc2_64_cbc with Small Key Sizes",
+    "description" : "Detects usage of EVP_rc2_64_cbc encryption with keysizes that are too small for modern security standards.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "EVP_rc4_40",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using EVP_rc4_40 with Small Key Sizes",
+    "description" : "Detects usage of EVP_rc4_40 calls which use small key sizes that are insecure by modern standards.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "execl",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid unsafe use of execl calls",
+    "description" : "Detects potentially unsafe usage of execl calls that can lead to security vulnerabilities such as command injection.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "execle",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid insecure use of execle calls",
+    "description" : "Detects potentially unsafe usage of execle calls that execute new programs, which can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "execlp",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe Use of execlp Calls",
+    "description" : "Detects potentially unsafe use of execlp calls that can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "execv",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe execv Calls",
+    "description" : "Detects potentially unsafe use of execv calls which execute new programs and can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "execvp",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe Use of execvp",
+    "description" : "Detects potentially unsafe use of the execvp function which executes a new program, posing security risks.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fgetc",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Check Buffer Boundaries in fgetc Calls",
+    "description" : "Detects potential security problems related to buffer boundary checking when using fgetc in loops, including recursive loops.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fopen",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid Unsafe fopen Calls",
+    "description" : "Detects potentially insecure usage of fopen that can lead to security vulnerabilities such as symlink attacks, race conditions, or opening special device files.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe fprintf Usage",
+    "description" : "Detects potential security issues in fprintf calls where format strings can be influenced by an attacker.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fread",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect Potential Security Issues in fread Calls",
+    "description" : "This rule identifies potential security problems related to the use of the fread function in C and C++ programs.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fscanf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe fscanf %s usage",
+    "description" : "Detects unsafe usage of fscanf() with %s format specifier without length limit, which can cause buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_ftcscat",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of _ftcscat",
+    "description" : "Detects potential security problems related to buffer overflows when using _ftcscat for string concatenation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_ftcscpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe _ftcscpy usage",
+    "description" : "Detects potential security problems in _ftcscpy calls that do not check for buffer overflows when copying to destination.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_ftprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe _ftprintf Calls",
+    "description" : "Detects potential security vulnerabilities in _ftprintf function calls when format strings can be influenced by an attacker.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_ftscanf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe _ftscanf %s usage",
+    "description" : "Detects unsafe usage of the _ftscanf function with %s format specifier without a length limit, which can cause buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fvwprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid insecure use of fvwprintf",
+    "description" : "Detects potential security problems in the use of fvwprintf calls where format strings may be attacker-controlled.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fwprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid insecure usage of fwprintf with attacker-controlled format strings",
+    "description" : "Detects potential security vulnerabilities in fwprintf calls where format strings can be influenced by an attacker, leading to format string attacks (CWE-134).",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "fwscanf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of fwscanf with %s specifier",
+    "description" : "Detects usage of fwscanf with %s format specifier without a length limit, which can lead to buffer overflow vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getc",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of getc",
+    "description" : "Detects potential security problems related to the use of getc calls, especially regarding buffer boundaries in loops.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getchar",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of getchar()",
+    "description" : "Detects potential security problems caused by unsafe use of getchar() calls, especially in loops without proper buffer boundary checks.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getenv",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of getenv",
+    "description" : "Detects potential security issues when using getenv to access environment variables.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getlogin",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Avoid Using getlogin() for Security-Related Purposes",
+    "description" : "Detects usage of getlogin() which is unreliable and insecure for identifying the current user in security-sensitive contexts.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getopt",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe getopt Calls",
+    "description" : "Detects usage of older getopt implementations that may cause internal buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getopt_long",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe getopt_long Calls",
+    "description" : "Detects potential security problems in calls to getopt_long, particularly buffer overflows in older implementations.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getpass",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using Obsolete getpass Function",
+    "description" : "Detects usage of the obsolete and non-portable getpass function which can cause security and compatibility issues.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getpw",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using getpw Function",
+    "description" : "Detects usage of the getpw function which is potentially dangerous due to buffer overflow risks and insecure access to protected data.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "gets",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid using gets function",
+    "description" : "Detects usage of the unsafe gets function which does not check for buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_gettc",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Check buffer boundaries in _gettc calls",
+    "description" : "Detects potential security issues related to buffer boundaries when using _gettc calls, especially in loops including recursive loops.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "GetTempFileName",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid insecure use of GetTempFileName",
+    "description" : "Detects potential security vulnerabilities related to the use of GetTempFileName which can lead to temporary file race conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_getts",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid _getts Calls",
+    "description" : "Detects usage of _getts function calls which do not check for buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "getwd",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using getwd Calls",
+    "description" : "Detects usage of getwd calls which may lead to security vulnerabilities such as buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_get_home_dir",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using g_get_home_dir Due to Untrusted Input",
+    "description" : "Detects usage of g_get_home_dir function which returns untrusted environment input that can be manipulated by attackers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_get_tmp_dir",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using g_get_tmp_dir for Temporary Directory Retrieval",
+    "description" : "Detects usage of g_get_tmp_dir function which returns untrusted input from environment variables that can be manipulated by attackers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_rand_boolean",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_rand_boolean for Security-Sensitive Randomness",
+    "description" : "Detects usage of g_rand_boolean function which is not sufficiently random for security-related functions such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_rand_double",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid using g_rand_double for security-related randomness",
+    "description" : "Detects use of g_rand_double function which is not sufficiently random for security-sensitive operations such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_rand_double_range",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid use of g_rand_double_range for security-sensitive randomness",
+    "description" : "Detects use of g_rand_double_range function which is not sufficiently random for security-related purposes such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_rand_int",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_rand_int for Security-Critical Randomness",
+    "description" : "Detects usage of g_rand_int function which provides insufficient randomness for security-related purposes such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_rand_int_range",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_rand_int_range for Security-Critical Randomness",
+    "description" : "Detects use of g_rand_int_range function which is not sufficiently random for security-related purposes such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_random_boolean",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_random_boolean for Security-Sensitive Randomness",
+    "description" : "Detects use of the g_random_boolean function which is not sufficiently random for security-related purposes such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_random_double",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_random_double for Security-Critical Randomness",
+    "description" : "Detects usage of g_random_double function which is not sufficiently random for security-sensitive purposes such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_random_double_range",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_random_double_range for Security-Critical Randomness",
+    "description" : "Detects usage of g_random_double_range function which is not sufficiently random for security-related purposes such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_random_int",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_random_int for Security-Sensitive Randomness",
+    "description" : "Detects usage of g_random_int which is not sufficiently random for security-sensitive functions such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "g_random_int_range",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using g_random_int_range for Security-Critical Randomness",
+    "description" : "Detects use of g_random_int_range function which is not suitable for security-related randomness such as key or nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "gsignal",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid use of obsolete gsignal functions",
+    "description" : "Detects usage of obsolete and non-portable gsignal and ssignal functions which can lead to compatibility and security issues.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ImpersonateDdeClientWindow",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Detect Potential Security Issues in ImpersonateDdeClientWindow Calls",
+    "description" : "This rule detects potential security problems when the ImpersonateDdeClientWindow call fails, which may prevent the program from properly dropping elevated privileges.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ImpersonateLoggedOnUser",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Detect potential security problems in ImpersonateLoggedOnUser calls",
+    "description" : "Detects potential security issues when the ImpersonateLoggedOnUser call fails, which may prevent the program from dropping heightened privileges.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ImpersonateNamedPipeClient",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Detect Potential Security Issues in ImpersonateNamedPipeClient Calls",
+    "description" : "This rule identifies potential security problems when the ImpersonateNamedPipeClient function call fails, which may prevent the program from properly dropping elevated privileges.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ImpersonateSecurityContext",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Detect Potential Security Issues in ImpersonateSecurityContext Calls",
+    "description" : "This rule detects potential security problems when the ImpersonateSecurityContext call fails to drop elevated privileges properly.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "InitializeCriticalSection",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "UnexpectedBehaviour",
+    "title" : "Avoid Exceptions in InitializeCriticalSection Calls",
+    "description" : "Detects potential security problems caused by exceptions thrown in InitializeCriticalSection calls in low-memory situations.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "is_permutation",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of is_permutation that may cause iterator over-read",
+    "description" : "Detects unsafe use of the is_permutation function where the second iterator is not properly checked, potentially causing buffer over-read.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "jrand48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using jrand48 for Security-Related Randomness",
+    "description" : "Detects usage of the jrand48 function which is not sufficiently random for security-related purposes such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lcong48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using lcong48 for Security-Critical Randomness",
+    "description" : "Detects usage of the lcong48 function which is insufficiently random for security-related purposes such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LoadLibrary",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Ensure Full Path in LoadLibrary Calls",
+    "description" : "Checks that LoadLibrary calls specify the full path to the library to avoid loading from the current directory.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LoadLibraryEx",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Ensure Full Path in LoadLibraryEx Calls",
+    "description" : "This rule checks that the full path to the library is specified in LoadLibraryEx calls to avoid using the current directory implicitly.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lrand48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid using lrand48 for security-sensitive randomness",
+    "description" : "Detects usage of lrand48 function which is not sufficiently random for security-related functions such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of lstrcat",
+    "description" : "Detects potential security problems when using lstrcat calls that do not check for buffer overflows during string concatenation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcatA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of lstrcatA",
+    "description" : "Detects potential security problems caused by unsafe usage of lstrcatA calls that do not check for buffer overflows when concatenating strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcatn",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Incorrect Usage of lstrcatn",
+    "description" : "Detects potential security problems caused by incorrect use of the lstrcatn function, such as miscalculating the maximum buffer size to append.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcatnA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of lstrcatnA",
+    "description" : "Detects potential security issues in calls to lstrcatnA where buffer overflows are not properly checked when concatenating to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcatnW",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of lstrcatnW",
+    "description" : "Detects potential security problems in lstrcatnW calls where buffer overflows are not checked when concatenating to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcatW",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe usage of lstrcatW",
+    "description" : "Detects usage of lstrcatW function calls that do not check for buffer overflows when concatenating strings to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of lstrcpy",
+    "description" : "Detects use of lstrcpy function which does not check for buffer overflows when copying to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcpyA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of lstrcpyA",
+    "description" : "Detects unsafe usage of the lstrcpyA function that does not check for buffer overflows when copying to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcpyn",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Incorrect Use of lstrcpyn",
+    "description" : "Detects potential security issues in calls to lstrcpyn, which can be misused and may not always null-terminate strings or check for invalid pointers.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcpynA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid insecure use of lstrcpynA calls",
+    "description" : "Detects potential security problems related to the use of lstrcpynA function calls that do not properly check for buffer overflows when copying to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcpynW",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of lstrcpynW",
+    "description" : "Detects potential security problems in lstrcpynW calls that do not properly check for buffer overflows when copying to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrcpyW",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of lstrcpyW",
+    "description" : "Detects unsafe usage of lstrcpyW function calls that do not check for buffer overflows when copying to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "lstrncat",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of lstrncat",
+    "description" : "Detects potential security problems in lstrncat calls that do not properly check for buffer overflows when concatenating to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbccat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of _mbccat function",
+    "description" : "Detects potential security problems related to the use of _mbccat function which does not check for buffer overflows when concatenating strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbccpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid _mbccpy Calls Without Buffer Overflow Checks",
+    "description" : "Detects uses of the _mbccpy function that do not check for buffer overflows when copying to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbscat",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe _mbscat Calls",
+    "description" : "Detects usage of _mbscat function that can cause buffer overflows when concatenating strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbscpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid _mbscpy Calls",
+    "description" : "Detects use of _mbscpy function calls that do not check for buffer overflows when copying to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbslen",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe _mbslen Calls",
+    "description" : "Detects usage of _mbslen function calls that may cause buffer over-read if strings are not null-terminated.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbsnbcat",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of _mbsnbcat",
+    "description" : "Detects potential security problems in the use of the _mbsnbcat function, which is easily used incorrectly, such as computing the wrong maximum size to add.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbsnbcpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Incorrect Use of _mbsnbcpy",
+    "description" : "Detects potential security issues when using _mbsnbcpy function which may not always null-terminate or check for invalid pointers.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_mbsncpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of _mbsncpy",
+    "description" : "Detects potential security problems in _mbsncpy calls that do not check for buffer overflows when copying to the destination.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "memalign",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe memalign Usage",
+    "description" : "Detects potential security issues related to the use of memalign() function calls.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "memcpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe memcpy Usage",
+    "description" : "Detects potentially unsafe usage of memcpy that may cause buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "mismatch",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Usage of std::mismatch",
+    "description" : "Detects potential security problems when using std::mismatch without properly checking the second iterator for over-read conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "mkstemp",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Detect Potential Security Vulnerabilities in mkstemp Calls",
+    "description" : "Detects potential security issues in the use of mkstemp for creating temporary files, particularly related to file permissions and atomicity of file creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "mktemp",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid insecure mktemp usage",
+    "description" : "Detects insecure usage of mktemp function that can lead to temporary file race conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "mrand48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid using mrand48 for security-related randomness",
+    "description" : "Detects usage of mrand48 function which is not sufficiently random for security-critical operations such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MultiByteToWideChar",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Ensure MultiByteToWideChar Maximum Length Is in Characters",
+    "description" : "Checks that the maximum length parameter in MultiByteToWideChar calls is specified in characters rather than bytes to prevent buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "nrand48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using nrand48 for Security-Critical Randomness",
+    "description" : "Detects usage of the nrand48 function which is not sufficiently random for security-related functions such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "open",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Detect Potential Security Issues in open() Calls",
+    "description" : "Checks calls to open() function for potential security vulnerabilities such as symlink attacks, race conditions, and unauthorized file access.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "popen",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe Use of popen",
+    "description" : "Detects potentially unsafe use of the popen function that executes a new program, which can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "printf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of printf with Untrusted Format Strings",
+    "description" : "Detects potential security problems in printf calls where the format string can be influenced by an attacker.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "random",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using Insufficiently Random Functions for Security",
+    "description" : "Detects use of random functions that are not secure enough for cryptographic purposes such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "read",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Check Buffer Boundaries in read Calls",
+    "description" : "Ensures that buffer boundaries are properly checked when using read calls, especially in loops including recursive ones.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "readlink",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid insecure use of readlink",
+    "description" : "Detects potential security problems in the use of readlink calls that accept filename arguments, which can lead to race conditions and non-terminated strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "readv",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect Potential Security Issues in readv Calls",
+    "description" : "This rule identifies potential security problems related to the use of the readv function, which accepts input from outside the program.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "realpath",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe realpath usage",
+    "description" : "Detects potential security problems in calls to the realpath function, which may not protect against buffer overflows and can overflow internally in some implementations.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "recv",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect Potential Security Issues in recv Calls",
+    "description" : "This rule identifies potential security problems related to the use of the recv function, which accepts input from external sources.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "recvfrom",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of recvfrom calls",
+    "description" : "Detects potential security issues in the use of the recvfrom function which accepts input from external sources.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "recvmsg",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect Potential Security Issues in recvmsg Calls",
+    "description" : "Identifies potential security problems related to the use of the recvmsg function which accepts input from external sources.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RpcImpersonateClient",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Check RpcImpersonateClient Call Success",
+    "description" : "Ensures that the RpcImpersonateClient call succeeds to properly drop heightened privileges.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "scanf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe scanf %s Usage",
+    "description" : "Detects unsafe usage of scanf() family %s format specifier without a length limit which can cause buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "seed48",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using seed48 for Security-Critical Randomness",
+    "description" : "Detects use of the seed48 function which is not sufficiently random for security-related functions such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SetSecurityDescriptorDacl",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Creating NULL ACLs with SetSecurityDescriptorDacl",
+    "description" : "Detects potential security issues when SetSecurityDescriptorDacl is called with a NULL ACL, which can allow attackers to set overly permissive or restrictive access controls.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "setstate",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid using setstate for security-related randomness",
+    "description" : "Detects usage of the setstate function which is not sufficiently random for security-critical operations like key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SetThreadToken",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Detect Potential Security Issues in SetThreadToken Calls",
+    "description" : "This rule detects potential security problems when the SetThreadToken function call fails, which may prevent the program from properly dropping elevated privileges.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ShellExecute",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe ShellExecute Calls",
+    "description" : "Detects usage of ShellExecute calls that can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "snprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid insecure usage of snprintf",
+    "description" : "Detects potential security problems in snprintf calls where format strings may be attacker-controlled, leading to format string vulnerabilities and improper string termination.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_snprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect Potential Security Issues in _snprintf Calls",
+    "description" : "This rule identifies potential security vulnerabilities related to the use of _snprintf, especially when format strings can be influenced by an attacker and the function may not always null-terminate the output.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_sntprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of _sntprintf",
+    "description" : "Detects potential security problems in _sntprintf calls, especially when format strings can be influenced by attackers or when null-termination is not guaranteed.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "sprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of sprintf",
+    "description" : "Detects potentially unsafe usage of sprintf calls that can lead to buffer overflow vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "srand",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using srand for Security-Sensitive Randomness",
+    "description" : "Detects usage of srand function which is not sufficiently random for security-related purposes such as key and nonce generation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "srandom",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using srandom for Security-Sensitive Randomness",
+    "description" : "Detects usage of the srandom function which is not sufficiently random for security-related purposes such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "sscanf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of sscanf with %s specifier",
+    "description" : "Detects usage of sscanf with the %s format specifier without specifying a maximum field width, which can lead to buffer overflow vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ssignal",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid usage of ssignal function",
+    "description" : "Detects usage of the obsolete and non-portable ssignal function in C and C++ code.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_stprintf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of _stprintf",
+    "description" : "Detects potential security issues caused by using _stprintf which does not check for buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strcadd",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of strcadd",
+    "description" : "Detects potential security problems in strcadd calls that can cause buffer overflows if the buffer size is incorrectly specified.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strcat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of strcat",
+    "description" : "Detects potentially unsafe use of strcat function which can cause buffer overflows when concatenating strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of strcat",
+    "description" : "Detects unsafe use of strcat calls that do not check for buffer overflows when concatenating strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCatA",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of StrCatA",
+    "description" : "Detects potential security problems in StrCatA calls that do not check for buffer overflows when concatenating to the destination string.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strCatBuff",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of strCatBuff",
+    "description" : "Detects potential security problems in strCatBuff calls where buffer overflows are not checked during string concatenation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCatBuffA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of StrCatBuffA",
+    "description" : "Detects unsafe usage of StrCatBuffA calls that do not check for buffer overflows when concatenating to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCatBuffW",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe usage of StrCatBuffW",
+    "description" : "Detects potential security issues when using StrCatBuffW calls that do not check for buffer overflows during string concatenation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCatChainW",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of StrCatChainW",
+    "description" : "Detects potential security problems in StrCatChainW calls where buffer overflows are not checked when concatenating to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCatN",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of StrCatN",
+    "description" : "Detects potential buffer overflow vulnerabilities when using StrCatN to concatenate strings without proper bounds checking.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCatNA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of StrCatNA",
+    "description" : "Detects potential security problems in StrCatNA calls that do not check for buffer overflows when concatenating to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCatNW",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of StrCatNW",
+    "description" : "Detects unsafe use of StrCatNW function that does not check for buffer overflows when concatenating to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrcatW",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of StrcatW",
+    "description" : "Detects unsafe usage of StrcatW function that can cause buffer overflows when concatenating strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strccpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of strccpy",
+    "description" : "Detects potential security problems in calls to strccpy which can cause buffer overflows if the destination buffer is smaller than expected.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strcpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of strcpy",
+    "description" : "Detects unsafe usage of strcpy which can lead to buffer overflows when copying to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using strcpy to Prevent Buffer Overflows",
+    "description" : "Detects usage of strcpy calls that do not check for buffer overflows when copying to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strcpyA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe strcpyA calls",
+    "description" : "Detects potential security problems in strcpyA calls that do not check for buffer overflows when copying to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCpyA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of StrCpyA calls",
+    "description" : "Detects potential security problems in StrCpyA function calls that do not check for buffer overflows when copying to the destination.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCpyN",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe StrCpyN calls",
+    "description" : "Detects usage of StrCpyN functions that do not properly check for buffer overflows when copying to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strcpynA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe usage of strcpynA",
+    "description" : "Detects potentially unsafe usage of the strcpynA function that does not check for buffer overflows when copying to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCpyNA",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of StrCpyNA",
+    "description" : "Detects potential security problems in StrCpyNA calls that do not check for buffer overflows when copying to destination.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrCpyNW",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of StrCpyNW",
+    "description" : "Detects potential security problems related to unsafe use of StrCpyNW calls that do not properly check for buffer overflows when copying to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strcpyW",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe strcpyW usage",
+    "description" : "Detects potentially unsafe use of strcpyW function calls that do not check for buffer overflows when copying data to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "streadd",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using streadd Function",
+    "description" : "Detects usage of the streadd function which does not protect against buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strecpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using strecpy Function",
+    "description" : "Detects usage of the strecpy function which does not protect against buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strfry",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid using strfry for security-related randomness",
+    "description" : "Detects use of the strfry function which provides insufficient randomness for security purposes such as key and nonce creation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strlen",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of strlen on non-null-terminated strings",
+    "description" : "Detects usage of strlen function on strings that may not be null-terminated, which can lead to buffer over-reads and potential crashes.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strncat",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Incorrect Use of strncat",
+    "description" : "Detects potential security problems caused by incorrect use of strncat function calls in C and C++ code.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrNCat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe strncat usage",
+    "description" : "Detects potential buffer overflow vulnerabilities in calls to strncat when concatenating to destination buffers without proper bounds checking.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrNCatA",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of StrNCatA",
+    "description" : "Detects potential security problems in StrNCatA calls that do not properly check for buffer overflows when concatenating to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrNCatW",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe StrNCatW calls",
+    "description" : "Detects usage of StrNCatW function calls that do not properly check for buffer overflows when concatenating to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strncpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Incorrect Use of strncpy",
+    "description" : "Detects potential security problems in calls to strncpy, such as missing null-termination or invalid pointer usage.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrNCpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of strncpy",
+    "description" : "Detects potentially unsafe usage of strncpy that may lead to buffer overflows when copying to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrNCpyA",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid unsafe use of StrNCpyA calls",
+    "description" : "Detects potential security problems in StrNCpyA function calls that do not properly check for buffer overflows when copying to the destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "StrNCpyW",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of StrNCpyW",
+    "description" : "Detects unsafe usage of StrNCpyW function calls that do not properly check for buffer overflows when copying to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "strtrns",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe strtrns Calls",
+    "description" : "Detects usage of strtrns function which does not protect against buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "swprintf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Potential Buffer Overflow in swprintf Calls",
+    "description" : "Detects use of swprintf function calls that do not check for buffer overflows, which can lead to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "syslog",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Untrusted Input in syslog Format Strings",
+    "description" : "Detects potential security vulnerabilities when syslog format strings can be influenced by an attacker.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "system",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Using system() Calls",
+    "description" : "Detects use of system calls that execute new programs, which can be unsafe.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tccat",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of _tccat calls",
+    "description" : "Detects potential security problems related to buffer overflows when using _tccat function calls for string concatenation.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tccpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid using _tccpy to prevent buffer overflows",
+    "description" : "Detects usage of _tccpy function calls which do not check for buffer overflows when copying data to a destination buffer.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TCHAR",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Potential Security Problems in TCHAR Calls",
+    "description" : "Detects potential security issues related to statically-sized TCHAR arrays that may lead to buffer overflows or similar vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tcscat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of _tcscat",
+    "description" : "Detects potential security problems caused by unsafe use of _tcscat which can lead to buffer overflows when concatenating strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tcscpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe _tcscpy Usage",
+    "description" : "Detects usage of _tcscpy function calls that do not check for buffer overflows when copying to destination buffers.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tcslen",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of _tcslen",
+    "description" : "Detects unsafe usage of _tcslen function calls that may operate on non-null-terminated strings.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tcsncat",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Incorrect Usage of _tcsncat",
+    "description" : "Detects potential security problems arising from incorrect usage of the _tcsncat function, such as miscomputing the maximum size to append.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tcsncpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Incorrect Use of _tcsncpy",
+    "description" : "Detects potential security problems in calls to _tcsncpy, which can be used incorrectly and may not always null-terminate or check for invalid pointers.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "tempnam",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid Using tempnam for Temporary File Creation",
+    "description" : "Detects use of tempnam function which can lead to temporary file race conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "tmpfile",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using tmpfile() Function",
+    "description" : "Detects usage of the tmpfile() function which has known security flaws on some systems.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "tmpnam",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid Using tmpnam Function",
+    "description" : "Detects usage of the tmpnam function which can lead to temporary file race conditions.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_tscanf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of _tscanf with %s specifier",
+    "description" : "Detects usage of _tscanf functions with the %s format specifier without a length limit, which can lead to buffer overflow vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ulimit",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using Obsolete ulimit C Routine",
+    "description" : "Detects usage of the obsolete ulimit C routine which can lead to security problems.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "umask",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Enforce Restrictive umask Settings",
+    "description" : "Ensure that umask is set to the most restrictive possible value to prevent unintended file permissions.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "usleep",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "UnexpectedBehaviour",
+    "title" : "Avoid using usleep function",
+    "description" : "Detects usage of the obsolete usleep function which has unspecified interactions with other timer functions.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vfork",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of vfork",
+    "description" : "Detects potential security problems related to the use of vfork() calls, which can cause race conditions on some older systems.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vfprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe vfprintf Usage",
+    "description" : "Detects potential security vulnerabilities in vfprintf calls where format strings can be attacker-controlled.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vfscanf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe vfscanf %s usage without length limit",
+    "description" : "Detects unsafe usage of the scanf family %s specifier without a length limit, which can cause buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_vftprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe _vftprintf calls",
+    "description" : "Detects potential security vulnerabilities in _vftprintf calls where format strings may be attacker-controlled.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vfwprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe vfwprintf usage",
+    "description" : "Detects potential security problems in vfwprintf calls where format strings can be attacker-controlled.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vfwscanf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of vfwscanf with %s specifier",
+    "description" : "Detects usage of the vfwscanf function with the %s format specifier without a length limit, which can lead to buffer overflow vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid insecure use of vprintf format strings",
+    "description" : "Detects potentially unsafe uses of vprintf where format strings may be attacker-controlled, leading to format string vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vscanf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe vscanf Usage",
+    "description" : "Detects unsafe use of vscanf functions with %s format specifier without length limit, which can cause buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vsnprintf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid insecure usage of vsnprintf",
+    "description" : "Detects potential security vulnerabilities in calls to vsnprintf where format strings can be attacker-controlled, risking format string exploits and improper string termination.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_vsntprintf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Detect Potential Security Issues in _vsntprintf Calls",
+    "description" : "Detects potential security vulnerabilities in the use of _vsntprintf, especially when format strings can be influenced by attackers and when null-termination is not guaranteed.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vsprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid using vsprintf",
+    "description" : "Detects usage of vsprintf calls that do not check for buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vsscanf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe vsscanf Usage",
+    "description" : "Detects unsafe use of vsscanf calls without length limits on %s specifiers that can lead to buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_vstprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe _vstprintf Calls",
+    "description" : "Detects usage of _vstprintf functions that do not perform buffer overflow checks.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vswprintf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe vswprintf Usage",
+    "description" : "Detects usage of vswprintf function calls that do not check for buffer overflows, potentially leading to security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vswscanf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of vswscanf with %s specifier",
+    "description" : "Detects use of the vswscanf function with the %s format specifier without specifying a buffer size limit, which can lead to buffer overflow vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_vtprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Use of _vtprintf Calls",
+    "description" : "Detects potentially unsafe use of _vtprintf functions where format strings may be attacker-controlled, leading to format string vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vwprintf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe vwprintf Calls",
+    "description" : "Detects potential security vulnerabilities in vwprintf calls where format strings can be attacker-controlled, leading to format string attacks (CWE-134).",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "vwscanf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe vwscanf calls without length limit",
+    "description" : "Detects usage of vwscanf calls with %s format specifier without specifying a maximum field width, which can lead to buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wchar_t",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe Usage of wchar_t Arrays",
+    "description" : "Detects potential security problems related to improper use of statically-sized wchar_t arrays that may lead to buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wcscat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of wcscat",
+    "description" : "Detects usage of wcscat function calls that do not check for buffer overflows when concatenating wide character strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wcscpy",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe use of wcscpy",
+    "description" : "Detects unsafe usage of wcscpy function which can cause buffer overflows when copying wide-character strings.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wcslen",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe wcslen calls",
+    "description" : "Detects unsafe use of wcslen function on strings that may not be null-terminated, which can cause buffer over-read vulnerabilities.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wcsncat",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Incorrect Use of wcsncat",
+    "description" : "Detects potential security problems arising from incorrect usage of the wcsncat function in C/C++ code, such as miscalculating the maximum size to append.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wcsncpy",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Incorrect Usage of wcsncpy",
+    "description" : "Detects potential security issues in wcsncpy calls, such as missing null termination or invalid pointer checks.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "WinExec",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Unsafe Use of WinExec",
+    "description" : "Detects usage of WinExec calls which can lead to execution of new programs and potential security vulnerabilities.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wprintf",
+    "level" : "Error",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe wprintf usage",
+    "description" : "Detects potential security vulnerabilities in wprintf calls where format strings can be influenced by an attacker.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "wscanf",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unsafe usage of wscanf with %s specifier",
+    "description" : "Detects usage of wscanf's %s specifier without a length limit, which can lead to buffer overflows.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_wtoi",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unchecked use of _wtoi",
+    "description" : "Detects potential security issues when using the _wtoi function without validating the result.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "_wtoi64",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid unchecked use of _wtoi64",
+    "description" : "Detects potential security problems when using _wtoi64 without validating the result, which can exceed the expected range.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

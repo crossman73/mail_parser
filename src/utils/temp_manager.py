@@ -252,7 +252,7 @@ class TempDataManager:
                                             if meta_data.get('status') == 'error':
                                                 has_error = True
                                                 break
-                                    except:
+                                    except Exception:
                                         pass
 
                             # 삭제 여부 결정
@@ -426,7 +426,7 @@ class TempDataManager:
                                             if json.load(f).get('status') == 'error':
                                                 stats['sessions_with_error'] += 1
                                                 break
-                                    except:
+                                    except Exception:
                                         pass
         except Exception as e:
             print(f"저장소 통계 조회 실패: {e}")

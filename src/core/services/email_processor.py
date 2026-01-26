@@ -48,10 +48,10 @@ class EmailProcessor:
         # 메시지 ID 생성
         message_id = message.get('Message-ID', '')
         if not message_id:
-            # 메시지 ID가 없으면 생성
+            # 메시지 ID가 없으면 생성 (SHA-256 사용)
             import hashlib
             content = str(message)
-            message_id = hashlib.md5(content.encode()).hexdigest()
+            message_id = hashlib.sha256(content.encode()).hexdigest()
 
         # 기본 정보 추출
         subject = decode_text(message.get('Subject', '(제목없음)'))
@@ -62,9 +62,9 @@ class EmailProcessor:
         to_header = message.get('To', '')
         cc_header = message.get('Cc', '')
         if to_header:
-            recipients.extend(re.findall(r'[\\w\\.-]+@[\\w\\.-]+', to_header))
+            recipients.extend(re.findall(r'[\w\.-]+@[\w\.-]+', to_header))
         if cc_header:
-            recipients.extend(re.findall(r'[\\w\\.-]+@[\\w\\.-]+', cc_header))
+            recipients.extend(re.findall(r'[\w\.-]+@[\w\.-]+', cc_header))
 
         # 날짜 처리
         email_date = get_email_date(message)

@@ -159,19 +159,19 @@ def register_api_routes(app):
     def api_export_evidence():
         """증거 목록 내보내기 API"""
         try:
-            format = request.args.get('format', 'json')
+            output_format = request.args.get('format', 'json')
 
-            if format not in ['json', 'csv']:
+            if output_format not in ['json', 'csv']:
                 return jsonify({
                     'success': False,
                     'message': '지원하지 않는 형식입니다. (json, csv만 지원)'
                 }), 400
 
-            export_data = evidence_service.export_evidence_list(format)
+            export_data = evidence_service.export_evidence_list(output_format)
 
             return jsonify({
                 'success': True,
-                'format': format,
+                'format': output_format,
                 'data': export_data
             })
 
@@ -261,9 +261,9 @@ def register_api_routes(app):
     def api_timeline_export():
         """타임라인 내보내기 API"""
         try:
-            format = request.args.get('format', 'json')
+            output_format = request.args.get('format', 'json')
 
-            if format not in ['json', 'csv', 'html']:
+            if output_format not in ['json', 'csv', 'html']:
                 return jsonify({
                     'success': False,
                     'message': '지원하지 않는 형식입니다. (json, csv, html만 지원)'
@@ -279,11 +279,11 @@ def register_api_routes(app):
 
             # 내보내기 데이터 생성
             export_data = timeline_service.export_timeline(
-                timeline_result['timeline'], format)
+                timeline_result['timeline'], output_format)
 
             return jsonify({
                 'success': True,
-                'format': format,
+                'format': output_format,
                 'data': export_data
             })
 

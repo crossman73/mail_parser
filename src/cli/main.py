@@ -10,8 +10,9 @@ import sys
 from pathlib import Path
 
 # 현재 파일의 부모 디렉터리를 sys.path에 추가
-current_dir = Path(__file__).parent
-sys.path.insert(0, str(current_dir))
+# 프로젝트 루트를 sys.path에 추가하여 `src.*` 절대 임포트가 작동하도록 함
+project_root = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(project_root))
 
 # 통합 아키텍처 임포트
 
@@ -99,16 +100,19 @@ def main():
         # 정리
         try:
             unified_arch.cleanup()
-        except:
+        except Exception:
             pass
 
 
 def start_web_server(unified_arch: UnifiedArchitecture, port: int, verbose: bool):
     """웹 서버 시작"""
     try:
-        from src.web.app_factory import create_app
+        from src.web.app import create_app
 
-        app = create_app(unified_arch)
+        # create_app expects an optional config path; pass minimal and attach
+        # the unified architecture object to the app for downstream access.
+        app = create_app()
+        app.config['UNIFIED_ARCH'] = unified_arch
 
         print(f"🌐 웹 서버 시작 - http://localhost:{port}")
         print(f"📊 시스템 상태: http://localhost:{port}/system/status")
@@ -173,7 +177,7 @@ def process_emails_cli(unified_arch: UnifiedArchitecture, args):
         # 이메일 프로세서 서비스 가져오기
         try:
             processor = unified_arch.get_service('email_processor')
-        except:
+        except Exception:
             # 서비스가 없으면 직접 생성 (Phase 2에서 개선 예정)
             from src.mail_parser.processor import EmailProcessor
             processor = EmailProcessor(unified_arch.config.config_data)
@@ -190,7 +194,7 @@ def process_emails_cli(unified_arch: UnifiedArchitecture, args):
         if args.timeline:
             try:
                 timeline_gen = unified_arch.get_service('timeline_generator')
-            except:
+            except Exception:
                 from src.timeline_system.timeline_generator import \
                     TimelineGenerator
                 timeline_gen = TimelineGenerator()

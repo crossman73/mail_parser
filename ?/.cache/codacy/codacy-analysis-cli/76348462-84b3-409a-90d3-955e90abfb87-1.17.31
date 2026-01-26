@@ -1,0 +1,242 @@
+[
+  {
+    "id" : "ccn-critical",
+    "level" : "Error",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Critical Cyclomatic Complexity Threshold",
+    "description" : "This rule checks the cyclomatic complexity of functions or logic blocks and raises a critical issue if the complexity exceeds the default threshold of 12.",
+    "explanation" : "# Critical Cyclomatic Complexity control\n\nCheck the Cyclomatic Complexity value of a function or logic block. If the threshold is not met, raise a Critical issue. The default threshold is 10.",
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "12",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ccn-medium",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Medium Cyclomatic Complexity Threshold",
+    "description" : "Checks if the cyclomatic complexity of a function or logic block exceeds the medium threshold (default is 8).",
+    "explanation" : "# Medium Cyclomatic Complexity control\n\nCheck the Cyclomatic Complexity value of a function or logic block. If the threshold is not met, raise a Medium issue. The default threshold is 7.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "8",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ccn-minor",
+    "level" : "Info",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Minor Cyclomatic Complexity Threshold",
+    "description" : "Checks that the cyclomatic complexity of functions or logic blocks does not exceed a minor threshold, defaulting to 5.",
+    "explanation" : "# Minor Cyclomatic Complexity control\n\nCheck the Cyclomatic Complexity value of a function or logic block. If the threshold is not met, raise a Minor issue. The default threshold is 4.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "5",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "file-nloc-critical",
+    "level" : "Error",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Number of Lines of Code per File",
+    "description" : "Checks the number of lines of code (excluding comments) in a file and raises a critical issue if it exceeds the threshold (default 1000 lines).",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 20,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "1000",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "file-nloc-medium",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Medium File Length Limit Based on Number of Lines of Code",
+    "description" : "This rule checks if the number of lines of code (excluding comments) in a file exceeds a medium threshold, typically 500 lines.",
+    "explanation" : null,
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "500",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "file-nloc-minor",
+    "level" : "Info",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Minimum Number of Lines of Code per File",
+    "description" : "Checks that the number of lines of code (excluding comments) in a file meets a minimum threshold, defaulting to 300 lines.",
+    "explanation" : null,
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "300",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "nloc-critical",
+    "level" : "Error",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Maximum Number of Lines of Code in Functions",
+    "description" : "Checks if functions or logic blocks exceed a set maximum number of lines of code (excluding comments), defaulting to 100 lines.",
+    "explanation" : "# Critical NLOC control - Number of Lines of Code (without comments)\n\nCheck the number of lines of code (without comments) in a function or logic block. If the threshold is not met, raise a Critical issue. The default threshold is 100.",
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "100",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "nloc-medium",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Medium Number of Lines of Code (NLOC) Limit",
+    "description" : "Checks if the number of lines of code (excluding comments) in a function exceeds a medium threshold (default 50 lines).",
+    "explanation" : "# Medium NLOC control - Number of Lines of Code (without comments)\n\nCheck the number of lines of code (without comments) in a function. If the threshold is not met, raise a Medium issue. The default threshold is 50.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "50",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "nloc-minor",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Enforce Minimum Number of Lines of Code in Functions",
+    "description" : "Checks if functions have at least a minimum number of lines of code (excluding comments), raising a minor issue if they are too short.",
+    "explanation" : "# Minor NLOC control - Number of Lines of Code (without comments)\n\nCheck the number of lines of code (without comments) in a function. If the threshold is not met, raise a Minor issue. The default threshold is 20.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "20",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "parameter-count-critical",
+    "level" : "Error",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Excessive Function Parameter Count",
+    "description" : "This rule checks if a function has more parameters than a specified threshold and raises a critical issue if exceeded.",
+    "explanation" : "# Critical Parameter count control\n\nCheck the number of parameters sent to a function. If the threshold is not met, raise a Critical issue. The default threshold is 9.",
+    "enabled" : false,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "12",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "parameter-count-medium",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Medium Parameter Count Limit",
+    "description" : "This rule checks the number of parameters passed to a function and raises an issue if it exceeds a medium threshold, which by default is 8 parameters.",
+    "explanation" : "# Medium Parameter count control\n\nCheck the number of parameters sent to a function. If the threshold is not met, raise a Medium issue. The default threshold is 5.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "8",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "parameter-count-minor",
+    "level" : "Info",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Enforce Parameter Count Threshold in Functions",
+    "description" : "Checks if functions have more parameters than a specified threshold, raising a minor issue if exceeded.",
+    "explanation" : "# Minor Parameter count control\n\nCheck the number of parameters sent to a function. If the threshold is not met, raise a Minor issue. The default threshold is 3.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "threshold",
+        "default" : "4",
+        "description" : "The minimum value upon the issue is being triggered."
+      }
+    ],
+    "languages" : [
+    ]
+  }
+]

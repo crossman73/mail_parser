@@ -1,0 +1,647 @@
+[
+  {
+    "id" : "Attribute",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Public Writable Attributes",
+    "description" : "This rule detects public writable attributes declared via attr_writer, attr_accessor, or attr with writable flag set to true in Ruby classes.",
+    "explanation" : "# Attribute\n\n## Introduction\n\nA class that publishes a setter for an instance variable invites\nclient classes to become too intimate with its inner workings, and in\nparticular with its representation of state.\n\nThe same holds to a lesser extent for getters, but Reek doesn't flag those.\n\n## Example\n\nGiven:\n\n```ruby\nclass Klass\n  attr_accessor :dummy\nend\n```\n\nReek would emit the following warning:\n\n```\nreek test.rb\n\ntest.rb -- 1 warning:\n  [2]:Attribute: Klass#dummy is a writable attribute\n```\n\n## Support in Reek\n\nThis detector raises a warning for every public `attr_writer`,\n`attr_accessor`, and `attr` with the writable flag set to `true`.\n\nReek does not raise warnings for read-only attributes.\n\n## Configuration\n\n_Attribute_ supports only the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "BooleanParameter",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Boolean Parameter",
+    "description" : "Detects method parameters that are booleans defaulted to true or false, indicating a control couple smell.",
+    "explanation" : "# Boolean Parameter\n\n## Introduction\n\n_Boolean Parameter_ is a case of [Control Couple](Control-Couple.md), where a\nmethod parameter is defaulted to true or false. A _Boolean Parameter_\neffectively permits a method's caller to decide which execution path to take.\nThis is a case of bad cohesion. You're creating a dependency between methods\nthat is not really necessary, thus increasing coupling.\n\n## Example\n\nGiven\n\n```ruby\nclass Dummy\n  def hit_the_switch(switch = true)\n    if switch\n      puts 'Hitting the switch'\n      # do other things...\n    else\n      puts 'Not hitting the switch'\n      # do other things...\n    end\n  end\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 3 warnings:\n  [1]:Dummy#hit_the_switch has boolean parameter 'switch' (BooleanParameter)\n  [2]:Dummy#hit_the_switch is controlled by argument switch (ControlParameter)\n```\n\nNote that both smells are reported, _Boolean Parameter_ and _Control Parameter_.\n\n## Getting rid of the smell\n\nThis is highly dependent on your exact architecture, but looking at the example above what you could do is:\n\n* Move everything in the `if` branch into a separate method\n* Move everything in the `else` branch into a separate method\n* Get rid of the `hit_the_switch` method altogether\n* Make the decision what method to call in the initial caller of `hit_the_switch`\n\n## Current support in Reek\n\nReek can only detect a _Boolean Parameter_ when it has a default initializer like in the example above.\n\n## Configuration\n\n_Boolean Parameter_ supports the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ClassVariable",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Class Variables",
+    "description" : "Detects usage of class variables which form part of the global runtime state and can cause unintended dependencies between parts of the system.",
+    "explanation" : "# Class Variable\n\n## Introduction\n\nClass variables form part of the global runtime state, and as such make it easy for one part of the system to accidentally or inadvertently depend on another part of the system. So the system becomes more prone to problems where changing something over here breaks something over there. In particular, class variables can make it hard to set up tests (because the context of the test includes all global state).\n\nFor a detailed explanation, check out [this article](https://web.archive.org/web/20160714084532/http://4thmouse.com:80/index.php/2011/03/20/why-class-variables-in-ruby-are-a-bad-idea). and [Stackoverflow](https://stackoverflow.com/a/10594849/7798638)\n\n## Example\n\nGiven\n\n```ruby\nclass Dummy\n  @@class_variable = :whatever\nend\n```\n\nReek would emit the following warning:\n\n```\nreek test.rb\n\ntest.rb -- 1 warning:\n  [2]:Dummy declares the class variable @@class_variable (ClassVariable)\n```\n\n## Getting rid of the smell\n\nYou can use class-instance variable to mitigate the problem (as also suggested in the linked article above):\n\n```ruby\nclass Dummy\n  @class_variable = :whatever\nend\n```\n\n##  Configuration\n\n_Class Variable_ supports the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ControlParameter",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Control Parameter",
+    "description" : "Detects when a method or block parameter is used as the tested value in a conditional statement, indicating a control parameter.",
+    "explanation" : "# Control Parameter\n\n## Introduction\n\n_Control Parameter_ is a case of [Control Couple](Control-Couple.md).\n\n## Example\n\nA simple example would be the `quoted` parameter in the following method:\n\n```ruby\ndef write(quoted)\n  if quoted\n    write_quoted @value\n  else\n    write_unquoted @value\n  end\nend\n```\n\nFixing those problems is out of the scope of this document but an easy solution\ncould be to remove the `write` method altogether and to move the calls to\n`write_quoted` and `write_unquoted` to the caller of `write`.\n\n## Current Support in Reek\n\nReek warns about _Control Parameter_ when a method parameter or block parameter is\nthe tested value in a conditional statement.\n\n## Configuration\n\n_Control Parameter_ supports the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "DataClump",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Detect Data Clumps in Method Parameters",
+    "description" : "Detects groups of two or more parameters with the same names passed to three or more methods in a class, indicating potential data clumps.",
+    "explanation" : "# Data Clump\n\n## Introduction\n\nIn general, a _Data Clump_ occurs when the same two or three items frequently\nappear together in classes and parameter lists, or when a group of instance\nvariable names start or end with similar substrings.\n\nThe recurrence of the items often means there is duplicate code spread around to handle them. There may be an abstraction missing from the code, making the system harder to understand.\n\n## Example\n\nGiven\n\n```ruby\nclass Dummy\n  def x(y1,y2); end\n  def y(y1,y2); end\n  def z(y1,y2); end\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 1 warning:\n  [2, 3, 4]:Dummy takes parameters [y1, y2] to 3 methods (DataClump)\n```\n\nA possible way to fix this problem (quoting from [Martin Fowler](http://martinfowler.com/bliki/DataClump.html)):\n\n> The first step is to replace data clumps with objects and use the objects whenever you see them. An immediate benefit is that you'll shrink some parameter lists. The interesting stuff happens as you begin to look for behavior to move into the new objects.\n\n## Current Support in Reek\n\nReek looks for a group of two or more parameters with the same names that are expected by three or more methods of a class.\n\n## Configuration\n\nReek's _Data Clump_ detector offers the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option           | Value       | Effect  |\n| -----------------|-------------|---------|\n| `max_copies`     | integer | The maximum number of methods that are permitted to take the same group of parameters. Defaults to 2. |\n| `min_clump_size` | integer | The smallest number of parameters that can be reported as a clump. Defaults to 2. |",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_copies",
+        "default" : "2",
+        "description" : "The maximum number of methods that are permitted to take the same group of parameters. Defaults to 2."
+      },
+      {
+        "name" : "min_clump_size",
+        "default" : "2",
+        "description" : "The smallest number of parameters that can be reported as a clump. Defaults to 2."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "DuplicateMethodCall",
+    "level" : "Warning",
+    "category" : "Performance",
+    "subCategory" : null,
+    "title" : "Avoid Duplicate Method Calls Within a Method",
+    "description" : "Detects repeated identical method calls within a single method definition to improve efficiency and maintainability.",
+    "explanation" : "# Duplicate Method Call\n\n## Introduction\n\nDuplication occurs when two fragments of code look nearly identical, or when two fragments of code have nearly identical effects at some conceptual level.\n\nLet's look at an example that is quite common in the Rails world:\n\n```ruby\ndef not_production?\n  Rails.env.development? || Rails.env.test?\nend  \n```\n\nWhile this duplicate usage of `Rails.env` might seem innocuous there are 2 problems with it:\n\n1.) Efficiency\n\n```ruby\nRails.env.development? || Rails.env.test?\n```\n\nis not as efficient as it could be. If the call to `env` is not memoized your basically paying twice in terms of computation for something that you should only pay once.\n\nHere\n\n```ruby\nRails.env.development? || Rails.env.test?\n```\n\nyou have 4 method calls while here:\n\n```ruby\nenv = Rails.env\nenv.development? || env.test?\n```\n\nyou have one assignment (which is very cheap in terms of computation) and 3 method calls.\nThe difference might not be much here but just imagine you're writing a high performance app or you doing some expensive database calls in each method call.\n\nIt doesn't really matter though if the efficiency difference is significant. This is a matter of principle - we believe that being efficient is one of the vital traits of good software.\n\n2.) Maintainability\n\nThe second point is a bit more subtle. This\n\n```ruby\nenv = Rails.env\nenv.development? || env.test?\n```\n\nis a lot more intention revealing than \n\n```ruby\nRails.env.development? || Rails.env.test?\n```\n\nHere\n\n```ruby\nenv = Rails.env\nenv.development? || env.test?\n```\n\nI'm very clear on what I do: I get the environment and then I run some checks on it.\n\nHere\n\n```ruby\nRails.env.development? || Rails.env.test?\n```\n\nI'm not very clear on what I do and it requires quite more mental effort: Ok, so I'm talking to Rails, getting the environment and then running a check on it ...or .....oh, I get the same Rails constant again, get the same environment and run another check on it.\n\n## Example\n\nHere's a very much simplified and contrived example. The following method will report a warning:\n\n```ruby\ndef double_thing\n  @other.thing + @other.thing\nend\n```\n\nOne quick approach to silence Reek would be to refactor the code thus:\n\n```ruby\ndef double_thing\n  thing = @other.thing\n  thing + thing\nend\n```\n\nA slightly different approach would be to replace all calls in `double_thing` by calls to `thing`:\n\n```ruby\nclass Other\n  def double_thing\n    thing + thing\n  end\n\n  def thing\n    @other.thing\n  end\nend\n```\n\nThe approach you take will depend on balancing other factors in your code.\n\n## Current support in Reek\n\nReek's Duplicate Method Call detector checks for repeated identical method calls within\nany one method definition. This is intended to complement the checks performed by tools\nsuch as [Flay](http://ruby.sadi.st/Flay.html) and [Simian](http://www.redhillconsulting.com.au/products/simian/).\n\n## Edge cases\n\nBe aware that there are some edge cases like this code:\n\n```ruby\nclass Foo\n  def bar(switch)\n    case switch\n    when :a\n      ->(arg) { arg.call_me(:maybe); do_something }\n    when :b\n      ->(arg) { arg.call_me(:maybe); do_something_else }\n    when :c\n      ->(arg) { arg.call_me(:maybe); do_something_different }\n    end\n  end\nend\n```\n\nReek cannot reliably detect that each call's receiver is a different arg and will report:\n\n```\n[5, 7, 9]:DuplicateMethodCall: Foo#bar calls 'arg.call_me(:maybe)' 3 times\n```\n  \nIf you're running into this problem you can disable this smell detector for this method either via\nconfiguration:\n\n```yaml\n---\nDuplicateMethodCall:\n  exclude:\n    - 'Foo#bar'\n```\n\nor via source code comment:\n\n```ruby\nclass Foo\n  # :reek:DuplicateMethodCall\n  def bar(switch)\n    # ....\n  end\nend\n```\n\n## Configuration\n\nReek's Duplicate Method Call detector currently offers the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\nOption | Value | Effect\n-------|-------|-------\n`max_calls` |  integer | The maximum number of duplicate calls allowed within a method. Defaults to 1.\n`allow_calls` | an array of strings or regular expressions | Ignores any context who matches it |\n\n## Example configuration\n\n### Adjusting `max_calls`\n\nImagine code like this:\n\n```ruby\nclass Alfa\n  def bravo\n    charlie.delta\n    charlie.delta\n  end\nend\n```\n\nThis would report:\n\n>>\nsrc.rb -- 1 warning:\n  [4, 5]:DuplicateMethodCall: Alfa#bravo calls 'charlie.delta' 2 times\n\nIf you want to allow those double calls here you can disable it in 2 different ways:\n\n1.) Via source code comment:\n\n```ruby\nclass Alfa\n  # :reek:DuplicateMethodCall { max_calls: 2 }\n  def bravo\n    charlie.delta\n    charlie.delta\n  end\nend\n```\n\n2.) Via configuration file:\n\n```yaml\nDuplicateMethodCall:\n  max_calls: 2\n```\n\nNote though that the latter way will set `max_calls` to 2 for all instances\nof the smell detector which might not be what you want - in this case\nyou'll have to use source code comments.\n\n### Adjusting `allow_calls`\n\nImagine code like this:\n\n```ruby\nclass Alfa\n  def bravo\n    charlie.delta\n    charlie.delta\n    echo.foxtrot\n    echo.foxtrot\n  end\nend\n```\n\nThis would report:\n\n>>\nsrc.rb -- 2 warnings:\n  [4, 5]:DuplicateMethodCall: Alfa#bravo calls charlie.delta 2 times\n  [6, 7]:DuplicateMethodCall: Alfa#bravo calls echo.foxtrot 2 times\n\nSo let's say you're ok with the `echo.foxtrot` calls you can stop reporting them like this:\n\n1.) Via source code comment:\n\n```ruby\nclass Alfa\n  # :reek:DuplicateMethodCall { allow_calls: ['echo.foxtrot'] }\n  def bravo\n    charlie.delta\n    charlie.delta\n    echo.foxtrot\n    echo.foxtrot\n  end\nend\n```\n\n2.) Via configuration file:\n\n```yaml\nDuplicateMethodCall:\n  allow_calls:\n  - 'echo.foxtrot'\n```\n\nNote though that the latter way will allow those calls across your source code which might not be what you want.\nIn this case you'll have to use source code comments.",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "allow_calls",
+        "default" : "[]",
+        "description" : "Ignores any context who matches it."
+      },
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_calls",
+        "default" : "1",
+        "description" : "The maximum number of duplicate calls allowed within a method. Defaults to 1."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "FeatureEnvy",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Detect Feature Envy",
+    "description" : "Detects methods that refer to another object more often than to themselves (self), indicating misplaced behavior.",
+    "explanation" : "# Feature Envy\n\n## Introduction\n\n_Feature Envy_ occurs when a code fragment references another object more often than it references itself, or when several clients do the same series of manipulations on a particular type of object.\n\n_Feature Envy_ reduces the code's ability to communicate intent: code that \"belongs\" on one class but which is located in another can be hard to find, and may upset the \"System of Names\" in the host class.\n\n_Feature Envy_ also affects the design's flexibility: A code fragment that is in the wrong class creates couplings that may not be natural within the application's domain, and creates a loss of cohesion in the unwilling host class.\n\n_Feature Envy_ often arises because it must manipulate other objects (usually its arguments) to get them into a useful form, and one force preventing them (the arguments) doing this themselves is that the common knowledge lives outside the arguments, or the arguments are of too basic a type to justify extending that type. Therefore there must be something which 'knows' about the contents or purposes of the arguments.  That thing would have to be more than just a basic type, because the basic types are either containers which don't know about their contents, or they are single objects which can't capture their relationship with their fellows of the same type. So, this thing with the extra knowledge should be reified into a class, and the utility method will most likely belong there.\n\n## Example\n\nRunning Reek on:\n\n```ruby\nclass Warehouse\n  def sale_price(item)\n    (item.price - item.rebate) * @vat\n  end\nend\n```\n\nwould report:\n\n```bash\nWarehouse#sale_price refers to item more than self (FeatureEnvy)\n```\n\nsince this:\n\n```ruby\n(item.price - item.rebate)\n```\n\nbelongs to the Item class, not the Warehouse.\n\n## Current Support in Reek\n\n_Feature Envy_ reports any method that refers to self less often than it refers to (ie. send messages to) some other object.\n\n## Edge cases\n\nBe aware that there are some edge cases like this code:\n\n```ruby\nclass Foo\n  def initialize\n    @map = {\n      a: ->(arg) { arg.css('table') },\n      b: ->(arg) { arg.css('div') },\n      c: ->(arg) { arg.css('span') }\n    }\n  end\nend\n```\n\nReek cannot reliably detect that each call's receiver is a different arg and will report:\n\n```\n  [4, 5, 6]:FeatureEnvy: Foo#initialize refers to 'arg' more than self (maybe move it to another class?)\n```\n  \nIf you're running into this problem you can disable this smell detector for this method either via\nconfiguration:\n\n```yaml\n---\nFeatureEnvy:\n  exclude:\n    - 'Foo#bar'\n```\n\nor via source code comment:\n\n```ruby\nclass Foo\n  # :reek:FeatureEnvy\n  def initialize\n    @map = {\n    # ....\n  end\nend\n```\n\n## Differences to _Utility Function_\n\n_Feature Envy_ is only triggered if there are some references to self and _[Utility Function](UtilityFunction)_ is triggered if there are no references to self.\n\n## Configuration\n\n_Feature Envy_ supports the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "InstanceVariableAssumption",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Instance Variable Assumption",
+    "description" : "Ensures instance variables are set in the constructor or accessed via methods with lazy initialization to prevent assumptions about their presence.",
+    "explanation" : "# Instance Variable Assumption\n\n## Introduction\n\nClasses should not assume that instance variables are set or present outside of the current class definition.\n\nGood:\n\n```ruby\nclass Foo\n  def initialize\n    @bar = :foo\n  end\n\n  def foo?\n    @bar == :foo\n  end\nend\n```\n\nGood as well:\n\n```ruby\nclass Foo\n  def foo?\n    bar == :foo\n  end\n\n  def bar\n    @bar ||= :foo\n  end\nend\n```\n\nBad:\n\n```ruby\nclass Foo\n  def go_foo!\n    @bar = :foo\n  end\n\n  def foo?\n    @bar == :foo\n  end\nend\n```\n\n## Example\n\nRunning Reek on:\n\n```ruby\nclass Dummy\n  def test\n    @ivar\n  end\nend\n```\n\nwould report:\n\n```bash\n  [1]:InstanceVariableAssumption: Dummy assumes too much for instance variable @ivar\n```\n\nNote that this example would trigger this smell warning as well:\n\n```ruby\nclass Parent\n  def initialize(omg)\n    @omg = omg\n  end\nend\n\nclass Child < Parent\n  def foo\n    @omg\n  end\nend\n```\n\nThe way to address the smell warning is that you should create an `attr_reader` to use `@omg` in the subclass and not access `@omg` directly like this:\n\n```ruby\nclass Parent\n  attr_reader :omg\n\n  def initialize(omg)\n    @omg = omg\n  end\nend\n\nclass Child < Parent\n  def foo\n    omg\n  end\nend\n```\n\nDirectly accessing instance variables is considered a smell because it [breaks encapsulation](https://www.designisrefactoring.com/2015/03/30/organizing-data-self-encapsulation/) and makes it harder to reason about code.\n\nIf you don't want to expose those methods as public API just make them private like this:\n\n```ruby\nclass Parent\n  def initialize(omg)\n    @omg = omg\n  end\n\n  private\n  attr_reader :omg\nend\n\nclass Child < Parent\n  def foo\n    omg\n  end\nend\n```\n\n\n## Current Support in Reek\n\nAn instance variable must:\n\n* be set in the constructor\n* or be accessed through a method with lazy initialization / memoization.\n\nIf not, _Instance Variable Assumption_ will be reported.\n\n## Using Instance Variable Assumption in a Rails context\n\nIn ActiveRecord it seems common to use callbacks like `after_initialize` to initialize instance variables as\noutlined [here](https://stackoverflow.com/questions/41165520/overriding-applicationrecord-initialize-bad-idea)\nor [here](http://blog.dalethatcher.com/2008/03/rails-dont-override-initialize-on.html)\ninstead of overriding the `initialize` method.\nIf an instance variable is initialized in such a callback Reek will report it correspondingly.\n\nThis would smell for instance:\n\n```ruby\nclass Sample < ApplicationRecord\n  after_initialize do\n    @my_var = false\n  end\nend\n```\n\nSince Reek cannot reliably detect that is used in a Rails context we recommend to disable this detector\nfor \"app/models\" like this:\n\n```yaml\ndirectories:\n  # Your other configuration....\n  \"app/models\":\n    InstanceVariableAssumption:\n      enabled: false\n```\n\n## Configuration\n\n_Instance Variable Assumption_ supports the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "IrresponsibleModule",
+    "level" : "Info",
+    "category" : "Documentation",
+    "subCategory" : null,
+    "title" : "Enforce Descriptive Comments on Modules and Classes",
+    "description" : "Checks that every class and module is annotated with a brief descriptive comment outlining its responsibilities.",
+    "explanation" : "# Irresponsible Module\n\n## Introduction\n\nClasses and modules are the units of reuse and release. It is therefore\nconsidered good practice to annotate every class and module with a brief\ncomment outlining its responsibilities.\n\nFor further guideline on how to write good documentation in Ruby, see these\nlinks:\n- [Rails API documentation guidelines](http://edgeguides.rubyonrails.org/api_documentation_guidelines.html)\n- [Comments tell you why](https://blog.codinghorror.com/code-tells-you-how-comments-tell-you-why/)\n\n## Example\n\nGiven\n\n```ruby\nclass Dummy\n  # Do things...\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 1 warning:\n  [1]:IrresponsibleModule: Dummy has no descriptive comment\n```\n\nFixing this is simple - just an explaining comment:\n\n```ruby\n# The Dummy class is responsible for ...\nclass Dummy\n  # Do things...\nend\n```\n\n## Current Support in Reek\n\n_Irresponsible Module_ checks classes and modules, including those\ncreated through `Struct.new` and `Class.new` and directly assigned to a constant.\n\n## Configuration\n\n_Irresponsible Module_ supports only the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 3,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "LongYieldList",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Long Yield List",
+    "description" : "Detects methods or blocks that yield more than three parameters to a block.",
+    "explanation" : "# Long Yield List\n\n## Introduction\n\nA _Long Yield List_ occurs when a method yields a lot of arguments to the block\nit gets passed. It is a special case of [Long Parameter List](LongParameterList).\n\n## Example\n\n```ruby\nclass Dummy\n  def yields_a_lot(foo,bar,baz,fling,flung)\n    yield foo,bar,baz,fling,flung\n  end\nend\n```\n\nReek would report the following warning:\n\n```\ntest.rb -- 1 warning:\n  [4]:Dummy#yields_a_lot yields 5 parameters (LongYieldList)\n```\n\nA common solution to this problem would be the introduction of parameter objects.\n\n## Current Support in Reek\n\nCurrently _Long Yield List_ reports any method or block with more than 3 parameters.\n\n## Configuration\n\nReek's _Long Yield List_ detector supports the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option       | Value   | Effect  |\n| -------------|---------|---------|\n| `max_params` | integer | The maximum number of parameters allowed in a method or block before a warning is issued. Defaults to 3. |",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_params",
+        "default" : "3",
+        "description" : "The maximum number of parameters allowed in a method or block before a warning is issued. Defaults to 3."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ManualDispatch",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Manual Dispatch",
+    "description" : "Detects code that manually checks if an object responds to a method before calling it, indicating manual dispatch.",
+    "explanation" : "## Introduction\n\nReek reports a _Manual Dispatch_ smell if it finds source code that manually checks whether an object responds to a method before that method is called. Manual dispatch is a type of [Simulated Polymorphism](Simulated-Polymorphism.md) which leads to code that is harder to reason about, debug, and refactor.\n\n## Example\n\n```ruby\nclass MyManualDispatcher\n  attr_reader :foo\n\n  def initialize(foo)\n    @foo = foo\n  end\n\n  def call\n    foo.bar if foo.respond_to?(:bar)\n  end\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 1 warning:\n  [9]: MyManualDispatcher manually dispatches method call (ManualDispatch)\n```\n\n## Configuration\n\n_Manual Dispatch_ offers the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "MissingSafeMethod",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Detect Missing Safe Method",
+    "description" : "Detects methods ending with an exclamation mark (!) that do not have a corresponding non-bang (safe) version in the same class.",
+    "explanation" : "# Missing Safe Method\n\n## Introduction\n\nCandidate methods for the _Missing Safe Method_ smell are methods whose names\nend with an exclamation mark.\n\nAn exclamation mark in method names means (the explanation below is taken from\n[here](http://dablog.rubypal.com/2007/8/15/bang-methods-or-danger-will-rubyist)):\n\n> The ! in method names that end with ! means, “This method is dangerous”—or,\n> more precisely, this method is the “dangerous” version of an otherwise\n> equivalent method, with the same name minus the !. “Danger” is relative; the\n> ! doesn’t mean anything at all unless the method name it’s in corresponds to\n> a similar but bang-less method name.\n>\n> So, for example, gsub! is the dangerous version of gsub. exit! is the\n> dangerous version of exit. flatten! is the dangerous version of flatten. And\n> so forth.\n\nSuch a method is called _Missing Safe Method_ if and only if the non-bang\nversion does not exist and this method is reported as a smell.\n\nMissing Safe Method was formerly known as Prima Donna Method. \n\n## Example\n\nGiven\n\n```ruby\nclass C\n  def foo; end\n  def foo!; end\n  def bar!; end\nend\n```\n\nReek would report the _Missing Safe Method_ smell for `bar!`, but not for `foo!`.\n\nReek reports this smell only in a class context, not in a module context in order to allow perfectly legit code like this:\n\n\n```ruby\nclass Parent\n  def foo; end\nend\n\nmodule Dangerous\n  def foo!; end\nend\n\nclass Son < Parent\n  include Dangerous\nend\n\nclass Daughter < Parent\nend\n```\n\nIn this example, Reek would not report the _Missing Safe Method_ smell for the\nmethod `foo` of the `Dangerous` module.\n\n## Configuration\n\n_Missing Safe Method_ offers the [Basic Smell Options](Basic-Smell-Options.md).\n\n## Example configuration via source comment\n\nImagine code like this:\n\n```ruby\nclass Alfa\n  def bravo!\n  end\nend\n```\n\nThis would report:\n\n>>\nruby.rb -- 1 warning:\n  [1]:MissingSafeMethod: Alfa has missing safe method 'bravo!'\n\nIf you want to suppress this warning you can do this via source comment like this:\n\n```ruby\n# :reek:MissingSafeMethod { exclude: [ bravo! ] }\nclass Alfa\n  def bravo!\n  end\nend\n```",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "ModuleInitialize",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid defining initialize method in modules",
+    "description" : "Warns when an instance method named 'initialize' is defined in a module, which can cause confusion in initialization order and parameters when mixed into classes.",
+    "explanation" : "# Module Initialize\n\n## Introduction\n\nA module is usually a mixin, so when an `#initialize` method is present it is\nhard to tell initialization order and parameters so having `#initialize`\nin a module is usually a bad idea.\n\n## Example\n\nThe `Foo` module below contains a method `initialize`. Although class `B` inherits from `A`, the inclusion of `Foo` stops `A#initialize` from being called.\n\n```ruby\nclass A\n  def initialize(a)\n    @a = a\n  end\nend\n\nmodule Foo\n  def initialize(foo)\n    @foo = foo\n  end\nend\n\nclass B < A\n  include Foo\n\n  def initialize(b)\n    super('bar')\n    @b = b\n  end\nend\n```\n\nA simple solution is to rename `Foo#initialize` and call that method by name:\n\n```ruby\nmodule Foo\n  def setup_foo_module(foo)\n    @foo = foo\n  end\nend\n\nclass B < A\n  include Foo\n\n  def initialize(b)\n    super 'bar'\n    setup_foo_module('foo')\n    @b = b\n  end\nend\n```\n\n## Current Support in Reek\n\nReek warns about module initialize when an instance method named `initialize` is present in a module.\n\n## Configuration\n\nModule Initialize supports the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "NestedIterators",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Nested Iterators",
+    "description" : "Detects methods that contain nested iterators (blocks within blocks) beyond a configured maximum depth, which can reduce code clarity and maintainability.",
+    "explanation" : "# Nested Iterators\n\n## Introduction\n\nA _Nested Iterator_ occurs when a block contains another block.\n\n## Example\n\nGiven\n\n```ruby\nclass Duck\n  class << self\n    def duck_names\n      %i!tick trick track!.each do |surname|\n        %i!duck!.each do |last_name|\n          puts \"full name is #{surname} #{last_name}\"\n        end\n      end\n    end\n  end\nend\n```\n\nReek would report the following warning:\n\n```\ntest.rb -- 1 warning:\n  [5]:Duck#duck_names contains iterators nested 2 deep (NestedIterators)\n```\n\n## Current Support in Reek\n\n_Nested Iterators_ reports failing methods only once.\n`Object#tap` is ignored by default and thus does not count as iterator.\nFurthermore iterators without block arguments are not counted, e.g.:\n\n\n```ruby\ndef foo\n  before do\n    item.each do |part|\n      puts part\n    end\n  end\nend\n```\n\nwould not smell of NestedIterators (given a maximum allowed nesting of 1) since the\n`before` would not be counted (because it doesn't pass any arguments to the block).\n\n## Configuration\n\n_Nested Iterators_ offers the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option                | Value   | Effect  |\n| ----------------------|---------|---------|\n| `max_allowed_nesting` | integer | The maximum depth of nested iterators. Defaults to 1 |\n| `ignore_iterators`    | Array   | List of iterators to be excluded from the smell check. Includes only `tap` at the moment|",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "ignore_iterators",
+        "default" : "[]",
+        "description" : "List of iterators to be excluded from the smell check. Includes only tap at the moment"
+      },
+      {
+        "name" : "max_allowed_nesting",
+        "default" : "1",
+        "description" : "The maximum depth of nested iterators. Defaults to 1"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "NilCheck",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Nil Checks",
+    "description" : "Detects and discourages explicit nil checks in code, which are a form of type checking violating the 'tell, don't ask' principle.",
+    "explanation" : "# Nil Check\n\n## Introduction\n\nA _Nil Check_ is a type check. Failures of _Nil Check_ violate the\n[\"tell, don't ask\"](http://robots.thoughtbot.com/tell-dont-ask) principle.\nAdditionally to that, type checks often mask bigger problems in your source\ncode like not using OOP and / or polymorphism when you should.\n\nThe _Nil Check_ code smell is a case of [Simulated Polymorphism](Simulated-Polymorphism.md).\n\n## Example\n\nGiven\n\n```ruby\nclass Klass\n  def nil_checker(argument)\n    if argument.nil?\n      puts \"argument is nil!\"\n    end\n  end\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 1 warning:\n  [3]:Klass#nil_checker performs a nil-check. (NilCheck)\n```\n\n##  Current Support in Reek\n\n_Nil Check_ reports use of \n\n* <code>.nil?</code> method\n* <code>==</code> and <code>===</code> operators when checking vs. <code>nil</code>\n* case statements that use syntax like <code>when nil</code>\n\n_Nil Check_ allows use of\n\n* the safe navigation operator like `foo&.bar`\n\n## Configuration\n\n_Nil Check_ offers the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "RepeatedConditional",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Repeated Conditional",
+    "description" : "Detects repeated conditional checks of the same value within a class, indicating simulated polymorphism and potential missing abstraction.",
+    "explanation" : "# Repeated Conditional\n\n## Introduction\n\n_Repeated Conditional_ is a case of\n[Simulated Polymorphism](Simulated-Polymorphism.md). Basically it means you are\nchecking the same value throughout a single class and take decisions based on\nthis.\n\n## Example\n\nGiven\n\n```ruby\nclass RepeatedConditionals\n  attr_accessor :switch\n\n  def repeat_1\n    puts \"Repeat 1!\" if switch\n  end\n\n  def repeat_2\n    puts \"Repeat 2!\" if switch\n  end\n\n  def repeat_3\n    puts \"Repeat 3!\" if switch\n  end\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 4 warnings:\n  [5, 9, 13]:RepeatedConditionals tests switch at least 3 times (RepeatedConditional)\n```\n\nIf you get this warning then you are probably not using the right abstraction or even more probable, missing an additional abstraction.\n\n## Configuration\n\nReek's _Repeated Conditional_ detector offers the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option         | Value       | Effect  |\n| ---------------|-------------|---------|\n| `max_ifs` |  integer | The maximum number of identical conditional tests permitted before Reek raises a warning. Defaults to 2. |",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_ifs",
+        "default" : "2",
+        "description" : "The maximum number of identical conditional tests permitted before Reek raises a warning. Defaults to 2."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "SubclassedFromCoreClass",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Avoid Subclassing Core Classes",
+    "description" : "Detects classes that inherit from Ruby core classes like Hash, String, and Array, which can lead to unexpected behavior and debugging difficulties.",
+    "explanation" : "# Subclassed From Core Class\n\n## Introduction\n\nCandidate classes for the _Subclassed From Core Class_ smell are classes which inherit from Core Classes like Hash, String and Array.\n\nInheriting from Core Classes means that you are going to have a bad time debugging (the explanation below is taken from [here](http://words.steveklabnik.com/beware-subclassing-ruby-core-classes)):\n\n> What do you think this code should do?\n\n```ruby\nList = Class.new(Array)\n\nl = List.new\nl << 1\nl << 2\nputs l.reverse.class # => Array\n```\n\n> If you said “it prints Array” you’d be right.\n> Let’s talk about a more pernicious issue: Strings.\n\n```ruby\nclass MyString < String\n  def to_s\n    \"lol\"\n  end\nend\n\ns = MyString.new\ns.concat \"Hey\"\n\nputs s      # => Hey\nputs s.to_s # => lol\nputs \"#{s}\" # => Hey\n```\n\n> That’s right! With Strings, Ruby doesn’t call #to_s: it puts the value in directly.\n> Generally speaking, subclassing isn’t the right idea here.\n\n## Example\n\nGiven\n\n```ruby\nclass Ary < Array\nend\n\nclass Str < String\nend\n```\n\nReek would report the _Subclassed From Core Class_ smell for both classes. Instead of subclassing them you want a data structure that uses one of these core classes internally, but isn’t exactly like one. For instance:\n\n```ruby\nrequire 'forwardable'\n\nclass List\n  extend Forwardable\n  def_delegators :@list, :<<, :length # and anything else\n\n  def initialize(list = [])\n    @list = list\n  end\n\n  def reverse\n    List.new(@list.reverse)\n  end\nend\n\nl = List.new\nl << 1\nl << 2\nputs l.reverse.class  # => List\n```\n\n## Configuration\n\n_Subclassed From Core Class_ offers the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TooManyConstants",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Too Many Constants in a Class",
+    "description" : "Detects classes that declare more constants than a configured maximum, indicating a large class smell.",
+    "explanation" : "## Introduction\n\n_Too Many Constants_ is a case of [Large Class](Large-Class.md).\n\n## Example\n\nGiven this configuration\n\n```yaml\nTooManyConstants:\n  max_constants: 3\n```\n\nand this code:\n\n```ruby\nclass Smelly\n  CONST_1 = :dummy\n  CONST_2 = :dummy\n  CONST_3 = :dummy\n  CONST_4 = :dummy\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 1 warning:\n  [1]:TooManyConstants: Smelly has 4 constants\n```\n## Configuration\n\nReek's _Too Many Constants_ detector offers the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option                   | Value   | Effect  |\n| -------------------------|---------|---------|\n| `max_constants` | integer | The maximum number of constants that are permitted. Defaults to 5 |",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_constants",
+        "default" : "5",
+        "description" : "The maximum number of constants that are permitted. Defaults to 5"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TooManyInstanceVariables",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Too Many Instance Variables",
+    "description" : "Detects classes that explicitly use more instance variables than a specified maximum limit, indicating a potentially large and complex class.",
+    "explanation" : "## Introduction\n\n_Too Many Instance Variables_ is a case of [Large Class](Large-Class.md).\n\n## Example\n\nGiven this configuration\n\n```yaml\nTooManyInstanceVariables:\n  max_instance_variables: 3\n```\n\nand this code:\n\n```ruby\nclass Smelly\n  def initialize\n    @arg_1 = :dummy\n    @arg_2 = :dummy\n    @arg_3 = :dummy\n    @arg_4 = :dummy\n  end\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 5 warnings:\n  [1]:TooManyInstanceVariables: Smelly has at least 4 instance variables\n```\n## Current Support in Reek\n\nReek only counts the instance variables you use explicitly like in the example above. Class macros like `attr_accessor` are disregarded.\n\n## Configuration\n\nReek's _Too Many Instance Variables_ detector offers the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option                   | Value   | Effect  |\n| -------------------------|---------|---------|\n| `max_instance_variables` | integer | The maximum number of instance variables that are permitted. Defaults to 4 |",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_instance_variables",
+        "default" : "4",
+        "description" : "The maximum number of instance variables that are permitted. Defaults to 4"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TooManyMethods",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Detect Too Many Methods in Class",
+    "description" : "Detects classes that have more methods than a specified maximum, indicating a Large Class code smell.",
+    "explanation" : "## Introduction\n\n_Too Many Methods_ is a case of [Large Class](Large-Class.md).\n\n## Example\n\nGiven this configuration\n\n```yaml\nTooManyMethods:\n  max_methods: 3\n```\n\nand this code:\n\n```ruby\nclass Smelly\n  def one; end\n  def two; end\n  def three; end\n  def four; end\nend\n```\n\nReek would emit the following warning:\n\n```\ntest.rb -- 1 warning:\n  [1]:TooManyMethods: Smelly has at least 4 methods\n```\n## Current Support in Reek\n\nReek counts all the methods it can find in a class &mdash; instance *and* class\nmethods. So given `max_methods` from above is 4, this:\n\n```ruby\nclass Smelly\n  class << self\n    def one; end\n    def two; end\n  end\n\n  def three; end\n  def four; end\nend\n```\n\nwould cause Reek to emit the same warning as in the example above.\n\n## Configuration\n\nReek's _Too Many Methods_ detector offers the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option        | Value   | Effect  |\n| --------------|---------|---------|\n| `max_methods` | integer | The maximum number of methods that are permitted. Defaults to 15 |",
+    "enabled" : true,
+    "timeToFix" : 15,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_methods",
+        "default" : "15",
+        "description" : "The maximum number of methods that are permitted. Defaults to 15"
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "TooManyStatements",
+    "level" : "Warning",
+    "category" : "Complexity",
+    "subCategory" : null,
+    "title" : "Avoid Methods with Too Many Statements",
+    "description" : "Detects methods that contain a large number of statements, exceeding a configurable threshold (default is 5).",
+    "explanation" : "# Too Many Statements\n\n## Introduction\n\nA method with _Too Many Statements_ is any method that has a large number of lines.\n\n## Current Support in Reek\n\n_Too Many Statements_ warns about any method that has more than 5 statements.\nReek's smell detector for _Too Many Statements_ counts +1 for every simple\nstatement in a method and +1 for every statement within a control structure\n(`if`, `else`, `case`, `when`, `for`, `while`, `until`, `begin`, `rescue`) but\nit doesn't count the control structure itself.\n\nSo the following method would score +6 in Reek's statement-counting algorithm:\n\n```ruby\ndef parse(arg, argv, &error)\n  if !(val = arg) and (argv.empty? or /\\A-/ =~ (val = argv[0]))\n    return nil, block, nil                                         # +1\n  end\n  opt = (val = parse_arg(val, &error))[1]                          # +2\n  val = conv_arg(*val)                                             # +3\n  if opt and !arg\n    argv.shift                                                     # +4\n  else\n    val[0] = nil                                                   # +5\n  end\n  val                                                              # +6\nend\n```\n\n(You might argue that the two assignments within the first @if@ should count as statements, and that perhaps the nested assignment should count as +2.)\n\n## Configuration\n\nReek's _Too Many Statements_ detector supports the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option         | Value       | Effect  |\n| ---------------|-------------|---------|\n| `max_statements` |  integer | The maximum number of statements allowed in a method before a warning is issued. Defaults to 5. |\n\n_Too Many Statements_'s default configuration is:\n\n```yaml\n---\nTooManyStatements:\n  enabled: true\n  exclude:\n  - initialize\n  max_statements: 5\n```\n\nBy default, `initialize` is not checked for length; any class's constructor can be as long as necessary.",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "max_statements",
+        "default" : "5",
+        "description" : "The maximum number of statements allowed in a method before a warning is issued. Defaults to 5."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UncommunicativeMethodName",
+    "level" : "Warning",
+    "category" : "Comprehensibility",
+    "subCategory" : null,
+    "title" : "Avoid Uncommunicative Method Names",
+    "description" : "This rule detects method names that do not clearly communicate their intent, such as single-character names, names ending with numbers, or camelCase names.",
+    "explanation" : "# Uncommunicative Method Name\n\n## Introduction\n\nAn _Uncommunicative Method Name_ is a method name that doesn't communicate its\nintent well enough. This code smell is a case of\n[Uncommunicative Name](Uncommunicative-Name.md).\n\n## Current Support in Reek\n\n_Uncommunicative Method Name_ checks for:\n\n* single-character names\n* any name ending with a number\n* camelCaseMethodNames\n\n## Configuration\n\nReek's _Uncommunicative Method Name_ detector supports the\n[Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option         | Value       | Effect  |\n| ---------------|-------------|---------|\n| `reject` | array of strings | The set of names that Reek uses to check for bad names. Defaults to single-letter names, names ending with a number or names containing upper case letters. |\n| `accept` | array of strings | The set of names that Reek will accept (and not report) even if they match one of the `reject` expressions. |\n\nAn example configuration could look like this:\n\n```yaml\n---\nUncommunicativeMethodName:\n  accept:\n    - x\n    - meth1\n  reject:\n    - helper\n    - foobar\n```\n\nReek will convert whatever you give it as a string to the corresponding regex, so \"foobar\" from above will be converted to /foobar/ internally. \n\nApplying a configuration to a source file like this:\n\n```ruby\ndef x; end # Should not be reported\ndef meth1; end # Should not be reported\ndef foobar; end # Should be reported\ndef awesome_helper; end # Should be reported\n```\n\nReek would report:\n\n```\nsmelly.rb -- 2 warnings:\n  [4]:UncommunicativeMethodName: awesome_helper has the name 'awesome_helper'\n  [3]:UncommunicativeMethodName: foobar has the name 'foobar'\n```\n\n## Advanced configuration\n\nSometimes just strings are not enough for configuration. E.g. consider this code sample:\n\n```ruby\nclass Klass\n  def foo; end\n  def foobar; end;\nend\n```\n\nand now imagine that you want to reject the name \"foo\" but not \"foobar\". This wouldn't be possible with just using strings.\nFor this reason Reek has a special syntax that allows you to use regexes by using a forward slash at the beginning and the end of the string.\nEverything within the forward slashes will be loaded as a regex.\n\nA possible configuration that allows \"foobar\" but rejects \"foo\" could look like this:\n\n```yaml\n---\nUncommunicativeMethodName:\n  reject:\n    - \"/^foo$/\"\n```\n\n## Reek 4\n\nIn Reek 4 you could also pass regexes to `accept` or `reject`, meaning this was perfectly valid as well:\n\n```yaml\nUncommunicativeMethodName:\n  accept:\n    - !ruby/regexp /foobar/\n```\n\nSupport for this has been scrapped with Reek 5 to make the Reek configuration more yaml standard compliant.\nYou can still pass in regexes, you just have to wrap them into a string. Please see \"Advanced configuration\" above.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "accept",
+        "default" : "[]",
+        "description" : "The set of names that Reek will accept (and not report) even if they match one of the reject expressions."
+      },
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UncommunicativeModuleName",
+    "level" : "Info",
+    "category" : "Comprehensibility",
+    "subCategory" : null,
+    "title" : "Avoid Uncommunicative Module Names",
+    "description" : "This rule detects module names that do not clearly communicate their intent, such as single-character names or names ending with a number.",
+    "explanation" : "# Uncommunicative Module Name\n\n## Introduction\n\nAn _Uncommunicative Module Name_ is a module name that doesn't communicate its\nintent well enough. This code smell is a case of\n[Uncommunicative Name](Uncommunicative-Name.md).\n\n## Current Support in Reek\n\n_Uncommunicative Module Name_ checks for:\n\n* single-character names\n* any name ending with a number\n\n## Configuration\n\nReek's _Uncommunicative Module Name_ detector supports the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option         | Value       | Effect  |\n| ---------------|-------------|---------|\n| `reject` | array of strings | The set of names that Reek uses to check for bad names. Defaults to single-letter names and names ending with a number. |\n| `accept` | array or strings | The set of names that Reek will accept (and not report) even if they match one of the `reject` expressions. Empty by default.|\n\nAn example configuration could look like this:\n\n```yaml\n---\nUncommunicativeModuleName:\n  accept:\n    - lassy\n    - Util\n  reject:\n    - Helper\n```\n\nReek will convert whatever you give it as a string to the corresponding regex, so \"Helper\" from above will be converted to /Helper/ internally. \n\nApplying a configuration to a source file like this:\n\n```ruby\nclass Classy1; end # Should not be reported\nclass Util; end # Should not be reported\nclass BaseHelper; end # Should be reported\n```\n\nReek would report:\n\n```\nsmelly.rb -- 1 warning:\n  [3]:UncommunicativeModuleName: BaseHelper has the name 'BaseHelper'\n```\n\n## Advanced configuration\n\nSometimes just strings are not enough for configuration. E.g. consider this code sample:\n\n```ruby\nclass Klassy\n  # ...\nend\n\nclass KlassyModule\n  # ...\nend\n```\n\nand now imagine that you want to reject the name \"Klassy\" but not \"KlassyModule\". This wouldn't be possible with just using strings.\nFor this reason Reek has a special syntax that allows you to use regexes by using a forward slash at the beginning and the end of the string.\nEverything within the forward slashes will be loaded as a regex.\n\nA possible configuration that allows \"KlassyModule\" but rejects \"Klassy\" could look like this:\n\n```yaml\n---\nUncommunicativeModuleName:\n  reject:\n    - \"/^Klassy$/\"\n```\n\n## Reek 4\n\nIn Reek 4 you could also pass regexes to `accept` or `reject`, meaning this was perfectly valid as well:\n\n```yaml\nUncommunicativeModuleName:\n  accept:\n    - !ruby/regexp /foobar/\n```\n\nSupport for this has been scrapped with Reek 5 to make the Reek configuration more yaml standard compliant.\nYou can still pass in regexes, you just have to wrap them into a string. Please see \"Advanced configuration\" above.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "accept",
+        "default" : "[]",
+        "description" : "The set of names that Reek will accept (and not report) even if they match one of the reject expressions. Empty by default."
+      },
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UncommunicativeParameterName",
+    "level" : "Info",
+    "category" : "CodeStyle",
+    "subCategory" : null,
+    "title" : "Avoid Uncommunicative Parameter Names",
+    "description" : "Detects parameter names that do not clearly communicate their intent, such as single-character names, names ending with numbers, or camelCase names.",
+    "explanation" : "# Uncommunicative Parameter Name\n\n## Introduction\n\nAn _Uncommunicative Parameter Name_ is a parameter name that doesn't\ncommunicate its intent well enough. This code smell is a case of\n[Uncommunicative Name](Uncommunicative-Name.md).\n\n## Current Support in Reek\n\n_Uncommunicative Parameter Name_ checks for:\n\n* single-character names\n* any name ending with a number\n* camelCaseParameterNames\n\n## Configuration\n\nReek's _Uncommunicative Parameter Name_ detector supports the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option   | Value       | Effect  |\n| ---------|-------------|---------|\n| `reject` | array of strings | The set of names that Reek uses to check for bad names. Defaults to single-letter names, names containing an uppercase letter, names with a number at the end and '_'. |\n| `accept` | array of strings | The set of names that Reek will accept (and not report) even if they match one of the `reject` expressions. |\n\n\nAn example configuration could look like this:\n\n```yaml\n---\nUncommunicativeParameterName:\n  accept:\n    - x\n    - arg1\n  reject:\n    - foobar\n```\n\nReek will convert whatever you give it as a string to the corresponding regex, so \"foobar\" from above will be converted to /foobar/ internally. \n\nApplying a configuration to a source file like this:\n\n```ruby\ndef omg(x); x; end # Should not be reported\ndef omg(arg1); arg1; end # Should not be reported\ndef omg(foobar); foobar; end # Should be reported\n```\n\nReek would report:\n\n```\nsmelly.rb -- 1 warning:\n  [3]:UncommunicativeParameterName: omg has the parameter name 'foobar'\n```\n\n## Advanced configuration\n\nSometimes just strings are not enough for configuration. E.g. consider this code sample:\n\n```ruby\nclass Klass\n  def my_method(foo, foobar); end\nend\n```\n\nand now imagine that you want to reject the name \"foo\" but not \"foobar\". This wouldn't be possible with just using strings.\nFor this reason Reek has a special syntax that allows you to use regexes by using a forward slash at the beginning and the end of the string.\nEverything within the forward slashes will be loaded as a regex.\n\nA possible configuration that allows \"foobar\" but rejects \"foo\" could look like this:\n\n```yaml\n---\nUncommunicativeParameterName:\n  reject:\n    - \"/^foo$/\"\n```\n\n## Reek 4\n\nIn Reek 4 you could also pass regexes to `accept` or `reject`, meaning this was perfectly valid as well:\n\n```yaml\nUncommunicativeParameterName:\n  accept:\n    - !ruby/regexp /foobar/\n```\n\nSupport for this has been scrapped with Reek 5 to make the Reek configuration more yaml standard compliant.\nYou can still pass in regexes, you just have to wrap them into a string. Please see \"Advanced configuration\" above.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "accept",
+        "default" : "[]",
+        "description" : "The set of names that Reek will accept (and not report) even if they match one of the reject expressions."
+      },
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UncommunicativeVariableName",
+    "level" : "Info",
+    "category" : "Comprehensibility",
+    "subCategory" : null,
+    "title" : "Avoid Uncommunicative Variable Names",
+    "description" : "Detects variable names that do not clearly communicate their intent, such as single-character names, names ending with numbers, or camelCase names.",
+    "explanation" : "# Uncommunicative Variable Name\n\n## Introduction\n\nAn _Uncommunicative Variable Name_ is a variable name that doesn't communicate\nits intent well enough. This code smell is a case of\n[Uncommunicative Name](Uncommunicative-Name.md).\n\n## Current Support in Reek\n\n_Uncommunicative Variable Name_ checks for:\n\n* single-character names\n* any name ending with a number\n* camelCaseVariableNames\n\n## Configuration\n\nReek's _Uncommunicative Variable Name_ detector supports the\n[Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option         | Value       | Effect  |\n| ---------------|-------------|---------|\n| `reject` | array of strings | The set of names that Reek uses to check for bad names. Defaults to single-letter names, names ending with a number or names containing upper case letters. |\n| `accept` | array of strings | Names that will be accepted (not reported) even if they match one of the `reject` expressions. Defaults to `_`.|\n\nAn example configuration could look like this:\n\n```yaml\n---\nUncommunicativeVariableName:\n  accept:\n    - x\n    - var1\n  reject:\n    - helper\n    - foobar\n```\n\nReek will convert whatever you give it as a string to the corresponding regex, so \"foobar\" from above will be converted to /foobar/ internally. \n\nApplying a configuration to a source file like this:\n\n```ruby\ndef omg\n  x = 5 # Should not be reported\n  var1 = true # Should not be reported\n  helper = 42 # Should be reported\n  foobar = false # Should be reported\nend\n```\n\nReek would report:\n\n```\nsmelly.rb -- 2 warnings:\n  [5]:UncommunicativeVariableName: omg has the variable name 'foobar' [https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md]\n  [4]:UncommunicativeVariableName: omg has the variable name 'helper' [https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md]\n```\n\n## Advanced configuration\n\nSometimes just strings are not enough for configuration. E.g. consider this code sample:\n\n```ruby\ndef omg\n  foo = 42\n  foobar = 4242\nend\n```\n\nand now imagine that you want to reject the name \"foo\" but not \"foobar\". This wouldn't be possible with just using strings.\nFor this reason Reek has a special syntax that allows you to use regexes by using a forward slash at the beginning and the end of the string.\nEverything within the forward slashes will be loaded as a regex.\n\nA possible configuration that allows \"foobar\" but rejects \"foo\" could look like this:\n\n```yaml\n---\nUncommunicativeVariableName:\n  reject:\n    - \"/^foo$/\"\n```\n\n## Reek 4\n\nIn Reek 4 you could also pass regexes to `accept` or `reject`, meaning this was perfectly valid as well:\n\n```yaml\nUncommunicativeVariableName:\n  accept:\n    - !ruby/regexp /write/\n```\n\nSupport for this has been scrapped with Reek 5 to make the Reek configuration more yaml standard compliant.\nYou can still pass in regexes, you just have to wrap them into a string. Please see \"Advanced configuration\" above.",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "accept",
+        "default" : "[\"_\"]",
+        "description" : "Names that will be accepted (not reported) even if they match one of the reject expressions. Defaults to _."
+      },
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UnusedParameters",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Avoid Unused Parameters in Methods",
+    "description" : "Detects methods that have parameters which are not used within the method body.",
+    "explanation" : "## Introduction\n\n_Unused Parameter_ refers to methods with parameters that are unused in scope of the method.\n\nHaving unused parameters in a method is code smell because leaving dead code in\na method can never improve the method and it makes the code confusing to read.\n\n## Example\n\nGiven:\n\n```ruby\nclass Klass\n  def unused_parameters(x,y,z)\n    puts x,y # but not z\n  end\nend\n```\n\nReek would emit the following warning:\n\n```\n[2]:UnusedParameters: Klass#unused_parameters has unused parameter 'z'\n```\n\n## Configuration\n\n_Unused Parameter_ offers the [Basic Smell Options](Basic-Smell-Options.md).",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UnusedPrivateMethod",
+    "level" : "Warning",
+    "category" : "UnusedCode",
+    "subCategory" : null,
+    "title" : "Avoid Unused Private Methods",
+    "description" : "Detects private instance methods in classes that are never used, indicating dead code.",
+    "explanation" : "## Introduction\n\nClasses should use their private methods. Otherwise this is dead\ncode which is confusing and bad for maintenance.\n\nThe _Unused Private Method_ detector reports unused private instance\nmethods and instance methods only - class methods are ignored.\n\n## Example\n\nGiven:\n\n```ruby\nclass Car\n  private\n  def drive; end\n  def start; end\nend\n```\n\nReek would emit the following warning:\n\n```\n2 warnings:\n  [3]:Car has the unused private instance method `drive` (UnusedPrivateMethod)\n  [4]:Car has the unused private instance method `start` (UnusedPrivateMethod)\n```\n\n## Configuration\n\n_Unused Private Method_ offers the [Basic Smell Options](Basic-Smell-Options.md).\n\nPrivate methods that are called via dynamic dispatch\nwill trigger a false alarm since detecting something like this is far out of\nscope for Reek. In this case you can disable this detector via the `exclude`\nconfiguration option (which is part of the [Basic Smell Options](Basic-Smell-Options.md))\nfor instance like this (an example from Reek's own codebase):\n\n```ruby\n# :reek:UnusedPrivateMethod { exclude: [ process_ ] }\nclass ContextBuilder\n  def process_begin\n    # ....\n  end\nend\n```\n\nNote that disabling this detector via comment works on a class scope, not\na method scope (like you can see above).\n\nAnother simple example would be:\n\n```ruby\nclass Alfa\n  private\n  def bravo\n  end\nend\n```\n\nThis would report:\n\n>>\nruby.rb -- 1 warning:\n  [3]:UnusedPrivateMethod: Alfa has the unused private instance method 'bravo'\n\nIf you want to suppress this warning you can do this via source comment like this:\n\n```ruby\n# :reek:UnusedPrivateMethod: { exclude: bravo }\nclass Alfa\n  private\n  def bravo\n  end\nend\n```\n\n## Known limitations\n\n* Method calls via dynamic dispatch (e.g. via `send`) is something Reek (or any other\n  static tool for that matter) cannot detect.\n* Method calls via callback like [Rails filters](http://guides.rubyonrails.org/action_controller_overview.html#filters)\n  will trigger this as well, e.g.:\n\n```ruby\n  class BankController < ActionController::Base\n    before_action :audit\n\n    private\n    def audit\n      # ....\n    end\n  end\n```\n* Reek works on a per-file base. This means that using something like the [template pattern](https://en.wikipedia.org/wiki/Template_method_pattern)\n  with private methods will trigger this detector.\n  We do believe though that using private methods to fill out a template in a\n  superclass is not a good idea in general so this probably isn't really a problem\n  but still worth mentioning it.",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      }
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "UtilityFunction",
+    "level" : "Warning",
+    "category" : "BestPractice",
+    "subCategory" : null,
+    "title" : "Detect Utility Functions",
+    "description" : "Detect instance methods that do not depend on the instance state.",
+    "explanation" : "# Utility Function\n\n## Introduction\n\nA _Utility Function_ is any instance method that has no dependency on the state of the instance.\n\n_Utility Function_ is heavily related to _[Feature Envy](FeatureEnvy)_, please check out the explanation there why _Utility Function_ is something you should care about.\n\n## Example\n\nGiven\n\n```ruby\nclass UtilityFunction\n  def showcase(argument)\n    argument.to_s + argument.to_i\n  end\nend\n```\n\nReek would report:\n\n```\ntest.rb -- 2 warnings:\n  [2]:UtilityFunction#showcase doesn't depend on instance state (UtilityFunction)\n```\n\n## Current Support in Reek\n\n_Utility Function_ will warn about any method that:\n\n* is non-empty\n* does not override an inherited method\n* calls at least one method on another object\n* doesn't use any of self's instance variables\n* doesn't use any of self's methods\n\n## Differences to _Feature Envy_\n\n_[Feature Envy](FeatureEnvy)_ is only triggered if there are some references to self and _Utility Function_ is triggered if there are no references to self.\n\n## Configuration\n\nReek's _Utility Function_ detector supports the [Basic Smell Options](Basic-Smell-Options.md), plus:\n\n| Option                | Value       | Effect  |\n| ----------------------|-------------|---------|\n| `public_methods_only` | Boolean | Disable this smell detector for non-public methods (which means \"private\" and \"protected\") |\n\nA sample configuration file would look like this:\n\n```yaml\n---\ndetectors:\n  UtilityFunction:\n    public_methods_only: true\n```",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+      {
+        "name" : "exclude",
+        "default" : "[]",
+        "description" : "Ignores any context whose full description matches any element of this array."
+      },
+      {
+        "name" : "public_methods_only",
+        "default" : "false",
+        "description" : "Disable this smell detector for non-public methods (which means 'private' and 'protected')"
+      }
+    ],
+    "languages" : [
+    ]
+  }
+]

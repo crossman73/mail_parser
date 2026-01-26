@@ -1,0 +1,1172 @@
+[
+  {
+    "id" : "B101",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "UnexpectedBehaviour",
+    "title" : "Avoid Use of Assert Statements",
+    "description" : "This rule checks for the use of the Python 'assert' keyword in code.",
+    "explanation" : "## B101: Test for use of assert\n\nThis plugin test checks for the use of the Python `assert` keyword. It\nwas discovered that some projects used assert to enforce interface\nconstraints. However, assert is removed with compiling to optimised byte\ncode (python -o producing \\*.pyo files). This caused various protections\nto be removed. Consider raising a semantically meaningful error or\n`AssertionError` instead.\n\nPlease see\n<https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement>\nfor more info on `assert`.\n\n**Config Options:**\n\nYou can configure files that skip this check. This is often useful when\nyou use assert statements in test cases.\n\n`assert_used:\nskips: ['*_test.py', '*test_*.py']`\n\n\nExample:\n\n<!-- -->\n\n    >> Issue: Use of assert detected. The enclosed code will be removed when\n    compiling to optimised byte code.\n    Severity: Low   Confidence: High\n    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)\n    Location: ./examples/assert.py:1\n    1 assert logged_in\n    2 display_assets()",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B102",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid use of exec",
+    "description" : "Detects and warns against the use of Python's exec function or keyword.",
+    "explanation" : "## B102: Test for the use of exec\n\nThis plugin test checks for the use of Python’s exec method or keyword.\nThe Python docs succinctly describe why the use of exec is risky.\n\nExample:\n\n<!-- -->\n\n    >> Issue: Use of exec detected.\n    Severity: Medium   Confidence: High\n    CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)\n    Location: ./examples/exec.py:2\n    1 exec(\"do evil\")",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B103",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Detect Setting Permissive File Permissions",
+    "description" : "Detects usage of os.chmod to set overly permissive file permissions that may expose files to unauthorized access.",
+    "explanation" : "## B103: Test for setting permissive file permissions\n\nPOSIX based operating systems utilize a permissions model to protect\naccess to parts of the file system. This model supports three roles\n“owner”, “group” and “world” each role may have a combination of “read”,\n“write” or “execute” flags sets. Python provides `chmod` to manipulate\nPOSIX style permissions.\n\nThis plugin test looks for the use of `chmod` and will alert when it is\nused to set particularly permissive control flags. A MEDIUM warning is\ngenerated if a file is set to group executable and a HIGH warning is\nreported if a file is set world writable. Warnings are given with HIGH\nconfidence.\n\nExample:\n\n<!-- -->\n\n    >> Issue: Probable insecure usage of temp file/directory.\n    Severity: Medium   Confidence: Medium\n    CWE: CWE-732 (https://cwe.mitre.org/data/definitions/732.html)\n    Location: ./examples/os-chmod.py:15\n    14  os.chmod('/etc/hosts', 0o777)\n    15  os.chmod('/tmp/oh_hai', 0x1ff)\n    16  os.chmod('/etc/passwd', stat.S_IRWXU)\n    \n    >> Issue: Chmod setting a permissive mask 0777 on file (key_file).\n    Severity: High   Confidence: High\n    CWE: CWE-732 (https://cwe.mitre.org/data/definitions/732.html)\n    Location: ./examples/os-chmod.py:17\n    16  os.chmod('/etc/passwd', stat.S_IRWXU)\n    17  os.chmod(key_file, 0o777)\n    18",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B104",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "Visibility",
+    "title" : "Avoid binding to all network interfaces",
+    "description" : "Detects hardcoded binding to all network interfaces using '0.0.0.0' in socket binding calls.",
+    "explanation" : "## B104: Test for binding to all interfaces\n\nBinding to all network interfaces can potentially open up a service to\ntraffic on unintended interfaces, that may not be properly documented or\nsecured. This plugin test looks for a string pattern “0.0.0.0” that may\nindicate a hardcoded binding to all network interfaces.\n\nExample:\n\n<!-- -->\n\n    >> Issue: Possible binding to all interfaces.\n    Severity: Medium   Confidence: Medium\n    CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)\n    Location: ./examples/binding.py:4\n    3   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    4   s.bind(('0.0.0.0', 31137))\n    5   s.bind(('192.168.0.1', 8080))",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B105",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Detect Hardcoded Password Strings",
+    "description" : "Detects the use of hardcoded password strings in code that are assigned to variables or dictionary keys resembling password names or used in password comparisons.",
+    "explanation" : "**B105: Test for use of hard-coded password strings**\n\nThe use of hard-coded passwords increases the possibility of password\nguessing tremendously. This plugin test looks for all string literals\nand checks the following conditions:\n\n-   assigned to a variable that looks like a password\n\n-   assigned to a dict key that looks like a password\n\n-   used in a comparison with a variable that looks like a password\n\nVariables are considered to look like a password if they have match any\none of:\n\n-   “password”\n\n-   “pass”\n\n-   “passwd”\n\n-   “pwd”\n\n-   “secret”\n\n-   “token”\n\n-   “secrete”\n\nNote: this can be noisy and may generate false positives.\n\n**Config Options:**\n\nNone\n\nExample  \n\n<!-- -->\n\n    >> Issue: Possible hardcoded password '(root)'\n       Severity: Low   Confidence: Low\n       Location: ./examples/hardcoded-passwords.py:5\n    4 def someFunction2(password):\n    5     if password == \"root\":\n    6         print(\"OK, logged in\")",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B106",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Detect Hardcoded Password Function Arguments",
+    "description" : "Detects function calls where password-related keyword arguments are assigned hardcoded string literals.",
+    "explanation" : "**B106: Test for use of hard-coded password function arguments**\n\nThe use of hard-coded passwords increases the possibility of password\nguessing tremendously. This plugin test looks for all function calls\nbeing passed a keyword argument that is a string literal. It checks that\nthe assigned local variable does not look like a password.\n\nVariables are considered to look like a password if they have match any\none of:\n\n-   “password”\n\n-   “pass”\n\n-   “passwd”\n\n-   “pwd”\n\n-   “secret”\n\n-   “token”\n\n-   “secrete”\n\nNote: this can be noisy and may generate false positives.\n\n**Config Options:**\n\nNone\n\nExample  \n\n<!-- -->\n\n    >> Issue: [B106:hardcoded_password_funcarg] Possible hardcoded\n    password: 'blerg'\n       Severity: Low   Confidence: Medium\n       Location: ./examples/hardcoded-passwords.py:16\n    15\n    16    doLogin(password=\"blerg\")",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B107",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Avoid Hardcoded Password Argument Defaults",
+    "description" : "Detects function definitions that use hardcoded passwords as default argument values.",
+    "explanation" : "**B107: Test for use of hard-coded password argument defaults**\n\nThe use of hard-coded passwords increases the possibility of password\nguessing tremendously. This plugin test looks for all function\ndefinitions that specify a default string literal for some argument. It\nchecks that the argument does not look like a password.\n\nVariables are considered to look like a password if they have match any\none of:\n\n-   “password”\n\n-   “pass”\n\n-   “passwd”\n\n-   “pwd”\n\n-   “secret”\n\n-   “token”\n\n-   “secrete”\n\nNote: this can be noisy and may generate false positives.\n\n**Config Options:**\n\nNone\n\nExample  \n\n<!-- -->\n\n    >> Issue: [B107:hardcoded_password_default] Possible hardcoded\n    password: 'Admin'\n       Severity: Low   Confidence: Medium\n       Location: ./examples/hardcoded-passwords.py:1\n\n    1    def someFunction(user, password=\"Admin\"):\n    2      print(\"Hi \" + user)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B108",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Avoid Hardcoded Temporary Directory Usage",
+    "description" : "Detects insecure usage of hardcoded temporary file or directory paths in Python code.",
+    "explanation" : "## B108: Test for insecure usage of tmp file/directory\n\nSafely creating a temporary file or directory means following a number\nof rules (see the references for more details). This plugin test looks\nfor strings starting with (configurable) commonly used temporary paths,\nfor example:\n\n**Config Options:**\n\nThis test plugin takes a similarly named config block,\nhardcoded\\_tmp\\_directory. The config block provides a Python list,\ntmp\\_dirs, that lists string fragments indicating possible temporary\nfile paths. Any string starting with one of these fragments will report\na MEDIUM confidence issue.\n\n`hardcoded_tmp_directory:\ntmp_dirs: ['/tmp', '/var/tmp', '/dev/shm']`",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B109",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureStorage",
+    "title" : "Detect Password Based Config Options Not Marked Secret",
+    "description" : "Detects usage of password-related configuration options in OpenStack Oslo config that are not marked as secret to prevent sensitive data exposure in logs.",
+    "explanation" : "# B109: Test for a password based config option not marked secret\n\nThis plugin has been removed.\n\nPasswords are sensitive and must be protected appropriately. In\nOpenStack Oslo there is an option to mark options “secret” which will\nensure that they are not logged. This plugin detects usages of oslo\nconfiguration functions that appear to deal with strings ending in\n‘password’ and flag usages where they have not been marked secret.\n\nIf such a value is found a MEDIUM severity error is generated. If\n‘False’ or ‘None’ are explicitly set, Bandit will return a MEDIUM\nconfidence issue. If Bandit can’t determine the value of secret it will\nreturn a LOW confidence issue.\n\nConfig Options:\n\n`password_config_option_not_marked_secret:\nfunction_names:\n- oslo.config.cfg.StrOpt\n- oslo_config.cfg.StrOpt`\n\nExample:\n\n<!-- -->\n\n    >> Issue: [password_config_option_not_marked_secret] oslo config option\n    possibly not marked secret=True identified.\n    Severity: Medium   Confidence: Low\n    Location: examples/secret-config-option.py:12\n    11                  help=\"User's password\"),\n    12       cfg.StrOpt('nova_password',\n    13                  secret=secret,\n    14                  help=\"Nova user password\"),\n    15   ]\n    \n    >> Issue: [password_config_option_not_marked_secret] oslo config option not\n    marked secret=True identified, security issue.\n    Severity: Medium   Confidence: Medium\n    Location: examples/secret-config-option.py:21\n    20                  help=\"LDAP ubind ser name\"),\n    21       cfg.StrOpt('ldap_password',\n    22                  help=\"LDAP bind user password\"),\n    23       cfg.StrOpt('ldap_password_attribute',",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B110",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "UnexpectedBehaviour",
+    "title" : "Avoid pass in except block",
+    "description" : "Detects and warns against using a pass statement in an except block which silently ignores exceptions.",
+    "explanation" : "## B110: Test for a pass in the except block\n\nErrors in Python code bases are typically communicated using\n`Exceptions`. An exception object is ‘raised’ in the event of an error\nand can be ‘caught’ at a later point in the program, typically some\nerror handling or logging action will then be performed.\n\nHowever, it is possible to catch an exception and silently ignore it.\nThis is illustrated with the following example\n\nThis pattern is considered bad practice in general, but also represents\na potential security issue. A larger than normal volume of errors from a\nservice can indicate an attempt is being made to disrupt or interfere\nwith it. Thus errors should, at the very least, be logged.\n\nThere are rare situations where it is desirable to suppress errors, but\nthis is typically done with specific exception types, rather than the\nbase Exception class (or no type). To accommodate this, the test may be\nconfigured to ignore ‘try, except, pass’ where the exception is typed.\nFor example, the following would not generate a warning if the\nconfiguration option `checked_typed_exception` is set to False:\n\n**Config Options:**\n\n`try_except_pass:\ncheck_typed_exception: True`\n\nExample:\n\n<!-- -->\n\n    >> Issue: Try, Except, Pass detected.\n    Severity: Low   Confidence: High\n    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)\n    Location: ./examples/try_except_pass.py:4\n    3        a = 1\n    4    except:\n    5        pass",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B111",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Detect use of rootwrap running as root",
+    "description" : "Detects calls to specific functions with the parameter run_as_root set to True, which can lead to security risks by running commands as root.",
+    "explanation" : "# B111: Test for the use of rootwrap running as root\n\nThis plugin has been removed.\n\nRunning commands as root dramatically increase their potential risk.\nRunning commands with restricted user privileges provides defense in\ndepth against command injection attacks, or developer and configuration\nerror. This plugin test checks for specific methods being called with a\nkeyword parameter run\\_as\\_root set to True, a common OpenStack idiom.\n\n\n**Config Options:**\n\nThis test plugin takes a similarly named configuration block, execute_with_run_as_root_equals_true, providing a list, function_names, of function names. A call to any of these named functions will be checked for a run_as_root keyword parameter, and if True, will report a Low severity issue.\n\nexecute_with_run_as_root_equals_true:\n    function_names:\n- ceilometer.utils.execute\n- cinder.utils.execute\n- neutron.agent.linux.utils.execute\n- nova.utils.execute\n- nova.utils.trycmd\n\nExample:\n\n<!-- -->\n\n    >> Issue: Execute with run_as_root=True identified, possible security\n    issue.\n    Severity: Low   Confidence: Medium\n    Location: ./examples/exec-as-root.py:26\n    25  nova_utils.trycmd('gcc --version')\n    26  nova_utils.trycmd('gcc --version', run_as_root=True)\n    27",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B112",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "UnexpectedBehaviour",
+    "title" : "Avoid continue in except block",
+    "description" : "Detects usage of 'continue' statements inside except blocks which silently ignore exceptions in loops.",
+    "explanation" : "## B112: Test for a continue in the except block\n\nErrors in Python code bases are typically communicated using\n`Exceptions`. An exception object is ‘raised’ in the event of an error\nand can be ‘caught’ at a later point in the program, typically some\nerror handling or logging action will then be performed.\n\nHowever, it is possible to catch an exception and silently ignore it\nwhile in a loop. This is illustrated with the following example\n\nThis pattern is considered bad practice in general, but also represents\na potential security issue. A larger than normal volume of errors from a\nservice can indicate an attempt is being made to disrupt or interfere\nwith it. Thus errors should, at the very least, be logged.\n\nThere are rare situations where it is desirable to suppress errors, but\nthis is typically done with specific exception types, rather than the\nbase Exception class (or no type). To accommodate this, the test may be\nconfigured to ignore ‘try, except, continue’ where the exception is\ntyped. For example, the following would not generate a warning if the\nconfiguration option `checked_typed_exception` is set to False:\n\n**Config Options:**\n\n`try_except_continue:\ncheck_typed_exception: True`\n\nExample:\n\n<!-- -->\n\n    >> Issue: Try, Except, Continue detected.\n    Severity: Low   Confidence: High\n    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)\n    Location: ./examples/try_except_continue.py:5\n    4            a = i\n    5        except:\n    6            continue",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B113",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "DoS",
+    "title" : "Enforce timeout parameter in requests calls",
+    "description" : "Detects requests calls without a timeout parameter specified.",
+    "explanation" : "## B113: Test for missing requests timeout\n\nThis plugin test checks for requests calls without a timeout specified.\n\nNearly all production code should use this parameter in nearly all requests, Failure to do so can cause your program to hang indefinitely.\n\nWhen request methods are used without the timeout parameter set, Bandit will return a MEDIUM severity error.\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B113:request_without_timeout] Requests call without timeout\n    Severity: Medium   Confidence: Low\n    CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b113_request_without_timeout.html\n    Location: examples/requests-missing-timeout.py:3:0\n    2\n    3   requests.get('https://gmail.com')\n    4   requests.get('https://gmail.com', timeout=None)\n    \n    --------------------------------------------------\n    >> Issue: [B113:request_without_timeout] Requests call with timeout set to None\n    Severity: Medium   Confidence: Low\n    CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b113_request_without_timeout.html\n    Location: examples/requests-missing-timeout.py:4:0\n    3   requests.get('https://gmail.com')\n    4   requests.get('https://gmail.com', timeout=None)\n    5   requests.get('https://gmail.com', timeout=5)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B201",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid Running Flask App with Debug Mode Enabled",
+    "description" : "Detects Flask applications running with debug mode set to true, which enables the Werkzeug debugger and allows arbitrary code execution.",
+    "explanation" : "## B201: Test for use of flask app with debug set to true\n\nRunning Flask applications in debug mode results in the Werkzeug\ndebugger being enabled. This includes a feature that allows arbitrary\ncode execution. Documentation for both Flask\n<a href=\"#id4\" id=\"id1\" class=\"footnote-reference brackets\">1</a> and\nWerkzeug\n<a href=\"#id5\" id=\"id2\" class=\"footnote-reference brackets\">2</a>\nstrongly suggests that debug mode should never be enabled on production\nsystems.\n\nOperating a production server with debug mode enabled was the probable\ncause of the Patreon breach in 2015\n<a href=\"#id6\" id=\"id3\" class=\"footnote-reference brackets\">3</a>.\n\nExample:\n\n<!-- -->\n\n    >> Issue: A Flask app appears to be run with debug=True, which exposes\n    the Werkzeug debugger and allows the execution of arbitrary code.\n    Severity: High   Confidence: High\n    CWE: CWE-94 (https://cwe.mitre.org/data/definitions/94.html)\n    Location: examples/flask_debug.py:10\n    9 #bad\n    10    app.run(debug=True)\n    11",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B202",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Avoid Using tarfile.extractall Without Safe Member Validation",
+    "description" : "Detects usage of tarfile.extractall() without validating archive members to prevent directory traversal and unsafe file extraction.",
+    "explanation" : "## B202: Test for tarfile.extractall\n\nThis plugin will look for usage of tarfile.extractall()\n\nSeverity are set as follows:\n\n* tarfile.extractalll(members=function(tarfile)) - LOW\n* tarfile.extractalll(members=?) - member is not a function - MEDIUM\n* tarfile.extractall() - members from the archive is trusted - HIGH\n\nUse tarfile.extractall(members=function_name) and define a function that will inspect each member. Discard files that contain a directory traversal sequences such as ../ or \\.. along with all special filetypes unless you explicitly need them.\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B202:tarfile_unsafe_members] tarfile.extractall used without\n    any validation. You should check members and discard dangerous ones\n    Severity: High   Confidence: High\n    CWE: CWE-22 (https://cwe.mitre.org/data/definitions/22.html)\n    Location: examples/tarfile_extractall.py:8\n    More Info:\n    https://bandit.readthedocs.io/en/latest/plugins/b202_tarfile_unsafe_members.html\n    7       tar = tarfile.open(filename)\n    8       tar.extractall(path=tempfile.mkdtemp())\n    9       tar.close()",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B301",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of Pickle for Deserialization",
+    "description" : "Detects usage of pickle and related modules for deserializing data, which can be unsafe if the data is untrusted.",
+    "explanation" : "### B301: pickle\n\nPickle and modules that wrap it can be unsafe when used to deserialize\nuntrusted data, possible security issue.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B301</p></td>\n<td><p>pickle</p></td>\n<td><ul>\n<li><p>pickle.loads</p></li>\n<li><p>pickle.load</p></li>\n<li><p>pickle.Unpickler</p></li>\n<li><p>cPickle.loads</p></li>\n<li><p>cPickle.load</p></li>\n<li><p>cPickle.Unpickler</p></li>\n<li><p>dill.loads</p></li>\n<li><p>dill.load</p></li>\n<li><p>dill.Unpickler</p></li>\n<li><p>shelve.open</p></li>\n<li><p>shelve.DbfilenameShelf</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B302",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Deserialization with the marshal Module",
+    "description" : "Detects usage of the marshal module for deserialization, which can be potentially dangerous.",
+    "explanation" : "### B302: marshal\n\nDeserialization with the marshal module is possibly dangerous.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B302</p></td>\n<td><p>marshal</p></td>\n<td><ul>\n<li><p>marshal.load</p></li>\n<li><p>marshal.loads</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B303",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Use of Insecure Hash Functions (MD2, MD4, MD5, SHA1)",
+    "description" : "Detects usage of insecure cryptographic hash functions such as MD2, MD4, MD5, and SHA1 in Python code.",
+    "explanation" : "### B303: md5\n\nUse of insecure MD2, MD4, MD5, or SHA1 hash function.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B303</p></td>\n<td><p>md5</p></td>\n<td><ul>\n<li><p>hashlib.md5</p></li>\n<li><p>hashlib.sha1</p></li>\n<li><p>Crypto.Hash.MD2.new</p></li>\n<li><p>Crypto.Hash.MD4.new</p></li>\n<li><p>Crypto.Hash.MD5.new</p></li>\n<li><p>Crypto.Hash.SHA.new</p></li>\n<li><p>Cryptodome.Hash.MD2.new</p></li>\n<li><p>Cryptodome.Hash.MD4.new</p></li>\n<li><p>Cryptodome.Hash.MD5.new</p></li>\n<li><p>Cryptodome.Hash.SHA.new</p></li>\n<li><p>cryptography.hazmat.primitives .hashes.MD5</p></li>\n<li><p>cryptography.hazmat.primitives .hashes.SHA1</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B304",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Use of Insecure Cipher or Cipher Mode",
+    "description" : "Detects usage of insecure cryptographic ciphers or cipher modes that can compromise data security.",
+    "explanation" : "### B304 - B305: ciphers and modes\n\nUse of insecure cipher or cipher mode. Replace with a known secure\ncipher such as AES.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B304</p></td>\n<td><p>ciphers</p></td>\n<td><ul>\n<li><p>Crypto.Cipher.ARC2.new</p></li>\n<li><p>Crypto.Cipher.ARC4.new</p></li>\n<li><p>Crypto.Cipher.Blowfish.new</p></li>\n<li><p>Crypto.Cipher.DES.new</p></li>\n<li><p>Crypto.Cipher.XOR.new</p></li>\n<li><p>Cryptodome.Cipher.ARC2.new</p></li>\n<li><p>Cryptodome.Cipher.ARC4.new</p></li>\n<li><p>Cryptodome.Cipher.Blowfish.new</p></li>\n<li><p>Cryptodome.Cipher.DES.new</p></li>\n<li><p>Cryptodome.Cipher.XOR.new</p></li>\n<li><p>cryptography.hazmat.primitives .ciphers.algorithms.ARC4</p></li>\n<li><p>cryptography.hazmat.primitives .ciphers.algorithms.Blowfish</p></li>\n<li><p>cryptography.hazmat.primitives .ciphers.algorithms.IDEA</p></li>\n</ul></td>\n<td><p>High</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B305</p></td>\n<td><p>cipher_modes</p></td>\n<td><ul>\n<li><p>cryptography.hazmat.primitives .ciphers.modes.ECB</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B305",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Use of Insecure Ciphers and Cipher Modes",
+    "description" : "Detects the use of insecure cryptographic ciphers or cipher modes in Python code and recommends replacing them with secure alternatives such as AES.",
+    "explanation" : "### B304 - B305: ciphers and modes\n\nUse of insecure cipher or cipher mode. Replace with a known secure\ncipher such as AES.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B304</p></td>\n<td><p>ciphers</p></td>\n<td><ul>\n<li><p>Crypto.Cipher.ARC2.new</p></li>\n<li><p>Crypto.Cipher.ARC4.new</p></li>\n<li><p>Crypto.Cipher.Blowfish.new</p></li>\n<li><p>Crypto.Cipher.DES.new</p></li>\n<li><p>Crypto.Cipher.XOR.new</p></li>\n<li><p>Cryptodome.Cipher.ARC2.new</p></li>\n<li><p>Cryptodome.Cipher.ARC4.new</p></li>\n<li><p>Cryptodome.Cipher.Blowfish.new</p></li>\n<li><p>Cryptodome.Cipher.DES.new</p></li>\n<li><p>Cryptodome.Cipher.XOR.new</p></li>\n<li><p>cryptography.hazmat.primitives .ciphers.algorithms.ARC4</p></li>\n<li><p>cryptography.hazmat.primitives .ciphers.algorithms.Blowfish</p></li>\n<li><p>cryptography.hazmat.primitives .ciphers.algorithms.IDEA</p></li>\n</ul></td>\n<td><p>High</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B305</p></td>\n<td><p>cipher_modes</p></td>\n<td><ul>\n<li><p>cryptography.hazmat.primitives .ciphers.modes.ECB</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B306",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Use of Insecure and Deprecated Function mktemp",
+    "description" : "Detects the use of the insecure and deprecated function tempfile.mktemp in Python code.",
+    "explanation" : "### B306: mktemp\\_q\n\nUse of insecure and deprecated function (mktemp).\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B306</p></td>\n<td><p>mktemp_q</p></td>\n<td><ul>\n<li><p>tempfile.mktemp</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B307",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid use of eval function",
+    "description" : "Detects use of the potentially insecure eval function in Python code and suggests using safer alternatives.",
+    "explanation" : "### B307: eval\n\nUse of possibly insecure function - consider using safer\nast.literal\\_eval.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B307</p></td>\n<td><p>eval</p></td>\n<td><ul>\n<li><p>eval</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B308",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Avoid use of mark_safe()",
+    "description" : "Detects use of Django's mark_safe() which may expose cross-site scripting (XSS) vulnerabilities and should be reviewed.",
+    "explanation" : "### B308: mark\\_safe\n\nUse of mark\\_safe() may expose cross-site scripting vulnerabilities and\nshould be reviewed.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B308</p></td>\n<td><p>mark_safe</p></td>\n<td><ul>\n<li><p>django.utils.safestring.mark_safe</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B309",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "SSL",
+    "title" : "Avoid Use of HTTPSConnection on Older Python Versions",
+    "description" : "Detects use of HTTPSConnection on Python versions prior to 2.7.9 and 3.4.3 which do not provide proper security.",
+    "explanation" : "### B309: httpsconnection\n\nUse of HTTPSConnection on older versions of Python prior to 2.7.9 and\n3.4.3 do not provide security, see\n<https://wiki.openstack.org/wiki/OSSN/OSSN-0033>\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B309</p></td>\n<td><p>httpsconnection</p></td>\n<td><ul>\n<li><p>httplib.HTTPSConnection</p></li>\n<li><p>http.client.HTTPSConnection</p></li>\n<li><p>six.moves.http_client .HTTPSConnection</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B310",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "FileAccess",
+    "title" : "Audit urllib urlopen for permitted schemes",
+    "description" : "This rule audits usage of urllib urlopen and related functions to ensure only permitted URL schemes are used, avoiding unexpected or insecure schemes like 'file:'.",
+    "explanation" : "### B310: urllib\\_urlopen\n\nAudit url open for permitted schemes. Allowing use of ‘file:’’ or custom\nschemes is often unexpected.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B310</p></td>\n<td><p>urllib_urlopen</p></td>\n<td><ul>\n<li><p>urllib.urlopen</p></li>\n<li><p>urllib.request.urlopen</p></li>\n<li><p>urllib.urlretrieve</p></li>\n<li><p>urllib.request.urlretrieve</p></li>\n<li><p>urllib.URLopener</p></li>\n<li><p>urllib.request.URLopener</p></li>\n<li><p>urllib.FancyURLopener</p></li>\n<li><p>urllib.request.FancyURLopener</p></li>\n<li><p>urllib2.urlopen</p></li>\n<li><p>urllib2.Request</p></li>\n<li><p>six.moves.urllib.request.urlopen</p></li>\n<li><p>six.moves.urllib.request .urlretrieve</p></li>\n<li><p>six.moves.urllib.request .URLopener</p></li>\n<li><p>six.moves.urllib.request .FancyURLopener</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B311",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Using Standard Pseudo-Random Generators for Security Purposes",
+    "description" : "Detects use of Python's standard pseudo-random generators that are not suitable for cryptographic or security-sensitive purposes.",
+    "explanation" : "### B311: random\n\nStandard pseudo-random generators are not suitable for\nsecurity/cryptographic purposes.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B311</p></td>\n<td><p>random</p></td>\n<td><ul>\n<li><p>random.random</p></li>\n<li><p>random.randrange</p></li>\n<li><p>random.randint</p></li>\n<li><p>random.choice</p></li>\n<li><p>random.uniform</p></li>\n<li><p>random.triangular</p></li>\n</ul></td>\n<td><p>Low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B312",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using Telnet-related Functions",
+    "description" : "Detects usage of telnetlib functions which are insecure for network communication.",
+    "explanation" : "### B312: telnetlib\n\nTelnet-related functions are being called. Telnet is considered\ninsecure. Use SSH or some other encrypted protocol.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B312</p></td>\n<td><p>telnetlib</p></td>\n<td><ul>\n<li><p>telnetlib.*</p></li>\n</ul></td>\n<td><p>High</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B313",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using Unsafe XML Parsing Methods",
+    "description" : "Detects usage of insecure XML parsing methods from various libraries that are vulnerable to XML attacks when parsing untrusted data.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B314",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using Vulnerable XML Parsing Methods",
+    "description" : "Detects use of various XML parsing methods that are vulnerable to XML attacks when processing untrusted data.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B315",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using xml.sax.expatreader.create_parser for Parsing Untrusted XML",
+    "description" : "Detects usage of xml.sax.expatreader.create_parser to parse untrusted XML data, which is vulnerable to XML attacks.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B316",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid parsing untrusted XML data with vulnerable XML methods",
+    "description" : "Detects usage of certain XML parsing methods that are vulnerable to XML attacks when parsing untrusted XML data.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B317",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using xml.sax Methods to Parse Untrusted XML",
+    "description" : "Detects usage of xml.sax methods to parse untrusted XML data, which are vulnerable to XML attacks.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B318",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Unsafe XML Parsing with xml.dom.minidom",
+    "description" : "Detects usage of xml.dom.minidom.parse and parseString methods which parse untrusted XML data and are vulnerable to XML attacks.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B319",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Parsing Untrusted XML with xml.dom.pulldom Methods",
+    "description" : "Detects usage of xml.dom.pulldom.parse and parseString methods to parse untrusted XML data, which are vulnerable to XML attacks.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B320",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using Vulnerable lxml.etree XML Parsing Methods",
+    "description" : "Detects usage of vulnerable lxml.etree XML parsing methods that can lead to XML attacks when parsing untrusted data.",
+    "explanation" : "### B313 - B320: XML\n\nMost of this is based off of Christian Heimes’ work on defusedxml:\n<https://pypi.org/project/defusedxml/#defusedxml-sax>\n\nUsing various XLM methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Methods should be replaced with their\ndefusedxml equivalents.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B313</p></td>\n<td><p>xml_bad_cElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree.parse</p></li>\n<li><p>xml.etree.cElementTree.iterparse</p></li>\n<li><p>xml.etree.cElementTree.fromstring</p></li>\n<li><p>xml.etree.cElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B314</p></td>\n<td><p>xml_bad_ElementTree</p></td>\n<td><ul>\n<li><p>xml.etree.ElementTree.parse</p></li>\n<li><p>xml.etree.ElementTree.iterparse</p></li>\n<li><p>xml.etree.ElementTree.fromstring</p></li>\n<li><p>xml.etree.ElementTree.XMLParser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B315</p></td>\n<td><p>xml_bad_expatreader</p></td>\n<td><ul>\n<li><p>xml.sax.expatreader.create_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B316</p></td>\n<td><p>xml_bad_expatbuilder</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder.parse</p></li>\n<li><p>xml.dom.expatbuilder.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B317</p></td>\n<td><p>xml_bad_sax</p></td>\n<td><ul>\n<li><p>xml.sax.parse</p></li>\n<li><p>xml.sax.parseString</p></li>\n<li><p>xml.sax.make_parser</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B318</p></td>\n<td><p>xml_bad_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom.parse</p></li>\n<li><p>xml.dom.minidom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"odd row-even\">\n<td><p>B319</p></td>\n<td><p>xml_bad_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom.parse</p></li>\n<li><p>xml.dom.pulldom.parseString</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n<tr class=\"even row-odd\">\n<td><p>B320</p></td>\n<td><p>xml_bad_etree</p></td>\n<td><ul>\n<li><p>lxml.etree.parse</p></li>\n<li><p>lxml.etree.fromstring</p></li>\n<li><p>lxml.etree.RestrictedElement</p></li>\n<li><p>lxml.etree.GlobalParserTLS</p></li>\n<li><p>lxml.etree.getDefaultParser</p></li>\n<li><p>lxml.etree.check_docinfo</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B321",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using FTP-Related Functions",
+    "description" : "Detects usage of FTP-related functions from the ftplib module, which are insecure.",
+    "explanation" : "### B321: ftplib\n\nFTP-related functions are being called. FTP is considered insecure. Use\nSSH/SFTP/SCP or some other encrypted protocol.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B321</p></td>\n<td><p>ftplib</p></td>\n<td><ul>\n<li><p>ftplib.*</p></li>\n</ul></td>\n<td><p>High</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B322",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid using input() in Python 2",
+    "description" : "Detects use of the input() function in Python 2, which evaluates user input as code and poses a security risk.",
+    "explanation" : "### B322: input\n\nThe check for this call has been removed.\n\nThe input method in Python 2 will read from standard input, evaluate and\nrun the resulting string as python source code. This is similar, though\nin many ways worse, than using eval. On Python 2, use raw\\_input\ninstead, input is safe in Python 3.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B322</p></td>\n<td><p>input</p></td>\n<td><ul>\n<li><p>input</p></li>\n</ul></td>\n<td><p>High</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B323",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "SSL",
+    "title" : "Avoid Using Unverified SSL Context",
+    "description" : "This rule detects usage of Python's ssl._create_unverified_context which disables certificate validation and hostname checks in SSL connections.",
+    "explanation" : "### B323: unverified\\_context\n\nBy default, Python will create a secure, verified ssl context for use in\nsuch classes as HTTPSConnection. However, it still allows using an\ninsecure context via the \\_create\\_unverified\\_context that reverts to\nthe previous behavior that does not validate certificates or perform\nhostname checks.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B323</p></td>\n<td><p>unverified_context</p></td>\n<td><ul>\n<li><p>ssl._create_unverified_context</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B324",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Use of Insecure Hash Functions in hashlib",
+    "description" : "Detects usage of insecure MD4, MD5, or SHA1 hash functions in Python's hashlib and crypt modules.",
+    "explanation" : "## B324: Test use of insecure md4, md5, or sha1 hash functions in hashlib\n\nThis plugin checks for the usage of the insecure MD4, MD5, or SHA1 hash functions in hashlib and crypt. The hashlib.new function provides the ability to construct a new hashing object using the named algorithm. This can be used to create insecure hash functions like MD4 and MD5 if they are passed as algorithm names to this function.\n\nFor Python versions prior to 3.9, this check is similar to B303 blacklist except that this checks for insecure hash functions created using hashlib.new function. For Python version 3.9 and later, this check does additional checking for usage of keyword usedforsecurity on all function variations of hashlib.\n\nSimilar to hashlib, this plugin also checks for usage of one of the crypt module’s weak hashes. crypt also permits MD5 among other weak hash variants.\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B324:hashlib] Use of weak MD4, MD5, or SHA1 hash for\n    security. Consider usedforsecurity=False\n    Severity: High   Confidence: High\n    CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)\n    Location: examples/hashlib_new_insecure_functions.py:3:0\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b324_hashlib.html\n    2\n    3   hashlib.new('md5')\n    4",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B325",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid use of os.tempnam() and os.tmpnam()",
+    "description" : "Detects usage of os.tempnam() and os.tmpnam() functions which are vulnerable to symlink attacks.",
+    "explanation" : "### B325: tempnam\n\nUse of os.tempnam() and os.tmpnam() is vulnerable to symlink attacks.\nConsider using tmpfile() instead.\n\nFor further information:  \n<https://docs.python.org/2.7/library/os.html#os.tempnam>\n<https://docs.python.org/3/whatsnew/3.0.html?highlight=tempnam>\n<https://bugs.python.org/issue17880>\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Calls</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B325</p></td>\n<td><p>tempnam</p></td>\n<td><ul>\n<li><p>os.tempnam</p></li>\n<li><p>os.tmpnam</p></li>\n</ul></td>\n<td><p>Medium</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B401",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Importing Telnetlib Module",
+    "description" : "Detects import of the telnetlib module which is insecure due to Telnet's lack of encryption.",
+    "explanation" : "### B401: import\\_telnetlib\n\nA telnet-related module is being imported. Telnet is considered\ninsecure. Use SSH or some other encrypted protocol.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B401</p></td>\n<td><p>import_telnetlib</p></td>\n<td><ul>\n<li><p>telnetlib</p></li>\n</ul></td>\n<td><p>high</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B402",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Importing ftplib Module",
+    "description" : "Detects imports of the insecure FTP-related Python module 'ftplib'.",
+    "explanation" : "### B402: import\\_ftplib\n\nA FTP-related module is being imported. FTP is considered insecure. Use\nSSH/SFTP/SCP or some other encrypted protocol.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B402</p></td>\n<td><p>import_ftplib</p></td>\n<td><ul>\n<li><p>ftplib</p></li>\n</ul></td>\n<td><p>high</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B403",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Consider Security Implications of Importing pickle and Related Modules",
+    "description" : "Warns about importing the pickle, cPickle, dill, or shelve modules due to potential security risks.",
+    "explanation" : "### B403: import\\_pickle\n\nConsider possible security implications associated with these modules.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B403</p></td>\n<td><p>import_pickle</p></td>\n<td><ul>\n<li><p>pickle</p></li>\n<li><p>cPickle</p></li>\n<li><p>dill</p></li>\n<li><p>shelve</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B404",
+    "level" : "Info",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Consider security implications of importing subprocess module",
+    "description" : "Warns when the subprocess module is imported due to potential security risks associated with its use.",
+    "explanation" : "### B404: import\\_subprocess\n\nConsider possible security implications associated with these modules.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B404</p></td>\n<td><p>import_subprocess</p></td>\n<td><ul>\n<li><p>subprocess</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B405",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using Vulnerable xml.etree Imports for Parsing Untrusted XML",
+    "description" : "Detects usage of xml.etree.cElementTree or xml.etree.ElementTree for parsing untrusted XML data, which is vulnerable to XML attacks.",
+    "explanation" : "### B405: import\\_xml\\_etree\n\nUsing various methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Replace vulnerable imports with the\nequivalent defusedxml package, or make sure defusedxml.defuse\\_stdlib()\nis called.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B405</p></td>\n<td><p>import_xml_etree</p></td>\n<td><ul>\n<li><p>xml.etree.cElementTree</p></li>\n<li><p>xml.etree.ElementTree</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B406",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Using Vulnerable XML Parsing Methods",
+    "description" : "Detects usage of vulnerable XML parsing methods such as xml.sax which are susceptible to XML attacks when parsing untrusted data.",
+    "explanation" : "### B406: import\\_xml\\_sax\n\nUsing various methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Replace vulnerable imports with the\nequivalent defusedxml package, or make sure defusedxml.defuse\\_stdlib()\nis called.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B406</p></td>\n<td><p>import_xml_sax</p></td>\n<td><ul>\n<li><p>xml.sax</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B407",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using Vulnerable XML Parsing Methods",
+    "description" : "Detects usage of vulnerable XML parsing methods such as importing xml.dom.expatbuilder, which are susceptible to XML attacks when parsing untrusted data.",
+    "explanation" : "### B407: import\\_xml\\_expat\n\nUsing various methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Replace vulnerable imports with the\nequivalent defusedxml package, or make sure defusedxml.defuse\\_stdlib()\nis called.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B407</p></td>\n<td><p>import_xml_expat</p></td>\n<td><ul>\n<li><p>xml.dom.expatbuilder</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B408",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid importing xml.dom.minidom for untrusted XML parsing",
+    "description" : "Detects usage of xml.dom.minidom to parse untrusted XML data, which is vulnerable to XML attacks.",
+    "explanation" : "### B408: import\\_xml\\_minidom\n\nUsing various methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Replace vulnerable imports with the\nequivalent defusedxml package, or make sure defusedxml.defuse\\_stdlib()\nis called.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B408</p></td>\n<td><p>import_xml_minidom</p></td>\n<td><ul>\n<li><p>xml.dom.minidom</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B409",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid importing xml.dom.pulldom for untrusted XML parsing",
+    "description" : "Detects usage of xml.dom.pulldom to parse untrusted XML data which is vulnerable to XML attacks.",
+    "explanation" : "### B409: import\\_xml\\_pulldom\n\nUsing various methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Replace vulnerable imports with the\nequivalent defusedxml package, or make sure defusedxml.defuse\\_stdlib()\nis called.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B409</p></td>\n<td><p>import_xml_pulldom</p></td>\n<td><ul>\n<li><p>xml.dom.pulldom</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B410",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Avoid Using Vulnerable XML Parsing Libraries (lxml)",
+    "description" : "Detects usage of the lxml library for parsing untrusted XML data, which is vulnerable to XML attacks.",
+    "explanation" : "### B410: import\\_lxml\n\nUsing various methods to parse untrusted XML data is known to be\nvulnerable to XML attacks. Replace vulnerable imports with the\nequivalent defusedxml package.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B410</p></td>\n<td><p>import_lxml</p></td>\n<td><ul>\n<li><p>lxml</p></li>\n</ul></td>\n<td><p>low</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B411",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Importing xmlrpclib",
+    "description" : "Detects usage of the xmlrpclib module which is insecure for network communication.",
+    "explanation" : "### B411: import\\_xmlrpclib\n\nXMLRPC is particularly dangerous as it is also concerned with\ncommunicating data over a network. Use defused.xmlrpc.monkey\\_patch()\nfunction to monkey-patch xmlrpclib and mitigate remote XML attacks.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B411</p></td>\n<td><p>import_xmlrpclib</p></td>\n<td><ul>\n<li><p>xmlrpclib</p></li>\n</ul></td>\n<td><p>high</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B412",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "HTTP",
+    "title" : "Avoid importing CGI handlers vulnerable to httpoxy",
+    "description" : "Detects imports of CGI handlers that are vulnerable to the httpoxy attack in Python applications.",
+    "explanation" : "### B412: import\\_httpoxy\n\nhttpoxy is a set of vulnerabilities that affect application code running\nin CGI, or CGI-like environments. The use of CGI for web applications\nshould be avoided to prevent this class of attack. More details are\navailable at <https://httpoxy.org/>.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B412</p></td>\n<td><p>import_httpoxy</p></td>\n<td><ul>\n<li><p>wsgiref.handlers.CGIHandler</p></li>\n<li><p>twisted.web.twcgi.CGIScript</p></li>\n</ul></td>\n<td><p>high</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B413",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Importing PyCrypto Library",
+    "description" : "Detects imports of the pycrypto library, which is deprecated and has known security vulnerabilities.",
+    "explanation" : "### B413: import\\_pycrypto\n\npycrypto library is known to have publicly disclosed buffer overflow\nvulnerability <https://github.com/dlitz/pycrypto/issues/176>. It is no\nlonger actively maintained and has been deprecated in favor of\npyca/cryptography library.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B413</p></td>\n<td><p>import_pycrypto</p></td>\n<td><ul>\n<li><p>Crypto.Cipher</p></li>\n<li><p>Crypto.Hash</p></li>\n<li><p>Crypto.IO</p></li>\n<li><p>Crypto.Protocol</p></li>\n<li><p>Crypto.PublicKey</p></li>\n<li><p>Crypto.Random</p></li>\n<li><p>Crypto.Signature</p></li>\n<li><p>Crypto.Util</p></li>\n</ul></td>\n<td><p>high</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B414",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Importing PyCryptodome Modules",
+    "description" : "This rule flags the import of PyCryptodome modules, which is a fork of PyCrypto with unresolved issues and is deprecated in favor of pyca/cryptography.",
+    "explanation" : "### B414: import\\_pycryptodome\n\nThis import blacklist has been removed. The information here has been\nleft for historical purposes.\n\npycryptodome is a direct fork of pycrypto that has not fully addressed\nthe issues inherent in PyCrypto. It seems to exist, mainly, as an API\ncompatible continuation of pycrypto and should be deprecated in favor of\npyca/cryptography which has more support among the Python community.\n\n<table class=\"docutils align-default\">\n<colgroup>\n<col style=\"width: 8%\" />\n<col style=\"width: 28%\" />\n<col style=\"width: 49%\" />\n<col style=\"width: 15%\" />\n</colgroup>\n<thead>\n<tr class=\"header row-odd\">\n<th class=\"head\"><p>ID</p></th>\n<th class=\"head\"><p>Name</p></th>\n<th class=\"head\"><p>Imports</p></th>\n<th class=\"head\"><p>Severity</p></th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"odd row-even\">\n<td><p>B414</p></td>\n<td><p>import_pycryptodome</p></td>\n<td><ul>\n<li><p>Cryptodome.Cipher</p></li>\n<li><p>Cryptodome.Hash</p></li>\n<li><p>Cryptodome.IO</p></li>\n<li><p>Cryptodome.Protocol</p></li>\n<li><p>Cryptodome.PublicKey</p></li>\n<li><p>Cryptodome.Random</p></li>\n<li><p>Cryptodome.Signature</p></li>\n<li><p>Cryptodome.Util</p></li>\n</ul></td>\n<td><p>high</p></td>\n</tr>\n</tbody>\n</table>",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B501",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "SSL",
+    "title" : "Avoid disabling SSL certificate validation in requests",
+    "description" : "Detects when SSL certificate validation is explicitly disabled in Python requests, which compromises TLS security.",
+    "explanation" : "## B501: Test for missing certificate validation\n\nEncryption in general is typically critical to the security of many\napplications. Using TLS can greatly increase security by guaranteeing\nthe identity of the party you are communicating with. This is\naccomplished by one or both parties presenting trusted certificates\nduring the connection initialization phase of TLS.\n\nWhen request methods are used certificates are validated automatically\nwhich is the desired behavior. If certificate validation is explicitly\nturned off Bandit will return a HIGH severity error.\n\nExample:\n\n<!-- -->\n\n    >> Issue: [request_with_no_cert_validation] Call to requests with\n    verify=False disabling SSL certificate checks, security issue.\n    Severity: High   Confidence: High\n    CWE: CWE-295 (https://cwe.mitre.org/data/definitions/295.html)\n    Location: examples/requests-ssl-verify-disabled.py:4\n    3   requests.get('https://gmail.com', verify=True)\n    4   requests.get('https://gmail.com', verify=False)\n    5   requests.post('https://gmail.com', verify=True)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B502",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "SSL",
+    "title" : "Avoid Use of SSL/TLS with Bad Versions",
+    "description" : "Detects use of insecure SSL/TLS protocol versions such as SSLv2, SSLv3, TLSv1, and TLSv1.1 in Python code.",
+    "explanation" : "**B502: Test for SSL use with bad version used**\n\nSeveral highly publicized exploitable flaws have been discovered in all\nversions of SSL and early versions of TLS. It is strongly recommended\nthat use of the following known broken protocol versions be avoided:\n\n-   SSL v2\n\n-   SSL v3\n\n-   TLS v1\n\n-   TLS v1.1\n\nThis plugin test scans for calls to Python methods with parameters that\nindicate the used broken SSL/TLS protocol versions. Currently, detection\nsupports methods using Python’s native SSL/TLS support and the pyOpenSSL\nmodule. A HIGH severity warning will be reported whenever known broken\nprotocol versions are detected.\n\nIt is worth noting that native support for TLS 1.2 is only available in\nmore recent Python versions, specifically 2.7.9 and up, and 3.x\n\nA note on ‘SSLv23’:\n\nAmongst the available SSL/TLS versions provided by Python/pyOpenSSL\nthere exists the option to use SSLv23. This very poorly named option\nactually means “use the highest version of SSL/TLS supported by both the\nserver and client”. This may (and should be) a version well in advance\nof SSL v2 or v3. Bandit can scan for the use of SSLv23 if desired, but\nits detection does not necessarily indicate a problem.\n\nWhen using SSLv23 it is important to also provide flags to explicitly\nexclude bad versions of SSL/TLS from the protocol versions considered.\nBoth the Python native and pyOpenSSL modules provide the `OP_NO_SSLv2`\nand `OP_NO_SSLv3` flags for this purpose.\n\n**Config Options:**\n\n    ssl_with_bad_version:\n        bad_protocol_versions:\n            - PROTOCOL_SSLv2\n            - SSLv2_METHOD\n            - SSLv23_METHOD\n            - PROTOCOL_SSLv3  # strict option\n            - PROTOCOL_TLSv1  # strict option\n            - SSLv3_METHOD    # strict option\n            - TLSv1_METHOD    # strict option\n\nExample  \n\n<!-- -->\n\n    >> Issue: ssl.wrap_socket call with insecure SSL/TLS protocol version\n    identified, security issue.\n       Severity: High   Confidence: High\n       Location: ./examples/ssl-insecure-version.py:13\n    12  # strict tests\n    13  ssl.wrap_socket(ssl_version=ssl.PROTOCOL_SSLv3)\n    14  ssl.wrap_socket(ssl_version=ssl.PROTOCOL_TLSv1)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B503",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "SSL",
+    "title" : "Detect SSL Usage with Insecure Default Protocol Versions",
+    "description" : "Detects Python functions that use insecure SSL/TLS protocol versions as default parameters, which can lead to security vulnerabilities.",
+    "explanation" : "**B503: Test for SSL use with bad defaults specified**\n\nThis plugin is part of a family of tests that detect the use of known\nbad versions of SSL/TLS, please see\n\n../plugins/ssl\\_with\\_bad\\_version for a complete discussion.\nSpecifically, this plugin test scans for Python methods with default\nparameter values that specify the use of broken SSL/TLS protocol\nversions. Currently, detection supports methods using Python’s native\nSSL/TLS support and the pyOpenSSL module. A MEDIUM severity warning will\nbe reported whenever known broken protocol versions are detected.\n\n**Config Options:**\n\nThis test shares the configuration provided for the standard\n\n../plugins/ssl\\_with\\_bad\\_version test, please refer to its\ndocumentation.\n\nExample  \n\n<!-- -->\n\n    >> Issue: Function definition identified with insecure SSL/TLS protocol\n    version by default, possible security issue.\n       Severity: Medium   Confidence: Medium\n       Location: ./examples/ssl-insecure-version.py:28\n    27\n    28  def open_ssl_socket(version=SSL.SSLv2_METHOD):\n    29      pass",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B504",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "SSL",
+    "title" : "Detect SSL/TLS Usage with No Version Specified",
+    "description" : "Detects usage of SSL/TLS methods in Python where no specific protocol version is specified, potentially allowing insecure default versions.",
+    "explanation" : "**B504: Test for SSL use with no version specified**\n\nThis plugin is part of a family of tests that detect the use of known\nbad versions of SSL/TLS, please see\n\n../plugins/ssl\\_with\\_bad\\_version for a complete discussion.\nSpecifically, This plugin test scans for specific methods in Python’s\nnative SSL/TLS support and the pyOpenSSL module that configure the\nversion of SSL/TLS protocol to use. These methods are known to provide\ndefault value that maximize compatibility, but permit use of the\naforementioned broken protocol versions. A LOW severity warning will be\nreported whenever this is detected.\n\n**Config Options:**\n\nThis test shares the configuration provided for the standard\n\n../plugins/ssl\\_with\\_bad\\_version test, please refer to its\ndocumentation.\n\nExample  \n\n<!-- -->\n\n    >> Issue: ssl.wrap_socket call with no SSL/TLS protocol version\n    specified, the default SSLv23 could be insecure, possible security\n    issue.\n       Severity: Low   Confidence: Medium\n       Location: ./examples/ssl-insecure-version.py:23\n    22\n    23  ssl.wrap_socket()\n    24",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B505",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Detect Use of Weak Cryptographic Keys",
+    "description" : "This rule detects the use of cryptographic keys with insufficient length that are considered insecure and breakable.",
+    "explanation" : "## B505: Test for weak cryptographic key use\n\nAs computational power increases, so does the ability to break ciphers\nwith smaller key lengths. The recommended key length size for RSA and\nDSA algorithms is 2048 and higher. 1024 bits and below are now\nconsidered breakable. EC key length sizes are recommended to be 224 and\nhigher with 160 and below considered breakable. This plugin test checks\nfor use of any key less than those limits and returns a high severity\nerror if lower than the lower threshold and a medium severity error for\nthose lower than the higher threshold.\n\nExample:\n\n<!-- -->\n\n    >> Issue: DSA key sizes below 1024 bits are considered breakable.\n    Severity: High   Confidence: High\n    CWE: CWE-326 (https://cwe.mitre.org/data/definitions/326.html)\n    Location: examples/weak_cryptographic_key_sizes.py:36\n    35  # Also incorrect: without keyword args\n    36  dsa.generate_private_key(512,\n    37                           backends.default_backend())\n    38  rsa.generate_private_key(3,",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B506",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid Unsafe Use of yaml.load",
+    "description" : "Detects unsafe usage of PyYAML's yaml.load function which can instantiate arbitrary Python objects from YAML input.",
+    "explanation" : "## B506: Test for use of yaml load\n\nThis plugin test checks for the unsafe usage of the `yaml.load` function\nfrom the PyYAML package. The yaml.load function provides the ability to\nconstruct an arbitrary Python object, which may be dangerous if you\nreceive a YAML document from an untrusted source. The function\nyaml.safe\\_load limits this ability to simple Python objects like\nintegers or lists.\n\nPlease see <http://pyyaml.org/wiki/PyYAMLDocumentation#LoadingYAML> for\nmore information on `yaml.load` and yaml.safe\\_load\n\nExample:\n\n<!-- -->\n\n    >> Issue: [yaml_load] Use of unsafe yaml load. Allows instantiation of\n    arbitrary objects. Consider yaml.safe_load().\n    Severity: Medium   Confidence: High\n    CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)\n    Location: examples/yaml_load.py:5\n    4 ystr = yaml.dump({'a' : 1, 'b' : 2, 'c' : 3})\n    5 y = yaml.load(ystr)\n    6 yaml.dump(y)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B507",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "Auth",
+    "title" : "Avoid Disabling SSH Host Key Verification",
+    "description" : "Detects usage of Paramiko SSHClient methods that disable host key verification, which compromises SSH security.",
+    "explanation" : "## B507: Test for missing host key validation\n\nEncryption in general is typically critical to the security of many\napplications. Using SSH can greatly increase security by guaranteeing\nthe identity of the party you are communicating with. This is\naccomplished by one or both parties presenting trusted host keys during\nthe connection initialization phase of SSH.\n\nWhen paramiko methods are used, host keys are verified by default. If\nhost key verification is disabled, Bandit will return a HIGH severity\nerror.\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B507:ssh_no_host_key_verification] Paramiko call with policy set\n    to automatically trust the unknown host key.\n    Severity: High   Confidence: Medium\n    CWE: CWE-295 (https://cwe.mitre.org/data/definitions/295.html)\n    Location: examples/no_host_key_verification.py:4\n    3   ssh_client = client.SSHClient()\n    4   ssh_client.set_missing_host_key_policy(client.AutoAddPolicy)\n    5   ssh_client.set_missing_host_key_policy(client.WarningPolicy)",
+    "enabled" : false,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B508",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid using insecure SNMP versions",
+    "description" : "This rule detects usage of insecure SNMP versions (SNMPv1 and SNMPv2) in Python code and recommends using SNMPv3 instead.",
+    "explanation" : "## B508: Checking for insecure SNMP versions\n\nPlease update your code to use more secure versions of SNMP.\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B508:snmp_insecure_version_check] The use of SNMPv1 and\n    SNMPv2 is insecure. You should use SNMPv3 if able.\n    Severity: Medium Confidence: High\n    CWE: CWE-319 (https://cwe.mitre.org/data/definitions/319.html)\n    Location: examples/snmp.py:4:4\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b508_snmp_insecure_version_check.html\n    3   # SHOULD FAIL\n    4   a = CommunityData('public', mpModel=0)\n    5   # SHOULD FAIL",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B509",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "Cryptography",
+    "title" : "Avoid Weak SNMP Cryptography",
+    "description" : "Detects use of weak or no encryption in SNMP configurations, specifically usage of SNMPv3 without encryption or older SNMP versions with weak community strings.",
+    "explanation" : "## B509: Checking for weak cryptography\n\nPlease update your code to use more secure versions of SNMP. For example:\n\nInstead of:\n`CommunityData(‘public’, mpModel=0)`\nUse (Defaults to usmHMACMD5AuthProtocol and usmDESPrivProtocol\n`UsmUserData(“securityName”, “authName”, “privName”)`\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B509:snmp_crypto_check] You should not use SNMPv3 without encryption. noAuthNoPriv & authNoPriv is insecure\n    Severity: Medium CWE: CWE-319 (https://cwe.mitre.org/data/definitions/319.html) Confidence: High\n    Location: examples/snmp.py:6:11\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b509_snmp_crypto_check.html\n    5   # SHOULD FAIL\n    6   insecure = UsmUserData(\"securityName\")\n    7   # SHOULD FAIL",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B601",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Detect Shell Injection Vulnerabilities in Paramiko exec_command",
+    "description" : "Detects usage of Paramiko's exec_command method that may lead to shell injection vulnerabilities if inputs are not properly sanitized.",
+    "explanation" : "## B601: Test for shell injection within Paramiko\n\nParamiko is a Python library designed to work with the SSH2 protocol for\nsecure (encrypted and authenticated) connections to remote machines. It\nis intended to run commands on a remote host. These commands are run\nwithin a shell on the target and are thus vulnerable to various shell\ninjection attacks. Bandit reports a MEDIUM issue when it detects the use\nof Paramiko’s “exec\\_command” method advising the user to check inputs\nare correctly sanitized.\n\nExample:\n\n<!-- -->\n\n    >> Issue: Possible shell injection via Paramiko call, check inputs are\n    properly sanitized.\n    Severity: Medium   Confidence: Medium\n    CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)\n    Location: ./examples/paramiko_injection.py:4\n    3    # this is not safe\n    4    paramiko.exec_command('something; really; unsafe')\n    5",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B602",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid subprocess.Popen with shell=True",
+    "description" : "Detects use of subprocess calls with shell=True, which can lead to shell injection vulnerabilities if input is not properly sanitized.",
+    "explanation" : "**B602: Test for use of popen with shell equals true**\n\nPython possesses many mechanisms to invoke an external executable.\nHowever, doing so may present a security issue if appropriate care is\nnot taken to sanitize any user provided or variable input.\n\nThis plugin test is part of a family of tests built to check for process\nspawning and warn appropriately. Specifically, this test looks for the\nspawning of a subprocess using a command shell. This type of subprocess\ninvocation is dangerous as it is vulnerable to various shell injection\nattacks. Great care should be taken to sanitize all input in order to\nmitigate this risk. Calls of this type are identified by a parameter of\n‘shell=True’ being given.\n\nAdditionally, this plugin scans the command string given and adjusts its\nreported severity based on how it is presented. If the command string is\na simple static string containing no special shell characters, then the\nresulting issue has low severity. If the string is static, but contains\nshell formatting characters or wildcards, then the reported issue is\nmedium. Finally, if the string is computed using Python’s string\nmanipulation or formatting operations, then the reported issue has high\nseverity. These severity levels reflect the likelihood that the code is\nvulnerable to injection.\n\nSee also:\n\n-   ../plugins/linux\\_commands\\_wildcard\\_injection\n-   ../plugins/subprocess\\_without\\_shell\\_equals\\_true\n-   ../plugins/start\\_process\\_with\\_no\\_shell\n-   ../plugins/start\\_process\\_with\\_a\\_shell\n-   ../plugins/start\\_process\\_with\\_partial\\_path\n\n**Config Options:**\n\nThis plugin test shares a configuration with others in the same family,\nnamely shell\\_injection. This configuration is divided up into three\nsections, subprocess, shell and no\\_shell. They each list Python calls\nthat spawn subprocesses, invoke commands within a shell, or invoke\ncommands without a shell (by replacing the calling process)\nrespectively.\n\nThis plugin specifically scans for methods listed in subprocess section\nthat have shell=True specified.\n\n    shell_injection:\n\n        # Start a process using the subprocess module, or one of its\n        wrappers.\n        subprocess:\n            - subprocess.Popen\n            - subprocess.call\n\nExample  \n\n<!-- -->\n\n    >> Issue: subprocess call with shell=True seems safe, but may be\n    changed in the future, consider rewriting without shell\n       Severity: Low   Confidence: High\n       Location: ./examples/subprocess_shell.py:21\n    20  subprocess.check_call(['/bin/ls', '-l'], shell=False)\n    21  subprocess.check_call('/bin/ls -l', shell=True)\n    22\n\n    >> Issue: call with shell=True contains special shell characters,\n    consider moving extra logic into Python code\n       Severity: Medium   Confidence: High\n       Location: ./examples/subprocess_shell.py:26\n    25\n    26  subprocess.Popen('/bin/ls *', shell=True)\n    27  subprocess.Popen('/bin/ls %s' % ('something',), shell=True)\n\n    >> Issue: subprocess call with shell=True identified, security issue.\n       Severity: High   Confidence: High\n       Location: ./examples/subprocess_shell.py:27\n    26  subprocess.Popen('/bin/ls *', shell=True)\n    27  subprocess.Popen('/bin/ls %s' % ('something',), shell=True)\n    28  subprocess.Popen('/bin/ls {}'.format('something'), shell=True)",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B603",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InputValidation",
+    "title" : "Check subprocess usage without shell=True",
+    "description" : "Detects usage of Python subprocess calls without shell=True which is less vulnerable to shell injection but still requires careful input validation.",
+    "explanation" : "**B603: Test for use of subprocess without shell equals true**\n\nPython possesses many mechanisms to invoke an external executable.\nHowever, doing so may present a security issue if appropriate care is\nnot taken to sanitize any user provided or variable input.\n\nThis plugin test is part of a family of tests built to check for process\nspawning and warn appropriately. Specifically, this test looks for the\nspawning of a subprocess without the use of a command shell. This type\nof subprocess invocation is not vulnerable to shell injection attacks,\nbut care should still be taken to ensure validity of input.\n\nBecause this is a lesser issue than that described in\nsubprocess\\_popen\\_with\\_shell\\_equals\\_true a LOW severity warning is\nreported.\n\nSee also:\n\n-   ../plugins/linux\\_commands\\_wildcard\\_injection\n-   ../plugins/subprocess\\_popen\\_with\\_shell\\_equals\\_true\n-   ../plugins/start\\_process\\_with\\_no\\_shell\n-   ../plugins/start\\_process\\_with\\_a\\_shell\n-   ../plugins/start\\_process\\_with\\_partial\\_path\n\n**Config Options:**\n\nThis plugin test shares a configuration with others in the same family,\nnamely shell\\_injection. This configuration is divided up into three\nsections, subprocess, shell and no\\_shell. They each list Python calls\nthat spawn subprocesses, invoke commands within a shell, or invoke\ncommands without a shell (by replacing the calling process)\nrespectively.\n\nThis plugin specifically scans for methods listed in subprocess section\nthat have shell=False specified.\n\n    shell_injection:\n        # Start a process using the subprocess module, or one of its\n        wrappers.\n        subprocess:\n            - subprocess.Popen\n            - subprocess.call\n\nExample  \n\n<!-- -->\n\n    >> Issue: subprocess call - check for execution of untrusted input.\n       Severity: Low   Confidence: High\n       Location: ./examples/subprocess_shell.py:23\n    22\n    23    subprocess.check_output(['/bin/ls', '-l'])\n    24",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B604",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Detect function calls with shell=True parameter",
+    "description" : "Detects function calls where the shell parameter is set to True, which can lead to security risks such as shell injection.",
+    "explanation" : "**B604: Test for any function with shell equals true**\n\nPython possesses many mechanisms to invoke an external executable.\nHowever, doing so may present a security issue if appropriate care is\nnot taken to sanitize any user provided or variable input.\n\nThis plugin test is part of a family of tests built to check for process\nspawning and warn appropriately. Specifically, this plugin test\ninterrogates method calls for the presence of a keyword parameter shell\nequalling true. It is related to detection of shell injection issues and\nis intended to catch custom wrappers to vulnerable methods that may have\nbeen created.\n\nSee also:\n\n-   ../plugins/linux\\_commands\\_wildcard\\_injection\n-   ../plugins/subprocess\\_popen\\_with\\_shell\\_equals\\_true\n-   ../plugins/subprocess\\_without\\_shell\\_equals\\_true\n-   ../plugins/start\\_process\\_with\\_no\\_shell\n-   ../plugins/start\\_process\\_with\\_a\\_shell\n-   ../plugins/start\\_process\\_with\\_partial\\_path\n\n**Config Options:**\n\nThis plugin test shares a configuration with others in the same family,\nnamely shell\\_injection. This configuration is divided up into three\nsections, subprocess, shell and no\\_shell. They each list Python calls\nthat spawn subprocesses, invoke commands within a shell, or invoke\ncommands without a shell (by replacing the calling process)\nrespectively.\n\nSpecifically, this plugin excludes those functions listed under the\nsubprocess section, these methods are tested in a separate specific test\nplugin and this exclusion prevents duplicate issue reporting.\n\n    shell_injection:\n        # Start a process using the subprocess module, or one of its\n        wrappers.\n        subprocess: [subprocess.Popen, subprocess.call,\n                     subprocess.check_call, subprocess.check_output\n                     execute_with_timeout]\n\nExample  \n\n<!-- -->\n\n    >> Issue: Function call with shell=True parameter identified, possible\n    security issue.\n       Severity: Medium   Confidence: High\n       Location: ./examples/subprocess_shell.py:9\n    8 pop('/bin/gcc --version', shell=True)\n    9 Popen('/bin/gcc --version', shell=True)\n    10",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B605",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid starting a process with a shell",
+    "description" : "Detects usage of subprocess invocation methods that use a shell, which can lead to shell injection vulnerabilities.",
+    "explanation" : "**B605: Test for starting a process with a shell**\n\nPython possesses many mechanisms to invoke an external executable.\nHowever, doing so may present a security issue if appropriate care is\nnot taken to sanitize any user provided or variable input.\n\nThis plugin test is part of a family of tests built to check for process\nspawning and warn appropriately. Specifically, this test looks for the\nspawning of a subprocess using a command shell. This type of subprocess\ninvocation is dangerous as it is vulnerable to various shell injection\nattacks. Great care should be taken to sanitize all input in order to\nmitigate this risk. Calls of this type are identified by the use of\ncertain commands which are known to use shells. Bandit will report a LOW\nseverity warning.\n\nSee also:\n\n-   ../plugins/linux\\_commands\\_wildcard\\_injection\n-   ../plugins/subprocess\\_without\\_shell\\_equals\\_true\n-   ../plugins/start\\_process\\_with\\_no\\_shell\n-   ../plugins/start\\_process\\_with\\_partial\\_path\n-   ../plugins/subprocess\\_popen\\_with\\_shell\\_equals\\_true\n\n**Config Options:**\n\nThis plugin test shares a configuration with others in the same family,\nnamely shell\\_injection. This configuration is divided up into three\nsections, subprocess, shell and no\\_shell. They each list Python calls\nthat spawn subprocesses, invoke commands within a shell, or invoke\ncommands without a shell (by replacing the calling process)\nrespectively.\n\nThis plugin specifically scans for methods listed in shell section.\n\n    shell_injection:\n        shell:\n            - os.system\n            - os.popen\n            - os.popen2\n            - os.popen3\n            - os.popen4\n            - popen2.popen2\n            - popen2.popen3\n            - popen2.popen4\n            - popen2.Popen3\n            - popen2.Popen4\n            - commands.getoutput\n            - commands.getstatusoutput\n\nExample  \n\n<!-- -->\n\n    >> Issue: Starting a process with a shell: check for injection.\n       Severity: Low   Confidence: Medium\n       Location: examples/os_system.py:3\n    2\n    3   os.system('/bin/echo hi')",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B606",
+    "level" : "Info",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Detect Starting a Process Without a Shell",
+    "description" : "Detects starting external processes in Python without using a shell, which may be relevant for security auditing and penetration testing.",
+    "explanation" : "**B606: Test for starting a process with no shell**\n\nPython possesses many mechanisms to invoke an external executable.\nHowever, doing so may present a security issue if appropriate care is\nnot taken to sanitize any user provided or variable input.\n\nThis plugin test is part of a family of tests built to check for process\nspawning and warn appropriately. Specifically, this test looks for the\nspawning of a subprocess in a way that doesn’t use a shell. Although\nthis is generally safe, it maybe useful for penetration testing\nworkflows to track where external system calls are used. As such a LOW\nseverity message is generated.\n\nSee also:\n\n-   ../plugins/linux\\_commands\\_wildcard\\_injection\n-   ../plugins/subprocess\\_without\\_shell\\_equals\\_true\n-   ../plugins/start\\_process\\_with\\_a\\_shell\n-   ../plugins/start\\_process\\_with\\_partial\\_path\n-   ../plugins/subprocess\\_popen\\_with\\_shell\\_equals\\_true\n\n**Config Options:**\n\nThis plugin test shares a configuration with others in the same family,\nnamely shell\\_injection. This configuration is divided up into three\nsections, subprocess, shell and no\\_shell. They each list Python calls\nthat spawn subprocesses, invoke commands within a shell, or invoke\ncommands without a shell (by replacing the calling process)\nrespectively.\n\nThis plugin specifically scans for methods listed in no\\_shell section.\n\n    shell_injection:\n        no_shell:\n            - os.execl\n            - os.execle\n            - os.execlp\n            - os.execlpe\n            - os.execv\n            - os.execve\n            - os.execvp\n            - os.execvpe\n            - os.spawnl\n            - os.spawnle\n            - os.spawnlp\n            - os.spawnlpe\n            - os.spawnv\n            - os.spawnve\n            - os.spawnvp\n            - os.spawnvpe\n            - os.startfile\n\nExample  \n\n<!-- -->\n\n    >> Issue: [start_process_with_no_shell] Starting a process without a\n       shell.\n       Severity: Low   Confidence: Medium\n       Location: examples/os-spawn.py:8\n    7   os.spawnv(mode, path, args)\n    8   os.spawnve(mode, path, args, env)\n    9   os.spawnvp(mode, file, args)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B607",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Avoid starting a process with a partial executable path",
+    "description" : "Detects when a process is started using a partial executable path instead of a fully qualified path.",
+    "explanation" : "**B607: Test for starting a process with a partial path**\n\nPython possesses many mechanisms to invoke an external executable. If\nthe desired executable path is not fully qualified relative to the\nfilesystem root then this may present a potential security risk.\n\nIn POSIX environments, the PATH environment variable is used to specify\na set of standard locations that will be searched for the first matching\nnamed executable. While convenient, this behavior may allow a malicious\nactor to exert control over a system. If they are able to adjust the\ncontents of the PATH variable, or manipulate the file system, then a\nbogus executable may be discovered in place of the desired one. This\nexecutable will be invoked with the user privileges of the Python\nprocess that spawned it, potentially a highly privileged user.\n\nThis test will scan the parameters of all configured Python methods,\nlooking for paths that do not start at the filesystem root, that is, do\nnot have a leading ‘/’ character.\n\n**Config Options:**\n\nThis plugin test shares a configuration with others in the same family,\nnamely shell\\_injection. This configuration is divided up into three\nsections, subprocess, shell and no\\_shell. They each list Python calls\nthat spawn subprocesses, invoke commands within a shell, or invoke\ncommands without a shell (by replacing the calling process)\nrespectively.\n\nThis test will scan parameters of all methods in all sections. Note that\nmethods are fully qualified and de-aliased prior to checking.\n\n    shell_injection:\n        # Start a process using the subprocess module, or one of its\n        wrappers.\n        subprocess:\n            - subprocess.Popen\n            - subprocess.call\n\n        # Start a process with a function vulnerable to shell injection.\n        shell:\n            - os.system\n            - os.popen\n            - popen2.Popen3\n            - popen2.Popen4\n            - commands.getoutput\n            - commands.getstatusoutput\n        # Start a process with a function that is not vulnerable to shell\n        injection.\n        no_shell:\n            - os.execl\n            - os.execle\n\nExample  \n\n<!-- -->\n\n    >> Issue: Starting a process with a partial executable path\n    Severity: Low   Confidence: High\n    Location: ./examples/partial_path_process.py:3\n    2    from subprocess import Popen as pop\n    3    pop('gcc --version', shell=False)",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B608",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "SQLInjection",
+    "title" : "Detect Hardcoded SQL Expressions to Prevent SQL Injection",
+    "description" : "Detects SQL query strings constructed via string operations that may lead to SQL injection vulnerabilities.",
+    "explanation" : "## B608: Test for SQL injection\n\nAn SQL injection attack consists of insertion or “injection” of a SQL query via the input data given to an application. It is a very common attack vector. This plugin test looks for strings that resemble SQL statements that are involved in some form of string building operation. For example:\n\n* “SELECT %s FROM derp;” % var\n* “SELECT thing FROM ” + tab\n* “SELECT ” + val + ” FROM ” + tab + …\n* “SELECT {} FROM derp;”.format(var)\n* f”SELECT foo FROM bar WHERE id = {product}”\n* \nUnless care is taken to sanitize and control the input data when building such SQL statement strings, an injection attack becomes possible. If strings of this nature are discovered, a LOW confidence issue is reported. In order to boost result confidence, this plugin test will also check to see if the discovered string is in use with standard Python DBAPI calls execute or executemany. If so, a MEDIUM issue is reported. For example:\n\n* cursor.execute(“SELECT %s FROM derp;” % var)\n\nExample:\n\n<!-- -->\n\n    >> Issue: Possible SQL injection vector through string-based query\n    construction.\n    Severity: Medium   Confidence: Low\n    CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)\n    Location: ./examples/sql_statements.py:4\n    3 query = \"DELETE FROM foo WHERE id = '%s'\" % identifier\n    4 query = \"UPDATE foo SET value = 'b' WHERE id = '%s'\" % identifier\n    5",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B609",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "CommandInjection",
+    "title" : "Detect Wildcard Injection in Linux Command Emulation",
+    "description" : "Detects the use of wildcard characters in Python methods that emulate Linux command line utilities which can lead to unintended file operations.",
+    "explanation" : "## B609: Test for use of wildcard injection\n\nPython provides a number of methods that emulate the behavior of\nstandard Linux command line utilities. Like their Linux counterparts,\nthese commands may take a wildcard “\\*” character in place of a file\nsystem path. This is interpreted to mean “any and all files or folders”\nand can be used to build partially qualified paths, such as\n“/home/user/\\*”.\n\nThe use of partially qualified paths may result in unintended\nconsequences if an unexpected file or symlink is placed into the path\nlocation given. This becomes particularly dangerous when combined with\ncommands used to manipulate file permissions or copy data off of a\nsystem.\n\nThis test plugin looks for usage of the following commands in\nconjunction with wild card parameters:\n\nAs well as any method configured in the shell or subprocess injection\ntest configurations.\n\n**Config Options:**\n\nThis plugin test shares a configuration with others in the same family,\nnamely shell\\_injection. This configuration is divided up into three\nsections, subprocess, shell and no\\_shell. They each list Python calls\nthat spawn subprocesses, invoke commands within a shell, or invoke\ncommands without a shell (by replacing the calling process)\nrespectively.\n\nThis test will scan parameters of all methods in all sections. Note that\nmethods are fully qualified and de-aliased prior to checking.\n\n    # shell_injection:\n    # Start a process using the subprocess module, or one of its wrappers.\n    subprocess:\n        subprocess.Popen \n        subprocess.call\n\n    # Start a process with a function vulnerable to shell injection.\n    shell:\n        - os.system\n        - os.popen\n        - popen2.Popen3\n        - popen2.Popen4\n        - commands.getoutput\n        - commands.getstatusoutput\n    # Start a process with a function that is not vulnerable to shell\n    injection.\n    no_shell:\n        - os.execl\n        - os.execle\n\nExample:\n\n<!-- -->\n\n    >> Issue: Possible wildcard injection in call: subprocess.Popen\n    Severity: High   Confidence: Medium\n    CWE-78 (https://cwe.mitre.org/data/definitions/78.html)\n    Location: ./examples/wildcard-injection.py:8\n    7    o.popen2('/bin/chmod *')\n    8    subp.Popen('/bin/chown *', shell=True)\n    9\n    \n    >> Issue: subprocess call - check for execution of untrusted input.\n    Severity: Low   Confidence: High\n    CWE-78 (https://cwe.mitre.org/data/definitions/78.html)\n    Location: ./examples/wildcard-injection.py:11\n    10   # Not vulnerable to wildcard injection\n    11   subp.Popen('/bin/rsync *')\n    12   subp.Popen(\"/bin/chmod *\")",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B610",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "SQLInjection",
+    "title" : "Avoid Potential SQL Injection in Django extra() Function",
+    "description" : "Detects use of Django ORM's extra() function that may lead to SQL injection vulnerabilities.",
+    "explanation" : "**B610: Potential SQL injection on extra function**\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B610:django_extra_used] Use of extra potential SQL attack vector.\n    Severity: Medium Confidence: Medium\n    CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)\n    Location: examples/django_sql_injection_extra.py:29:0\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b610_django_extra_used.html\n    28  tables_str = 'django_content_type\" WHERE \"auth_user\".\"username\"=\"admin'\n    29  User.objects.all().extra(tables=[tables_str]).distinct()",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B611",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "SQLInjection",
+    "title" : "Avoid Use of RawSQL Function in Django",
+    "description" : "Detects usage of Django's RawSQL function which can lead to potential SQL injection vulnerabilities.",
+    "explanation" : "**B611: Potential SQL injection on RawSQL function**\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B611:django_rawsql_used] Use of RawSQL potential SQL attack vector.\n    Severity: Medium Confidence: Medium\n    CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)\n    Location: examples/django_sql_injection_raw.py:11:26\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b611_django_rawsql_used.html\n    10        ' WHERE \"username\"=\"admin\" OR 1=%s --'\n    11  User.objects.annotate(val=RawSQL(raw, [0]))",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B612",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "InsecureModulesLibraries",
+    "title" : "Avoid insecure use of logging.config.listen",
+    "description" : "Detects insecure usage of logging.config.listen which listens for external logging configuration on a socket and may evaluate untrusted code.",
+    "explanation" : "## B612: Test for insecure use of logging.config.listen\n\nThis plugin test checks for the unsafe usage of the logging.config.listen function. \nThe logging.config.listen function provides the ability to listen for external\nconfiguration files on a socket server. Because portions of the configuration\nare passed through eval(), use of this function may open its users to a security risk.\nWhile the function only binds to a socket on localhost, and so does not accept connections\nfrom remote machines, there are scenarios where untrusted code could be run under the account\nof the process which calls listen().\n\nlogging.config.listen provides the ability to verify bytes received across the socket\nwith signature verification or encryption/decryption.\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B612:logging_config_listen] Use of insecure\n    logging.config.listen detected.\n    Severity: Medium   Confidence: High\n    CWE: CWE-94 (https://cwe.mitre.org/data/definitions/94.html)\n    Location: examples/logging_config_insecure_listen.py:3:4\n    2\n    3   t = logging.config.listen(9999)",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B701",
+    "level" : "High",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Avoid disabling autoescaping in Jinja2 templates",
+    "description" : "Detects when Jinja2 templates are configured with autoescape set to False or when autoescape is omitted, which can lead to XSS vulnerabilities.",
+    "explanation" : "## B701: Test for not auto escaping in jinja2\n\nJinja2 is a Python HTML templating system. It is typically used to build\nweb applications, though appears in other places well, notably the\nAnsible automation system. When configuring the Jinja2 environment, the\noption to use autoescaping on input can be specified. When autoescaping\nis enabled, Jinja2 will filter input strings to escape any HTML content\nsubmitted via template variables. Without escaping HTML input the\napplication becomes vulnerable to Cross Site Scripting (XSS) attacks.\n\nUnfortunately, autoescaping is False by default. Thus this plugin test\nwill warn on omission of an autoescape setting, as well as an explicit\nsetting of false. A HIGH severity warning is generated in either of\nthese scenarios.\n\nExample:\n\n<!-- -->\n\n    >> Issue: Using jinja2 templates with autoescape=False is dangerous and can\n    lead to XSS. Use autoescape=True to mitigate XSS vulnerabilities.\n    Severity: High   Confidence: High\n    CWE: CWE-94 (https://cwe.mitre.org/data/definitions/94.html)\n    Location: ./examples/jinja2_templating.py:11\n    10  templateEnv = jinja2.Environment(autoescape=False,\n    loader=templateLoader)\n    11  Environment(loader=templateLoader,\n    12              load=templateLoader,\n    13              autoescape=False)\n    14\n    \n    >> Issue: By default, jinja2 sets autoescape to False. Consider using\n    autoescape=True or use the select_autoescape function to mitigate XSS\n    vulnerabilities.\n    Severity: High   Confidence: High\n    CWE: CWE-94 (https://cwe.mitre.org/data/definitions/94.html)\n    Location: ./examples/jinja2_templating.py:15\n    14\n    15  Environment(loader=templateLoader,\n    16              load=templateLoader)\n    17\n    18  Environment(autoescape=select_autoescape(['html', 'htm', 'xml']),\n    19              loader=templateLoader)",
+    "enabled" : true,
+    "timeToFix" : 5,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B702",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Detect Use of Mako Templates",
+    "description" : "Detects usage of Mako templating system which lacks environment-wide escaping, potentially leading to XSS vulnerabilities.",
+    "explanation" : "## B702: Test for use of mako templates\n\nMako is a Python templating system often used to build web applications.\nIt is the default templating system used in Pylons and Pyramid. Unlike\nJinja2 (an alternative templating system), Mako has no environment wide\nvariable escaping mechanism. Because of this, all input variables must\nbe carefully escaped before use to prevent possible vulnerabilities to\nCross Site Scripting (XSS) attacks.\n\nExample:\n\n<!-- -->\n\n    >> Issue: Mako templates allow HTML/JS rendering by default and are\n    inherently open to XSS attacks. Ensure variables in all templates are\n    properly sanitized via the 'n', 'h' or 'x' flags (depending on context).\n    For example, to HTML escape the variable 'data' do ${ data |h }.\n    Severity: Medium   Confidence: High\n    CWE: CWE-80 (https://cwe.mitre.org/data/definitions/80.html)\n    Location: ./examples/mako_templating.py:10\n    9\n    10  mako.template.Template(\"hern\")\n    11  template.Template(\"hern\")",
+    "enabled" : true,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  },
+  {
+    "id" : "B703",
+    "level" : "Warning",
+    "category" : "Security",
+    "subCategory" : "XSS",
+    "title" : "Avoid Potential XSS with django mark_safe Function",
+    "description" : "Detects potential cross-site scripting (XSS) vulnerabilities caused by unsafe use of Django's mark_safe function.",
+    "explanation" : "**B703: Potential XSS on mark\\_safe function**\n\nExample:\n\n<!-- -->\n\n    >> Issue: [B703:django_mark_safe] Potential XSS on mark_safe function.\n    Severity: Medium Confidence: High\n    CWE: CWE-80 (https://cwe.mitre.org/data/definitions/80.html)\n    Location: examples/mark_safe_insecure.py:159:4\n    More Info: https://bandit.readthedocs.io/en/latest/plugins/b703_django_mark_safe.html\n    158         str_arg = 'could be insecure'\n    159     safestring.mark_safe(str_arg)",
+    "enabled" : false,
+    "timeToFix" : 10,
+    "parameters" : [
+    ],
+    "languages" : [
+    ]
+  }
+]

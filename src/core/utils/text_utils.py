@@ -38,7 +38,7 @@ def decode_text(header_text: Optional[str]) -> str:
                     # fallback으로 cp949 사용 (한국어 이메일 대응)
                     try:
                         parts.append(part.decode('cp949', errors='ignore'))
-                    except:
+                    except Exception:
                         parts.append(part.decode('utf-8', errors='replace'))
             else:
                 parts.append(str(part))
