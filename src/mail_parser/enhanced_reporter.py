@@ -2,10 +2,9 @@
 import json
 import os
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Dict
 
 from .forensic_integrity import ForensicIntegrityService
-from .utils import decode_text
 
 
 class EnhancedReportGenerator:
@@ -86,7 +85,7 @@ class EnhancedReportGenerator:
                 f.write("=" * 50 + "\n")
                 f.write(
                     f"생성일시: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-                f.write(f"처리 시스템: Email Evidence Processor v2.0\n\n")
+                f.write("처리 시스템: Email Evidence Processor v2.0\n\n")
 
                 total_checks = len(compliance_checks)
                 passed_checks = sum(
@@ -105,7 +104,7 @@ class EnhancedReportGenerator:
                         f.write(f"  세부사항: {result['details']}\n")
 
                     if not result['passed'] and result.get('issues'):
-                        f.write(f"  문제점:\n")
+                        f.write("  문제점:\n")
                         for issue in result['issues']:
                             f.write(f"    - {issue}\n")
 

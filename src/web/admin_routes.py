@@ -6,7 +6,7 @@ from pathlib import Path
 from flask import (Blueprint, abort, current_app, render_template, request,
                    send_file, session)
 
-from src.core import evidence_store
+from ..core import evidence_store
 
 # [2025-12-30] Admin Blueprint
 # url_prefix='': 주요 경로 ('/admin', '/admin/settings' 등)
@@ -72,7 +72,7 @@ def evidence_detail(evidence_id: int):
 @admin.route('/admin/jobs')
 def admin_jobs():
     try:
-        from src.core import job_store
+        from ..core import job_store
         jobs = job_store.list_jobs(200)
     except Exception as e:
         current_app.logger.exception(f'admin_jobs db error: {e}')
@@ -85,7 +85,7 @@ def delete_job(job_id: str):
     """Job 삭제 API"""
     from flask import jsonify
     try:
-        from src.core import job_store
+        from ..core import job_store
         success = job_store.delete_job(job_id)
         if success:
             return jsonify({'status': 'ok', 'message': 'Job deleted'}), 200
@@ -100,7 +100,7 @@ def delete_job(job_id: str):
 def admin_settings():
     """시스템 설정 관리 페이지"""
     try:
-        from src.core.settings_manager import get_settings_manager
+        from ..core.settings_manager import get_settings_manager
         settings_manager = get_settings_manager()
 
         # DB 연결 상태 확인
@@ -113,7 +113,7 @@ def admin_settings():
 
         for category in categories:
             try:
-                from src.database.email_db import db
+                from ..database.email_db import db
                 settings = db.get_settings_metadata(category=category)
                 settings_by_category[category] = settings
             except Exception as e:
@@ -157,7 +157,7 @@ def admin_system_tests():
 @admin.route('/admin/logs')
 def admin_logs():
     try:
-        from src.core import db_manager
+        from ..core import db_manager
         page = int(request.args.get('page', '1'))
         if page < 1:
             page = 1
@@ -172,7 +172,7 @@ def admin_logs():
 @admin.route('/api/admin/logs')
 def api_admin_logs():
     try:
-        from src.core import db_manager
+        from ..core import db_manager
         limit = int(request.args.get('limit', '100'))
         if limit < 1:
             limit = 100
@@ -188,7 +188,7 @@ def api_init_settings():
     """기본 설정 초기화"""
     from flask import jsonify
     try:
-        from src.database.email_db import db
+        from ..database.email_db import db
 
         # 기본 설정 정의
         default_settings = [
@@ -289,7 +289,7 @@ def api_settings():
 
     if request.method == 'GET':
         try:
-            from src.database.email_db import db
+            from ..database.email_db import db
             category = request.args.get('category', None)
             include_sensitive = request.args.get(
                 'show_sensitive', 'false').lower() == 'true'
@@ -339,7 +339,7 @@ def api_settings():
             elif value_type == 'json':
                 value = json.loads(value) if isinstance(value, str) else value
 
-            from src.database.email_db import db
+            from ..database.email_db import db
             success = db.set_setting(
                 key=key,
                 value=value,
@@ -353,7 +353,7 @@ def api_settings():
             if success:
                 # 설정을 SettingsManager에도 반영
                 try:
-                    from src.core.settings_manager import get_settings_manager
+                    from ..core.settings_manager import get_settings_manager
                     settings_manager = get_settings_manager()
                     settings_manager.set(
                         key=key,
@@ -392,7 +392,7 @@ def api_update_setting(key: str):
         changed_by = data.get('changed_by', 'admin')
         reason = data.get('reason', '관리자 수정')
 
-        from src.database.email_db import db
+        from ..database.email_db import db
         success = db.set_setting(
             key=key,
             value=value,
@@ -406,7 +406,7 @@ def api_update_setting(key: str):
         if success:
             # 설정을 SettingsManager에도 반영 (캐시 갱신)
             try:
-                from src.core.settings_manager import get_settings_manager
+                from ..core.settings_manager import get_settings_manager
                 settings_manager = get_settings_manager()
                 settings_manager.set(
                     key=key,
@@ -442,7 +442,7 @@ def api_delete_setting(key: str):
         changed_by = data.get('changed_by', 'admin')
         reason = data.get('reason', '관리자 삭제')
 
-        from src.database.email_db import db
+        from ..database.email_db import db
         db.delete_setting(key=key, changed_by=changed_by, reason=reason)
 
         return jsonify({
@@ -462,14 +462,14 @@ def api_test_setting(key: str):
     """설정 값 테스트 API - 실제로 로드된 값 확인"""
     from flask import jsonify
     try:
-        from src.core.settings_manager import get_settings_manager
+        from ..core.settings_manager import get_settings_manager
         settings_manager = get_settings_manager()
 
         # 실제 설정 값 로드
         value = settings_manager.get(key, default=None)
 
         # DB에서 직접 조회
-        from src.database.email_db import db
+        from ..database.email_db import db
         db_value = db.get_setting(key, default=None)
 
         return jsonify({
@@ -495,7 +495,7 @@ def api_get_all_history():
     try:
         key = request.args.get('key', None)
         limit = int(request.args.get('limit', '100'))
-        from src.database.email_db import db
+        from ..database.email_db import db
         history = db.get_settings_history(key=key, limit=limit)
 
         return jsonify({
@@ -517,7 +517,7 @@ def api_get_setting_history(key: str):
     from flask import jsonify
     try:
         limit = int(request.args.get('limit', '50'))
-        from src.database.email_db import db
+        from ..database.email_db import db
         history = db.get_settings_history(key=key, limit=limit)
 
         return jsonify({
@@ -622,7 +622,7 @@ def admin_reload():
     # Token precedence: 1) DB setting 2) app config
     expected = None
     try:
-        from src.core import db_manager
+        from ..core import db_manager
         expected = db_manager.get_setting('DEV_RELOAD_TOKEN')
     except Exception:
         expected = None
@@ -664,13 +664,13 @@ def admin_reload():
             'src.core.db_manager',
             'src.core.hot_reload',
             'src.web.admin_routes',
-            'src.web.app_factory',
+            'src.web.app',
             'src.core.log_store',
             'src.core.logging_utils',
         ])
 
     try:
-        from src.core import hot_reload
+        from ..core import hot_reload
         results = hot_reload.reload_modules(modules)
     except Exception as e:
         current_app.logger.exception(f'admin_reload error: {e}')
@@ -678,7 +678,7 @@ def admin_reload():
 
     # log the reload attempt
     try:
-        from src.core import db_manager
+        from ..core import db_manager
         db_manager.write_log('INFO', 'dev_reload executed', extra={
                              'modules': modules, 'results': results})
     except Exception:
@@ -731,7 +731,7 @@ def remove_task(task_id: str):
         # if csrf_token != session.get('admin_csrf'):
         #     return {'error': 'CSRF token validation failed'}, 403
 
-        from src.web.progress_tracker import ProgressTracker
+        from .progress_tracker import ProgressTracker
         tracker = ProgressTracker()
         tracker.remove_task(task_id)
 
@@ -748,7 +748,7 @@ def remove_task(task_id: str):
 def api_get_tests():
     """전체 테스트 목록 조회"""
     try:
-        from src.database.email_db import test_manager
+        from ..database.email_db import test_manager
 
         category = request.args.get('category')
         enabled_only = request.args.get('enabled_only', 'false').lower() == 'true'
@@ -771,7 +771,7 @@ def api_get_tests():
 def api_get_test(test_key: str):
     """특정 테스트 조회"""
     try:
-        from src.database.email_db import test_manager
+        from ..database.email_db import test_manager
 
         test = test_manager.get_test_by_key(test_key)
 
@@ -788,7 +788,7 @@ def api_get_test(test_key: str):
 def api_add_test():
     """테스트 추가"""
     try:
-        from src.database.email_db import test_manager
+        from ..database.email_db import test_manager
 
         data = request.get_json()
 
@@ -822,7 +822,7 @@ def api_add_test():
 def api_update_test(test_key: str):
     """테스트 수정"""
     try:
-        from src.database.email_db import test_manager
+        from ..database.email_db import test_manager
 
         data = request.get_json()
 
@@ -845,7 +845,7 @@ def api_update_test(test_key: str):
 def api_delete_test(test_key: str):
     """테스트 삭제"""
     try:
-        from src.database.email_db import test_manager
+        from ..database.email_db import test_manager
 
         success = test_manager.delete_test(test_key)
 
@@ -862,8 +862,8 @@ def api_delete_test(test_key: str):
 def api_execute_test(test_key: str):
     """단일 테스트 실행"""
     try:
-        from src.database.email_db import test_manager
-        from src.system_tests.executor import test_executor
+        from ..database.email_db import test_manager
+        from ..system_tests.executor import test_executor
 
         # 테스트 정보 조회
         test = test_manager.get_test_by_key(test_key)
@@ -906,8 +906,8 @@ def api_execute_test(test_key: str):
 def api_execute_all_tests():
     """전체 테스트 실행"""
     try:
-        from src.database.email_db import test_manager
-        from src.system_tests.executor import test_executor
+        from ..database.email_db import test_manager
+        from ..system_tests.executor import test_executor
 
         data = request.get_json() or {}
         category = data.get('category')
@@ -947,7 +947,7 @@ def api_execute_all_tests():
 def api_get_test_history(test_key: str):
     """테스트 실행 이력 조회"""
     try:
-        from src.database.email_db import test_manager
+        from ..database.email_db import test_manager
 
         limit = int(request.args.get('limit', 50))
         history = test_manager.get_execution_history(test_key=test_key, limit=limit)
@@ -973,7 +973,7 @@ def test_history_page():
 def api_get_test_execution_history():
     """전체 테스트 실행 이력 조회"""
     try:
-        from src.database.email_db import test_manager
+        from ..database.email_db import test_manager
 
         limit = int(request.args.get('limit', 100))
         history = test_manager.get_execution_history(limit=limit)
@@ -998,7 +998,6 @@ def file_management():
 @admin.route('/api/admin/files', methods=['GET'])
 def api_get_files():
     """파일 목록 조회"""
-    import os
     from datetime import datetime
 
     from flask import jsonify

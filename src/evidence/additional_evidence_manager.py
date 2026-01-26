@@ -12,11 +12,10 @@ Additional Evidence Manager for Court Submission
 import hashlib
 import json
 import mimetypes
-import os
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 
 class AdditionalEvidenceManager:

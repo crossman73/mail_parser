@@ -4,7 +4,7 @@ Date processing utilities.
 
 import email.utils
 from datetime import datetime, timezone, timedelta
-from typing import Optional, Union
+from typing import Optional
 import re
 
 

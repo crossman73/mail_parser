@@ -26,7 +26,7 @@ def logs_viewer():
 def api_logs():
     """최근 로그 조회 API (DB 기반 - 실패 시 메모리 폴백)"""
     try:
-        from src.database.email_db import db
+        from ...database.email_db import db
 
         level = request.args.get('level', None)
         limit = request.args.get('limit', 1000, type=int)
@@ -69,7 +69,7 @@ def api_logs_download():
     try:
         import json
 
-        from src.database.email_db import db
+        from ...database.email_db import db
 
         level = request.args.get('level', None)
         limit = request.args.get('limit', 5000, type=int)
@@ -85,7 +85,7 @@ def api_logs_download():
         filename = f"logs_{timestamp}.json"
 
         # temp_manager 가져오기
-        from src.utils.temp_file_manager import temp_manager
+        from ...utils.temp_file_manager import temp_manager
         temp_file = temp_manager.create_temp_file(filename, cleanup=False)
 
         with open(temp_file, 'w', encoding='utf-8') as f:
@@ -109,7 +109,7 @@ def api_logs_download():
 def api_logs_clear():
     """DB 로그 초기화 API - DB 실패 시 안내"""
     try:
-        from src.database.email_db import db
+        from ...database.email_db import db
 
         # 7일 이전 로그만 삭제 (안전장치)
         cutoff = (datetime.now() - timedelta(days=7)).isoformat()

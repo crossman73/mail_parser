@@ -3,17 +3,11 @@ Main routes blueprint
 메인 페이지, 업로드, 검색, 설정 등 핵심 기능
 """
 
-import os
-import shutil
-import tempfile
-import threading
-import uuid
 from datetime import datetime
 from pathlib import Path
 
 from flask import (Blueprint, current_app, flash, jsonify, redirect,
-                   render_template, request, send_file, url_for)
-from werkzeug.utils import secure_filename
+                   render_template, send_file, url_for)
 
 # Blueprint 정의
 main_bp = Blueprint('main', __name__)
@@ -82,7 +76,6 @@ def index():
 @main_bp.route('/search')
 def search_page():
     """검색 페이지 (템플릿 미구현)"""
-    from flask import jsonify
     return jsonify({
         'status': 'not_implemented',
         'message': '검색 기능은 추후 구현 예정입니다.',

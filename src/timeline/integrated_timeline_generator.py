@@ -7,12 +7,10 @@ Integrated Timeline Generator for Court Submission
 """
 
 import json
-import os
 import shutil
-import zipfile
 from datetime import date, datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional
 
 
 class IntegratedTimelineGenerator:
@@ -496,7 +494,7 @@ if __name__ == "__main__":
     generator = IntegratedTimelineGenerator()
     result = generator.generate_integrated_timeline()
 
-    print(f"\n📋 타임라인 생성 결과:")
+    print("\n📋 타임라인 생성 결과:")
     print(f"  총 항목: {result['total_items']}개")
     print(f"  이메일: {result['email_items']}개")
     print(f"  추가증거: {result['additional_items']}개")

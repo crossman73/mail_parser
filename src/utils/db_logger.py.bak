@@ -1,0 +1,88 @@
+"""
+SQLite 기반 로그 핸들러
+메모리 문제 없이 DB에 직접 로그를 저장
+"""
+import logging
+import threading
+from datetime import datetime
+
+
+class SQLiteLogHandler(logging.Handler):
+    """SQLite 데이터베이스에 로그를 저장하는 핸들러"""
+
+    def __init__(self, db_path: str = "data/db/email_parser.db"):
+        super().__init__()
+        self.db_path = db_path
+        self._lock = threading.Lock()
+        # DB 인스턴스는 emit 시점에 lazy 로드 (순환 import 방지)
+        self._db = None
+
+    def _get_db(self):
+        """DB 인스턴스 lazy 로드"""
+        if self._db is None:
+            try:
+                from src.database.email_db import db
+                self._db = db
+            except Exception as e:
+                # DB 로드 실패 시 콘솔에만 출력
+                print(f"[SQLiteLogHandler] DB 로드 실패: {e}")
+        return self._db
+
+    def emit(self, record: logging.LogRecord):
+        """로그 레코드를 DB에 저장"""
+        try:
+            db = self._get_db()
+            if db is None:
+                return  # DB 사용 불가시 조용히 건너뜀
+
+            # 타임스탬프 (ISO 8601)
+            timestamp = datetime.fromtimestamp(record.created).isoformat()
+
+            # 추가 데이터 (exc_info 등)
+            extra_data = {}
+            if record.exc_info:
+                extra_data['exc_info'] = self.format(record)
+            if hasattr(record, 'extra_fields'):
+                extra_data.update(record.extra_fields)
+
+            # 스레드 안전 저장
+            with self._lock:
+                db.save_log(
+                    timestamp=timestamp,
+                    level=record.levelname,
+                    logger_name=record.name,
+                    message=record.getMessage(),
+                    module=record.module,
+                    function=record.funcName,
+                    line_no=record.lineno,
+                    thread_id=record.thread,
+                    process_id=record.process,
+                    extra_data=extra_data if extra_data else None
+                )
+
+        except Exception:
+            # 로그 저장 실패는 조용히 처리 (순환 방지)
+            self.handleError(record)
+
+
+def setup_db_logging(logger: logging.Logger, db_path: str = "data/db/email_parser.db"):
+    """
+    기존 로거에 SQLite 핸들러 추가
+
+    Args:
+        logger: 로거 인스턴스
+        db_path: DB 파일 경로
+    """
+    # 이미 SQLiteLogHandler가 있으면 추가 안함
+    for handler in logger.handlers:
+        if isinstance(handler, SQLiteLogHandler):
+            return
+
+    db_handler = SQLiteLogHandler(db_path)
+    db_handler.setLevel(logging.INFO)  # INFO 이상만 DB에 저장
+
+    # 간단한 포맷 (상세 정보는 DB 컬럼에 저장됨)
+    formatter = logging.Formatter('%(levelname)s - %(message)s')
+    db_handler.setFormatter(formatter)
+
+    logger.addHandler(db_handler)

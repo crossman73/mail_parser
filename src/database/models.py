@@ -2,8 +2,7 @@
 데이터 모델 정의
 dataclass 기반으로 타입 안전성을 확보하고 스키마를 중앙 관리
 """
-from dataclasses import dataclass, field
-from datetime import datetime
+from dataclasses import dataclass
 from typing import Optional
 
 

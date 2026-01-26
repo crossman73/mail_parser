@@ -4,7 +4,7 @@ Use this module to initialize DBs and call CRUD operations from other code
 without coupling import-time side-effects.
 
 Example:
-    from src.core import db_manager
+    from ..core import db_manager
     db_manager.init_all()
     eid, entries = db_manager.save_evidence(metadata, file_paths)
 """
@@ -21,7 +21,7 @@ def init_all(evidence_path: Optional[Path] = None, job_store_path: Optional[Path
 
     # Evidence DB (lazy init)
     try:
-        from src.core import evidence_store
+        from ..core import evidence_store
         evidence_store.init_db(evidence_path)
     except Exception as e:
         # Don't fail hard; callers can handle missing DB
@@ -29,7 +29,7 @@ def init_all(evidence_path: Optional[Path] = None, job_store_path: Optional[Path
 
     # Job store
     try:
-        from src.core import job_store
+        from ..core import job_store
         job_store.init_db(job_store_path)
     except Exception as e:
         print(f"⚠️ Job store 초기화 실패: {e}")
@@ -37,7 +37,7 @@ def init_all(evidence_path: Optional[Path] = None, job_store_path: Optional[Path
 
 # Evidence helpers -----------------------------------------------------------
 def save_evidence(metadata: Dict[str, Any], file_paths: List[str | Path]) -> Tuple[int, List[Dict[str, Any]]]:
-    from src.core import evidence_store
+    from ..core import evidence_store
 
     # Ensure DB initialized if not already
     try:
@@ -48,7 +48,7 @@ def save_evidence(metadata: Dict[str, Any], file_paths: List[str | Path]) -> Tup
 
 
 def get_evidence(evidence_id: int) -> Optional[Dict[str, Any]]:
-    from src.core import evidence_store
+    from ..core import evidence_store
     try:
         return evidence_store.get_evidence(evidence_id)
     except Exception:
@@ -57,7 +57,7 @@ def get_evidence(evidence_id: int) -> Optional[Dict[str, Any]]:
 
 def list_evidence(limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
     """List evidence rows (simple wrapper)."""
-    from src.core import evidence_store
+    from ..core import evidence_store
     conn = None
     try:
         conn = evidence_store._get_conn()
@@ -71,7 +71,7 @@ def list_evidence(limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
 
 
 def delete_evidence(evidence_id: int) -> bool:
-    from src.core import evidence_store
+    from ..core import evidence_store
     try:
         conn = evidence_store._get_conn()
         cur = conn.cursor()
@@ -86,7 +86,7 @@ def delete_evidence(evidence_id: int) -> bool:
 
 # Job store helpers ----------------------------------------------------------
 def create_job(job_id: str, status: str = 'running', result: Any = None):
-    from src.core import job_store
+    from ..core import job_store
     try:
         job_store._get_conn()
     except Exception:
@@ -95,7 +95,7 @@ def create_job(job_id: str, status: str = 'running', result: Any = None):
 
 
 def update_job(job_id: str, status: str, result: Any = None):
-    from src.core import job_store
+    from ..core import job_store
     try:
         job_store._get_conn()
     except Exception:
@@ -104,7 +104,7 @@ def update_job(job_id: str, status: str, result: Any = None):
 
 
 def get_job(job_id: str) -> Optional[Dict[str, Any]]:
-    from src.core import job_store
+    from ..core import job_store
     try:
         return job_store.get_job(job_id)
     except Exception:
@@ -112,7 +112,7 @@ def get_job(job_id: str) -> Optional[Dict[str, Any]]:
 
 
 def list_jobs(limit: int = 100) -> List[Dict[str, Any]]:
-    from src.core import job_store
+    from ..core import job_store
     try:
         return job_store.list_jobs(limit)
     except Exception:
@@ -126,7 +126,7 @@ def list_jobs(limit: int = 100) -> List[Dict[str, Any]]:
 # Email DB helpers (uses src.database.email_db.db which is lazy now)
 def get_processed_files() -> List[Dict[str, Any]]:
     try:
-        from src.database.email_db import db as email_db
+        from ..database.email_db import db as email_db
         return email_db.get_all_processed_files()
     except Exception:
         return []
@@ -135,7 +135,7 @@ def get_processed_files() -> List[Dict[str, Any]]:
 # Logging helpers ------------------------------------------------------------
 def write_log(level: str, message: str, extra: Any = None) -> int:
     try:
-        from src.core import log_store
+        from ..core import log_store
         try:
             log_store._get_conn()
         except Exception:
@@ -147,7 +147,7 @@ def write_log(level: str, message: str, extra: Any = None) -> int:
 
 def list_logs(limit: int = 100) -> List[Dict[str, Any]]:
     try:
-        from src.core import log_store
+        from ..core import log_store
         return log_store.list_logs(limit)
     except Exception:
         return []

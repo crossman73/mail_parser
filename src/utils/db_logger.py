@@ -3,10 +3,8 @@ SQLite 기반 로그 핸들러
 메모리 문제 없이 DB에 직접 로그를 저장
 """
 import logging
-import os
 import threading
 from datetime import datetime
-from typing import Optional
 
 
 class SQLiteLogHandler(logging.Handler):
@@ -23,7 +21,7 @@ class SQLiteLogHandler(logging.Handler):
         """DB 인스턴스 lazy 로드"""
         if self._db is None:
             try:
-                from src.database.email_db import db
+                from ..database.email_db import db
                 self._db = db
             except Exception as e:
                 # DB 로드 실패 시 콘솔에만 출력
@@ -62,7 +60,7 @@ class SQLiteLogHandler(logging.Handler):
                     extra_data=extra_data if extra_data else None
                 )
 
-        except Exception as e:
+        except Exception:
             # 로그 저장 실패는 조용히 처리 (순환 방지)
             self.handleError(record)
 

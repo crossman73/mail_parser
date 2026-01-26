@@ -2,7 +2,7 @@
 Core utilities for the email evidence processing system.
 """
 
-from src.core.utils.file_utils import ensure_directory, safe_filename
+from ..core.utils.file_utils import ensure_directory, safe_filename
 
 from .date_utils import format_korean_date, get_email_date
 from .hash_utils import calculate_data_hash, calculate_file_hash

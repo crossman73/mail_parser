@@ -8,7 +8,7 @@ from pathlib import Path
 from flask import jsonify, request
 from werkzeug.utils import secure_filename
 
-from src.services import (EmailService, EvidenceService, FileService,
+from ..services import (EmailService, EvidenceService, FileService,
                           TimelineService)
 
 

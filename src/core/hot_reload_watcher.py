@@ -38,7 +38,7 @@ def start_watcher(app, modules: List[str], paths: Optional[List[str]] = None):
         def on_modified(self, event):
             if not event.is_directory and event.src_path.endswith('.py'):
                 try:
-                    from src.core import hot_reload
+                    from ..core import hot_reload
                     with self.app.app_context():
                         hot_reload.reload_modules(self.modules)
                         self.app.logger.info(

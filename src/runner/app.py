@@ -113,7 +113,7 @@ try:
         host = os.environ.get('FLASK_HOST', '0.0.0.0')
         port = int(os.environ.get('FLASK_PORT', '5000'))
 
-        print(f"\n🚀 서버 시작:")
+        print("\n🚀 서버 시작:")
         print(f"   주소: http://{host}:{port}")
         print(f"   디버그 모드: {'ON' if debug_mode else 'OFF'}")
         print(f"   환경: {'개발' if debug_mode else '운영'}")

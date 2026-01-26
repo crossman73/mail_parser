@@ -3,10 +3,7 @@ Email service for handling email processing operations
 웹 인터페이스와 메일 처리 로직 연결
 """
 
-import json
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from ..mail_parser.processor import EmailEvidenceProcessor
 

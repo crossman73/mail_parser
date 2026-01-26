@@ -3,8 +3,7 @@ import gc
 import logging
 import mailbox
 import os
-from pathlib import Path
-from typing import Dict, Iterator, Optional
+from typing import Dict, Iterator
 
 try:
     import psutil

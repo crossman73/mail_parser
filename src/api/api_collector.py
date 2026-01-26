@@ -3,7 +3,6 @@ API 엔드포인트 자동 수집 유틸리티
 Flask 라우트에서 API 정보를 추출하여 DB에 저장
 """
 import logging
-import re
 from typing import Any, Dict, List, Optional
 
 from flask import Flask

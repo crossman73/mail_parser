@@ -14,7 +14,7 @@ def check_and_init(app) -> List[Dict[str, Any]]:
 
     # 1) Initialize logging DB first so subsequent checks can log into DB
     try:
-        from src.core import log_store, logging_utils
+        from ..core import log_store, logging_utils
         try:
             log_store.init_db()
         except Exception:
@@ -30,7 +30,7 @@ def check_and_init(app) -> List[Dict[str, Any]]:
 
     # 2) Initialize core DBs
     try:
-        from src.core import db_manager
+        from ..core import db_manager
         try:
             db_manager.init_all()
         except Exception as e:
@@ -116,7 +116,7 @@ def check_and_init(app) -> List[Dict[str, Any]]:
 
     # 6) Persist startup errors to logs DB for operator visibility
     try:
-        from src.core import db_manager
+        from ..core import db_manager
         if errors:
             for err in errors:
                 db_manager.write_log('ERROR', 'startup_check_failure', err)

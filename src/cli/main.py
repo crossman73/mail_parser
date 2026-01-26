@@ -1,9 +1,8 @@
 """
 이메일 증거 파서 메인 애플리케이션 - 통합 아키텍처 v2.0
 """
-from src.core.unified_architecture import SystemConfig, UnifiedArchitecture
+from ..core.unified_architecture import SystemConfig, UnifiedArchitecture
 import argparse
-import asyncio
 import json
 import os
 import sys
@@ -15,6 +14,13 @@ project_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(project_root))
 
 # 통합 아키텍처 임포트
+from ..mail_parser.progress import (
+    display_welcome_message,
+    display_configuration_info,
+    display_error_help,
+    EmailProcessingProgress,
+)
+from ..mail_parser.processor import EmailEvidenceProcessor
 
 
 def load_system_config(config_path: str = "config.json") -> SystemConfig:
@@ -107,7 +113,7 @@ def main():
 def start_web_server(unified_arch: UnifiedArchitecture, port: int, verbose: bool):
     """웹 서버 시작"""
     try:
-        from src.web.app import create_app
+        from ..web.app import create_app
 
         # create_app expects an optional config path; pass minimal and attach
         # the unified architecture object to the app for downstream access.
@@ -179,7 +185,7 @@ def process_emails_cli(unified_arch: UnifiedArchitecture, args):
             processor = unified_arch.get_service('email_processor')
         except Exception:
             # 서비스가 없으면 직접 생성 (Phase 2에서 개선 예정)
-            from src.mail_parser.processor import EmailProcessor
+            from ..mail_parser.processor import EmailProcessor
             processor = EmailProcessor(unified_arch.config.config_data)
 
         print(f"📧 이메일 처리 시작: {args.input_path}")
@@ -195,7 +201,7 @@ def process_emails_cli(unified_arch: UnifiedArchitecture, args):
             try:
                 timeline_gen = unified_arch.get_service('timeline_generator')
             except Exception:
-                from src.timeline_system.timeline_generator import \
+                from ..timeline_system.timeline_generator import \
                     TimelineGenerator
                 timeline_gen = TimelineGenerator()
 
@@ -204,7 +210,7 @@ def process_emails_cli(unified_arch: UnifiedArchitecture, args):
 
         # 종합 보고서 생성
         try:
-            from src.mail_parser.reporter import create_comprehensive_report
+            from ..mail_parser.reporter import create_comprehensive_report
             report_path = create_comprehensive_report(results, args.output)
             print(f"✅ 종합 보고서 생성: {report_path}")
         except Exception as e:
@@ -273,7 +279,7 @@ def parse_selection_argument(selection_str: str, max_count: int) -> list:
             print(f"⚠️  경고: 유효하지 않은 번호들이 무시됩니다: {invalid_indices}")
 
         return valid_indices
-    except ValueError as e:
+    except ValueError:
         raise ValueError(
             f"선택 인수 형식이 잘못되었습니다: '{selection_str}'. 예: '1,3,5' 또는 'all' 또는 'none'")
 

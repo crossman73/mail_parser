@@ -1,10 +1,9 @@
 import mailbox
 import os
 from collections import defaultdict
-from datetime import datetime
 from typing import List
 
-from src.utils.email_utils import get_email_date
+from ..utils.email_utils import get_email_date
 
 
 def process_mailbox(mbox_path: str, output_dir: str = None) -> List[List[object]]:

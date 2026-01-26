@@ -2,7 +2,7 @@ import argparse
 import sys
 import time
 from pathlib import Path
-from src.core.service_manager import get_service_manager
+from ..core.service_manager import get_service_manager
 
 # service_control.py
 #!/usr/bin/env python3
@@ -85,9 +85,9 @@ def main():
           background=not args.foreground
         )
         if success and not args.foreground:
-          print(f"🌐 웹 서비스가 백그라운드에서 시작되었습니다.")
+          print("🌐 웹 서비스가 백그라운드에서 시작되었습니다.")
           print(f"   URL: http://{args.host}:{args.port}")
-          print(f"   상태 확인: python service_control.py status")
+          print("   상태 확인: python service_control.py status")
         return 0 if success else 1
         
       elif args.service == 'docs-updater':

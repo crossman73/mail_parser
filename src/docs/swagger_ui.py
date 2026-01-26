@@ -7,7 +7,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, current_app, jsonify, render_template_string, request
+from flask import Flask, jsonify, request
 
 
 class SwaggerUIService:

@@ -1,0 +1,8 @@
+[MASTER]
+# Ensure pylint can import the project's `src` package by adding the repository
+# root to sys.path when pylint runs. This avoids edit-heavy refactors solely to
+# satisfy linter import resolution.
+init-hook="import sys, os; sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))"
+
+# Keep default message control but allow project to use relative imports where
+# appropriate. Adjust further as needed.

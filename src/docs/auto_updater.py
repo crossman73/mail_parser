@@ -5,7 +5,6 @@
 import hashlib
 import json
 import logging
-import os
 import threading
 import time
 from datetime import datetime
@@ -115,7 +114,7 @@ class DocumentAutoUpdater:
             time.sleep(debounce)
 
             # 문서 생성 실행
-            from src.docs import generate_all_documentation
+            from ..docs import generate_all_documentation
 
             start_time = time.time()
             result = generate_all_documentation()

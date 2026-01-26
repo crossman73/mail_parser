@@ -1,8 +1,6 @@
 import logging
-import time
 
-from src.core import evidence_store
-from src.mail_parser.processor import EmailEvidenceProcessor
+from ..mail_parser.processor import EmailEvidenceProcessor
 
 logger = logging.getLogger('worker_tasks')
 

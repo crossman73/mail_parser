@@ -5,11 +5,10 @@
 법원 제출용 메일박스 증거 분류 시스템의 웹 인터페이스를 시작합니다.
 """
 
-from src.web.app import create_app
+from ..web.app import create_app
 import os
 import sys
 
-from flask import Flask
 
 # 프로젝트 루트 디렉토리를 Python 경로에 추가
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -36,9 +35,9 @@ def main():
     # 개발 모드 설정
     app.config['DEBUG'] = True
 
-    print(f"🌐 웹 서버를 시작합니다...")
-    print(f"📍 접속 주소: http://localhost:5000")
-    print(f"💡 종료하려면 Ctrl+C를 누르세요")
+    print("🌐 웹 서버를 시작합니다...")
+    print("📍 접속 주소: http://localhost:5000")
+    print("💡 종료하려면 Ctrl+C를 누르세요")
     print("-" * 60)
 
     try:

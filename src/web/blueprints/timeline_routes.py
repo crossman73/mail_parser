@@ -68,7 +68,7 @@ def integrated_timeline():
                                    timeline_result=None,
                                    no_data=True)
 
-        from src.timeline.integrated_timeline_generator import \
+        from ...timeline.integrated_timeline_generator import \
             IntegratedTimelineGenerator
 
         generator = IntegratedTimelineGenerator()
@@ -95,7 +95,7 @@ def integrated_timeline():
 def generate_timeline_package():
     """법원 제출용 타임라인 패키지 생성"""
     try:
-        from src.timeline.integrated_timeline_generator import \
+        from ...timeline.integrated_timeline_generator import \
             IntegratedTimelineGenerator
 
         generator = IntegratedTimelineGenerator()

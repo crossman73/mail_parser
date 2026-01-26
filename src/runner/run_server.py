@@ -15,22 +15,10 @@ print(f"DEBUG: Project root = {project_root.resolve()}")
 print(f"DEBUG: sys.path[0] = {sys.path[0]}")
 
 
-# App factory selection policy
-# - For day-to-day development we prefer the legacy/full UI (src.web.app)
-#   because it provides the richer `/upload` template and developer UX.
-# - In CI / production or when explicitly requested, you can choose the
-#   lighter-weight compatibility factory (`src.web.app_factory`) by setting
-#   USE_MINIMAL_UI=1 in the environment.
-# - For backwards compatibility we also honor USE_FULL_UI truthy values.
-try:
-    use_minimal = os.environ.get(
-        'USE_MINIMAL_UI', '').lower() in ('1', 'true', 'yes', 'on')
-    use_full = os.environ.get('USE_FULL_UI', '').lower() in (
-        '1', 'true', 'yes', 'on')
+# App factory selection
+# Prefer the canonical application factory for development and testing.
+from ..web.app import create_app
 
-    # Prefer the main application factory; compatibility factory removed.
-    # Keep a simple import to avoid import-time issues during linting.
-    from src.web.app import create_app
 
 try:
     import psutil
@@ -85,8 +73,8 @@ def main(port: int = 5000, auto_kill: bool = False, start_server: bool = True):
     # 데이터베이스 초기화
     print('💾 데이터베이스 초기화 중...')
     try:
-        from src.database.connection import db_connection
-        from src.database.migrations import MigrationManager
+        from ..database.connection import db_connection
+        from ..database.migrations import MigrationManager
 
         # DB 초기화
         db_path = project_root / 'data' / 'db' / 'email_parser.db'

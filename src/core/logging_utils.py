@@ -9,7 +9,7 @@ class DBLogHandler(Handler):
     def __init__(self):
         super().__init__()
         try:
-            from src.core import log_store
+            from ..core import log_store
             self._store = log_store
         except Exception:
             self._store = None

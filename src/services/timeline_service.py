@@ -5,8 +5,7 @@ Timeline service for email visualization
 
 import json
 from collections import defaultdict
-from datetime import datetime, timedelta
-from pathlib import Path
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 
@@ -302,16 +301,16 @@ class TimelineService:
 
         for date in sorted(events_by_date.keys()):
             events = events_by_date[date]
-            timeline_content += f'<div class="timeline-item">'
+            timeline_content += '<div class="timeline-item">'
             timeline_content += f'<div class="timeline-date">{date} ({len(events)}개 이벤트)</div>'
 
             for event in events:
-                timeline_content += f'<div class="event">'
+                timeline_content += '<div class="event">'
                 timeline_content += f'<div class="event-title">{event.get("evidence_number", "")} - {event.get("title", "")}</div>'
                 timeline_content += f'<div class="event-details">시간: {event.get("time", "00:00")} | 첨부파일: {event.get("attachment_count", 0)}개</div>'
-                timeline_content += f'</div>'
+                timeline_content += '</div>'
 
-            timeline_content += f'</div>'
+            timeline_content += '</div>'
 
         # 통계 내용 생성
         stats = timeline_data.get('statistics', {})

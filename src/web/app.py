@@ -6,7 +6,7 @@ Main Flask application factory
 import os
 from pathlib import Path
 
-from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for
 
 
 def create_app(config_path: str = None):
@@ -35,7 +35,7 @@ def create_app(config_path: str = None):
     # 설정 관리자 초기화 (DB 불가 시 메모리 폴백)
     # ========================================================================
     try:
-        from src.core.settings_manager import get_settings_manager
+        from ..core.settings_manager import get_settings_manager
         settings = get_settings_manager()
         app.config['SETTINGS_MANAGER'] = settings
         if settings.is_db_available():
@@ -50,7 +50,7 @@ def create_app(config_path: str = None):
     # 통합 로거 설정 (DB 기반 - 실패해도 계속)
     # ========================================================================
     try:
-        from src.utils.db_logger import setup_db_logging
+        from ..utils.db_logger import setup_db_logging
         setup_db_logging(app.logger, "data/db/email_parser.db")
         app.logger.info("Flask 앱 로거 초기화 완료 - DB 로깅 활성화")
     except Exception as e:
@@ -130,7 +130,7 @@ def create_app(config_path: str = None):
         import threading
         import time
 
-        from src.utils.temp_manager import temp_manager
+        from ..utils.temp_manager import temp_manager
 
         def cleanup_scheduler():
             """백그라운드에서 주기적으로 오래된 임시 파일 정리"""
@@ -163,7 +163,7 @@ def create_app(config_path: str = None):
 
         # 데이터베이스 초기화 (API 문서 수집에 필요)
         try:
-            from src.database.connection import db_connection
+            from ..database.connection import db_connection
             db_path = Path(__file__).parent.parent.parent / 'data' / 'db' / 'email_parser.db'
             db_path.parent.mkdir(parents=True, exist_ok=True)
             if not db_connection.db_path:
@@ -177,8 +177,8 @@ def create_app(config_path: str = None):
         # API 문서 자동 수집
         try:
             print("🔍 API 문서 수집 시작...")
-            from src.api.api_collector import collect_api_docs
-            from src.database.connection import db_connection
+            from ..api.api_collector import collect_api_docs
+            from ..database.connection import db_connection
 
             # DB가 초기화되었는지 확인
             print(f"  - DB 경로: {db_connection.db_path}")
@@ -197,7 +197,6 @@ def create_app(config_path: str = None):
     @app.context_processor
     def inject_template_helpers():
         """템플릿 헬퍼 함수 등록: 엔드포인트 확인 및 안전한 URL 생성"""
-        from flask import url_for
 
         def has_endpoint(name):
             """엔드포인트가 등록되어 있는지 확인"""
@@ -240,7 +239,7 @@ def create_app(config_path: str = None):
         from pathlib import Path
 
         import psutil
-        from flask import render_template, request
+        from flask import render_template
 
         try:
             # 메모리 사용률 확인
@@ -425,7 +424,7 @@ def create_app(config_path: str = None):
 
             # 데이터베이스 헬스체크
             try:
-                from src.database.connection import db_connection
+                from ..database.connection import db_connection
                 db_health = db_connection.health_check()
                 db_info = db_connection.get_database_info()
 
@@ -551,7 +550,6 @@ def create_app(config_path: str = None):
     @app.route('/system')
     def system_redirect():
         """구형 /system 엔드포인트 리다이렉트"""
-        from flask import redirect, url_for
         return redirect(url_for('system_status_json'))
 
     # ===== 이하 기존 코드 삭제 (중복 제거) =====
@@ -619,7 +617,7 @@ def _maybe_start_watcher(app):
             modules = app.config.get('DEV_RELOAD_MODULES', [])
             paths = app.config.get('WATCH_PATHS')
             try:
-                from src.core.hot_reload_watcher import start_watcher
+                from ..core.hot_reload_watcher import start_watcher
                 start_watcher(app, modules, paths)
             except Exception:
                 app.logger.exception('failed to start hot reload watcher')

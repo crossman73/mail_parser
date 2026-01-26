@@ -3,7 +3,6 @@
 스키마 버전을 추적하고 자동으로 마이그레이션 실행
 """
 import logging
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -192,7 +191,7 @@ class MigrationManager:
             성공 여부
         """
         try:
-            from src.database.api_docs_models import API_DOCS_SCHEMA
+            from ...database.api_docs_models import API_DOCS_SCHEMA
 
             with self.db.get_connection() as conn:
                 # 테이블 생성
@@ -221,7 +220,7 @@ class MigrationManager:
             성공 여부
         """
         try:
-            from src.database.api_docs_models import API_TEST_SCHEMA
+            from ...database.api_docs_models import API_TEST_SCHEMA
 
             with self.db.get_connection() as conn:
                 # 테이블 생성
@@ -250,7 +249,7 @@ class MigrationManager:
             성공 여부
         """
         try:
-            from src.database.models import SCHEMA_DEFINITIONS
+            from ...database.models import SCHEMA_DEFINITIONS
 
             schema_v1 = SCHEMA_DEFINITIONS[1]
 

@@ -8,7 +8,7 @@ from typing import Any, Dict
 def test_web_application() -> Dict[str, Any]:
     """웹 애플리케이션 테스트"""
     try:
-        from src.web.app import create_app
+        from ..web.app import create_app
 
         app = create_app()
 
@@ -43,7 +43,7 @@ def test_web_application() -> Dict[str, Any]:
 def test_health_check() -> Dict[str, Any]:
     """헬스체크 엔드포인트 테스트"""
     try:
-        from src.web.app import create_app
+        from ..web.app import create_app
 
         app = create_app()
         client = app.test_client()
@@ -77,7 +77,7 @@ def test_health_check() -> Dict[str, Any]:
 def test_database_connection() -> Dict[str, Any]:
     """데이터베이스 연결 테스트"""
     try:
-        from src.database.email_db import db
+        from ..database.email_db import db
 
         conn = db.get_connection()
 
@@ -188,7 +188,7 @@ def test_directory_structure() -> Dict[str, Any]:
 def test_email_processor() -> Dict[str, Any]:
     """이메일 프로세서 초기화 테스트"""
     try:
-        from src.mail_parser.processor import EmailEvidenceProcessor
+        from ..mail_parser.processor import EmailEvidenceProcessor
 
         processor = EmailEvidenceProcessor('config.json')
 
@@ -212,7 +212,7 @@ def test_email_processor() -> Dict[str, Any]:
 def test_forensic_integrity_service() -> Dict[str, Any]:
     """포렌식 무결성 서비스 테스트"""
     try:
-        from src.mail_parser.forensic_integrity import ForensicIntegrityService
+        from ..mail_parser.forensic_integrity import ForensicIntegrityService
 
         service = ForensicIntegrityService()
 
@@ -235,8 +235,9 @@ def test_forensic_integrity_service() -> Dict[str, Any]:
 
 def test_api_endpoints() -> Dict[str, Any]:
     """API 엔드포인트 테스트"""
+
     try:
-            from src.web.app import create_app
+        from ..web.app import create_app
 
         app = create_app()
         client = app.test_client()
@@ -273,7 +274,7 @@ def test_api_endpoints() -> Dict[str, Any]:
 def test_system_settings() -> Dict[str, Any]:
     """시스템 설정 기능 테스트"""
     try:
-        from src.database.email_db import db
+        from ..database.email_db import db
 
         # 테스트 설정 저장
         test_key = 'test_setting_key_temp'

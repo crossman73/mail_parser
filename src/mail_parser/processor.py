@@ -8,16 +8,15 @@ import re
 import shutil
 from datetime import datetime
 from email.message import Message
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, cast
 
-from src.parser.mailbox_processor import process_mailbox
+from ..parser.mailbox_processor import process_mailbox
 
-from .analyzer import ThreadAnalyzer
 from .evidence_generator import EvidenceGenerator
 from .forensic_integrity import ForensicIntegrityService
 from .formatter import CourtFormatter
 from .integrity import IntegrityManager
-from .logger import (log_email_processing, log_file_operation,
+from .logger import (log_file_operation,
                      log_processing_step, setup_logger)
 from .streaming_processor import StreamingEmailProcessor
 from .utils import decode_text, get_email_date, sanitize_filename
@@ -81,7 +80,7 @@ class EmailEvidenceProcessor:
                                mbox_path, success=False, error_msg=str(e))
             raise
 
-        log_processing_step(self.logger, 2, f"메타데이터 수집 시작")
+        log_processing_step(self.logger, 2, "메타데이터 수집 시작")
         metadata_count = 0
 
         for key, msg in self.mbox.items():

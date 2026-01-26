@@ -4,11 +4,10 @@
 import json
 import logging
 import os
-import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 try:
     import psutil
@@ -107,7 +106,7 @@ class UnifiedArchitecture:
 
             # 3. DB 핸들러 추가 (순환 import 방지를 위해 여기서 import)
             try:
-                from src.utils.db_logger import setup_db_logging
+                from ..utils.db_logger import setup_db_logging
                 db_path = "data/db/email_parser.db"
                 setup_db_logging(logger, db_path)
                 logger.info("DB 로깅 핸들러 초기화 완료")
@@ -166,8 +165,8 @@ class UnifiedArchitecture:
         """핵심 서비스 초기화"""
         try:
             # 기존 서비스들을 동적으로 로드
-            from src.mail_parser.performance import PerformanceMonitor
-            from src.mail_parser.processor import EmailEvidenceProcessor
+            from ..mail_parser.performance import PerformanceMonitor
+            from ..mail_parser.processor import EmailEvidenceProcessor
 
             # helper to try multiple constructor signatures
             def try_construct(klass, *args_options):
@@ -213,7 +212,7 @@ class UnifiedArchitecture:
 
             # 포렌식 무결성 서비스 (있으면 로드)
             try:
-                from src.mail_parser.forensic_integrity import \
+                from ..mail_parser.forensic_integrity import \
                     ForensicIntegrityService
                 try:
                     inst = try_construct(
@@ -226,7 +225,7 @@ class UnifiedArchitecture:
 
             # 스트리밍 프로세서 (있으면 로드)
             try:
-                from src.mail_parser.streaming_processor import \
+                from ..mail_parser.streaming_processor import \
                     StreamingEmailProcessor
                 try:
                     inst = try_construct(
@@ -314,7 +313,7 @@ class UnifiedArchitecture:
 
         # DB connectivity quick check (best-effort)
         try:
-            from src.core import db_manager
+            from ..core import db_manager
 
             try:
                 # attempt a harmless read

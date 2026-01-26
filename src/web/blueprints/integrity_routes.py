@@ -22,7 +22,7 @@ def verify_integrity():
     """법원 제출용 무결성 검증 페이지"""
     try:
         # Lazy import to avoid loading heavy dependencies at startup
-        from src.legal_compliance.court_evidence_verifier import \
+        from ...legal_compliance.court_evidence_verifier import \
             CourtEvidenceIntegrityVerifier
 
         # 처리된 이메일 폴더 확인
@@ -59,7 +59,7 @@ def api_verify_integrity():
     """법원 제출용 무결성 검증 API"""
     try:
         # Lazy import to avoid loading heavy dependencies at startup
-        from src.legal_compliance.court_evidence_verifier import \
+        from ...legal_compliance.court_evidence_verifier import \
             CourtEvidenceIntegrityVerifier
 
         verifier = CourtEvidenceIntegrityVerifier("processed_emails")

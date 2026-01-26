@@ -5,7 +5,6 @@ stateful objects inconsistent. Use only with FEATURE_FLAGS['enable_dev_reload']
 enabled and in development environments.
 """
 from importlib import import_module, reload
-from types import ModuleType
 from typing import Any, Dict, List
 
 

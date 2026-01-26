@@ -6,20 +6,12 @@ Court Evidence Integrity Verifier with Additional Evidence Support
 import hashlib
 import json
 import os
-import zipfile
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional
 
-import openpyxl
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import (BaseDocTemplate, Frame, PageTemplate,
-                                Paragraph, Spacer, Table, TableStyle)
-from reportlab.platypus.flowables import PageBreak
 
 
 class CourtEvidenceIntegrityVerifier:
@@ -280,7 +272,7 @@ class CourtEvidenceIntegrityVerifier:
             f.write("=" * 80 + "\n\n")
 
             f.write(f"검증 일시: {results['timestamp']}\n")
-            f.write(f"검증 도구: CourtEvidenceIntegrityVerifier v2.0\n\n")
+            f.write("검증 도구: CourtEvidenceIntegrityVerifier v2.0\n\n")
 
             f.write("■ 검증 요약\n")
             f.write(f"  - 총 파일 수: {results['summary']['total_files']}개\n")

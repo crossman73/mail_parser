@@ -7,7 +7,7 @@ import mailbox
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from ..models import AttachmentModel, EmailModel
 from ..utils import decode_text, get_email_date, sanitize_filename

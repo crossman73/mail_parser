@@ -2,7 +2,6 @@
 실시간 처리 진행 상황 추적기
 """
 import threading
-import time
 from datetime import datetime
 from typing import Dict, Optional
 

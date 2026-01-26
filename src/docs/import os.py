@@ -1,19 +1,12 @@
 import os
-import signal
 import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Dict, Optional, List
+from typing import Dict, Optional
 import psutil
 import logging
-from src.docs.auto_updater import start_auto_updater
-import sys
-from pathlib import Path
-from src.docs.auto_updater import start_auto_updater, stop_auto_updater
-import signal
-import time
-import json
+from ..docs.auto_updater import start_auto_updater
 import json
 
 # src/core/service_manager.py
@@ -103,7 +96,7 @@ class BackgroundServiceManager:
         # 서비스 시작 확인
         time.sleep(2)
         if self._verify_web_service(host, port):
-          print(f"🚀 웹 서비스 백그라운드 시작 완료")
+          print("🚀 웹 서비스 백그라운드 시작 완료")
           print(f"   URL: http://{host}:{port}")
           print(f"   PID: {process.pid}")
           return True
@@ -125,7 +118,7 @@ class BackgroundServiceManager:
     """문서 자동 업데이터 백그라운드 시작"""
     try:
       if self.is_service_running("docs_updater"):
-        print(f"⚠️ 문서 자동 업데이터가 이미 실행 중입니다")
+        print("⚠️ 문서 자동 업데이터가 이미 실행 중입니다")
         return True
       
       if background:

@@ -5,8 +5,6 @@ import os
 import shutil
 import zipfile
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 
 class EvidencePackager:

@@ -1,0 +1,100 @@
+Pylint total issues: 1890
+Counts by type:
+ - warning: 954
+ - convention: 550
+ - refactor: 236
+ - error: 150
+Top symbols:
+ - broad-exception-caught: 447
+ - bad-indentation: 276
+ - import-outside-toplevel: 225
+ - line-too-long: 119
+ - logging-fstring-interpolation: 105
+ - trailing-whitespace: 83
+ - import-error: 81
+ - relative-beyond-top-level: 57
+ - missing-function-docstring: 50
+ - no-else-return: 41
+ - duplicate-code: 41
+ - redefined-outer-name: 28
+ - too-many-locals: 25
+ - missing-module-docstring: 24
+ - too-many-branches: 22
+ - too-many-nested-blocks: 18
+ - protected-access: 17
+ - too-many-instance-attributes: 17
+ - invalid-name: 16
+ - unused-variable: 14
+Top files:
+ - src/docs/import os.py: 262
+ - src/web/admin_routes.py: 184
+ - src/docs/import argparse.py: 131
+ - src/web/app.py: 100
+ - src/web/routes.py: 83
+ - src/core/db_manager.py: 72
+ - src/database/email_db.py: 56
+ - src/core/unified_architecture.py: 43
+ - src/cli/main.py: 42
+ - src/web/blueprints/__init__.py: 41
+ - src/mail_parser/processor.py: 36
+ - src/web/api.py: 34
+ - src/web/blueprints/evidence_routes.py: 32
+ - src/system_tests/core_tests.py: 27
+ - src/core/startup.py: 23
+ - src/database/migrations/migration_manager.py: 23
+ - src/utils/temp_manager.py: 23
+ - src/mail_parser/reporter.py: 22
+ - src/services/email_service.py: 22
+ - src/web/upload_stream.py: 22
+
+Top 50 individual issues:
+ 1. error: src/cli/main.py:4 - import-error - Unable to import 'src.core.unified_architecture'
+ 2. error: src/cli/main.py:17 - import-error - Unable to import 'src.mail_parser.progress'
+ 3. error: src/cli/main.py:23 - import-error - Unable to import 'src.mail_parser.processor'
+ 4. error: src/cli/main.py:188 - import-error - Unable to import 'src.mail_parser.processor'
+ 5. error: src/cli/main.py:204 - import-error - Unable to import 'src.timeline_system.timeline_generator'
+ 6. error: src/cli/main.py:213 - import-error - Unable to import 'src.mail_parser.reporter'
+ 7. error: src/cli/main.py:287 - function-redefined - function already defined line 49
+ 8. error: src/core/db_manager.py:24 - import-error - Unable to import 'src.core'
+ 9. error: src/core/db_manager.py:32 - import-error - Unable to import 'src.core'
+10. error: src/core/db_manager.py:40 - import-error - Unable to import 'src.core'
+11. error: src/core/db_manager.py:51 - import-error - Unable to import 'src.core'
+12. error: src/core/db_manager.py:60 - import-error - Unable to import 'src.core'
+13. error: src/core/db_manager.py:74 - import-error - Unable to import 'src.core'
+14. error: src/core/db_manager.py:89 - import-error - Unable to import 'src.core'
+15. error: src/core/db_manager.py:98 - import-error - Unable to import 'src.core'
+16. error: src/core/db_manager.py:107 - import-error - Unable to import 'src.core'
+17. error: src/core/db_manager.py:115 - import-error - Unable to import 'src.core'
+18. error: src/core/db_manager.py:129 - import-error - Unable to import 'src.database.email_db'
+19. error: src/core/db_manager.py:138 - import-error - Unable to import 'src.core'
+20. error: src/core/db_manager.py:150 - import-error - Unable to import 'src.core'
+21. error: src/core/hot_reload_watcher.py:21 - import-error - Unable to import 'watchdog.events'
+22. error: src/core/hot_reload_watcher.py:22 - import-error - Unable to import 'watchdog.observers'
+23. error: src/core/hot_reload_watcher.py:41 - import-error - Unable to import 'src.core'
+24. error: src/core/logging_utils.py:12 - import-error - Unable to import 'src.core'
+25. error: src/core/settings_manager.py:34 - import-error - Unable to import 'src.database.email_db'
+26. error: src/core/startup.py:17 - import-error - Unable to import 'src.core'
+27. error: src/core/startup.py:33 - import-error - Unable to import 'src.core'
+28. error: src/core/startup.py:108 - import-error - Unable to import 'redis'
+29. error: src/core/startup.py:119 - import-error - Unable to import 'src.core'
+30. error: src/core/unified_architecture.py:13 - import-error - Unable to import 'psutil'
+31. error: src/core/unified_architecture.py:109 - import-error - Unable to import 'src.utils.db_logger'
+32. error: src/core/unified_architecture.py:168 - import-error - Unable to import 'src.mail_parser.performance'
+33. error: src/core/unified_architecture.py:169 - import-error - Unable to import 'src.mail_parser.processor'
+34. error: src/core/unified_architecture.py:316 - import-error - Unable to import 'src.core'
+35. error: src/database/migrations/migration_manager.py:194 - import-error - Unable to import 'src.database.api_docs_models'
+36. error: src/database/migrations/migration_manager.py:223 - import-error - Unable to import 'src.database.api_docs_models'
+37. error: src/database/migrations/migration_manager.py:252 - import-error - Unable to import 'src.database.models'
+38. error: src/docs/api_endpoints.py:17 - import-error - Unable to import 'src.docs'
+39. error: src/docs/auto_updater.py:117 - import-error - Unable to import 'src.docs'
+40. error: src/docs/import argparse.py:5 - import-error - Unable to import 'src.core.service_manager'
+41. error: src/docs/import os.py:7 - import-error - Unable to import 'psutil'
+42. error: src/docs/import os.py:9 - import-error - Unable to import 'src.docs.auto_updater'
+43. error: src/docs/swagger_ui.py:500 - no-value-for-parameter - No value for argument 'project_root' in constructor call
+44. error: src/mail_parser/__init__.py:5 - import-error - Unable to import 'src.core.utils.file_utils'
+45. error: src/mail_parser/evidence_generator.py:12 - import-error - Unable to import 'src.core'
+46. error: src/mail_parser/models/__init__.py:7 - import-error - Unable to import 'mail_parser.models.timeline_model'
+47. error: src/mail_parser/performance.py:9 - import-error - Unable to import 'psutil'
+48. error: src/mail_parser/performance.py:150 - function-redefined - method already defined line 103
+49. error: src/mail_parser/processor.py:13 - import-error - Unable to import 'src.parser.mailbox_processor'
+50. error: src/mail_parser/processor.py:552 - no-member - Instance of 'EmailEvidenceProcessor' has no 'should_exclude_email' member

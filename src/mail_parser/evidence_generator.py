@@ -7,10 +7,9 @@ import hashlib
 import json
 import os
 from datetime import datetime
-from email.utils import parseaddr
 from pathlib import Path
 
-from src.core import evidence_store
+from ..core import evidence_store
 
 
 class EvidenceGenerator:

@@ -165,7 +165,7 @@ def main():
         print(f"   예상 시간: {info['estimated_time']}")
 
     print("─" * 40)
-    print(f"📊 전체 요약:")
+    print("📊 전체 요약:")
     print(f"   총 파일 수: {len(mbox_files)}개")
     print(f"   총 크기: {total_size:.1f}MB")
     print(f"   예상 총 처리 시간: {estimate_processing_time(total_size)}")
@@ -180,7 +180,7 @@ def main():
         return 0
 
     # 사용자 확인
-    response = input(f"\n계속하시겠습니까? (y/N): ").strip().lower()
+    response = input("\n계속하시겠습니까? (y/N): ").strip().lower()
     if response not in ['y', 'yes']:
         print("처리가 취소되었습니다.")
         return 0
@@ -224,12 +224,12 @@ def main():
     print(f"❌ 실패: {len(failed_files)}개 파일")
 
     if successful_files:
-        print(f"\n✅ 성공한 파일들:")
+        print("\n✅ 성공한 파일들:")
         for file in successful_files:
             print(f"   • {os.path.basename(file)}")
 
     if failed_files:
-        print(f"\n❌ 실패한 파일들:")
+        print("\n❌ 실패한 파일들:")
         for file in failed_files:
             print(f"   • {os.path.basename(file)}")
 

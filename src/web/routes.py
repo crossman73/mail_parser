@@ -12,18 +12,16 @@ from datetime import datetime
 from pathlib import Path
 
 from flask import (flash, jsonify, redirect, render_template, request,
-                   send_file, session, url_for)
+                   url_for, current_app)
 from werkzeug.utils import secure_filename
 
-from src.evidence.additional_evidence_manager import AdditionalEvidenceManager
 # Heavy imports (openpyxl/numpy) moved into functions to avoid import-time cost
-# from src.legal_compliance.court_evidence_verifier import \
+# from ..legal_compliance.court_evidence_verifier import \
 #     CourtEvidenceIntegrityVerifier
-from src.mail_parser.processor import EmailEvidenceProcessor
-from src.mail_parser.progress import EmailProcessingProgress
-from src.timeline.integrated_timeline_generator import \
+from ..mail_parser.processor import EmailEvidenceProcessor
+from ..timeline.integrated_timeline_generator import \
     IntegratedTimelineGenerator
-from src.utils.temp_manager import temp_manager
+from ..utils.temp_manager import temp_manager
 
 from .progress_tracker import progress_tracker
 
@@ -39,7 +37,7 @@ email_processors = {}  # 세션별 프로세서 인스턴스
 
 # DB 통합
 try:
-    from src.database.email_db import db as email_db
+    from ..database.email_db import db as email_db
     USE_DATABASE = True
     print("✅ 데이터베이스 연결 성공")
 except ImportError as e:
@@ -52,16 +50,16 @@ def register_routes(app):
     """웹 라우트 등록"""
 
     # 서비스 인스턴스 초기화
-    from src.services.evidence_service import EvidenceService
-    from src.services.timeline_service import TimelineService
+    from ..services.evidence_service import EvidenceService
+    from ..services.timeline_service import TimelineService
 
     evidence_service = EvidenceService()
     timeline_service = TimelineService()
 
     # Evidence Blueprint 등록 (evidence_service 필요)
     try:
-        from src.web.blueprints.evidence_routes import (evidence_bp,
-                                                        init_evidence_services)
+        from .blueprints.evidence_routes import (evidence_bp,
+                            init_evidence_services)
 
         # USE_DATABASE와 email_db는 여기서 가져옴
         USE_DATABASE = app.config.get('USE_DATABASE', False)
@@ -74,8 +72,8 @@ def register_routes(app):
 
     # Timeline Blueprint 등록 (timeline_service, evidence_service 필요)
     try:
-        from src.web.blueprints.timeline_routes import (init_timeline_services,
-                                                        timeline_bp)
+        from .blueprints.timeline_routes import (init_timeline_services,
+                            timeline_bp)
         init_timeline_services(timeline_service, evidence_service)
         app.register_blueprint(timeline_bp)
         app.logger.info('✅ Timeline blueprint registered (/timeline, /integrated_timeline, /generate_timeline_package, etc.)')
@@ -84,7 +82,7 @@ def register_routes(app):
 
     # Integrity Blueprint 등록
     try:
-        from src.web.blueprints.integrity_routes import integrity_bp
+        from .blueprints.integrity_routes import integrity_bp
         app.register_blueprint(integrity_bp)
         app.logger.info('✅ Integrity blueprint registered (/integrity, /verify_integrity, /download_verification_report, etc.)')
     except Exception as e:
@@ -92,7 +90,7 @@ def register_routes(app):
 
     # Logs Blueprint 등록
     try:
-        from src.web.blueprints.logs_routes import logs_bp
+        from .blueprints.logs_routes import logs_bp
         app.register_blueprint(logs_bp)
         app.logger.info('✅ Logs blueprint registered (/logs, /api/logs, /api/logs/download, etc.)')
     except Exception as e:
@@ -383,7 +381,7 @@ def register_routes(app):
             integrity_report = None
             if options.get('verify_integrity', True):
                 try:
-                    from src.legal_compliance.court_evidence_verifier import \
+                    from ..legal_compliance.court_evidence_verifier import \
                         CourtEvidenceIntegrityVerifier
                 except Exception as e:
                     app.logger.error(f"무결성 검증 모듈 로드 실패: {e}")
@@ -458,9 +456,9 @@ def register_routes(app):
             )
 
             if timeline_data:
-                completion_msg += f", 타임라인 생성됨"
+                completion_msg += ", 타임라인 생성됨"
             if integrity_report:
-                completion_msg += f", 무결성 검증 완료"
+                completion_msg += ", 무결성 검증 완료"
 
             completion_msg += f" (세션 디렉토리: {temp_manager.get_session_dir()})"
 
@@ -705,7 +703,7 @@ def register_routes(app):
 
             return jsonify({
                 'success': True,
-                'message': f"임시 파일 정리 완료",
+                'message': "임시 파일 정리 완료",
                 'stats': stats
             })
         except Exception as e:
@@ -760,7 +758,7 @@ def register_routes(app):
     @app.route('/api/docs')
     def api_docs():
         """API 문서 페이지 (DB 기반 동적 생성)"""
-        from src.database.connection import db_connection
+        from ..database.connection import db_connection
 
         try:
             with db_connection.get_connection() as conn:
@@ -810,7 +808,7 @@ def register_routes(app):
     @app.route('/api/test-result', methods=['POST'])
     def api_test_result():
         """API 테스트 결과 저장"""
-        from src.database.connection import db_connection
+        from ..database.connection import db_connection
 
         try:
             data = request.get_json()
@@ -872,7 +870,7 @@ def register_routes(app):
     @app.route('/api/docs/history')
     def api_docs_history():
         """API 테스트 이력 조회"""
-        from src.database.connection import db_connection
+        from ..database.connection import db_connection
 
         try:
             with db_connection.get_connection() as conn:

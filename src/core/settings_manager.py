@@ -31,7 +31,7 @@ class SettingsManager:
     def _init_db(self):
         """DB 초기화 (실패해도 계속 진행)"""
         try:
-            from src.database.email_db import db
+            from ..database.email_db import db
             self._db = db
             # DB 연결 테스트
             _ = self._db.get_setting('_test_connection', default='ok')

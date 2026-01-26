@@ -4,7 +4,7 @@ API 문서 재생성 엔드포인트
 import time
 from pathlib import Path
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 
 # Blueprint 생성
 docs_api = Blueprint('docs_api', __name__, url_prefix='/api')
@@ -14,7 +14,7 @@ docs_api = Blueprint('docs_api', __name__, url_prefix='/api')
 def regenerate_docs():
     """문서 재생성 API"""
     try:
-        from src.docs import generate_all_documentation
+        from ..docs import generate_all_documentation
 
         start_time = time.time()
 

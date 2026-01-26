@@ -4,11 +4,10 @@ Phase 2.4: docs/ 디렉토리 체계화 및 자동 관리 시스템
 """
 import json
 import logging
-import os
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 
 class DocsStructureManager:

@@ -3,7 +3,6 @@ Evidence routes blueprint
 증거 관리, 추가 증거, 증거 목록 관련 라우트
 """
 
-import os
 import tempfile
 from datetime import datetime
 from pathlib import Path
@@ -12,7 +11,7 @@ from flask import (Blueprint, current_app, flash, jsonify, redirect,
                    render_template, request, send_file, url_for)
 from werkzeug.utils import secure_filename
 
-from src.evidence.additional_evidence_manager import AdditionalEvidenceManager
+from ...evidence.additional_evidence_manager import AdditionalEvidenceManager
 
 # Blueprint 정의
 evidence_bp = Blueprint('evidence', __name__)
@@ -177,7 +176,7 @@ def delete_files():
         errors = []
         deleted_files = []
 
-        from src.utils.file_deleter import delete_physical_files
+        from ...utils.file_deleter import delete_physical_files
 
         for file_id in file_ids:
             try:

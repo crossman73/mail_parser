@@ -3,12 +3,10 @@ Email routes blueprint
 이메일 목록, 상세, 처리 관련 라우트
 """
 
-import os
 import threading
-from pathlib import Path
 
 from flask import (Blueprint, current_app, flash, jsonify, redirect,
-                   render_template, request, send_file, url_for)
+                   render_template, request, url_for)
 
 # Blueprint 정의
 email_bp = Blueprint('email', __name__)

@@ -3,12 +3,11 @@ API 자동 스캔 시스템
 현재 Flask 애플리케이션의 모든 라우트와 API를 분석
 """
 import ast
-import inspect
 import json
 import logging
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 
 class APIScanner:

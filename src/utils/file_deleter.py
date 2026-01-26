@@ -4,11 +4,10 @@
 업로드 및 처리된 증거 파일을 디스크에서 삭제하는 기능 제공
 """
 
-import os
 import shutil
 from pathlib import Path
 from typing import Dict, List
-from src.core.SystemConfig import SystemConfig
+from ..core.SystemConfig import SystemConfig
 
 
 def delete_physical_files(file_id: str, uploads_dir: str = None, processed_dir: str = None) -> Dict[str, any]:

@@ -1,11 +1,10 @@
 import tempfile
 import threading
 import uuid
-from pathlib import Path
 
 from flask import Blueprint, current_app, jsonify, request
 
-from src.core import job_store
+from ..core import job_store
 
 # [2025-12-30] Upload Blueprint
 # url_prefix='/api': API 업로드 엔드포인트 ('/api/upload/stream', '/api/upload/job/<job_id>')
@@ -58,7 +57,7 @@ def upload_stream():
             tmp_path = tmp.name
 
         # Try to enqueue background job using RQ; fallback to local thread if unavailable
-        from src.tasks.worker_tasks import process_uploaded_mbox
+        from ..tasks.worker_tasks import process_uploaded_mbox
         try:
             # Lazy import to avoid hard dependency at module import time
             # In production this branch should succeed and enqueue to Redis/RQ.
