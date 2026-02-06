@@ -70,3 +70,9 @@ Thumbs.db
 
 #Ignore vscode AI rules (tracked separately)
 # .github\instructions\codacy.instructions.md
+
+# Tool virtual environments
+.venv-tools/
+
+# Codacy cache (corrupted path prefix)
+\?/
