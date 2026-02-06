@@ -24,10 +24,6 @@ applyTo: "**"
 | `context7`            | 컨텍스트 관리                       | 🟡 권장  |
 | `brave-search`        | 웹 검색                             | 🟡 권장  |
 | `sequential-thinking` | 단계적 사고                         | 🟢 선택  |
-| `playwright`          | 브라우저 자동화                     | 🟢 선택  |
-| `memory`              | 메모리 관리                         | 🟢 선택  |
-| `desktop-commander`   | 데스크톱 제어                       | 🟢 선택  |
-| `markitdown`          | 마크다운 변환                       | 🟢 선택  |
 
 ### VS Code 사용자 MCP 서버 (`settings.json`)
 

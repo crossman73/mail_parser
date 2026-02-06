@@ -29,7 +29,8 @@
     "**/email_files/**": true,
     "**/data/db/**": true,
     "**/archives/**": true,
-    "**/.venv/**": true
+    "**/.venv/**": true,
+    "**/.venv-tools/**": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -40,12 +41,14 @@
     "**/data/db": true,
     "**/archives": true,
     "**/.venv": true,
+    "**/.venv-tools": true,
     "**/*.db": true,
     "**/*.log": true
   },
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.venv": true,
+    "**/.venv-tools": true,
     "**/__pycache__": true
   },
 

@@ -60,3 +60,20 @@ diagnostics/
 workspace_backups/
 vscode_diagnostics*/
 repo_cleanup_backups/
+scripts/vscode_diagnostics*/
+mcp/diagnostics/
+
+# Codacy / lint 생성물
+codacy_run.log
+codacy_cli_pid.txt
+pylint_*.json
+pylint_*.txt
+pylint_*.err
+
+# 대용량 HTML/백업
+*.html.backup
+api_docs_response.html
+blueprint_register_error.txt
+
+# .venv-tools (Codacy Docker용)
+.venv-tools/
