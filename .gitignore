@@ -1,78 +1,88 @@
-# Virtual environment directories
-.venv
-.venv-wsl
+# ============================================================
+# .gitignore — python-email (court-evidence-system)
+# ============================================================
 
-# Byte-compiled / optimized / DLL files
+# === Python ===
 __pycache__/
 *.py[cod]
-
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-
-# Local env files
-.env
-
-# Python bytecode
-__pycache__/
-*.py[cod]
-*.class
 *.so
+*.class
 .Python
 *.egg-info/
 dist/
 build/
 
-# Virtual Environment
+# === Virtual Environments ===
 .venv/
+.venv-wsl/
+.venv-tools/
 venv/
 ENV/
 
-# IDE
-.idea/
-# .vscode/ — track project settings, exclude secrets
-!.vscode/
+# === Environment / Secrets ===
+.env
+.env.*
 .vscode/.env
 .vscode/*.bak
 .vscode/*.bak-*
 
-# 로컬 데이터
+# === IDE ===
+.idea/
+!.vscode/
+
+# === Data / DB ===
 data/db/*.db
+data/db/*.db.backup*
+data/*.db
 data/cases/
 data/timelines/
 data/imports/
-logs/*.log
+
+# === Logs / PID / Lint artifacts ===
+logs/
+*.log
+*.pid
+pylint_run.err
+pylint_summary.txt
+codacy_cli_pid.txt
+codacy_run.log
+
+# === Temp / Uploads ===
 temp/
 uploads/*.mbox
-processed_emails/
 
-# 백업
+# === Processed / Email data ===
+processed_emails/
+email_files/
+
+# === Backups ===
 archives/
 workspace_backups/
 repo_cleanup_backups/
+*.backup
+*.backup_*
 
-# 이메일 파일
-email_files/
+# === Generated HTML / Debug artifacts ===
+api_docs_response.html
+blueprint_register_error.txt
 
-# MCP
+# === VS Code diagnostics (auto-generated) ===
+scripts/vscode_diagnostics*/
+
+# === MCP ===
 mcp/
 
-# 테스트
+# === Test cache ===
 .pytest_cache/
 .coverage
 htmlcov/
 
-# OS
+# === Codacy large JAR (use Docker instead) ===
+tools/codacy/*.jar
+
+# === Codacy cache (corrupted path prefix) ===
+\?/
+
+# === OS ===
 .DS_Store
 Thumbs.db
-
-
-#Ignore vscode AI rules (tracked separately)
-# .github\instructions\codacy.instructions.md
-
-# Tool virtual environments
-.venv-tools/
-
-# Codacy cache (corrupted path prefix)
-\?/

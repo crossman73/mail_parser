@@ -27,10 +27,15 @@
     "**/logs/**": true,
     "**/processed_emails/**": true,
     "**/email_files/**": true,
-    "**/data/db/**": true,
+    "**/data/**": true,
     "**/archives/**": true,
     "**/.venv/**": true,
-    "**/.venv-tools/**": true
+    "**/.venv-tools/**": true,
+    "**/tools/codacy/**": true,
+    "**/scripts/vscode_diagnostics*/**": true,
+    "**/.serena/**": true,
+    "**/mcp/**": true,
+    "**/temp/**": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -38,18 +43,26 @@
     "**/logs": true,
     "**/processed_emails": true,
     "**/email_files": true,
-    "**/data/db": true,
+    "**/data/**": true,
     "**/archives": true,
     "**/.venv": true,
     "**/.venv-tools": true,
     "**/*.db": true,
-    "**/*.log": true
+    "**/*.log": true,
+    "**/tools/codacy": true,
+    "**/scripts/vscode_diagnostics*": true,
+    "**/.serena": true,
+    "**/mcp": true,
+    "**/*.jar": true,
+    "**/*.backup*": true
   },
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.venv": true,
     "**/.venv-tools": true,
-    "**/__pycache__": true
+    "**/__pycache__": true,
+    "**/scripts/vscode_diagnostics*": true,
+    "**/*.backup*": true
   },
 
   // === GitHub Copilot / agent ===
