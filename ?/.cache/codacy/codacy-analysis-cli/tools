@@ -1,5 +1,78 @@
 [
   {
+    "uuid" : "ec8f6265-18e8-478a-a295-7a4c09fa2171",
+    "dockerImage" : "codacy/codacy-reek:0.0.2",
+    "isDefault" : false,
+    "version" : "6.5.0",
+    "languages" : [
+      {
+        "name" : "Ruby"
+      }
+    ],
+    "name" : "Reek (New)",
+    "shortName" : "reek",
+    "documentationUrl" : "https://github.com/troessner/reek",
+    "sourceCodeUrl" : "https://github.com/troessner/reek",
+    "prefix" : "",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".reek.yml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "eebd5ab6-3bef-4192-843c-f52bc4dce861",
+    "dockerImage" : "codacy/codacy-sqlfluff:0.0.11",
+    "isDefault" : false,
+    "version" : "3.5.0",
+    "languages" : [
+      {
+        "name" : "SQL"
+      }
+    ],
+    "name" : "SQLFluff (New)",
+    "shortName" : "sqlfluff",
+    "documentationUrl" : "https://github.com/sqlfluff/sqlfluff/blob/main/README.md",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-sqlfluff",
+    "prefix" : "SQLFluff_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".sqlfluff",
+      "setup.cfg",
+      "tox.ini",
+      "pep8.ini",
+      "pyproject.toml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "d87d5570-a63c-4014-98ab-f446816ae67b",
+    "dockerImage" : "codacy/codacy-codenarc:0.5.20",
+    "isDefault" : true,
+    "version" : "3.6.0",
+    "languages" : [
+      {
+        "name" : "Groovy"
+      }
+    ],
+    "name" : "CodeNarc",
+    "shortName" : "codenarc",
+    "documentationUrl" : "https://codenarc.org/codenarc-rule-index.html",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-codenarc",
+    "prefix" : "CodeNarc_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".codenarcrc"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
     "uuid" : "e9fbc87b-e818-4e8e-bba1-0a95e46be070",
     "dockerImage" : "codacy/codacy-golangci-lint:0.0.4",
     "isDefault" : false,
@@ -22,33 +95,55 @@
     "hasUIConfiguration" : false
   },
   {
-    "uuid" : "81806a42-1d70-40e6-ad07-9a1a9da9e500",
-    "dockerImage" : "codacy/codacy-flawfinder:2.4.8",
+    "uuid" : "29815f43-c1d4-40e9-a9ad-27423209fa7b",
+    "dockerImage" : "codacy/codacy-ameba:2.6.8",
     "isDefault" : true,
-    "version" : "2.0.19",
+    "version" : "1.6.4",
     "languages" : [
       {
-        "name" : "C"
-      },
-      {
-        "name" : "CPP"
+        "name" : "Crystal"
       }
     ],
-    "name" : "Flawfinder",
-    "shortName" : "flawfinder",
-    "documentationUrl" : "https://dwheeler.com/flawfinder/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-flawfinder",
-    "prefix" : "flawfinder_",
+    "name" : "Ameba",
+    "shortName" : "ameba",
+    "documentationUrl" : "https://crystal-ameba.github.io/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-ameba",
+    "prefix" : "ameba_",
     "needsCompilation" : false,
-    "hasConfigFile" : false,
+    "hasConfigFile" : true,
     "configFilenames" : [
+      ".ameba.yml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "f67f7669-fff1-4f28-8a37-b665e5ebd182",
+    "dockerImage" : "codacy/codacy-codesniffer:2.6.12",
+    "isDefault" : true,
+    "version" : "3.10.1",
+    "languages" : [
+      {
+        "name" : "PHP"
+      }
+    ],
+    "name" : "PHP_CodeSniffer",
+    "shortName" : "phpcs",
+    "documentationUrl" : "https://github.com/squizlabs/PHP_CodeSniffer/wiki",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-codesniffer",
+    "prefix" : "PHPCS_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      "phpcs.xml",
+      "phpcs.xml.dist"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
   },
   {
     "uuid" : "2fd7fbe0-33f9-4ab3-ab73-e9b62404e2cb",
-    "dockerImage" : "codacy/codacy-trivy:1.8.8",
+    "dockerImage" : "codacy/codacy-trivy:1.8.10",
     "isDefault" : true,
     "version" : "0.66.0",
     "languages" : [
@@ -126,140 +221,46 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "d87d5570-a63c-4014-98ab-f446816ae67b",
-    "dockerImage" : "codacy/codacy-codenarc:0.5.20",
-    "isDefault" : true,
-    "version" : "3.6.0",
-    "languages" : [
-      {
-        "name" : "Groovy"
-      }
-    ],
-    "name" : "CodeNarc",
-    "shortName" : "codenarc",
-    "documentationUrl" : "https://codenarc.org/codenarc-rule-index.html",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-codenarc",
-    "prefix" : "CodeNarc_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      ".codenarcrc"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "f67f7669-fff1-4f28-8a37-b665e5ebd182",
-    "dockerImage" : "codacy/codacy-codesniffer:2.6.12",
-    "isDefault" : true,
-    "version" : "3.10.1",
-    "languages" : [
-      {
-        "name" : "PHP"
-      }
-    ],
-    "name" : "PHP_CodeSniffer",
-    "shortName" : "phpcs",
-    "documentationUrl" : "https://github.com/squizlabs/PHP_CodeSniffer/wiki",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-codesniffer",
-    "prefix" : "PHPCS_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "phpcs.xml",
-      "phpcs.xml.dist"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "ec8f6265-18e8-478a-a295-7a4c09fa2171",
-    "dockerImage" : "codacy/codacy-reek:0.0.2",
+    "uuid" : "997201eb-0907-4823-87c0-a8f7703531e7",
+    "dockerImage" : "codacy/codacy-csslint:3.2.5",
     "isDefault" : false,
-    "version" : "6.5.0",
+    "version" : "1.0.5",
     "languages" : [
       {
-        "name" : "Ruby"
+        "name" : "CSS"
       }
     ],
-    "name" : "Reek (New)",
-    "shortName" : "reek",
-    "documentationUrl" : "https://github.com/troessner/reek",
-    "sourceCodeUrl" : "https://github.com/troessner/reek",
-    "prefix" : "",
+    "name" : "CSSLint (deprecated)",
+    "shortName" : "csslint",
+    "documentationUrl" : "https://github.com/CSSLint/csslint/wiki/Rules",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-csslint",
+    "prefix" : "CSSLint_",
     "needsCompilation" : false,
     "hasConfigFile" : true,
     "configFilenames" : [
-      ".reek.yml"
+      ".csslintrc"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "29815f43-c1d4-40e9-a9ad-27423209fa7b",
-    "dockerImage" : "codacy/codacy-ameba:2.6.8",
+    "uuid" : "81806a42-1d70-40e6-ad07-9a1a9da9e500",
+    "dockerImage" : "codacy/codacy-flawfinder:2.4.8",
     "isDefault" : true,
-    "version" : "1.6.4",
+    "version" : "2.0.19",
     "languages" : [
       {
-        "name" : "Crystal"
-      }
-    ],
-    "name" : "Ameba",
-    "shortName" : "ameba",
-    "documentationUrl" : "https://crystal-ameba.github.io/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-ameba",
-    "prefix" : "ameba_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      ".ameba.yml"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "eebd5ab6-3bef-4192-843c-f52bc4dce861",
-    "dockerImage" : "codacy/codacy-sqlfluff:0.0.11",
-    "isDefault" : false,
-    "version" : "3.5.0",
-    "languages" : [
+        "name" : "C"
+      },
       {
-        "name" : "SQL"
+        "name" : "CPP"
       }
     ],
-    "name" : "SQLFluff (New)",
-    "shortName" : "sqlfluff",
-    "documentationUrl" : "https://github.com/sqlfluff/sqlfluff/blob/main/README.md",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-sqlfluff",
-    "prefix" : "SQLFluff_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      ".sqlfluff",
-      "setup.cfg",
-      "tox.ini",
-      "pep8.ini",
-      "pyproject.toml"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "8fb0fb29-fa6e-43f2-9a73-9cd3873b4d8a",
-    "dockerImage" : "codacy/codacy-psscriptanalyzer:2.3.7",
-    "isDefault" : true,
-    "version" : "1.24.0",
-    "languages" : [
-      {
-        "name" : "Powershell"
-      }
-    ],
-    "name" : "PSScriptAnalyzer",
-    "shortName" : "psscriptanalyzer",
-    "documentationUrl" : "https://github.com/PowerShell/PSScriptAnalyzer#readme",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-psscriptanalyzer",
-    "prefix" : "psscriptanalyzer_",
+    "name" : "Flawfinder",
+    "shortName" : "flawfinder",
+    "documentationUrl" : "https://dwheeler.com/flawfinder/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-flawfinder",
+    "prefix" : "flawfinder_",
     "needsCompilation" : false,
     "hasConfigFile" : false,
     "configFilenames" : [
@@ -293,24 +294,67 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "997201eb-0907-4823-87c0-a8f7703531e7",
-    "dockerImage" : "codacy/codacy-csslint:3.2.5",
-    "isDefault" : false,
-    "version" : "1.0.5",
+    "uuid" : "8fb0fb29-fa6e-43f2-9a73-9cd3873b4d8a",
+    "dockerImage" : "codacy/codacy-psscriptanalyzer:2.3.7",
+    "isDefault" : true,
+    "version" : "1.24.0",
     "languages" : [
       {
-        "name" : "CSS"
+        "name" : "Powershell"
       }
     ],
-    "name" : "CSSLint (deprecated)",
-    "shortName" : "csslint",
-    "documentationUrl" : "https://github.com/CSSLint/csslint/wiki/Rules",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-csslint",
-    "prefix" : "CSSLint_",
+    "name" : "PSScriptAnalyzer",
+    "shortName" : "psscriptanalyzer",
+    "documentationUrl" : "https://github.com/PowerShell/PSScriptAnalyzer#readme",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-psscriptanalyzer",
+    "prefix" : "psscriptanalyzer_",
     "needsCompilation" : false,
-    "hasConfigFile" : true,
+    "hasConfigFile" : false,
     "configFilenames" : [
-      ".csslintrc"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "cd6c01c6-7ff8-4a35-aaac-bbb0859564a1",
+    "dockerImage" : "codacy/codacy-faux-pas:0.3.7",
+    "isDefault" : false,
+    "version" : "1.7.2",
+    "languages" : [
+      {
+        "name" : "Objective C"
+      }
+    ],
+    "name" : "Faux Pas (deprecated)",
+    "shortName" : "faux-pas",
+    "documentationUrl" : "http://fauxpasapp.com/docs/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-faux-pas",
+    "prefix" : "FauxPas_",
+    "needsCompilation" : false,
+    "hasConfigFile" : false,
+    "configFilenames" : [
+    ],
+    "standalone" : true,
+    "hasUIConfiguration" : false
+  },
+  {
+    "uuid" : "38794ba2-94d8-4178-ab99-1f5c1d12760c",
+    "dockerImage" : "codacy/codacy-bundler-audit:4.3.11",
+    "isDefault" : false,
+    "version" : "0.9.1",
+    "languages" : [
+      {
+        "name" : "Ruby"
+      }
+    ],
+    "name" : "bundler-audit (deprecated)",
+    "shortName" : "bundleraudit",
+    "documentationUrl" : "https://www.rubydoc.info/gems/bundler-audit/frames",
+    "sourceCodeUrl" : "https://github.com/rubysec/bundler-audit",
+    "prefix" : "BundlerAudit_",
+    "needsCompilation" : false,
+    "hasConfigFile" : false,
+    "configFilenames" : [
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -344,29 +388,6 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "f4a54ce0-1fe1-4bc7-a9ed-9f91f675c409",
-    "dockerImage" : "codacy/codacy-checkstyle:3.0.17",
-    "isDefault" : false,
-    "version" : "10.26.1",
-    "languages" : [
-      {
-        "name" : "Java"
-      }
-    ],
-    "name" : "Checkstyle",
-    "shortName" : "checkstyle",
-    "documentationUrl" : "http://checkstyle.sourceforge.net/checks.html",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-checkstyle",
-    "prefix" : "Checkstyle_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "checkstyle.xml"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
     "uuid" : "aac6ad5e-093d-47c4-97ff-87f91d6128a2",
     "dockerImage" : "codacy/codacy-ruff:0.0.7",
     "isDefault" : false,
@@ -392,24 +413,24 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "ea1f5906-d2fc-4f84-926f-848273f5cf94",
-    "dockerImage" : "codacy/codacy-tailor:2.2.5",
+    "uuid" : "f4a54ce0-1fe1-4bc7-a9ed-9f91f675c409",
+    "dockerImage" : "codacy/codacy-checkstyle:3.0.17",
     "isDefault" : false,
-    "version" : "0.12.0",
+    "version" : "10.26.1",
     "languages" : [
       {
-        "name" : "Swift"
+        "name" : "Java"
       }
     ],
-    "name" : "tailor (deprecated)",
-    "shortName" : "tailor",
-    "documentationUrl" : "https://github.com/sleekbyte/tailor/wiki",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-tailor",
-    "prefix" : "tailor_",
+    "name" : "Checkstyle",
+    "shortName" : "checkstyle",
+    "documentationUrl" : "http://checkstyle.sourceforge.net/checks.html",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-checkstyle",
+    "prefix" : "Checkstyle_",
     "needsCompilation" : false,
     "hasConfigFile" : true,
     "configFilenames" : [
-      ".tailor.yml"
+      "checkstyle.xml"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -433,6 +454,29 @@
     "hasConfigFile" : true,
     "configFilenames" : [
       "revive.toml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "ea1f5906-d2fc-4f84-926f-848273f5cf94",
+    "dockerImage" : "codacy/codacy-tailor:2.2.5",
+    "isDefault" : false,
+    "version" : "0.12.0",
+    "languages" : [
+      {
+        "name" : "Swift"
+      }
+    ],
+    "name" : "tailor (deprecated)",
+    "shortName" : "tailor",
+    "documentationUrl" : "https://github.com/sleekbyte/tailor/wiki",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-tailor",
+    "prefix" : "tailor_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".tailor.yml"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -486,50 +530,6 @@
     ],
     "standalone" : true,
     "hasUIConfiguration" : false
-  },
-  {
-    "uuid" : "cd6c01c6-7ff8-4a35-aaac-bbb0859564a1",
-    "dockerImage" : "codacy/codacy-faux-pas:0.3.7",
-    "isDefault" : false,
-    "version" : "1.7.2",
-    "languages" : [
-      {
-        "name" : "Objective C"
-      }
-    ],
-    "name" : "Faux Pas (deprecated)",
-    "shortName" : "faux-pas",
-    "documentationUrl" : "http://fauxpasapp.com/docs/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-faux-pas",
-    "prefix" : "FauxPas_",
-    "needsCompilation" : false,
-    "hasConfigFile" : false,
-    "configFilenames" : [
-    ],
-    "standalone" : true,
-    "hasUIConfiguration" : false
-  },
-  {
-    "uuid" : "38794ba2-94d8-4178-ab99-1f5c1d12760c",
-    "dockerImage" : "codacy/codacy-bundler-audit:4.3.11",
-    "isDefault" : false,
-    "version" : "0.9.1",
-    "languages" : [
-      {
-        "name" : "Ruby"
-      }
-    ],
-    "name" : "bundler-audit (deprecated)",
-    "shortName" : "bundleraudit",
-    "documentationUrl" : "https://www.rubydoc.info/gems/bundler-audit/frames",
-    "sourceCodeUrl" : "https://github.com/rubysec/bundler-audit",
-    "prefix" : "BundlerAudit_",
-    "needsCompilation" : false,
-    "hasConfigFile" : false,
-    "configFilenames" : [
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
   },
   {
     "uuid" : "cb36c32d-fc0d-4b4c-8f21-66e536ef4513",
@@ -709,30 +709,6 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "21586cd3-3eaa-4454-878e-ac0211a833c2",
-    "dockerImage" : "codacy/codacy-scalastyle:3.1.7",
-    "isDefault" : true,
-    "version" : "1.5.1",
-    "languages" : [
-      {
-        "name" : "Scala"
-      }
-    ],
-    "name" : "Scalastyle",
-    "shortName" : "scalastyle",
-    "documentationUrl" : "http://www.scalastyle.org/rules-0.8.0.html",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-scalastyle",
-    "prefix" : "ScalaStyle_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "scalastyle-config.xml",
-      "scalastyle_config.xml"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
     "uuid" : "31677b6d-4ae0-4f56-8041-606a8d7a8e61",
     "dockerImage" : "codacy/codacy-pylint-python3:2.3.58",
     "isDefault" : true,
@@ -752,6 +728,30 @@
     "configFilenames" : [
       "pylintrc",
       ".pylintrc"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "21586cd3-3eaa-4454-878e-ac0211a833c2",
+    "dockerImage" : "codacy/codacy-scalastyle:3.1.7",
+    "isDefault" : true,
+    "version" : "1.5.1",
+    "languages" : [
+      {
+        "name" : "Scala"
+      }
+    ],
+    "name" : "Scalastyle",
+    "shortName" : "scalastyle",
+    "documentationUrl" : "http://www.scalastyle.org/rules-0.8.0.html",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-scalastyle",
+    "prefix" : "ScalaStyle_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      "scalastyle-config.xml",
+      "scalastyle_config.xml"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -830,28 +830,6 @@
     "hasUIConfiguration" : false
   },
   {
-    "uuid" : "233f8aac-4fb6-4193-8a17-e64515bea152",
-    "dockerImage" : "codacy/codacy-shellcheck:2.4.10",
-    "isDefault" : true,
-    "version" : "0.10.0",
-    "languages" : [
-      {
-        "name" : "Shell"
-      }
-    ],
-    "name" : "ShellCheck",
-    "shortName" : "shellcheck",
-    "documentationUrl" : "https://github.com/koalaman/shellcheck/wiki",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-shellcheck",
-    "prefix" : "shellcheck_",
-    "needsCompilation" : false,
-    "hasConfigFile" : false,
-    "configFilenames" : [
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
     "uuid" : "db4f1048-70d9-439e-b8a7-85a8dd91858c",
     "dockerImage" : "codacy/codacy-spotbugs:1.11.8",
     "isDefault" : false,
@@ -883,31 +861,47 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "25673894-eac1-4941-87a6-81f1abd5c321",
-    "dockerImage" : "codacy/codacy-prospector:2.4.1",
+    "uuid" : "233f8aac-4fb6-4193-8a17-e64515bea152",
+    "dockerImage" : "codacy/codacy-shellcheck:2.4.10",
     "isDefault" : true,
-    "version" : "1.17.2",
+    "version" : "0.10.0",
+    "languages" : [
+      {
+        "name" : "Shell"
+      }
+    ],
+    "name" : "ShellCheck",
+    "shortName" : "shellcheck",
+    "documentationUrl" : "https://github.com/koalaman/shellcheck/wiki",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-shellcheck",
+    "prefix" : "shellcheck_",
+    "needsCompilation" : false,
+    "hasConfigFile" : false,
+    "configFilenames" : [
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "34225275-f79e-4b85-8126-c7512c987c0d",
+    "dockerImage" : "codacy/codacy-pylint:3.3.6",
+    "isDefault" : false,
+    "version" : "1.9.5",
     "languages" : [
       {
         "name" : "Python"
       }
     ],
-    "name" : "Prospector",
-    "shortName" : "prospector",
-    "documentationUrl" : "https://prospector.readthedocs.io/en/latest/index.html",
-    "sourceCodeUrl" : "https://github.com/PyCQA/prospector",
-    "prefix" : "Prospector_",
+    "name" : "Pylint (deprecated)",
+    "shortName" : "pylint",
+    "documentationUrl" : "http://pylint-messages.wikidot.com/all-messages",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-pylint",
+    "prefix" : "PyLint_",
     "needsCompilation" : false,
     "hasConfigFile" : true,
     "configFilenames" : [
-      ".landscape.yml",
-      "landscape.yml",
-      ".prospector.yaml",
-      ".landscape.yaml",
-      ".prospector.yml",
-      "prospector.yml",
-      "prospector.yaml",
-      "landscape.yaml"
+      "pylintrc",
+      ".pylintrc"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -988,6 +982,36 @@
     "hasUIConfiguration" : true
   },
   {
+    "uuid" : "25673894-eac1-4941-87a6-81f1abd5c321",
+    "dockerImage" : "codacy/codacy-prospector:2.4.1",
+    "isDefault" : true,
+    "version" : "1.17.2",
+    "languages" : [
+      {
+        "name" : "Python"
+      }
+    ],
+    "name" : "Prospector",
+    "shortName" : "prospector",
+    "documentationUrl" : "https://prospector.readthedocs.io/en/latest/index.html",
+    "sourceCodeUrl" : "https://github.com/PyCQA/prospector",
+    "prefix" : "Prospector_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".landscape.yml",
+      "landscape.yml",
+      ".prospector.yaml",
+      ".landscape.yaml",
+      ".prospector.yml",
+      "prospector.yml",
+      "prospector.yaml",
+      "landscape.yaml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
     "uuid" : "ed9354c2-c1be-11ea-b3de-0242ac130004",
     "dockerImage" : "codacy/codacy-gosec:1.0.2",
     "isDefault" : false,
@@ -1034,108 +1058,29 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "34225275-f79e-4b85-8126-c7512c987c0d",
-    "dockerImage" : "codacy/codacy-pylint:3.3.6",
+    "uuid" : "fb60ff64-3d91-11ec-9bbc-0242ac130002",
+    "dockerImage" : "codacy/codacy-spectral:0.2.24",
     "isDefault" : false,
-    "version" : "1.9.5",
+    "version" : "1.22.0",
     "languages" : [
       {
-        "name" : "Python"
-      }
-    ],
-    "name" : "Pylint (deprecated)",
-    "shortName" : "pylint",
-    "documentationUrl" : "http://pylint-messages.wikidot.com/all-messages",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-pylint",
-    "prefix" : "PyLint_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "pylintrc",
-      ".pylintrc"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "cf05f3aa-fd23-4586-8cce-5368917ec3e5",
-    "dockerImage" : "codacy/codacy-eslint-legacy:8.2.2",
-    "isDefault" : false,
-    "version" : "7.32.0",
-    "languages" : [
-      {
-        "name" : "Javascript"
+        "name" : "YAML"
       },
       {
-        "name" : "TypeScript"
+        "name" : "JSON"
       }
     ],
-    "name" : "ESLint (deprecated)",
-    "shortName" : "eslint",
-    "documentationUrl" : "https://eslint.org/docs/rules/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-eslint-legacy",
-    "prefix" : "ESLint_",
+    "name" : "Spectral",
+    "shortName" : "spectral",
+    "documentationUrl" : "https://meta.stoplight.io/docs/spectral",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-spectral",
+    "prefix" : "spectral_",
     "needsCompilation" : false,
     "hasConfigFile" : true,
     "configFilenames" : [
-      ".prettierrc.yaml",
-      ".eslintrc.yml",
-      ".eslintrc.yaml",
-      ".prettierrc.yml",
-      ".eslintrc.json",
-      ".prettierrc",
-      ".eslintrc.js",
-      "prettier.config.js",
-      ".eslintrc.cjs",
-      ".eslintrc",
-      ".prettierrc.js",
-      ".prettierrc.json"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "0c5f0040-53b7-11e3-8f96-0800200c9a66",
-    "dockerImage" : "codacy/codacy-jshint:2.4.7",
-    "isDefault" : false,
-    "version" : "2.13.6",
-    "languages" : [
-      {
-        "name" : "Javascript"
-      }
-    ],
-    "name" : "JSHint (deprecated)",
-    "shortName" : "jshint",
-    "documentationUrl" : "https://jshint.com/docs/options/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-jshint",
-    "prefix" : "",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      ".jshintrc"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "612c22f7-663d-429c-ac02-e5cb3d1eb020",
-    "dockerImage" : "codacy/codacy-tslint:2.2.5",
-    "isDefault" : false,
-    "version" : "6.1.3",
-    "languages" : [
-      {
-        "name" : "TypeScript"
-      }
-    ],
-    "name" : "TSLint (deprecated)",
-    "shortName" : "tslint",
-    "documentationUrl" : "https://palantir.github.io/tslint/rules/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-tslint",
-    "prefix" : "TSLint_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "tslint.json"
+      ".spectral.yaml",
+      ".spectral.yml",
+      ".spectral.json"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -1163,26 +1108,52 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "1c7c40d9-1af9-425b-a706-f8773245b599",
-    "dockerImage" : "codacy/codacy-staticcheck:3.0.18",
-    "isDefault" : false,
-    "version" : "2025.1.1",
+    "uuid" : "c6273c22-5248-11e5-885d-feff819cdc9f",
+    "dockerImage" : "codacy/codacy-brakeman:1.4.1",
+    "isDefault" : true,
+    "version" : "4.3.1",
     "languages" : [
       {
-        "name" : "Go"
+        "name" : "Ruby"
       }
     ],
-    "name" : "Staticcheck",
-    "shortName" : "staticcheck",
-    "documentationUrl" : "https://staticcheck.io/docs/staticcheck",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-staticcheck",
-    "prefix" : "Staticcheck_",
+    "name" : "Brakeman",
+    "shortName" : "brakeman",
+    "documentationUrl" : "https://brakemanscanner.org/docs/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-brakeman",
+    "prefix" : "",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      "config/brakeman.yml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "02eb6a1c-757f-4324-81bf-094835a1578b",
+    "dockerImage" : "codacy/codacy-cppcheck:2.10.18",
+    "isDefault" : true,
+    "version" : "2.18.0",
+    "languages" : [
+      {
+        "name" : "C"
+      },
+      {
+        "name" : "CPP"
+      }
+    ],
+    "name" : "Cppcheck",
+    "shortName" : "cppcheck",
+    "documentationUrl" : "https://sourceforge.net/p/cppcheck/wiki/ListOfChecks/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-cppcheck",
+    "prefix" : "cppcheck_",
     "needsCompilation" : false,
     "hasConfigFile" : false,
     "configFilenames" : [
     ],
-    "standalone" : true,
-    "hasUIConfiguration" : false
+    "standalone" : false,
+    "hasUIConfiguration" : true
   },
   {
     "uuid" : "76348462-84b3-409a-90d3-955e90abfb87",
@@ -1261,29 +1232,61 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "fb60ff64-3d91-11ec-9bbc-0242ac130002",
-    "dockerImage" : "codacy/codacy-spectral:0.2.24",
+    "uuid" : "cf05f3aa-fd23-4586-8cce-5368917ec3e5",
+    "dockerImage" : "codacy/codacy-eslint-legacy:8.2.2",
     "isDefault" : false,
-    "version" : "1.22.0",
+    "version" : "7.32.0",
     "languages" : [
       {
-        "name" : "YAML"
+        "name" : "Javascript"
       },
       {
-        "name" : "JSON"
+        "name" : "TypeScript"
       }
     ],
-    "name" : "Spectral",
-    "shortName" : "spectral",
-    "documentationUrl" : "https://meta.stoplight.io/docs/spectral",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-spectral",
-    "prefix" : "spectral_",
+    "name" : "ESLint (deprecated)",
+    "shortName" : "eslint",
+    "documentationUrl" : "https://eslint.org/docs/rules/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-eslint-legacy",
+    "prefix" : "ESLint_",
     "needsCompilation" : false,
     "hasConfigFile" : true,
     "configFilenames" : [
-      ".spectral.yaml",
-      ".spectral.yml",
-      ".spectral.json"
+      ".prettierrc.yaml",
+      ".eslintrc.yml",
+      ".eslintrc.yaml",
+      ".prettierrc.yml",
+      ".eslintrc.json",
+      ".prettierrc",
+      ".eslintrc.js",
+      "prettier.config.js",
+      ".eslintrc.cjs",
+      ".eslintrc",
+      ".prettierrc.js",
+      ".prettierrc.json"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "0c5f0040-53b7-11e3-8f96-0800200c9a66",
+    "dockerImage" : "codacy/codacy-jshint:2.4.7",
+    "isDefault" : false,
+    "version" : "2.13.6",
+    "languages" : [
+      {
+        "name" : "Javascript"
+      }
+    ],
+    "name" : "JSHint (deprecated)",
+    "shortName" : "jshint",
+    "documentationUrl" : "https://jshint.com/docs/options/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-jshint",
+    "prefix" : "",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".jshintrc"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -1312,49 +1315,260 @@
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "c6273c22-5248-11e5-885d-feff819cdc9f",
-    "dockerImage" : "codacy/codacy-brakeman:1.4.1",
-    "isDefault" : true,
-    "version" : "4.3.1",
+    "uuid" : "612c22f7-663d-429c-ac02-e5cb3d1eb020",
+    "dockerImage" : "codacy/codacy-tslint:2.2.5",
+    "isDefault" : false,
+    "version" : "6.1.3",
     "languages" : [
       {
-        "name" : "Ruby"
+        "name" : "TypeScript"
       }
     ],
-    "name" : "Brakeman",
-    "shortName" : "brakeman",
-    "documentationUrl" : "https://brakemanscanner.org/docs/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-brakeman",
-    "prefix" : "",
+    "name" : "TSLint (deprecated)",
+    "shortName" : "tslint",
+    "documentationUrl" : "https://palantir.github.io/tslint/rules/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-tslint",
+    "prefix" : "TSLint_",
     "needsCompilation" : false,
     "hasConfigFile" : true,
     "configFilenames" : [
-      "config/brakeman.yml"
+      "tslint.json"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
   },
   {
-    "uuid" : "02eb6a1c-757f-4324-81bf-094835a1578b",
-    "dockerImage" : "codacy/codacy-cppcheck:2.10.18",
-    "isDefault" : true,
-    "version" : "2.18.0",
+    "uuid" : "1c7c40d9-1af9-425b-a706-f8773245b599",
+    "dockerImage" : "codacy/codacy-staticcheck:3.0.18",
+    "isDefault" : false,
+    "version" : "2025.1.1",
     "languages" : [
       {
-        "name" : "C"
-      },
-      {
-        "name" : "CPP"
+        "name" : "Go"
       }
     ],
-    "name" : "Cppcheck",
-    "shortName" : "cppcheck",
-    "documentationUrl" : "https://sourceforge.net/p/cppcheck/wiki/ListOfChecks/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-cppcheck",
-    "prefix" : "cppcheck_",
+    "name" : "Staticcheck",
+    "shortName" : "staticcheck",
+    "documentationUrl" : "https://staticcheck.io/docs/staticcheck",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-staticcheck",
+    "prefix" : "Staticcheck_",
     "needsCompilation" : false,
     "hasConfigFile" : false,
     "configFilenames" : [
+    ],
+    "standalone" : true,
+    "hasUIConfiguration" : false
+  },
+  {
+    "uuid" : "1f03328a-086e-459e-bfa3-73e56f01020f",
+    "dockerImage" : "codacy/codacy-stylelint:2.13.67",
+    "isDefault" : true,
+    "version" : "16.23.0",
+    "languages" : [
+      {
+        "name" : "CSS"
+      },
+      {
+        "name" : "LESS"
+      },
+      {
+        "name" : "SASS"
+      }
+    ],
+    "name" : "Stylelint",
+    "shortName" : "stylelint",
+    "documentationUrl" : "https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-stylelint",
+    "prefix" : "Stylelint_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".stylelintrc.json",
+      ".stylelintrc.js",
+      "stylelint.config.js",
+      ".stylelintrc.yml",
+      ".stylelintrc.yaml",
+      ".stylelintrc"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "ed7e8287-707d-485a-a0cb-e211004432c2",
+    "dockerImage" : "codacy/codacy-pmd7:0.0.5",
+    "isDefault" : false,
+    "version" : "7.16.0",
+    "languages" : [
+      {
+        "name" : "PLSQL"
+      },
+      {
+        "name" : "XML"
+      },
+      {
+        "name" : "JSP"
+      },
+      {
+        "name" : "TypeScript"
+      },
+      {
+        "name" : "Velocity"
+      },
+      {
+        "name" : "Apex"
+      },
+      {
+        "name" : "Javascript"
+      },
+      {
+        "name" : "VisualForce"
+      },
+      {
+        "name" : "Kotlin"
+      },
+      {
+        "name" : "Java"
+      },
+      {
+        "name" : "Swift"
+      }
+    ],
+    "name" : "PMD7",
+    "shortName" : "pmd-7",
+    "documentationUrl" : "https://docs.pmd-code.org/pmd-doc-7.5.0/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-pmd7",
+    "prefix" : "PMD7_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      "ruleset.xml",
+      "apex-ruleset.xml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "2a30ab97-477f-4769-8b88-af596ce7a94c",
+    "dockerImage" : "codacy/codacy-eslint9:0.0.50",
+    "isDefault" : false,
+    "version" : "9.38.0",
+    "languages" : [
+      {
+        "name" : "Javascript"
+      },
+      {
+        "name" : "TypeScript"
+      }
+    ],
+    "name" : "ESLint9",
+    "shortName" : "eslint-9",
+    "documentationUrl" : "https://eslint.org/docs/rules/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-eslint9",
+    "prefix" : "ESLint9_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      "eslint.config.js",
+      "eslint.config.mjs",
+      "eslint.config.cjs"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "89b6fc6a-9137-4cf3-8b9f-dcc3bedfa738",
+    "dockerImage" : "codacy/codacy-bandit:2.3.15",
+    "isDefault" : true,
+    "version" : "1.8.3",
+    "languages" : [
+      {
+        "name" : "Python"
+      }
+    ],
+    "name" : "Bandit",
+    "shortName" : "bandit",
+    "documentationUrl" : "https://bandit.readthedocs.io/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-bandit",
+    "prefix" : "Bandit_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      "bandit.yaml",
+      "bandit.ini",
+      "bandit.toml",
+      ".bandit",
+      "bandit.yml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "9ed24812-b6ee-4a58-9004-0ed183c45b8f",
+    "dockerImage" : "codacy/codacy-pmd:3.13.19",
+    "isDefault" : true,
+    "version" : "6.55.0",
+    "languages" : [
+      {
+        "name" : "PLSQL"
+      },
+      {
+        "name" : "XML"
+      },
+      {
+        "name" : "JSP"
+      },
+      {
+        "name" : "Velocity"
+      },
+      {
+        "name" : "Apex"
+      },
+      {
+        "name" : "Javascript"
+      },
+      {
+        "name" : "VisualForce"
+      },
+      {
+        "name" : "Java"
+      },
+      {
+        "name" : "SQL"
+      }
+    ],
+    "name" : "PMD",
+    "shortName" : "pmd",
+    "documentationUrl" : "https://pmd.github.io/pmd-6.26.0/",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-pmd",
+    "prefix" : "PMD_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      "ruleset.xml",
+      "apex-ruleset.xml"
+    ],
+    "standalone" : false,
+    "hasUIConfiguration" : true
+  },
+  {
+    "uuid" : "d3ec07a8-71b3-4b89-a25e-9c32ef827668",
+    "dockerImage" : "codacy/codacy-hadolint:2.0.0",
+    "isDefault" : true,
+    "version" : "2.12.0",
+    "languages" : [
+      {
+        "name" : "Dockerfile"
+      }
+    ],
+    "name" : "Hadolint",
+    "shortName" : "hadolint",
+    "documentationUrl" : "https://github.com/hadolint/hadolint#rules",
+    "sourceCodeUrl" : "https://github.com/codacy/codacy-hadolint",
+    "prefix" : "Hadolint_",
+    "needsCompilation" : false,
+    "hasConfigFile" : true,
+    "configFilenames" : [
+      ".hadolint.yaml"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true
@@ -1454,220 +1668,6 @@
     "hasConfigFile" : true,
     "configFilenames" : [
       ".tsqllintrc"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "9ed24812-b6ee-4a58-9004-0ed183c45b8f",
-    "dockerImage" : "codacy/codacy-pmd:3.13.19",
-    "isDefault" : true,
-    "version" : "6.55.0",
-    "languages" : [
-      {
-        "name" : "PLSQL"
-      },
-      {
-        "name" : "XML"
-      },
-      {
-        "name" : "JSP"
-      },
-      {
-        "name" : "Velocity"
-      },
-      {
-        "name" : "Apex"
-      },
-      {
-        "name" : "Javascript"
-      },
-      {
-        "name" : "VisualForce"
-      },
-      {
-        "name" : "Java"
-      },
-      {
-        "name" : "SQL"
-      }
-    ],
-    "name" : "PMD",
-    "shortName" : "pmd",
-    "documentationUrl" : "https://pmd.github.io/pmd-6.26.0/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-pmd",
-    "prefix" : "PMD_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "ruleset.xml",
-      "apex-ruleset.xml"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "2a30ab97-477f-4769-8b88-af596ce7a94c",
-    "dockerImage" : "codacy/codacy-eslint9:0.0.50",
-    "isDefault" : false,
-    "version" : "9.38.0",
-    "languages" : [
-      {
-        "name" : "Javascript"
-      },
-      {
-        "name" : "TypeScript"
-      }
-    ],
-    "name" : "ESLint9",
-    "shortName" : "eslint-9",
-    "documentationUrl" : "https://eslint.org/docs/rules/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-eslint9",
-    "prefix" : "ESLint9_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "eslint.config.js",
-      "eslint.config.mjs",
-      "eslint.config.cjs"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "d3ec07a8-71b3-4b89-a25e-9c32ef827668",
-    "dockerImage" : "codacy/codacy-hadolint:2.0.0",
-    "isDefault" : true,
-    "version" : "2.12.0",
-    "languages" : [
-      {
-        "name" : "Dockerfile"
-      }
-    ],
-    "name" : "Hadolint",
-    "shortName" : "hadolint",
-    "documentationUrl" : "https://github.com/hadolint/hadolint#rules",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-hadolint",
-    "prefix" : "Hadolint_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      ".hadolint.yaml"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "1f03328a-086e-459e-bfa3-73e56f01020f",
-    "dockerImage" : "codacy/codacy-stylelint:2.13.67",
-    "isDefault" : true,
-    "version" : "16.23.0",
-    "languages" : [
-      {
-        "name" : "CSS"
-      },
-      {
-        "name" : "LESS"
-      },
-      {
-        "name" : "SASS"
-      }
-    ],
-    "name" : "Stylelint",
-    "shortName" : "stylelint",
-    "documentationUrl" : "https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-stylelint",
-    "prefix" : "Stylelint_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      ".stylelintrc.json",
-      ".stylelintrc.js",
-      "stylelint.config.js",
-      ".stylelintrc.yml",
-      ".stylelintrc.yaml",
-      ".stylelintrc"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "ed7e8287-707d-485a-a0cb-e211004432c2",
-    "dockerImage" : "codacy/codacy-pmd7:0.0.5",
-    "isDefault" : false,
-    "version" : "7.16.0",
-    "languages" : [
-      {
-        "name" : "PLSQL"
-      },
-      {
-        "name" : "XML"
-      },
-      {
-        "name" : "JSP"
-      },
-      {
-        "name" : "TypeScript"
-      },
-      {
-        "name" : "Velocity"
-      },
-      {
-        "name" : "Apex"
-      },
-      {
-        "name" : "Javascript"
-      },
-      {
-        "name" : "VisualForce"
-      },
-      {
-        "name" : "Kotlin"
-      },
-      {
-        "name" : "Java"
-      },
-      {
-        "name" : "Swift"
-      }
-    ],
-    "name" : "PMD7",
-    "shortName" : "pmd-7",
-    "documentationUrl" : "https://docs.pmd-code.org/pmd-doc-7.5.0/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-pmd7",
-    "prefix" : "PMD7_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "ruleset.xml",
-      "apex-ruleset.xml"
-    ],
-    "standalone" : false,
-    "hasUIConfiguration" : true
-  },
-  {
-    "uuid" : "89b6fc6a-9137-4cf3-8b9f-dcc3bedfa738",
-    "dockerImage" : "codacy/codacy-bandit:2.3.15",
-    "isDefault" : true,
-    "version" : "1.8.3",
-    "languages" : [
-      {
-        "name" : "Python"
-      }
-    ],
-    "name" : "Bandit",
-    "shortName" : "bandit",
-    "documentationUrl" : "https://bandit.readthedocs.io/",
-    "sourceCodeUrl" : "https://github.com/codacy/codacy-bandit",
-    "prefix" : "Bandit_",
-    "needsCompilation" : false,
-    "hasConfigFile" : true,
-    "configFilenames" : [
-      "bandit.yaml",
-      "bandit.ini",
-      "bandit.toml",
-      ".bandit",
-      "bandit.yml"
     ],
     "standalone" : false,
     "hasUIConfiguration" : true

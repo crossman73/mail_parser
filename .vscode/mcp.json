@@ -1,0 +1,46 @@
+{
+  "servers": {
+    "codacy": {
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "CODACY_ACCOUNT_TOKEN=\"${env:CODACY_ACCOUNT_TOKEN}\" npx -y @codacy/codacy-mcp@latest"
+      ],
+      "env": {
+        "CODACY_ACCOUNT_TOKEN": "${env:CODACY_ACCOUNT_TOKEN}"
+      }
+    },
+    "serena": {
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project /mnt/c/dev/python-email"
+      ]
+    },
+    "context7": {
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "npx -y @upstash/context7-mcp"
+      ]
+    },
+    "brave-search": {
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "BRAVE_API_KEY=\"${env:BRAVE_API_KEY}\" npx -y @anthropic/mcp-server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+      }
+    },
+    "sequential-thinking": {
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "npx -y @anthropic/mcp-server-sequential-thinking"
+      ]
+    }
+  },
+  "inputs": []
+}

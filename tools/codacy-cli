@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+JAVA=$(command -v java || true)
+if [ -z "$JAVA" ]; then
+  echo 'Java not found. Please install Java (JRE) to run Codacy CLI.' >&2
+  exit 1
+fi
+DIR="$(cd "$(dirname "$0")" && pwd)"
+JAR="$DIR/codacy/codacy-analysis-cli-assembly.jar"
+exec "$JAVA" -jar "$JAR" "$@"

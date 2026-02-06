@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Codacy: Analyze (WSL)",
+      "type": "shell",
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "cd /mnt/c/dev/python-email && nohup ./tools/codacy_run.sh > /mnt/c/dev/python-email/codacy_run.log 2>&1 & echo \"Codacy background started: $!\""
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Codacy CLI (WSL)",
+      "type": "shell",
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "echo '🔍 Codacy CLI Ready - WSL 2 Terminal'; echo 'Usage: codacy-cli analyze'; exec bash"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "runOptions": { "runOn": "folderOpen" },
+      "problemMatcher": []
+    },
+    {
+      "label": "WSL: Setup Environment",
+      "type": "shell",
+      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+      "args": [
+        "-d", "Ubuntu", "--", "bash", "-lc",
+        "cd /mnt/c/dev/python-email && bash tools/setup_wsl_env.sh"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    }
+  ]
+}

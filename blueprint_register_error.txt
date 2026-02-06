@@ -1,40 +1,22 @@
 failed to register admin blueprint
 Traceback (most recent call last):
-  File "C:\dev\python-email\src\web\app.py", line 100, in create_app
+  File "/mnt/c/dev/python-email/src/web/app.py", line 100, in create_app
     app.register_blueprint(admin_bp)
-    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
-  File "C:\Users\cross\AppData\Roaming\Python\Python314\site-packages\flask\sansio\scaffold.py", line 47, in wrapper_func
+  File "/mnt/c/dev/python-email/.venv/lib/python3.12/site-packages/flask/sansio/scaffold.py", line 47, in wrapper_func
     return f(self, *args, **kwargs)
-  File "C:\Users\cross\AppData\Roaming\Python\Python314\site-packages\flask\sansio\app.py", line 595, in register_blueprint
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/dev/python-email/.venv/lib/python3.12/site-packages/flask/sansio/app.py", line 595, in register_blueprint
     blueprint.register(self, options)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
-  File "C:\Users\cross\AppData\Roaming\Python\Python314\site-packages\flask\sansio\blueprints.py", line 335, in register
+  File "/mnt/c/dev/python-email/.venv/lib/python3.12/site-packages/flask/sansio/blueprints.py", line 335, in register
     deferred(state)
-    ~~~~~~~~^^^^^^^
-  File "C:\Users\cross\AppData\Roaming\Python\Python314\site-packages\flask\sansio\blueprints.py", line 434, in <lambda>
+  File "/mnt/c/dev/python-email/.venv/lib/python3.12/site-packages/flask/sansio/blueprints.py", line 434, in <lambda>
     lambda s: s.add_url_rule(
-              ~~~~~~~~~~~~~~^
-        rule,
-        ^^^^^
-    ...<3 lines>...
-        **options,
-        ^^^^^^^^^^
-    )
-    ^
-  File "C:\Users\cross\AppData\Roaming\Python\Python314\site-packages\flask\sansio\blueprints.py", line 110, in add_url_rule
+              ^^^^^^^^^^^^^^^
+  File "/mnt/c/dev/python-email/.venv/lib/python3.12/site-packages/flask/sansio/blueprints.py", line 110, in add_url_rule
     self.app.add_url_rule(
-    ~~~~~~~~~~~~~~~~~~~~~^
-        rule,
-        ^^^^^
-    ...<3 lines>...
-        **options,
-        ^^^^^^^^^^
-    )
-    ^
-  File "C:\Users\cross\AppData\Roaming\Python\Python314\site-packages\flask\sansio\scaffold.py", line 47, in wrapper_func
+  File "/mnt/c/dev/python-email/.venv/lib/python3.12/site-packages/flask/sansio/scaffold.py", line 47, in wrapper_func
     return f(self, *args, **kwargs)
-  File "C:\Users\cross\AppData\Roaming\Python\Python314\site-packages\flask\sansio\app.py", line 657, in add_url_rule
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/dev/python-email/.venv/lib/python3.12/site-packages/flask/sansio/app.py", line 657, in add_url_rule
     raise AssertionError(
-    ...<2 lines>...
-    )
 AssertionError: View function mapping is overwriting an existing endpoint function: admin.api_restart_service

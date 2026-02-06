@@ -1,0 +1,101 @@
+{
+  // === Terminal: WSL-first ===
+  "terminal.integrated.profiles.windows": {
+    "WSL (wrapper)": {
+      "path": "${workspaceFolder}\\tools\\wsl-wrapper.cmd",
+      "args": ["-d", "Ubuntu", "--"],
+      "icon": "terminal-wsl"
+    },
+    "WSL": {
+      "path": "C:\\Windows\\System32\\wsl.exe",
+      "args": [],
+      "icon": "terminal-linux"
+    },
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "WSL (wrapper)",
+  "terminal.integrated.allowChords": false,
+
+  // === File watcher / search exclusions ===
+  "files.watcherExclude": {
+    "**/node_modules": true,
+    "**/.git/objects/**": true,
+    "**/__pycache__/**": true,
+    "**/logs/**": true,
+    "**/processed_emails/**": true,
+    "**/email_files/**": true,
+    "**/data/db/**": true,
+    "**/archives/**": true,
+    "**/.venv/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/logs": true,
+    "**/processed_emails": true,
+    "**/email_files": true,
+    "**/data/db": true,
+    "**/archives": true,
+    "**/.venv": true,
+    "**/*.db": true,
+    "**/*.log": true
+  },
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.venv": true,
+    "**/__pycache__": true
+  },
+
+  // === GitHub Copilot / agent ===
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.chat.editorContext.enabled": true,
+  "github.copilot.chat.workspaceContext.enabled": false,
+  "github.copilot.enableLargeFileSupport": false,
+  "github.copilot.enable": {
+    "*": true,
+    "markdown": false,
+    "plaintext": false,
+    "json": false,
+    "yaml": true,
+    "dockerfile": true,
+    "python": true,
+    "javascript": true,
+    "typescript": true,
+    "html": true
+  },
+  "github.copilot.chat.editor.temporalContext.enabled": false,
+  "github.copilot.chat.edits.temporalContext.enabled": false,
+  "github.copilot.chat.notebook.followCellExecution.enabled": false,
+  "github.copilot.chat.codesearch.enabled": false,
+  "chat.agent.maxRequests": 30,
+
+  // === MCP server settings ===
+  "mcp.server.autoStart": true,
+  "mcp.server.maxTools": 128,
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": false,
+    "windsurf": false,
+    "cursor-global": false,
+    "cursor-workspace": false
+  },
+  "chat.mcp.autostart": "always",
+  "mcp.logLevel": "error",
+
+  // === Editor performance ===
+  "editor.largeFileOptimizations": true,
+  "files.maxMemoryForLargeFilesMB": 2048,
+  "ai.indexing.enable": false,
+  "telemetry.enableTelemetry": false,
+  "telemetry.enableCrashReporter": false,
+
+  // === Extensions ===
+  "cloudcode.enable": false,
+  "gitlens.views.repositories.enabled": false,
+  "github.copilot.chat.enable": true,
+
+  // === Tasks ===
+  "task.allowAutomaticTasks": "on"
+}

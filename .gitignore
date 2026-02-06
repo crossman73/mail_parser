@@ -12,7 +12,9 @@ dist/
 *.egg-info/
 
 # Local env files
-.env# Python
+.env
+
+# Python bytecode
 __pycache__/
 *.py[cod]
 *.class
@@ -28,8 +30,12 @@ venv/
 ENV/
 
 # IDE
-.vscode/
 .idea/
+# .vscode/ — track project settings, exclude secrets
+!.vscode/
+.vscode/.env
+.vscode/*.bak
+.vscode/*.bak-*
 
 # 로컬 데이터
 data/db/*.db
@@ -62,5 +68,5 @@ htmlcov/
 Thumbs.db
 
 
-#Ignore vscode AI rules
-.github\instructions\codacy.instructions.md
+#Ignore vscode AI rules (tracked separately)
+# .github\instructions\codacy.instructions.md

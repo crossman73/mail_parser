@@ -19,3 +19,22 @@ exclude_patterns:
   - codacy_*.log
   - '*.log'
   - .venv/**
+
+# Codacy Trivy configuration: enable and add common lockfile/Dockerfile patterns
+# Adjust patterns to match your repo's package manager lockfiles if needed.
+tools:
+  trivy:
+    enabled: true
+    patterns:
+      - "requirements.txt"
+      - "**/requirements.txt"
+      - "Pipfile.lock"
+      - "poetry.lock"
+      - "package-lock.json"
+      - "yarn.lock"
+      - "**/package-lock.json"
+      - "**/yarn.lock"
+      - "Dockerfile"
+      - "**/Dockerfile"
+  eslint-8:
+    enabled: false

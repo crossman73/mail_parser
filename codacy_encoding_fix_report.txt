@@ -1,7 +1,0 @@
-/mnt/c/dev/python-email/static/css/modern-ui.css	fixed=True	detected=utf-8
-/mnt/c/dev/python-email/src/docs/doc_generator.py	fixed=True	detected=utf-8
-/mnt/c/dev/python-email/src/evidence/additional_evidence_manager.py	fixed=True	detected=utf-8
-/mnt/c/dev/python-email/src/docs/auto_updater.py	fixed=True	detected=utf-8
-/mnt/c/dev/python-email/src/web/app.py	fixed=True	detected=utf-8
-/mnt/c/dev/python-email/templates/service_management.html	fixed=True	detected=utf-8
-/mnt/c/dev/python-email/templates/file_management.html	fixed=True	detected=utf-8
