@@ -314,3 +314,117 @@ def api_reorder_events(timeline_id):
     except Exception as e:
         current_app.logger.error(f'이벤트 순서 변경 오류: {e}')
         return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# ============================================================
+# 타임라인 편집기 페이지
+# ============================================================
+
+@timeline_bp.route('/timeline_editor')
+def timeline_editor():
+    """타임라인 편집기 페이지 (SortableJS 기반)"""
+    return render_template('timeline_editor.html', page_title='타임라인 편집기')
+
+
+# ============================================================
+# 내보내기 API (PPT / Word / HTML)
+# ============================================================
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>/export/<fmt>', methods=['GET'])
+def api_export_timeline(timeline_id, fmt):
+    """타임라인 내보내기 (pptx, docx, html)"""
+    import io
+    allowed = {'pptx', 'docx', 'html'}
+    if fmt not in allowed:
+        return jsonify({'success': False, 'error': f'지원 형식: {", ".join(allowed)}'}), 400
+
+    try:
+        tl = timeline_service.get_timeline(timeline_id)
+        if not tl.get('success'):
+            return jsonify({'success': False, 'error': '타임라인 없음'}), 404
+
+        timeline_data = tl['timeline']
+        events = timeline_data.get('events', [])
+
+        if fmt == 'pptx':
+            from src.timeline.exporters.pptx_exporter import PptxExporter
+            exporter = PptxExporter()
+            buf = exporter.export(timeline_data, events)
+            return send_file(
+                io.BytesIO(buf) if isinstance(buf, bytes) else buf,
+                mimetype='application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                as_attachment=True,
+                download_name=f'timeline_{timeline_id}.pptx'
+            )
+        elif fmt == 'docx':
+            from src.timeline.exporters.docx_exporter import DocxExporter
+            exporter = DocxExporter()
+            buf = exporter.export(timeline_data, events)
+            return send_file(
+                io.BytesIO(buf) if isinstance(buf, bytes) else buf,
+                mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                as_attachment=True,
+                download_name=f'timeline_{timeline_id}.docx'
+            )
+        elif fmt == 'html':
+            from src.timeline.exporters.html_exporter import HtmlExporter
+            exporter = HtmlExporter()
+            html_str = exporter.export(timeline_data, events)
+            if isinstance(html_str, bytes):
+                html_str = html_str.decode('utf-8')
+            return html_str, 200, {'Content-Type': 'text/html; charset=utf-8'}
+
+    except Exception as e:
+        current_app.logger.error(f'내보내기 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# ============================================================
+# 이메일 → 타임라인 자동 생성
+# ============================================================
+
+@timeline_bp.route('/api/timelines/from-emails', methods=['POST'])
+def api_create_from_emails():
+    """이메일 목록으로부터 타임라인 자동 생성"""
+    data = request.get_json()
+    if not data:
+        return jsonify({'success': False, 'error': '요청 본문 필요'}), 400
+
+    title = data.get('title', '이메일 타임라인')
+    emails = data.get('emails')
+    if not emails or not isinstance(emails, list):
+        return jsonify({'success': False, 'error': 'emails 배열 필수'}), 400
+
+    try:
+        # 타임라인 생성
+        result = timeline_service.create_timeline(
+            title=title,
+            description=data.get('description', f'이메일 {len(emails)}건으로 생성')
+        )
+        if not result.get('success'):
+            return jsonify(result), 500
+
+        tid = result['timeline_id']
+
+        # 이메일 → 이벤트 변환
+        for em in emails:
+            timeline_service.create_event(
+                timeline_id=tid,
+                title=em.get('subject', '제목 없음'),
+                timestamp=em.get('date', datetime.now().isoformat()),
+                event_type='email',
+                description=f"From: {em.get('from', '')}",
+                email_id=em.get('message_id'),
+                participants=[em.get('from', ''), em.get('to', '')],
+            )
+
+        return jsonify({
+            'success': True,
+            'timeline_id': tid,
+            'event_count': len(emails),
+            'message': f'{len(emails)}건 이벤트 생성 완료',
+        }), 201
+
+    except Exception as e:
+        current_app.logger.error(f'이메일→타임라인 생성 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500

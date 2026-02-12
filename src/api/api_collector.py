@@ -177,7 +177,7 @@ class APICollector:
 
     def save_to_db(self, endpoints: List[Dict[str, Any]]) -> int:
         """
-        수집된 엔드포인트를 DB에 저장
+        수집된 엔드포인트를 DB에 저장 (기존 데이터 초기화 후 새로 삽입)
 
         Args:
             endpoints: 엔드포인트 정보 목록
@@ -191,11 +191,13 @@ class APICollector:
             with self.db.get_connection() as conn:
                 cursor = conn.cursor()
 
+                # 기존 엔드포인트 초기화 (매 수집 시 최신 상태 유지)
+                cursor.execute("DELETE FROM api_endpoints")
+
                 for ep in endpoints:
                     try:
-                        # UNIQUE 제약으로 중복 시 무시
                         cursor.execute("""
-                            INSERT OR REPLACE INTO api_endpoints
+                            INSERT INTO api_endpoints
                             (path, method, summary, description, category, version, deprecated, auth_required)
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                         """, (
