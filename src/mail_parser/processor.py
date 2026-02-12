@@ -10,7 +10,7 @@ from datetime import datetime
 from email.message import Message
 from typing import Any, Dict, cast
 
-from ..parser.mailbox_processor import process_mailbox
+from .mailbox_utils import process_mailbox
 
 from .evidence_generator import EvidenceGenerator
 from .forensic_integrity import ForensicIntegrityService

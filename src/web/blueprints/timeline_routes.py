@@ -7,8 +7,8 @@ import zipfile
 from datetime import datetime
 from pathlib import Path
 
-from flask import (Blueprint, current_app, flash, redirect, render_template,
-                   send_file, url_for)
+from flask import (Blueprint, current_app, flash, jsonify, redirect,
+                   render_template, request, send_file, url_for)
 
 timeline_bp = Blueprint('timeline', __name__)
 
@@ -149,3 +149,168 @@ def download_timeline_excel():
     except Exception as e:
         flash(f'Excel 다운로드 실패: {str(e)}', 'error')
         return redirect(url_for('timeline.integrated_timeline'))
+
+
+# ─── Timeline CRUD REST API ──────────────────────────────────────────
+
+
+@timeline_bp.route('/api/timelines', methods=['GET'])
+def api_list_timelines():
+    """타임라인 목록 조회 API"""
+    try:
+        status = request.args.get('status')
+        limit = request.args.get('limit', 50, type=int)
+        result = timeline_service.list_timelines(status=status, limit=limit)
+        return jsonify({'success': True, 'timelines': result})
+    except Exception as e:
+        current_app.logger.error(f'타임라인 목록 조회 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines', methods=['POST'])
+def api_create_timeline():
+    """타임라인 생성 API"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'error': '요청 데이터 없음'}), 400
+
+        title = data.get('title', '새 타임라인')
+        description = data.get('description', '')
+        source_file = data.get('source_file', '')
+        emails = data.get('emails', [])
+
+        result = timeline_service.create_timeline(
+            title=title,
+            description=description,
+            source_file=source_file,
+            emails=emails
+        )
+        status_code = 201 if result.get('success') else 400
+        return jsonify(result), status_code
+    except Exception as e:
+        current_app.logger.error(f'타임라인 생성 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>', methods=['GET'])
+def api_get_timeline(timeline_id):
+    """타임라인 상세 조회 API"""
+    try:
+        result = timeline_service.get_timeline(timeline_id)
+        if result is None:
+            return jsonify({'success': False, 'error': '타임라인을 찾을 수 없습니다'}), 404
+        return jsonify({'success': True, 'timeline': result})
+    except Exception as e:
+        current_app.logger.error(f'타임라인 조회 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>', methods=['PUT'])
+def api_update_timeline(timeline_id):
+    """타임라인 메타데이터 수정 API"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'error': '요청 데이터 없음'}), 400
+
+        result = timeline_service.update_timeline_meta(
+            timeline_id=timeline_id,
+            title=data.get('title'),
+            description=data.get('description'),
+            status=data.get('status')
+        )
+        return jsonify(result)
+    except Exception as e:
+        current_app.logger.error(f'타임라인 수정 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>', methods=['DELETE'])
+def api_delete_timeline(timeline_id):
+    """타임라인 삭제 API"""
+    try:
+        result = timeline_service.delete_timeline(timeline_id)
+        return jsonify(result)
+    except Exception as e:
+        current_app.logger.error(f'타임라인 삭제 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>/events', methods=['POST'])
+def api_create_event(timeline_id):
+    """타임라인 이벤트 추가 API"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'error': '요청 데이터 없음'}), 400
+
+        title = data.get('title', '')
+        timestamp = data.get('timestamp', '')
+        if not title or not timestamp:
+            return jsonify({'success': False, 'error': 'title과 timestamp는 필수'}), 400
+
+        result = timeline_service.create_event(
+            timeline_id=timeline_id,
+            title=title,
+            timestamp=timestamp,
+            event_type=data.get('event_type', 'email'),
+            description=data.get('description', ''),
+            email_id=data.get('email_id'),
+            evidence_id=data.get('evidence_id'),
+            source_file=data.get('source_file', ''),
+            participants=data.get('participants', []),
+            attachments=data.get('attachments', []),
+            is_key_event=data.get('is_key_event', False),
+            legal_significance=data.get('legal_significance', ''),
+            notes=data.get('notes', '')
+        )
+        status_code = 201 if result.get('success') else 400
+        return jsonify(result), status_code
+    except Exception as e:
+        current_app.logger.error(f'이벤트 추가 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>/events/<int:event_id>', methods=['PUT'])
+def api_update_event(timeline_id, event_id):
+    """타임라인 이벤트 수정 API"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'error': '요청 데이터 없음'}), 400
+
+        result = timeline_service.update_event(event_id=event_id, **data)
+        return jsonify(result)
+    except Exception as e:
+        current_app.logger.error(f'이벤트 수정 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>/events/<int:event_id>', methods=['DELETE'])
+def api_delete_event(timeline_id, event_id):
+    """타임라인 이벤트 삭제 API"""
+    try:
+        result = timeline_service.delete_event(event_id, timeline_id=timeline_id)
+        return jsonify(result)
+    except Exception as e:
+        current_app.logger.error(f'이벤트 삭제 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@timeline_bp.route('/api/timelines/<int:timeline_id>/events/reorder', methods=['PUT'])
+def api_reorder_events(timeline_id):
+    """타임라인 이벤트 순서 변경 API"""
+    try:
+        data = request.get_json()
+        if not data or 'event_ids' not in data:
+            return jsonify({'success': False, 'error': 'event_ids 배열 필수'}), 400
+
+        result = timeline_service.reorder_events(
+            timeline_id=timeline_id,
+            event_ids=data['event_ids']
+        )
+        return jsonify(result)
+    except Exception as e:
+        current_app.logger.error(f'이벤트 순서 변경 오류: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500

@@ -1,401 +1,115 @@
-<!DOCTYPE html>
-<html lang="ko" data-theme="light">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>헬스체크 - 이메일 증거 처리 시스템</title>
-    <meta http-equiv="refresh" content="30" />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
-        color: #333;
-      }
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        padding: 40px;
-      }
-      .header {
-        text-align: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 3px solid #f0f0f0;
-      }
-      .header h1 {
-        color: #2c3e50;
-        font-size: 2rem;
-        margin-bottom: 10px;
-      }
-      .status-indicator {
-        display: inline-block;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        margin: 15px 0;
-      }
-      .status-healthy {
-        background: linear-gradient(135deg, #d4edda, #c3e6cb);
-        color: #155724;
-        animation: pulse 2s infinite;
-      }
-      .status-warning {
-        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-        color: #856404;
-      }
-      .status-unhealthy {
-        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-        color: #721c24;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-      }
-      .timestamp {
-        color: #7f8c8d;
-        font-size: 0.9rem;
-        margin-top: 10px;
-      }
-      .metrics-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin: 30px 0;
-      }
-      .metric-card {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border-radius: 10px;
-        padding: 20px;
-        border-left: 5px solid;
-        transition: transform 0.2s;
-      }
-      .metric-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      }
-      .metric-card.healthy {
-        border-color: #28a745;
-      }
-      .metric-card.warning {
-        border-color: #ffc107;
-      }
-      .metric-card.danger {
-        border-color: #dc3545;
-      }
-      .metric-card h3 {
-        color: #2c3e50;
-        margin-bottom: 15px;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-      }
-      .metric-card .emoji {
-        font-size: 1.5rem;
-        margin-right: 10px;
-      }
-      .metric-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin: 10px 0;
-      }
-      .metric-label {
-        color: #7f8c8d;
-        font-size: 0.9rem;
-      }
-      .progress-bar {
-        width: 100%;
-        height: 25px;
-        background: #ecf0f1;
-        border-radius: 12px;
-        overflow: hidden;
-        margin-top: 10px;
-      }
-      .progress-fill {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 600;
-        font-size: 0.85rem;
-        transition: width 0.5s ease;
-      }
-      .services-list {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 20px 0;
-      }
-      .services-list h3 {
-        color: #2c3e50;
-        margin-bottom: 15px;
-        font-size: 1.2rem;
-      }
-      .service-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 12px;
-        background: white;
-        margin: 8px 0;
-        border-radius: 6px;
-        border-left: 4px solid;
-      }
-      .service-item.running {
-        border-color: #28a745;
-      }
-      .service-item.error {
-        border-color: #dc3545;
-      }
-      .service-item.not_configured {
-        border-color: #6c757d;
-      }
-      .service-name {
-        font-weight: 500;
-        color: #2c3e50;
-      }
-      .service-status {
-        font-weight: 600;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 0.85rem;
-      }
-      .service-status.running {
-        background: #d4edda;
-        color: #155724;
-      }
-      .service-status.connected {
-        background: #d1ecf1;
-        color: #0c5460;
-      }
-      .service-status.error {
-        background: #f8d7da;
-        color: #721c24;
-      }
-      .service-status.not_configured {
-        background: #e2e3e5;
-        color: #383d41;
-      }
-      .warnings {
-        background: #fff3cd;
-        border-left: 5px solid #ffc107;
-        padding: 15px 20px;
-        margin: 20px 0;
-        border-radius: 8px;
-      }
-      .warnings h4 {
-        color: #856404;
-        margin-bottom: 10px;
-      }
-      .warnings ul {
-        list-style: none;
-        padding-left: 0;
-      }
-      .warnings li {
-        color: #856404;
-        padding: 5px 0;
-      }
-      .warnings li:before {
-        content: "⚠️ ";
-        margin-right: 8px;
-      }
-      .actions {
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        margin-top: 30px;
-        flex-wrap: wrap;
-      }
-      .btn {
-        padding: 12px 24px;
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      .btn-primary {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-      }
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-      }
-      .btn-secondary {
-        background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-      }
-      .btn-secondary:hover {
-        transform: translateY(-2px);
-      }
-      .auto-refresh {
-        text-align: center;
-        color: #7f8c8d;
-        font-size: 0.85rem;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #ecf0f1;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>🏥 시스템 헬스체크</h1>
-        <div class="status-indicator status-{{health.status}}">
-          {% if health.status == 'healthy' %} ✅ 시스템 정상 {% elif
-          health.status == 'warning' %} ⚠️ 주의 필요 {% else %} ❌ 시스템 오류
-          {% endif %}
-        </div>
-        <div class="timestamp">
-          <strong>조회 시각:</strong> {{health.timestamp}} <br /><strong
-            >버전:</strong
-          >
-          {{health.version}}
-        </div>
+{% extends "base.html" %}
+
+{% block title %}헬스체크 - 이메일 증거 처리 시스템{% endblock %}
+
+{% block extra_css %}
+<meta http-equiv="refresh" content="30" />
+{% endblock %}
+
+{% block content %}
+<div class="health-check-wrapper">
+  <div class="health-check-container">
+    <div class="hc-header">
+      <h1>🏥 시스템 헬스체크</h1>
+      <div class="hc-status-indicator hc-status-{{ health.status }}">
+        {% if health.status == 'healthy' %} ✅ 시스템 정상
+        {% elif health.status == 'warning' %} ⚠️ 주의 필요
+        {% else %} ❌ 시스템 오류
+        {% endif %}
+      </div>
+      <div class="hc-timestamp">
+        <strong>조회 시각:</strong> {{ health.timestamp }}
+        <br /><strong>버전:</strong> {{ health.version }}
+      </div>
       </div>
 
-      {% if health.warnings %}
-      <div class="warnings">
-        <h4>⚠️ 경고 사항</h4>
-        <ul>
-          {% for warning in health.warnings %}
-          <li>{{warning}}</li>
-          {% endfor %}
+    {% if health.warnings %}
+    <div class="hc-warnings">
+      <h4>⚠️ 경고 사항</h4>
+      <ul>
+        {% for warning in health.warnings %}
+        <li>{{ warning }}</li>
+        {% endfor %}
         </ul>
+        </div>
+        {% endif %}
+
+    <div class="hc-metrics-grid">
+      <div
+        class="hc-metric-card {% if health.system.cpu_usage_percent < 70 %}healthy{% elif health.system.cpu_usage_percent < 90 %}warning{% else %}danger{% endif %}">
+        <h3><span class="emoji">⚡</span>CPU 사용률</h3>
+        <div class="hc-metric-value">{{ health.system.cpu_usage_percent|round(1) }}%</div>
+        <div class="hc-progress-bar">
+          <div class="hc-progress-fill"
+            style="width: {{ health.system.cpu_usage_percent }}%; background: {% if health.system.cpu_usage_percent < 70 %}var(--success-color){% elif health.system.cpu_usage_percent < 90 %}var(--warning-color){% else %}var(--danger-color){% endif %};">
+            {{ health.system.cpu_usage_percent|round(1) }}%
+          </div>
+        </div>
+        </div>
+
+      <div
+        class="hc-metric-card {% if health.system.memory_usage_percent < 70 %}healthy{% elif health.system.memory_usage_percent < 90 %}warning{% else %}danger{% endif %}">
+        <h3><span class="emoji">💾</span>메모리 사용률</h3>
+        <div class="hc-metric-value">{{ health.system.memory_usage_percent|round(1) }}%</div>
+        <div class="hc-metric-label">사용 가능: {{ health.system.available_memory_mb|round(0)|int }} MB / {{
+          health.system.total_memory_gb|round(1) }} GB</div>
+        <div class="hc-progress-bar">
+          <div class="hc-progress-fill"
+            style="width: {{ health.system.memory_usage_percent }}%; background: {% if health.system.memory_usage_percent < 70 %}var(--success-color){% elif health.system.memory_usage_percent < 90 %}var(--warning-color){% else %}var(--danger-color){% endif %};">
+            {{ health.system.memory_usage_percent|round(1) }}%
+          </div>
+        </div>
+        </div>
+
+      <div
+        class="hc-metric-card {% if health.system.disk_usage_percent < 70 %}healthy{% elif health.system.disk_usage_percent < 90 %}warning{% else %}danger{% endif %}">
+        <h3><span class="emoji">💽</span>디스크 사용률</h3>
+        <div class="hc-metric-value">{{ health.system.disk_usage_percent|round(1) }}%</div>
+        <div class="hc-metric-label">여유 공간: {{ health.system.disk_free_gb|round(1) }} GB</div>
+        <div class="hc-progress-bar">
+          <div class="hc-progress-fill"
+            style="width: {{ health.system.disk_usage_percent }}%; background: {% if health.system.disk_usage_percent < 70 %}var(--success-color){% elif health.system.disk_usage_percent < 90 %}var(--warning-color){% else %}var(--danger-color){% endif %};">
+            {{ health.system.disk_usage_percent|round(1) }}%
+          </div>
+        </div>
+        </div>
+        </div>
+
+    <div class="hc-services-list">
+      <h3>🔧 서비스 상태</h3>
+      <div class="hc-service-item {{ health.services.flask_app }}">
+        <span class="hc-service-name">Flask 웹 서버</span>
+        <span class="hc-service-status {{ health.services.flask_app }}">{{ health.services.flask_app }}</span>
       </div>
-      {% endif %}
-
-      <div class="metrics-grid">
-        <!-- CPU -->
-        <div
-          class="metric-card {% if health.system.cpu_usage_percent < 70 %}healthy{% elif health.system.cpu_usage_percent < 90 %}warning{% else %}danger{% endif %}"
-        >
-          <h3><span class="emoji">⚡</span>CPU 사용률</h3>
-          <div class="metric-value">
-            {{health.system.cpu_usage_percent|round(1)}}%
-          </div>
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              style="width: {{health.system.cpu_usage_percent}}%;
-                                background: {% if health.system.cpu_usage_percent < 70 %}#28a745{% elif health.system.cpu_usage_percent < 90 %}#ffc107{% else %}#dc3545{% endif %};"
-            >
-              {{health.system.cpu_usage_percent|round(1)}}%
-            </div>
-          </div>
-        </div>
-
-        <!-- 메모리 -->
-        <div
-          class="metric-card {% if health.system.memory_usage_percent < 70 %}healthy{% elif health.system.memory_usage_percent < 90 %}warning{% else %}danger{% endif %}"
-        >
-          <h3><span class="emoji">💾</span>메모리 사용률</h3>
-          <div class="metric-value">
-            {{health.system.memory_usage_percent|round(1)}}%
-          </div>
-          <div class="metric-label">
-            사용 가능: {{health.system.available_memory_mb|round(0)|int}} MB /
-            {{health.system.total_memory_gb|round(1)}} GB
-          </div>
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              style="width: {{health.system.memory_usage_percent}}%;
-                                background: {% if health.system.memory_usage_percent < 70 %}#28a745{% elif health.system.memory_usage_percent < 90 %}#ffc107{% else %}#dc3545{% endif %};"
-            >
-              {{health.system.memory_usage_percent|round(1)}}%
-            </div>
-          </div>
-        </div>
-
-        <!-- 디스크 -->
-        <div
-          class="metric-card {% if health.system.disk_usage_percent < 70 %}healthy{% elif health.system.disk_usage_percent < 90 %}warning{% else %}danger{% endif %}"
-        >
-          <h3><span class="emoji">💽</span>디스크 사용률</h3>
-          <div class="metric-value">
-            {{health.system.disk_usage_percent|round(1)}}%
-          </div>
-          <div class="metric-label">
-            여유 공간: {{health.system.disk_free_gb|round(1)}} GB
-          </div>
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              style="width: {{health.system.disk_usage_percent}}%;
-                                background: {% if health.system.disk_usage_percent < 70 %}#28a745{% elif health.system.disk_usage_percent < 90 %}#ffc107{% else %}#dc3545{% endif %};"
-            >
-              {{health.system.disk_usage_percent|round(1)}}%
-            </div>
-          </div>
-        </div>
+      <div class="hc-service-item {{ health.services.file_system }}">
+        <span class="hc-service-name">파일 시스템</span>
+        <span class="hc-service-status {{ health.services.file_system }}">{{ health.services.file_system }}</span>
       </div>
-
-      <div class="services-list">
-        <h3>🔧 서비스 상태</h3>
-        <div class="service-item {{health.services.flask_app}}">
-          <span class="service-name">Flask 웹 서버</span>
-          <span class="service-status {{health.services.flask_app}}"
-            >{{health.services.flask_app}}</span
-          >
-        </div>
-        <div class="service-item {{health.services.file_system}}">
-          <span class="service-name">파일 시스템</span>
-          <span class="service-status {{health.services.file_system}}"
-            >{{health.services.file_system}}</span
-          >
-        </div>
-        <div class="service-item {{health.services.database}}">
-          <span class="service-name">데이터베이스</span>
-          <span class="service-status {{health.services.database}}"
-            >{{health.services.database}}</span
-          >
-        </div>
-        <div class="service-item running">
-          <span class="service-name">처리된 이메일</span>
-          <span class="service-status running"
-            >{{health.services.processed_emails}}건</span
-          >
-        </div>
-        <div class="service-item running">
-          <span class="service-name">대기 중인 업로드</span>
-          <span class="service-status running"
-            >{{health.services.pending_uploads}}개</span
-          >
-        </div>
+      <div class="hc-service-item {{ health.services.database }}">
+        <span class="hc-service-name">데이터베이스</span>
+        <span class="hc-service-status {{ health.services.database }}">{{ health.services.database }}</span>
+      </div>
+      <div class="hc-service-item running">
+        <span class="hc-service-name">처리된 이메일</span>
+        <span class="hc-service-status running">{{ health.services.processed_emails }}건</span>
+      </div>
+      <div class="hc-service-item running">
+        <span class="hc-service-name">대기 중인 업로드</span>
+        <span class="hc-service-status running">{{ health.services.pending_uploads }}개</span>
+      </div>
       </div>
 
-      <div class="actions">
-        <a href="/" class="btn btn-primary">🏠 홈으로</a>
-        <a href="/system/status" class="btn btn-secondary">📊 상세 상태</a>
-        <a href="/docs" class="btn btn-secondary">📚 API 문서</a>
-        <a href="javascript:location.reload()" class="btn btn-secondary"
-          >🔄 새로고침</a
-        >
-      </div>
-
-      <div class="auto-refresh">
-        ⏱️ 이 페이지는 30초마다 자동으로 새로고침됩니다
-      </div>
+    <div class="hc-actions">
+      <a href="/" class="btn btn-primary"><i class="fas fa-home"></i> 홈으로</a>
+      <a href="/system/status" class="btn btn-outline-secondary"><i class="fas fa-chart-bar"></i> 상세 상태</a>
+      <a href="/docs" class="btn btn-outline-secondary"><i class="fas fa-book"></i> API 문서</a>
+      <a href="javascript:location.reload()" class="btn btn-outline-secondary"><i class="fas fa-sync-alt"></i> 새로고침</a>
     </div>
-  </body>
-</html>
+
+    <div class="hc-auto-refresh">
+      <i class="fas fa-clock"></i> 이 페이지는 30초마다 자동으로 새로고침됩니다
+    </div>
+    </div>
+</div>
+{% endblock %}
+

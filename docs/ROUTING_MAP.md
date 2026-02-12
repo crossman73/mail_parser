@@ -1,53 +1,115 @@
 # 라우팅 맵 (Routing Map)
 
-> 생성일: 2025-12-30
-> Phase 1 완료 후 상태
-> 총 라우트: 약 70개
+> 최종 업데이트: 2026-02-06
+> 총 라우트: 127개
 
 ## 📊 Blueprint 구조
 
 | Blueprint | url_prefix | 파일 | 라우트 수 | 설명 |
 |-----------|-----------|------|----------|------|
-| **main** | - | routes.py | ~55 | 메인 애플리케이션 라우트 |
-| **admin** | '' | admin_routes.py | 5 | 관리자 기능 |
-| **ui** | '' | ui_routes.py | 1 | 실험적 UI |
-| **upload_bp** | /api | upload_stream.py | 2 | 업로드 API |
-| **api** | - | api.py | 18 | REST API (register 방식) |
-| **system** | - | app.py | 5 | 시스템 라우트 |
+| **main** | `/` | blueprints/main_routes.py | 4 | 메인 페이지, 업로드 |
+| **email** | `/email` | blueprints/email_routes.py | 5 | 이메일 조회/처리 |
+| **evidence** | `/evidence` | blueprints/evidence_routes.py | 12 | 증거 관리 CRUD |
+| **timeline** | `/timeline` | blueprints/timeline_routes.py | 4 | 타임라인 생성/조회 |
+| **integrity** | `/integrity` | blueprints/integrity_routes.py | 5 | 무결성 검증 |
+| **logs** | `/logs` | blueprints/logs_routes.py | 7 | 로그 조회/관리 |
+| **legacy** | - | routes.py | 21 | 레거시 라우트 (이전 중) |
+| **admin** | `/admin` | admin_routes.py | 15 | 관리자 대시보드 |
+| **api** | `/api` | api.py | 50+ | REST API |
 
-## 🗺️ 주요 라우트
+## 🗺️ Blueprint별 주요 라우트
 
-### 메인 페이지 (routes.py)
-- `GET /` - 메인 페이지
-- `GET /upload` - 파일 업로드 페이지
-- `POST /upload` - 파일 업로드 처리
+### main_routes (4개)
+```
+GET  /              메인 페이지
+GET  /upload        파일 업로드 페이지
+POST /upload        파일 업로드 처리
+GET  /health        헬스 체크
+```
 
-### 이메일 관련
-- `GET /emails/<file_id>` - 이메일 목록
-- `GET /email/<file_id>/<int:email_index>` - 이메일 상세
-- `POST /process_selected` - 선택 이메일 처리
+### email_routes (5개)
+```
+GET  /emails/<file_id>              이메일 목록
+GET  /email/<file_id>/<index>       이메일 상세
+POST /process_selected              선택 이메일 처리
+GET  /email/thread/<thread_id>      스레드 보기
+POST /email/export                  이메일 내보내기
+```
 
-### 증거 관리
-- `GET /evidence` - 증거 목록
-- `GET /evidence/<folder_name>` - 증거 상세
-- `POST /generate_evidence/<file_id>` - 증거 생성
-- `GET /evidence_file/<file_id>` - 증거 파일 뷰어
-- `GET /evidence_management` - 증거 관리 페이지
-- `GET /additional_evidence` - 추가 증거 목록
-- `GET /add_evidence` - 추가 증거 등록
-- `POST /add_evidence` - 추가 증거 저장
-- `GET /edit_evidence/<file_id>` - 증거 편집
-- `POST /edit_evidence/<file_id>` - 증거 수정
-- `POST /delete_evidence/<file_id>` - 증거 삭제
+### evidence_routes (12개)
+```
+GET  /evidence                      증거 목록
+GET  /evidence/<folder>             증거 상세
+POST /generate_evidence/<file_id>   증거 생성
+GET  /evidence_file/<file_id>       증거 파일 뷰어
+GET  /evidence_management           증거 관리
+GET  /additional_evidence           추가 증거 목록
+GET  /add_evidence                  추가 증거 등록 폼
+POST /add_evidence                  추가 증거 저장
+GET  /edit_evidence/<file_id>       증거 편집 폼
+POST /edit_evidence/<file_id>       증거 수정
+POST /delete_evidence/<file_id>     증거 삭제
+GET  /download_evidence/<file_id>   증거 다운로드
+```
 
-### 타임라인
-- `GET /timeline` - 타임라인 페이지
-- `GET /integrated_timeline` - 통합 타임라인
-- `GET /generate_timeline_package` - 법원 제출용 패키지
-- `GET /download_timeline_excel` - Excel 다운로드
+### timeline_routes (4개)
+```
+GET  /timeline                      타임라인 페이지
+GET  /integrated_timeline           통합 타임라인
+GET  /generate_timeline_package     법원 제출 패키지
+GET  /download_timeline_excel       Excel 다운로드
+```
 
-### 무결성 검증
-- `GET /integrity` - 무결성 검증 페이지
+### integrity_routes (5개)
+```
+GET  /integrity                     무결성 검증 페이지
+POST /verify_integrity              무결성 검증 실행
+GET  /hash_chain                    해시 체인 조회
+POST /generate_hash_chain           해시 체인 생성
+GET  /integrity_report              무결성 보고서
+```
+
+### logs_routes (7개)
+```
+GET  /admin/logs                    로그 대시보드
+GET  /api/logs                      로그 API
+GET  /api/logs/export               로그 내보내기
+POST /api/logs/clear                로그 삭제
+GET  /api/logs/stats                로그 통계
+GET  /api/logs/filter               로그 필터링
+GET  /api/logs/download             로그 다운로드
+```
+
+## 🔌 REST API 엔드포인트
+
+### 이메일 API
+```
+GET  /api/emails                    이메일 목록
+GET  /api/emails/<id>               이메일 상세
+POST /api/emails/parse              이메일 파싱
+```
+
+### 증거 API
+```
+GET  /api/evidence                  증거 목록
+POST /api/evidence                  증거 생성
+GET  /api/evidence/<id>             증거 상세
+PUT  /api/evidence/<id>             증거 수정
+DELETE /api/evidence/<id>           증거 삭제
+```
+
+### 타임라인 API
+```
+GET  /api/timeline                  타임라인 조회
+POST /api/timeline/generate         타임라인 생성
+```
+
+### 시스템 API
+```
+GET  /api/status                    시스템 상태
+GET  /api/settings                  설정 조회
+POST /api/settings                  설정 저장
+```
 - `GET /verify_integrity` - 검증 수행
 - `GET /api/verify_integrity` - 검증 API
 - `GET /api/check_processed_emails` - 이메일 확인

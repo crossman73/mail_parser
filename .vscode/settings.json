@@ -18,6 +18,7 @@
   },
   "terminal.integrated.defaultProfile.windows": "WSL (wrapper)",
   "terminal.integrated.allowChords": false,
+  "terminal.integrated.shellIntegration.enabled": true,
 
   // === File watcher / search exclusions ===
   "files.watcherExclude": {
@@ -113,5 +114,6 @@
   "github.copilot.chat.enable": true,
 
   // === Tasks ===
-  "task.allowAutomaticTasks": "on"
+  "task.allowAutomaticTasks": "on",
+  "codacy.cli.devMode": true
 }

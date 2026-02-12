@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <script>!function () { var t = localStorage.getItem('theme'); if (!t) { t = window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light' } document.documentElement.setAttribute('data-theme', t) }()</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
       {% block title %}{{ page_title or '이메일 증거 처리 시스템' }}{% endblock
@@ -35,23 +36,6 @@
     />
 
     {% block extra_css %}{% endblock %}
-
-    <style>
-      .navbar-brand {
-        font-weight: bold;
-      }
-      .feature-card {
-        transition: transform 0.2s;
-      }
-      .feature-card:hover {
-        transform: translateY(-2px);
-      }
-      .footer {
-        margin-top: 50px;
-        padding: 20px 0;
-        border-top: 1px solid #dee2e6;
-      }
-    </style>
   </head>
   <body>
     {% include '_nav.html' %}

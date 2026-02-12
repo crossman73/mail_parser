@@ -160,6 +160,97 @@ class EmailDatabase:
                 )
             """)
 
+            # 증거 테이블 (evidence_store.py에서 통합)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS evidence (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    evidence_number TEXT,
+                    subject TEXT,
+                    folder_path TEXT,
+                    html_file TEXT,
+                    pdf_file TEXT,
+                    attachments_count INTEGER,
+                    integrity_hash TEXT,
+                    generated_at TEXT
+                )
+            """)
+
+            # 해시 체인 엔트리 테이블
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS chain_entry (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    evidence_id INTEGER,
+                    file_path TEXT,
+                    file_hash TEXT,
+                    chain_hash TEXT,
+                    FOREIGN KEY(evidence_id) REFERENCES evidence(id)
+                )
+            """)
+
+            # 작업(Job) 테이블 (job_store.py에서 통합)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS jobs (
+                    id TEXT PRIMARY KEY,
+                    status TEXT,
+                    result TEXT,
+                    created_at TEXT,
+                    updated_at TEXT
+                )
+            """)
+
+            # 타임라인 테이블
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS timelines (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    description TEXT,
+                    date_range_start TEXT,
+                    date_range_end TEXT,
+                    source_file TEXT,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    status TEXT DEFAULT 'draft',
+                    hash TEXT
+                )
+            """)
+
+            # 타임라인 이벤트 테이블
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS timeline_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timeline_id INTEGER NOT NULL,
+                    event_type TEXT DEFAULT 'email',
+                    timestamp TEXT NOT NULL,
+                    title TEXT,
+                    description TEXT,
+                    email_id TEXT,
+                    evidence_id INTEGER,
+                    source_file TEXT,
+                    attachments_json TEXT,
+                    participants_json TEXT,
+                    sort_order INTEGER DEFAULT 0,
+                    is_key_event INTEGER DEFAULT 0,
+                    legal_significance TEXT,
+                    notes TEXT,
+                    hash_value TEXT,
+                    verified INTEGER DEFAULT 0,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    FOREIGN KEY(timeline_id) REFERENCES timelines(id),
+                    FOREIGN KEY(evidence_id) REFERENCES evidence(id)
+                )
+            """)
+
+            # 타임라인 이벤트 인덱스
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_timeline_events_timeline
+                ON timeline_events(timeline_id)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_timeline_events_timestamp
+                ON timeline_events(timestamp)
+            """)
+
             conn.commit()
 
     def get_connection(self):

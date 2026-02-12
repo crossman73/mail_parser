@@ -1127,51 +1127,11 @@ def api_get_services():
     """서비스 목록 조회"""
     from flask import jsonify
 
+    from ..core.service_manager import get_service_registry
+
     try:
-        # TODO: 실제 서비스 모니터링 시스템과 연동
-        # 현재는 더미 데이터 반환
-        services = [
-            {
-                'id': 'flask-app',
-                'name': 'Flask Application',
-                'description': '메인 웹 애플리케이션 서버',
-                'status': 'running',
-                'category': 'core',
-                'uptime': '2h 15m',
-                'restart_count': 0,
-                'last_update': datetime.now().isoformat()
-            },
-            {
-                'id': 'email-processor',
-                'name': 'Email Processor',
-                'description': '이메일 파싱 및 처리 서비스',
-                'status': 'running',
-                'category': 'background',
-                'uptime': '2h 15m',
-                'restart_count': 1,
-                'last_update': datetime.now().isoformat()
-            },
-            {
-                'id': 'database',
-                'name': 'SQLite Database',
-                'description': '데이터베이스 서비스',
-                'status': 'running',
-                'category': 'database',
-                'uptime': '2h 15m',
-                'restart_count': 0,
-                'last_update': datetime.now().isoformat()
-            },
-            {
-                'id': 'log-monitor',
-                'name': 'Log Monitor',
-                'description': '로그 모니터링 서비스',
-                'status': 'idle',
-                'category': 'monitoring',
-                'uptime': '2h 15m',
-                'restart_count': 0,
-                'last_update': datetime.now().isoformat()
-            }
-        ]
+        registry = get_service_registry()
+        services = [svc.to_dict() for svc in registry.get_all_services()]
 
         return jsonify({
             'success': True,
@@ -1187,14 +1147,22 @@ def api_start_service(service_id: str):
     """서비스 시작"""
     from flask import jsonify
 
-    try:
-        # TODO: 실제 서비스 제어 로직 구현
-        current_app.logger.info(f'서비스 시작 요청: {service_id}')
+    from ..core.service_manager import get_service_registry
 
-        return jsonify({
-            'success': True,
-            'message': f'{service_id} 서비스가 시작되었습니다.'
-        }), 200
+    try:
+        registry = get_service_registry()
+        success = registry.start_service(service_id)
+
+        if success:
+            return jsonify({
+                'success': True,
+                'message': f'{service_id} 서비스가 시작되었습니다.'
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'error': f'{service_id} 서비스 시작 실패'
+            }), 400
     except Exception as e:
         current_app.logger.exception(f'서비스 시작 오류: {e}')
         return jsonify({'success': False, 'error': str(e)}), 500
@@ -1205,32 +1173,48 @@ def api_stop_service(service_id: str):
     """서비스 중지"""
     from flask import jsonify
 
-    try:
-        # TODO: 실제 서비스 제어 로직 구현
-        current_app.logger.info(f'서비스 중지 요청: {service_id}')
+    from ..core.service_manager import get_service_registry
 
-        return jsonify({
-            'success': True,
-            'message': f'{service_id} 서비스가 중지되었습니다.'
-        }), 200
+    try:
+        registry = get_service_registry()
+        success = registry.stop_service(service_id)
+
+        if success:
+            return jsonify({
+                'success': True,
+                'message': f'{service_id} 서비스가 중지되었습니다.'
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'error': f'{service_id} 서비스 중지 실패 (코어 서비스는 중지 불가)'
+            }), 400
     except Exception as e:
         current_app.logger.exception(f'서비스 중지 오류: {e}')
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @admin.route('/api/admin/services/<service_id>/restart', methods=['POST'])
-def api_restart_service(service_id: str):
+def api_restart_managed_service(service_id: str):
     """서비스 재시작"""
     from flask import jsonify
 
-    try:
-        # TODO: 실제 서비스 제어 로직 구현
-        current_app.logger.info(f'서비스 재시작 요청: {service_id}')
+    from ..core.service_manager import get_service_registry
 
-        return jsonify({
-            'success': True,
-            'message': f'{service_id} 서비스가 재시작되었습니다.'
-        }), 200
+    try:
+        registry = get_service_registry()
+        success = registry.restart_service(service_id)
+
+        if success:
+            return jsonify({
+                'success': True,
+                'message': f'{service_id} 서비스가 재시작되었습니다.'
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'error': f'{service_id} 서비스 재시작 실패'
+            }), 400
     except Exception as e:
         current_app.logger.exception(f'서비스 재시작 오류: {e}')
         return jsonify({'success': False, 'error': str(e)}), 500
@@ -1239,20 +1223,25 @@ def api_restart_service(service_id: str):
 @admin.route('/api/admin/services/<service_id>/logs', methods=['GET'])
 def api_get_service_logs(service_id: str):
     """서비스 로그 조회"""
-    from flask import jsonify
+    from flask import jsonify, request
+
+    from ..core.service_manager import get_service_registry
 
     try:
-        # TODO: 실제 로그 파일 읽기
-        # 현재는 더미 로그 반환
-        logs = f"""[2025-12-30 12:00:00] INFO: {service_id} service started
-[2025-12-30 12:05:15] INFO: Processing request
-[2025-12-30 12:10:30] INFO: Request completed successfully
-[2025-12-30 12:15:45] INFO: Health check passed"""
+        lines = request.args.get('lines', 100, type=int)
+        registry = get_service_registry()
+        logs = registry.get_service_logs(service_id, lines=lines)
+
+        if logs is None:
+            return jsonify({
+                'success': False,
+                'error': f'{service_id} 서비스 로그를 찾을 수 없습니다.'
+            }), 404
 
         return jsonify({
             'success': True,
             'logs': logs,
-            'log_count': logs.count('\n') + 1
+            'log_count': logs.count('\n') + 1 if logs else 0
         }), 200
     except Exception as e:
         current_app.logger.exception(f'서비스 로그 조회 오류: {e}')
@@ -1264,10 +1253,11 @@ def api_start_all_services():
     """전체 서비스 시작"""
     from flask import jsonify
 
+    from ..core.service_manager import get_service_registry
+
     try:
-        # TODO: 실제 서비스 제어 로직 구현
-        started_count = 0
-        current_app.logger.info('전체 서비스 시작 요청')
+        registry = get_service_registry()
+        started_count = registry.start_all()
 
         return jsonify({
             'success': True,
@@ -1284,10 +1274,11 @@ def api_stop_all_services():
     """전체 서비스 중지"""
     from flask import jsonify
 
+    from ..core.service_manager import get_service_registry
+
     try:
-        # TODO: 실제 서비스 제어 로직 구현
-        stopped_count = 0
-        current_app.logger.info('전체 서비스 중지 요청')
+        registry = get_service_registry()
+        stopped_count = registry.stop_all()
 
         return jsonify({
             'success': True,
@@ -1304,10 +1295,11 @@ def api_restart_all_services():
     """전체 서비스 재시작"""
     from flask import jsonify
 
+    from ..core.service_manager import get_service_registry
+
     try:
-        # TODO: 실제 서비스 제어 로직 구현
-        restarted_count = 0
-        current_app.logger.info('전체 서비스 재시작 요청')
+        registry = get_service_registry()
+        restarted_count = registry.restart_all()
 
         return jsonify({
             'success': True,

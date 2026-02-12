@@ -31,8 +31,9 @@ def _find_processes_using_port(port: int):
     if psutil is None:
         return procs
 
+    my_pid = os.getpid()
     for conn in psutil.net_connections(kind='inet'):
-        if conn.laddr and conn.laddr.port == port:
+        if conn.laddr and conn.laddr.port == port and conn.pid != my_pid:
             try:
                 p = psutil.Process(conn.pid)
                 procs.append((p.pid, p.name(), p.cmdline()))

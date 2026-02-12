@@ -2,6 +2,8 @@ import email
 import re
 from datetime import datetime
 from email.header import decode_header
+from email.message import Message
+from typing import Optional
 
 
 def decode_text(header_text):
@@ -31,9 +33,9 @@ def sanitize_filename(filename):
     return sanitized[:150]
 
 
-def get_email_date(msg):
+def get_email_date(msg: Message) -> datetime:
     """Return a datetime extracted from a message's Date header or now()."""
-    date_str = None
+    date_str: Optional[str] = None
     try:
         date_str = msg.get('Date')
     except Exception:

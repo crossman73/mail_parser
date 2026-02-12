@@ -179,12 +179,22 @@ document.addEventListener("DOMContentLoaded", function () {
   // Dark mode toggle
   const themeToggle = document.getElementById("themeToggle");
   if (themeToggle) {
-    // Initialize theme from localStorage
-    const currentTheme = localStorage.getItem("theme") || "light";
-    document.documentElement.setAttribute("data-theme", currentTheme);
+    // Theme already set by inline script in <head> — just read it for icon
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
     updateThemeIcon(currentTheme);
 
-    // Theme toggle event
+    // Listen for OS theme changes (only applies if user hasn't manually set)
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
+        if (!localStorage.getItem("theme")) {
+          const osTheme = e.matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", osTheme);
+          updateThemeIcon(osTheme);
+        }
+      });
+    }
+
+    // Theme toggle event (manual override - saves to localStorage)
     themeToggle.addEventListener("click", function () {
       const theme = document.documentElement.getAttribute("data-theme");
       const newTheme = theme === "dark" ? "light" : "dark";

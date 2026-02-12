@@ -1,0 +1,61 @@
+{
+  "files.autoSave": "afterDelay",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modifications",
+  "editor.wordWrap": "on",
+  "github.copilot.advanced": {},
+  "merge-conflict.autoNavigateNextConflict.enabled": true,
+  "workbench.colorTheme": "One Monokai",
+  "gitlens.views.worktrees.files.layout": "list",
+  "workbench.editor.preferHistoryBasedLanguageDetection": true,
+  "editor.stickyScroll.enabled": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "codeium.enableConfig": {
+    "*": true,
+    "markdown": true
+  },
+  "redhat.telemetry.enabled": true,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "chat.tools.terminal.autoApprove": {
+    "git clone": true,
+    "git remote": true,
+    "git init": true,
+    "git fetch": true,
+    "git checkout": true,
+    "/^cd d:\\\\Dev\\\\Python_email_parser; python -m venv \\.venv$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    ".\\.venv\\Scripts\\Activate.ps1": true,
+    "pip": true,
+    ".\\.venv\\Scripts\\python.exe": true,
+    "redis-cli": true,
+    "psql": true,
+    "docker --version 2>&1": true,
+    "git add": true,
+    "git commit": true,
+    "git push": true,
+    "wsl": true,
+    "Test-Path": true,
+    "New-Item": true,
+    "ConvertFrom-Json": true,
+    "Add-Member": true,
+    "ConvertTo-Json": true,
+    "Set-Content": true,
+    "Get-Item": true,
+    "uvx": true,
+    "code": true,
+    "&": true,
+    "uv": true
+  },
+  "git.autofetch": true,
+  "chat.mcp.gallery.enabled": true,
+  "workbench.startupEditor": "none",
+  "codacy.cli.devMode": true,
+  "python.analysis.typeCheckingMode": "strict",
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "mcp": {
+    "servers": {}
+  }
+}

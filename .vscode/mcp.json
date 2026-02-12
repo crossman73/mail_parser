@@ -1,30 +1,82 @@
 {
   "servers": {
-    "codacy": {
-      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
-      "args": ["-d", "Ubuntu", "--", "bash", "-lc", "CODACY_ACCOUNT_TOKEN=\"${env:CODACY_ACCOUNT_TOKEN}\" npx -y @codacy/codacy-mcp@latest"],
-      "env": {
-        "CODACY_ACCOUNT_TOKEN": "${env:CODACY_ACCOUNT_TOKEN}"
+    "serena": {
+      "command": "bash",
+      "args": [
+        "-lc",
+        "uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project /mnt/c/dev/python-email"
+      ],
+      "windows": {
+        "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+        "args": [
+          "-d",
+          "Ubuntu",
+          "--",
+          "bash",
+          "-lc",
+          "uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project /mnt/c/dev/python-email"
+        ]
       }
     },
-    "serena": {
-      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
-      "args": ["-d", "Ubuntu", "--", "bash", "-lc", "uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project /mnt/c/dev/python-email"]
-    },
     "context7": {
-      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
-      "args": ["-d", "Ubuntu", "--", "bash", "-lc", "npx -y @upstash/context7-mcp"]
+      "command": "bash",
+      "args": [
+        "-lc",
+        "npx -y @upstash/context7-mcp"
+      ],
+      "windows": {
+        "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+        "args": [
+          "-d",
+          "Ubuntu",
+          "--",
+          "bash",
+          "-lc",
+          "npx -y @upstash/context7-mcp"
+        ]
+      }
     },
     "brave-search": {
-      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
-      "args": ["-d", "Ubuntu", "--", "bash", "-lc", "npx -y @brave/brave-search-mcp-server --brave-api-key \"${env:BRAVE_API_KEY}\""],
+      "command": "bash",
+      "args": [
+        "-lc",
+        "if [ -f .vscode/.env ]; then set -a; . .vscode/.env; set +a; fi; npx -y @brave/brave-search-mcp-server --brave-api-key \"$BRAVE_API_KEY\""
+      ],
       "env": {
         "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+      },
+      "windows": {
+        "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+        "args": [
+          "-d",
+          "Ubuntu",
+          "--",
+          "bash",
+          "-lc",
+          "if [ -f .vscode/.env ]; then set -a; . .vscode/.env; set +a; fi; npx -y @brave/brave-search-mcp-server --brave-api-key \"$BRAVE_API_KEY\""
+        ],
+        "env": {
+          "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+        }
       }
     },
     "sequential-thinking": {
-      "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
-      "args": ["-d", "Ubuntu", "--", "bash", "-lc", "npx -y @modelcontextprotocol/server-sequential-thinking"]
+      "command": "bash",
+      "args": [
+        "-lc",
+        "npx -y @modelcontextprotocol/server-sequential-thinking"
+      ],
+      "windows": {
+        "command": "${workspaceFolder}/tools/wsl-wrapper.cmd",
+        "args": [
+          "-d",
+          "Ubuntu",
+          "--",
+          "bash",
+          "-lc",
+          "npx -y @modelcontextprotocol/server-sequential-thinking"
+        ]
+      }
     }
   },
   "inputs": []

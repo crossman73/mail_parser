@@ -48,6 +48,16 @@
 
       <li class="nav-item">
         <a
+          class="nav-link {% if request.path.startswith('/timeline_editor') %}active{% endif %}"
+          href="/timeline_editor"
+        >
+          <i class="fas fa-stream"></i>
+          <span>타임라인</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
           class="nav-link {% if request.path.startswith('/api') %}active{% endif %}"
           href="/api/docs"
         >

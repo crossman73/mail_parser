@@ -178,10 +178,102 @@ class MigrationManager:
                 logger.error("API 테스트 이력 스키마 적용 실패")
                 return False
 
-        # 추가 마이그레이션 실행
-        # TODO: versions/ 디렉토리에서 마이그레이션 파일 로드 및 실행
+        # versions/ 디렉토리에서 추가 마이그레이션 로드 및 실행
+        current_version = self._run_version_migrations(
+            current_version, target_version
+        )
 
         return True
+
+    def _run_version_migrations(
+        self, current_version: int, target_version: Optional[int] = None
+    ) -> int:
+        """
+        versions/ 디렉토리에서 마이그레이션 파일 로드 및 실행
+
+        Args:
+            current_version: 현재 버전
+            target_version: 목표 버전 (None이면 최신까지)
+
+        Returns:
+            적용 후 버전
+        """
+        import importlib.util
+        import re
+
+        versions_dir = self.migrations_dir / 'versions'
+        if not versions_dir.exists():
+            logger.debug("versions/ 디렉토리 없음")
+            return current_version
+
+        # v{version}_{description}.py 패턴의 파일 검색
+        migration_files: List[tuple] = []
+        pattern = re.compile(r'^v(\d+)_(.+)\.py$')
+
+        for f in versions_dir.iterdir():
+            if f.is_file() and f.suffix == '.py' and f.name != '__init__.py':
+                match = pattern.match(f.name)
+                if match:
+                    version = int(match.group(1))
+                    description = match.group(2).replace('_', ' ')
+                    migration_files.append((version, description, f))
+
+        # 버전 순으로 정렬
+        migration_files.sort(key=lambda x: x[0])
+
+        for version, description, filepath in migration_files:
+            # 이미 적용된 버전은 건너뜀
+            if version <= current_version:
+                continue
+
+            # 목표 버전 초과 시 중단
+            if target_version is not None and version > target_version:
+                break
+
+            # 마이그레이션 모듈 동적 로드
+            try:
+                spec = importlib.util.spec_from_file_location(
+                    f"migration_v{version}", filepath
+                )
+                if spec is None or spec.loader is None:
+                    logger.error(f"마이그레이션 로드 실패: {filepath}")
+                    continue
+
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+
+                # Migration 클래스 찾기
+                migration_class = None
+                for attr_name in dir(module):
+                    attr = getattr(module, attr_name)
+                    if (
+                        isinstance(attr, type)
+                        and issubclass(attr, Migration)
+                        and attr is not Migration
+                    ):
+                        migration_class = attr
+                        break
+
+                if migration_class is None:
+                    logger.warning(f"Migration 클래스 없음: {filepath}")
+                    continue
+
+                # 마이그레이션 실행
+                migration = migration_class(version, description)
+                with self.db.get_connection() as conn:
+                    if migration.up(conn):
+                        self.update_version(version, description)
+                        current_version = version
+                        logger.info(f"마이그레이션 v{version} 적용: {description}")
+                    else:
+                        logger.error(f"마이그레이션 v{version} 실패")
+                        break
+
+            except Exception as e:
+                logger.exception(f"마이그레이션 v{version} 오류: {e}")
+                break
+
+        return current_version
 
     def _apply_api_docs_schema(self) -> bool:
         """

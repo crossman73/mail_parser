@@ -1,6 +1,6 @@
 """
 Timeline service for email visualization
-타임라인 시각화 서비스
+타임라인 시각화 서비스 — DB CRUD + 레거시 인메모리 지원
 """
 
 import json
@@ -8,13 +8,223 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from src.mail_parser.timeline import TimelineBuilder
+from src.core.models.timeline_model import (
+    TimelineModel,
+    TimelineEvent,
+    TimelineEventType,
+)
+
 
 class TimelineService:
-    """타임라인 서비스"""
+    """타임라인 서비스 — DB 기반 CRUD + 레거시 호환"""
 
     def __init__(self):
         """초기화"""
         self.timeline_cache = {}
+        self._builder = TimelineBuilder()
+
+    # ─── DB CRUD ──────────────────────────────────────────
+
+    def create_timeline(
+        self,
+        title: str,
+        description: str = None,
+        source_file: str = None,
+        emails: list = None,
+    ) -> Dict[str, Any]:
+        """타임라인 생성 및 DB 저장
+
+        Args:
+            title: 타임라인 제목
+            description: 설명
+            source_file: 원본 파일명
+            emails: EmailModel 또는 dict 리스트 (선택)
+
+        Returns:
+            {'success': bool, 'timeline_id': int, 'message': str}
+        """
+        try:
+            if emails:
+                timeline = self._builder.build_from_emails(
+                    emails, title=title, source_file=source_file
+                )
+            else:
+                now = datetime.now().isoformat()
+                timeline = TimelineModel(
+                    title=title,
+                    description=description,
+                    source_file=source_file,
+                    created_at=now,
+                    updated_at=now,
+                )
+
+            if description:
+                timeline.description = description
+
+            tid = self._builder.save_timeline(timeline)
+            return {
+                'success': True,
+                'timeline_id': tid,
+                'message': f'타임라인 생성 완료 (이벤트 {timeline.event_count}개)',
+            }
+        except Exception as e:
+            return {'success': False, 'timeline_id': None, 'message': f'생성 오류: {e}'}
+
+    def get_timeline(self, timeline_id: int) -> Optional[Dict[str, Any]]:
+        """타임라인 + 이벤트 조회"""
+        timeline = self._builder.load_timeline(timeline_id)
+        if not timeline:
+            return None
+        return timeline.to_dict()
+
+    def list_timelines(self, status: str = None, limit: int = 50) -> List[Dict[str, Any]]:
+        """타임라인 목록 조회"""
+        return self._builder.list_timelines(status=status, limit=limit)
+
+    def update_timeline_meta(
+        self,
+        timeline_id: int,
+        title: str = None,
+        description: str = None,
+        status: str = None,
+    ) -> Dict[str, Any]:
+        """타임라인 메타데이터 수정"""
+        timeline = self._builder.load_timeline(timeline_id)
+        if not timeline:
+            return {'success': False, 'message': '타임라인을 찾을 수 없습니다.'}
+
+        if title is not None:
+            timeline.title = title
+        if description is not None:
+            timeline.description = description
+        if status is not None:
+            timeline.status = status
+
+        ok = self._builder.update_timeline(timeline)
+        return {
+            'success': ok,
+            'message': '수정 완료' if ok else '수정 실패',
+        }
+
+    def delete_timeline(self, timeline_id: int) -> Dict[str, Any]:
+        """타임라인 삭제"""
+        ok = self._builder.delete_timeline(timeline_id)
+        return {
+            'success': ok,
+            'message': '삭제 완료' if ok else '삭제 실패',
+        }
+
+    # ─── 이벤트 CRUD ──────────────────────────────────────
+
+    def create_event(
+        self,
+        timeline_id: int,
+        title: str,
+        timestamp: str,
+        event_type: str = 'email',
+        description: str = None,
+        email_id: str = None,
+        evidence_id: int = None,
+        source_file: str = None,
+        participants: list = None,
+        attachments: list = None,
+        legal_significance: str = None,
+        notes: str = None,
+        is_key_event: bool = False,
+    ) -> Dict[str, Any]:
+        """이벤트 추가"""
+        try:
+            ts = datetime.fromisoformat(timestamp)
+        except (ValueError, TypeError):
+            return {'success': False, 'event_id': None, 'message': '잘못된 날짜 형식'}
+
+        try:
+            et = TimelineEventType(event_type)
+        except ValueError:
+            et = TimelineEventType.EMAIL
+
+        event = TimelineEvent(
+            timestamp=ts,
+            title=title,
+            event_type=et,
+            description=description,
+            email_id=email_id,
+            evidence_id=evidence_id,
+            source_file=source_file or '',
+            participants=participants or [],
+            attachments=attachments or [],
+            legal_significance=legal_significance,
+            notes=notes,
+            is_key_event=is_key_event,
+        )
+
+        eid = self._builder.add_event(timeline_id, event)
+        return {
+            'success': True,
+            'event_id': eid,
+            'message': '이벤트 추가 완료',
+        }
+
+    def update_event(
+        self,
+        event_id: int,
+        **kwargs,
+    ) -> Dict[str, Any]:
+        """이벤트 수정"""
+        event = self._builder.get_event(event_id)
+        if not event:
+            return {'success': False, 'message': '이벤트를 찾을 수 없습니다.'}
+
+        # 업데이트 가능한 필드
+        updatable = [
+            'title', 'description', 'legal_significance', 'notes',
+            'is_key_event', 'sort_order', 'verified',
+        ]
+        for key in updatable:
+            if key in kwargs:
+                setattr(event, key, kwargs[key])
+
+        if 'timestamp' in kwargs:
+            try:
+                event.timestamp = datetime.fromisoformat(kwargs['timestamp'])
+            except (ValueError, TypeError):
+                pass
+
+        if 'event_type' in kwargs:
+            try:
+                event.event_type = TimelineEventType(kwargs['event_type'])
+            except ValueError:
+                pass
+
+        if 'participants' in kwargs:
+            event.participants = kwargs['participants'] or []
+        if 'attachments' in kwargs:
+            event.attachments = kwargs['attachments'] or []
+
+        ok = self._builder.update_event(event)
+        return {
+            'success': ok,
+            'message': '이벤트 수정 완료' if ok else '수정 실패',
+        }
+
+    def delete_event(self, event_id: int, timeline_id: int = None) -> Dict[str, Any]:
+        """이벤트 삭제"""
+        ok = self._builder.delete_event(event_id, timeline_id=timeline_id)
+        return {
+            'success': ok,
+            'message': '이벤트 삭제 완료' if ok else '삭제 실패',
+        }
+
+    def reorder_events(self, timeline_id: int, event_ids: List[int]) -> Dict[str, Any]:
+        """이벤트 순서 변경"""
+        ok = self._builder.reorder_events(timeline_id, event_ids)
+        return {
+            'success': ok,
+            'message': '순서 변경 완료' if ok else '순서 변경 실패',
+        }
+
+    # ─── 레거시 메서드 (기존 라우트 호환) ─────────────────
 
     def generate_timeline_from_evidence(self, evidence_list: List[Dict[str, Any]]) -> Dict[str, Any]:
         """증거 목록으로부터 타임라인 생성"""

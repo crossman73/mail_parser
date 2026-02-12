@@ -1,94 +1,70 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>API 테스트 결과 저장 검증</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-      }
-      .result {
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 5px;
-      }
-      .success {
-        background: #d4edda;
-        color: #155724;
-      }
-      .error {
-        background: #f8d7da;
-        color: #721c24;
-      }
-      button {
-        padding: 10px 20px;
-        margin: 5px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>API 테스트 결과 저장 검증</h1>
+{% extends "base.html" %}
 
-    <button onclick="testSingleAPI()">단일 테스트 실행</button>
-    <button onclick="checkHistory()">이력 페이지 열기</button>
+{% block title %}API 테스트 결과 저장 검증{% endblock %}
 
-    <div id="results"></div>
+{% block content %}
+<h1 class="mb-4">API 테스트 결과 저장 검증</h1>
 
-    <script>
-      function testSingleAPI() {
-        const resultsDiv = document.getElementById("results");
-        resultsDiv.innerHTML = "<p>테스트 실행 중...</p>";
+<div class="mb-3">
+  <button class="btn btn-primary" onclick="testSingleAPI()"><i class="fas fa-play"></i> 단일 테스트 실행</button>
+  <button class="btn btn-outline-secondary" onclick="checkHistory()"><i class="fas fa-history"></i> 이력 페이지 열기</button>
+</div>
 
-        const startTime = performance.now();
+<div id="results"></div>
+{% endblock %}
 
-        fetch("/evidence")
-          .then(async (response) => {
-            const endTime = performance.now();
-            const responseTime = Math.round(endTime - startTime);
+{% block scripts %}
+<script>
+  function testSingleAPI() {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '<p>테스트 실행 중...</p>';
 
-            // 테스트 결과 저장
-            const testResult = {
-              endpoint: "/evidence",
-              method: "GET",
-              status_code: response.status,
-              response_time_ms: responseTime,
-              success: response.ok,
-              error_message: response.ok ? null : `HTTP ${response.status}`,
-              request_data: "{}",
-              response_data: "test from browser",
-            };
+  const startTime = performance.now();
 
-            return fetch("/api/test-result", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(testResult),
-            }).then((saveResponse) => {
-              return { testResponse: response, saveResponse, responseTime };
-            });
-          })
-          .then(async ({ testResponse, saveResponse, responseTime }) => {
-            const saveData = await saveResponse.json();
+  fetch('/evidence')
+    .then(async response => {
+      const endTime = performance.now();
+      const responseTime = Math.round(endTime - startTime);
 
-            let html = '<div class="result success">';
-            html += `<h3>✅ 테스트 성공</h3>`;
-            html += `<p>엔드포인트: /evidence</p>`;
-            html += `<p>상태 코드: ${testResponse.status}</p>`;
-            html += `<p>응답 시간: ${responseTime}ms</p>`;
-            html += `<p>저장 결과: ${saveData.message} (ID: ${saveData.id})</p>`;
-            html += "</div>";
+      const testResult = {
+        endpoint: '/evidence',
+        method: 'GET',
+        status_code: response.status,
+        response_time_ms: responseTime,
+        success: response.ok,
+        error_message: response.ok ? null : `HTTP ${response.status}`,
+        request_data: '{}',
+        response_data: 'test from browser'
+      };
 
-            resultsDiv.innerHTML = html;
-          })
-          .catch((error) => {
-            resultsDiv.innerHTML = `<div class="result error">❌ 오류: ${error.message}</div>`;
-          });
-      }
+      return fetch('/api/test-result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testResult)
+      }).then(saveResponse => {
+        return { testResponse: response, saveResponse, responseTime };
+      });
+    })
+    .then(async ({ testResponse, saveResponse, responseTime }) => {
+      const saveData = await saveResponse.json();
 
-      function checkHistory() {
-        window.open("/api/docs/history", "_blank");
-      }
-    </script>
-  </body>
-</html>
+      let html = '<div class="test-tracking-result success">';
+      html += '<h3>✅ 테스트 성공</h3>';
+      html += `<p>엔드포인트: /evidence</p>`;
+      html += `<p>상태 코드: ${testResponse.status}</p>`;
+      html += `<p>응답 시간: ${responseTime}ms</p>`;
+      html += `<p>저장 결과: ${saveData.message} (ID: ${saveData.id})</p>`;
+      html += '</div>';
+
+      resultsDiv.innerHTML = html;
+    })
+    .catch(error => {
+      resultsDiv.innerHTML = `<div class="test-tracking-result error">❌ 오류: ${error.message}</div>`;
+    });
+}
+
+  function checkHistory() {
+      window.open('/api/docs/history', '_blank');
+    }
+  </script>
+{% endblock %}

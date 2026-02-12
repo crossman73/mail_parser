@@ -1,25 +1,23 @@
 # VS Code 환경 구성 가이드
 
-이 문서는 `mail_parser` 프로젝트의 VS Code 개발 환경을 다른 컴퓨터에서 동일하게 구성하는 방법을 설명합니다.
+이 문서는 `mail_parser` 프로젝트의 VS Code 개발 환경을 WSL Ubuntu에서 구성하는 방법을 설명합니다.
 
 ## 📋 사전 요구사항
 
 ### 필수 소프트웨어
 
-| 소프트웨어 | 최소 버전 | 설치 명령 (Windows) |
-|-----------|----------|-------------------|
-| Node.js | v20+ | `winget install OpenJS.NodeJS.LTS` |
-| Python | 3.11+ | `winget install Python.Python.3.11` |
-| uv | 0.4+ | `powershell -c "irm https://astral.sh/uv/install.ps1 \| iex"` |
-| Git | 2.40+ | `winget install Git.Git` |
+| 소프트웨어 | 최소 버전 | 설치 명령 (WSL Ubuntu) |
+|-----------|----------|----------------------|
+| Python | 3.12+ | `sudo apt install python3.12 python3.12-venv` |
+| Node.js | v20+ | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt install nodejs` |
+| Git | 2.40+ | `sudo apt install git` |
 
 ### 버전 확인
-```powershell
-node --version    # v25.2.1
-npm --version     # 11.7.0
-python --version  # Python 3.14.2
-uv --version      # uv 0.9.2
-git --version     # git version 2.x
+```bash
+python3 --version  # Python 3.12.x
+node --version     # v20.x.x
+npm --version      # 10.x.x
+git --version      # git version 2.x
 ```
 
 ---
@@ -27,24 +25,30 @@ git --version     # git version 2.x
 ## 🚀 빠른 설정 (자동화)
 
 ### 1. 프로젝트 클론
-```powershell
+```bash
 git clone https://github.com/crossman73/mail_parser.git
 cd mail_parser
 ```
 
-### 2. 자동 설정 스크립트 실행
-```powershell
-# VS Code 확장 프로그램 설치
-.\tools\setup_vscode_extensions.ps1
-
-# Python 가상환경 설정
-uv venv .venv
-.\.venv\Scripts\Activate.ps1
-uv pip install -r requirements.txt
+### 2. 환경 자동 설정
+```bash
+# 전체 환경 구축 (Python, Node, 의존성 모두)
+bash tools/setup_wsl_env.sh
 ```
 
-### 3. VS Code 열기
-```powershell
+### 3. 수동 설정 (선택)
+```bash
+# Python 가상환경
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Node 의존성 (필요시)
+npm install
+```
+
+### 4. VS Code 열기
+```bash
 code .
 ```
 
