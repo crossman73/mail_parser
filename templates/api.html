@@ -1,319 +1,352 @@
 {% extends "base.html" %} {% block content %}
-<div class="row">
-  <div class="col-12">
-    <h1 class="mb-4">
-      <i class="fas fa-code me-2"></i>
-      API 문서
-    </h1>
-    <p class="lead">이메일 증거 처리 시스템의 RESTful API 문서입니다.</p>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-3">
-    <div class="list-group" id="api-nav">
-      {% if categories %} {% for category, count in categories %}
-      <a
-        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if loop.first %}active{% endif %}"
-        href="#{{ category|replace(' ', '-')|lower }}-api"
-      >
-        <span>
-          <i
-            class="fas fa-{% if category == '이메일' %}envelope{% elif category == '증거' %}gavel{% elif category == '타임라인' %}timeline{% elif category == '파일' %}file{% elif category == '로그' %}list{% elif category == 'API 문서' %}book{% else %}cog{% endif %} me-2"
-          ></i>
-          {{ category }} API
-        </span>
-        <span class="badge bg-primary rounded-pill">{{ count }}</span>
-      </a>
-      {% endfor %} {% else %}
-      <div class="alert alert-warning">카테고리 없음</div>
-      {% endif %}
-    </div>
+<div class="api-docs-container">
+  <div class="api-header">
+    <h1><i class="fas fa-code"></i> API 문서</h1>
+    <div class="subtitle">이메일 증거 처리 시스템 - RESTful API 레퍼런스</div>
   </div>
 
-  <div class="col-md-9">
-    <!-- API 사용 안내 -->
-    <div class="card bg-light border-0 shadow-sm mb-4">
-      <div class="card-body">
-        <h5 class="mb-3">
-          <i class="fas fa-info-circle me-2"></i>API 사용 안내
-        </h5>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="mb-3">
-              <strong>Base URL:</strong><br />
-              <code class="text-primary">http://localhost:5000/api</code>
-            </div>
-            <div class="mb-3">
-              <strong>Content-Type:</strong><br />
-              <code>application/json</code>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <strong>인증:</strong><br />
-              <span class="text-muted">현재 인증 없음 (개발 환경)</span>
-            </div>
-            <div class="mb-3">
-              <strong>오류 코드:</strong><br />
-              <span class="text-muted"
-                >HTTP 상태 코드 사용 (200, 400, 404, 500)</span
-              >
-            </div>
-          </div>
-        </div>
+  <!-- API 사용 안내 (접기) -->
+  <details class="api-usage-guide mb-3">
+    <summary><i class="fas fa-info-circle me-1"></i> API 사용 안내</summary>
+    <div class="row mt-2">
+      <div class="col-md-6">
+        <strong>Base URL:</strong> <code>http://localhost:5000/api</code><br>
+        <strong>Content-Type:</strong> <code>application/json</code>
+      </div>
+      <div class="col-md-6">
+        <strong>인증:</strong> <span class="text-muted">현재 인증 없음 (개발 환경)</span><br>
+        <strong>오류 코드:</strong> <span class="text-muted">HTTP 200, 400, 404, 500</span>
       </div>
     </div>
+  </details>
 
-    <!-- 동적 API 섹션 -->
-    {% if endpoints %} {% for category, group in endpoints|groupby('category')
-    %}
-    <div
-      id="{{ category|replace(' ', '-')|lower }}-api"
-      class="api-section"
-      {%
-      if
-      not
-      loop.first
-      %}style="display:none;"
-      {%
-      endif
-      %}
-    >
-      <h3>
-        <i
-          class="fas fa-{% if category == '이메일' %}envelope{% elif category == '증거' %}gavel{% elif category == '타임라인' %}timeline{% elif category == '파일' %}file{% elif category == '로그' %}list{% elif category == 'API 문서' %}book{% else %}cog{% endif %} me-2"
-        ></i>
-        {{ category }} API
-      </h3>
+  <!-- 2분할 레이아웃 -->
+  <div class="api-split-layout">
+    <!-- 좌측: 카테고리 + 목록 -->
+    <div class="api-left-panel">
+      <!-- 검색 -->
+      <input type="text" id="searchBox" class="api-search-box"
+        placeholder="🔍 엔드포인트 검색... (예: /api/upload, GET, 이메일)" />
 
-      {% for ep in group %}
-      <div class="card mb-3">
-        <div
-          class="card-header d-flex justify-content-between align-items-center"
-        >
-          <div>
-            <span
-              class="badge {% if ep.method == 'GET' %}bg-success{% elif ep.method == 'POST' %}bg-primary{% elif ep.method == 'PUT' %}bg-warning{% elif ep.method == 'DELETE' %}bg-danger{% else %}bg-secondary{% endif %} me-2"
-            >
-              {{ ep.method }}
-            </span>
-            <code class="text-dark">{{ ep.path }}</code>
+      <!-- 카테고리 탭 -->
+      <div class="api-tabs" id="categoryTabs">
+        <button class="api-tab active" onclick="showCategory('all')">
+          <i class="fas fa-list"></i> 전체
+          <span class="tab-count">{{ endpoints|length }}</span>
+        </button>
+        {% for category, count in categories %}
+        <button class="api-tab" onclick="showCategory('{{ category }}')">
+          <i class="fas fa-{% if category == '이메일' %}envelope{% elif category == '증거' %}gavel{% elif category == '타임라인' %}clock{% elif category == '파일' %}file{% elif category == '로그' %}list{% elif category == 'API 문서' %}book{% elif category == '관리' %}cog{% elif category == '시스템' %}server{% else %}circle{% endif %}"></i>
+          {{ category }}
+          <span class="tab-count">{{ count }}</span>
+        </button>
+        {% endfor %}
+      </div>
+
+      <!-- 페이지 정보 -->
+      <div class="api-page-info" id="pageInfo"></div>
+
+      <!-- 엔드포인트 목록 -->
+      <div class="endpoint-list" id="endpointList">
+        {% for ep in endpoints %}
+        <div class="endpoint-card {% if ep.method == 'GET' %}get{% elif ep.method == 'POST' %}post{% elif ep.method == 'PUT' %}put{% elif ep.method == 'DELETE' %}delete{% endif %}"
+          data-search="{{ ep.path }} {{ ep.method }} {{ ep.summary }} {{ ep.description }} {{ ep.category }}"
+          data-category="{{ ep.category }}"
+          data-path="{{ ep.path }}"
+          data-method="{{ ep.method }}">
+          <div class="endpoint-header">
+            <span class="method-badge {{ ep.method|lower }}">{{ ep.method }}</span>
+            <div class="endpoint-path">{{ ep.path }}</div>
             {% if ep.auth_required %}
-            <span class="badge bg-warning ms-2"
-              ><i class="fas fa-lock me-1"></i>인증 필요</span
-            >
+            <span class="badge bg-warning"><i class="fas fa-lock"></i></span>
             {% endif %}
+            <button class="btn-api-test" onclick="runTest(this)" title="테스트 실행">
+              <i class="fas fa-play"></i>
+            </button>
+          </div>
+          <div class="endpoint-description">
+            {{ ep.summary if ep.summary else '문서가 없습니다.' }}
           </div>
         </div>
-        <div class="card-body">
-          <h6 class="card-title">{{ ep.summary }}</h6>
-          {% if ep.description %}
-          <p class="card-text text-muted">{{ ep.description }}</p>
-          {% endif %}
-          <button
-            class="btn btn-sm btn-outline-primary"
-            onclick="testAPI('{{ ep.path }}', '{{ ep.method }}')"
-          >
-            <i class="fas fa-play me-1"></i>테스트
+        {% endfor %}
+        {% if not endpoints %}
+        <div class="no-results">등록된 API 문서가 없습니다.</div>
+        {% endif %}
+      </div>
+
+      <!-- 페이지네이션 -->
+      <div class="api-pagination" id="pagination"></div>
+    </div>
+
+    <!-- 우측: 테스트 결과 패널 -->
+    <div class="api-right-panel" id="testPanel">
+      <div class="test-panel-header">
+        <h3><i class="fas fa-terminal"></i> 테스트 결과</h3>
+        <div>
+          <button class="btn-panel-clear" onclick="clearTestPanel()" title="결과 초기화">
+            <i class="fas fa-trash-alt"></i>
           </button>
         </div>
       </div>
-      {% endfor %}
+      <div class="test-panel-body" id="testResults">
+        <div class="test-placeholder">
+          <i class="fas fa-flask" style="font-size:2.5rem;opacity:0.3"></i>
+          <p>엔드포인트의 <i class="fas fa-play"></i> 버튼을 클릭하면<br>여기에 테스트 결과가 표시됩니다.</p>
+        </div>
+      </div>
     </div>
-    {% endfor %} {% else %}
-    <div class="alert alert-info">
-      <i class="fas fa-info-circle me-2"></i>
-      등록된 API 문서가 없습니다.
-    </div>
-    {% endif %}
+  </div>
+
+  <div class="api-actions">
+    <a href="/" class="modern-btn modern-btn-primary"><i class="fas fa-home"></i> 홈으로</a>
+    <a href="/api/docs/history" class="modern-btn modern-btn-secondary"><i class="fas fa-history"></i> 테스트 이력</a>
+    <a href="/system/status" class="modern-btn modern-btn-secondary"><i class="fas fa-chart-bar"></i> 시스템 상태</a>
   </div>
 </div>
 {% endblock %} {% block styles %} {% endblock %} {% block scripts %}
 <script>
-  // API 네비게이션
-  document.querySelectorAll("#api-nav a").forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
+(function() {
+  const PAGE_SIZE = 15;
+  let currentPage = 1;
+  let currentCategory = 'all';
+  let filteredCards = [];
 
-      // 모든 섹션 숨기기
-      document.querySelectorAll(".api-section").forEach((section) => {
-        section.style.display = "none";
-      });
+  const allCards = Array.from(document.querySelectorAll('#endpointList .endpoint-card'));
 
-      // 모든 링크에서 active 제거
-      document.querySelectorAll("#api-nav a").forEach((a) => {
-        a.classList.remove("active");
-      });
+  // ─── 카테고리 전환 ───
+  window.showCategory = function(cat) {
+    currentCategory = cat;
+    currentPage = 1;
 
-      // 선택된 섹션 보이기
-      const targetId = this.getAttribute("href").substring(1);
-      const targetSection = document.getElementById(targetId);
-      if (targetSection) {
-        targetSection.style.display = "block";
-      }
+    document.querySelectorAll('#categoryTabs .api-tab').forEach(t => t.classList.remove('active'));
+    event.currentTarget.classList.add('active');
 
-      // 선택된 링크에 active 추가
-      this.classList.add("active");
+    applyFilterAndPaginate();
+  };
+
+  // ─── 필터 + 페이지네이션 ───
+  function applyFilterAndPaginate() {
+    const term = document.getElementById('searchBox').value.toLowerCase().trim();
+
+    // 카테고리 + 검색어 필터
+    filteredCards = allCards.filter(c => {
+      const matchCat = currentCategory === 'all' || c.getAttribute('data-category') === currentCategory;
+      const matchSearch = !term || c.getAttribute('data-search').toLowerCase().includes(term);
+      return matchCat && matchSearch;
     });
+
+    // 모든 카드 숨기기
+    allCards.forEach(c => c.style.display = 'none');
+
+    // 기존 no-results 제거
+    const oldNr = document.querySelector('#endpointList .no-results-dynamic');
+    if (oldNr) oldNr.remove();
+
+    if (filteredCards.length === 0) {
+      const nr = document.createElement('div');
+      nr.className = 'no-results no-results-dynamic';
+      nr.textContent = '검색 결과가 없습니다.';
+      document.getElementById('endpointList').appendChild(nr);
+      document.getElementById('pagination').innerHTML = '';
+      document.getElementById('pageInfo').textContent = '0개 결과';
+      return;
+    }
+
+    // 페이지 계산
+    const totalPages = Math.ceil(filteredCards.length / PAGE_SIZE);
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = Math.min(start + PAGE_SIZE, filteredCards.length);
+
+    // 현재 페이지 카드만 표시
+    for (let i = start; i < end; i++) {
+      filteredCards[i].style.display = 'block';
+    }
+
+    // 페이지 정보
+    document.getElementById('pageInfo').textContent =
+      filteredCards.length + '개 중 ' + (start + 1) + '-' + end + ' 표시';
+
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages) {
+    const container = document.getElementById('pagination');
+    if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+    let html = '';
+    html += '<button class="page-btn" ' + (currentPage === 1 ? 'disabled' : '') +
+      ' onclick="window._apiPage(' + (currentPage - 1) + ')"><i class="fas fa-chevron-left"></i></button>';
+
+    const maxVisible = 5;
+    let startP = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let endP = Math.min(totalPages, startP + maxVisible - 1);
+    if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
+
+    if (startP > 1) {
+      html += '<button class="page-btn" onclick="window._apiPage(1)">1</button>';
+      if (startP > 2) html += '<span class="page-ellipsis">…</span>';
+    }
+    for (let i = startP; i <= endP; i++) {
+      html += '<button class="page-btn' + (i === currentPage ? ' active' : '') +
+        '" onclick="window._apiPage(' + i + ')">' + i + '</button>';
+    }
+    if (endP < totalPages) {
+      if (endP < totalPages - 1) html += '<span class="page-ellipsis">…</span>';
+      html += '<button class="page-btn" onclick="window._apiPage(' + totalPages + ')">' + totalPages + '</button>';
+    }
+
+    html += '<button class="page-btn" ' + (currentPage === totalPages ? 'disabled' : '') +
+      ' onclick="window._apiPage(' + (currentPage + 1) + ')"><i class="fas fa-chevron-right"></i></button>';
+
+    container.innerHTML = html;
+  }
+
+  window._apiPage = function(page) {
+    currentPage = page;
+    applyFilterAndPaginate();
+    document.querySelector('.api-left-panel').scrollTo({top: 0, behavior: 'smooth'});
+  };
+
+  // 검색 입력
+  document.getElementById('searchBox').addEventListener('input', function() {
+    currentPage = 1;
+    applyFilterAndPaginate();
   });
 
-  // API 테스트 함수 (개선 + 결과 DB 저장)
-  function testAPI(endpoint, method = "GET") {
-    // URL 파라미터 처리 (<...> 패턴 확인)
-    if (endpoint.includes("<") && endpoint.includes(">")) {
-      // 파라미터가 필요한 엔드포인트
-      const paramPattern = endpoint.match(/<([^>]+)>/g);
-      if (paramPattern) {
-        alert(
-          `⚠️ 이 엔드포인트는 파라미터가 필요합니다:\n${paramPattern.join(
-            ", "
-          )}\n\n브라우저 콘솔에서 테스트하세요:\nfetch('${endpoint.replace(
-            /<[^>]+>/g,
-            "{value}"
-          )}')`
-        );
-        return;
-      }
+  // ─── API 테스트 ───
+  window.runTest = function(btn) {
+    const card = btn.closest('.endpoint-card');
+    const path = card.getAttribute('data-path');
+    const method = card.getAttribute('data-method');
+
+    // URL 파라미터 필요 시 안내
+    if (path.includes('<') && path.includes('>')) {
+      const params = path.match(/<([^>]+)>/g);
+      showTestError(path, method, '파라미터 필요: ' + params.join(', ') +
+        '\n콘솔에서 직접 테스트: fetch(\'' + path.replace(/<[^>]+>/g, '{value}') + '\')');
+      return;
     }
 
-    // 메서드별 처리
-    const fetchOptions = {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+    // 선택 표시
+    document.querySelectorAll('.endpoint-card').forEach(c => c.classList.remove('testing'));
+    card.classList.add('testing');
 
-    // POST/PUT 요청인 경우 기본 body 추가 (필요시)
-    if (method === "POST" || method === "PUT") {
-      // 엔드포인트별 샘플 데이터 (필요시 확장)
-      const sampleData = {};
-      if (Object.keys(sampleData).length > 0) {
-        fetchOptions.body = JSON.stringify(sampleData);
-      }
-    }
+    // 로딩
+    const panel = document.getElementById('testResults');
+    panel.innerHTML = '<div class="test-loading"><i class="fas fa-spinner fa-spin"></i> ' + method + ' ' + path + ' 테스트 중...</div>' +
+      panel.innerHTML.replace(/<div class="test-placeholder">[\s\S]*?<\/div>/g, '')
+                      .replace(/<div class="test-loading">[\s\S]*?<\/div>/g, '');
 
-    // 로딩 표시
-    const loadingMsg = `🔄 테스트 중... ${method} ${endpoint}`;
-    console.log(loadingMsg);
-
-    // 성능 측정 시작
     const startTime = performance.now();
+    const fetchOpts = { method: (method === 'GET' || method === 'HEAD') ? method : 'GET',
+                        headers: { 'Accept': 'application/json' } };
 
-    fetch(endpoint, fetchOptions)
-      .then(async (response) => {
-        const endTime = performance.now();
-        const responseTime = Math.round(endTime - startTime);
+    fetch(path, fetchOpts)
+      .then(async response => {
+        const elapsed = Math.round(performance.now() - startTime);
+        const contentType = response.headers.get('content-type') || '';
+        let body = '';
 
-        const contentType = response.headers.get("content-type");
-        let data;
-
-        // Content-Type에 따라 처리
-        if (contentType && contentType.includes("application/json")) {
-          data = await response.json();
-        } else if (contentType && contentType.includes("text/html")) {
-          data = await response.text();
-          data = `HTML Response (${data.length} bytes):\n${data.substring(
-            0,
-            500
-          )}...`;
-        } else {
-          data = await response.text();
-        }
-
-        // 결과 서버로 전송
-        saveTestResult({
-          endpoint: endpoint,
-          method: method,
-          status_code: response.status,
-          response_time_ms: responseTime,
-          success: response.ok,
-          error_message: response.ok ? null : `HTTP ${response.status}`,
-          request_data: JSON.stringify(fetchOptions.body || {}),
-          response_data:
-            typeof data === "object"
-              ? JSON.stringify(data).substring(0, 1000)
-              : String(data).substring(0, 1000),
-        });
-
-        // 결과 표시
-        if (response.ok) {
-          console.log(`✅ 성공 (${response.status}, ${responseTime}ms):`, data);
-
-          // JSON 데이터는 포맷팅해서 표시
-          if (typeof data === "object") {
-            alert(
-              `✅ API 테스트 성공 (${
-                response.status
-              })\n응답 시간: ${responseTime}ms\n\n${JSON.stringify(
-                data,
-                null,
-                2
-              )}`
-            );
+        try {
+          if (contentType.includes('json')) {
+            body = JSON.stringify(await response.json(), null, 2);
           } else {
-            alert(
-              `✅ API 테스트 성공 (${response.status})\n응답 시간: ${responseTime}ms\n\n${data}`
-            );
+            const text = await response.text();
+            body = text.substring(0, 2000);
+            if (text.length > 2000) body += '\n... (truncated)';
           }
-        } else {
-          console.error(
-            `❌ 실패 (${response.status}, ${responseTime}ms):`,
-            data
-          );
-          alert(
-            `❌ API 테스트 실패 (${
-              response.status
-            })\n응답 시간: ${responseTime}ms\n\n${
-              typeof data === "object" ? JSON.stringify(data, null, 2) : data
-            }`
-          );
-        }
-      })
-      .catch((error) => {
-        const endTime = performance.now();
-        const responseTime = Math.round(endTime - startTime);
+        } catch(e) { body = '(응답 파싱 실패)'; }
 
-        // 에러도 저장
-        saveTestResult({
-          endpoint: endpoint,
-          method: method,
-          status_code: null,
-          response_time_ms: responseTime,
-          success: false,
-          error_message: error.message,
-          request_data: JSON.stringify(fetchOptions.body || {}),
-          response_data: null,
+        appendTestResult({
+          path, method, status: response.status, elapsed, contentType, body,
+          success: response.ok
         });
 
-        console.error("❌ 테스트 오류:", error);
-        alert(
-          `❌ API 테스트 오류\n\n${error.message}\n\n자세한 내용은 브라우저 콘솔을 확인하세요.`
-        );
-      });
-  }
-
-  // 테스트 결과 서버 전송
-  function saveTestResult(result) {
-    fetch("/api/test-result", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(result),
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("💾 테스트 결과 저장 완료");
-        } else {
-          console.warn("⚠️ 테스트 결과 저장 실패:", response.status);
-        }
+        // DB 저장
+        saveTestResult(path, method, response.status, elapsed, response.ok);
       })
-      .catch((err) => console.error("❌ 테스트 결과 저장 오류:", err));
+      .catch(error => {
+        appendTestResult({
+          path, method, status: 0, elapsed: Math.round(performance.now() - startTime),
+          contentType: '', body: error.message, success: false
+        });
+      });
+  };
+
+  function appendTestResult(r) {
+    const statusClass = r.success ? 'test-success' : 'test-fail';
+    const statusIcon = r.success ? 'fa-check-circle' : 'fa-times-circle';
+    const now = new Date().toLocaleTimeString('ko-KR');
+
+    const item = document.createElement('div');
+    item.className = 'test-result-item ' + statusClass;
+    item.innerHTML = `
+      <div class="test-result-header">
+        <span class="method-badge ${r.method.toLowerCase()}">${r.method}</span>
+        <code>${escapeHtml(r.path)}</code>
+        <span class="test-time">${now}</span>
+      </div>
+      <div class="test-result-meta">
+        <span class="test-status"><i class="fas ${statusIcon}"></i> ${r.status}</span>
+        <span class="test-elapsed"><i class="fas fa-clock"></i> ${r.elapsed}ms</span>
+        <span class="test-type"><i class="fas fa-file-alt"></i> ${(r.contentType || '').split(';')[0] || 'N/A'}</span>
+      </div>
+      <div class="test-result-body">
+        <div class="test-body-toggle" onclick="this.nextElementSibling.classList.toggle('expanded')">
+          <i class="fas fa-code"></i> 응답 본문 <i class="fas fa-chevron-down"></i>
+        </div>
+        <pre class="test-body-content">${escapeHtml(r.body)}</pre>
+      </div>`;
+
+    const panel = document.getElementById('testResults');
+    // placeholder, loading 제거
+    const ph = panel.querySelector('.test-placeholder');
+    if (ph) ph.remove();
+    const ld = panel.querySelector('.test-loading');
+    if (ld) ld.remove();
+
+    panel.insertBefore(item, panel.firstChild);
   }
 
-  // 메서드별 테스트 함수
-  function testAPIWithMethod(endpoint, method) {
-    testAPI(endpoint, method);
+  function showTestError(path, method, msg) {
+    appendTestResult({
+      path, method, status: '-', elapsed: 0,
+      contentType: '', body: msg, success: false
+    });
   }
+
+  function saveTestResult(endpoint, method, statusCode, responseTime, success) {
+    fetch('/api/test-result', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        endpoint, method, status_code: statusCode,
+        response_time_ms: responseTime, success,
+        error_message: success ? null : 'HTTP ' + statusCode,
+        request_data: '{}', response_data: 'browser test'
+      })
+    }).catch(() => {});
+  }
+
+  window.clearTestPanel = function() {
+    document.getElementById('testResults').innerHTML = `
+      <div class="test-placeholder">
+        <i class="fas fa-flask" style="font-size:2.5rem;opacity:0.3"></i>
+        <p>엔드포인트의 <i class="fas fa-play"></i> 버튼을 클릭하면<br>여기에 테스트 결과가 표시됩니다.</p>
+      </div>`;
+    document.querySelectorAll('.endpoint-card').forEach(c => c.classList.remove('testing'));
+  };
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  // 초기 실행
+  applyFilterAndPaginate();
+})();
 </script>
 {% endblock %}
