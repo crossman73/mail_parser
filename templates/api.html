@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% block content %}
 <div class="api-docs-container">
-  <div class="api-header">
-    <h1><i class="fas fa-code"></i> API 문서</h1>
-    <div class="subtitle">이메일 증거 처리 시스템 - RESTful API 레퍼런스</div>
+  <div class="api-header" style="margin-bottom:8px">
+    <h1 style="font-size:1.4rem;margin-bottom:2px"><i class="fas fa-code"></i> API 문서</h1>
+    <div class="subtitle" style="font-size:0.82rem;opacity:0.7">이메일 증거 처리 시스템 RESTful API</div>
   </div>
 
   <!-- API 사용 안내 (접기) -->
@@ -280,34 +280,28 @@
     const statusIcon = r.success ? 'fa-check-circle' : 'fa-times-circle';
     const now = new Date().toLocaleTimeString('ko-KR');
 
-    const item = document.createElement('div');
-    item.className = 'test-result-item ' + statusClass;
-    item.innerHTML = `
-      <div class="test-result-header">
-        <span class="method-badge ${r.method.toLowerCase()}">${r.method}</span>
-        <code>${escapeHtml(r.path)}</code>
-        <span class="test-time">${now}</span>
-      </div>
-      <div class="test-result-meta">
-        <span class="test-status"><i class="fas ${statusIcon}"></i> ${r.status}</span>
-        <span class="test-elapsed"><i class="fas fa-clock"></i> ${r.elapsed}ms</span>
-        <span class="test-type"><i class="fas fa-file-alt"></i> ${(r.contentType || '').split(';')[0] || 'N/A'}</span>
-      </div>
-      <div class="test-result-body">
-        <div class="test-body-toggle" onclick="this.nextElementSibling.classList.toggle('expanded')">
-          <i class="fas fa-code"></i> 응답 본문 <i class="fas fa-chevron-down"></i>
+    const html = `
+      <div class="test-result-item ${statusClass}">
+        <div class="test-result-header">
+          <span class="method-badge ${r.method.toLowerCase()}">${r.method}</span>
+          <code>${escapeHtml(r.path)}</code>
+          <span class="test-time">${now}</span>
         </div>
-        <pre class="test-body-content">${escapeHtml(r.body)}</pre>
+        <div class="test-result-meta">
+          <span class="test-status"><i class="fas ${statusIcon}"></i> ${r.status}</span>
+          <span class="test-elapsed"><i class="fas fa-clock"></i> ${r.elapsed}ms</span>
+          <span class="test-type"><i class="fas fa-file-alt"></i> ${(r.contentType || '').split(';')[0] || 'N/A'}</span>
+        </div>
+        <div class="test-result-body">
+          <div class="test-body-toggle" onclick="this.nextElementSibling.classList.toggle('expanded')">
+            <i class="fas fa-code"></i> 응답 본문 <i class="fas fa-chevron-down"></i>
+          </div>
+          <pre class="test-body-content">${escapeHtml(r.body)}</pre>
+        </div>
       </div>`;
 
-    const panel = document.getElementById('testResults');
-    // placeholder, loading 제거
-    const ph = panel.querySelector('.test-placeholder');
-    if (ph) ph.remove();
-    const ld = panel.querySelector('.test-loading');
-    if (ld) ld.remove();
-
-    panel.insertBefore(item, panel.firstChild);
+    // 기존 결과를 모두 지우고 새 결과만 표시 (오버라이트)
+    document.getElementById('testResults').innerHTML = html;
   }
 
   function showTestError(path, method, msg) {

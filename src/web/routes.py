@@ -499,8 +499,9 @@ def register_routes(app):
                 temp_path = os.path.join(temp_dir, f"{task_id}_{filename}")
                 file.save(temp_path)
 
-                # uploads 디렉토리에도 복사 (영구 보관용)
-                uploads_dir = Path('uploads')
+                # uploads 디렉토리에도 복사 (영구 보관용) - 프로젝트 루트 기준 절대경로
+                project_root = Path(os.path.dirname(__file__)).parent.parent
+                uploads_dir = project_root / 'uploads'
                 uploads_dir.mkdir(exist_ok=True)
                 permanent_path = uploads_dir / f"{task_id}_{filename}"
                 import shutil
